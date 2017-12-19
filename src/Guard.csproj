@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <LangVersion>7.2</LangVersion>
+    <TargetFrameworks>netstandard2.0;netstandard1.0;net35</TargetFrameworks>
+    <AssemblyName>Dawn.Guard</AssemblyName>
+    <RootNamespace>Dawn</RootNamespace>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>

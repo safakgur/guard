@@ -1,0 +1,6 @@
+# Line ending normalizations
+* text=auto
+
+# C# and Visual Studio
+*.sln    merge=union
+*.cs     diff=csharp
