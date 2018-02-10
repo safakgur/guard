@@ -1,5 +1,7 @@
 # Guard
 
+[![NuGet Status](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
+
 Guard is a fluent argument validation library that is intuitive, fast and extensible.
 
 * [Introduction](#introduction)
