@@ -41,10 +41,6 @@
         ///     Requires the argument to have a URI with the HTTP or HTTPS scheme.
         /// </summary>
         /// <param name="argument">The URI argument.</param>
-        /// <param name="allowHttps">
-        ///     Pass <c>false</c> to require only
-        ///     the HTTP and not the HTTPS scheme.
-        /// </param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that
         ///     will be thrown if the precondition is not satisfied.
