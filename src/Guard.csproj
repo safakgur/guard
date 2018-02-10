@@ -4,8 +4,32 @@
     <LangVersion>7.2</LangVersion>
     <TargetFrameworks>netstandard2.0;netstandard1.0;net35</TargetFrameworks>
     <AssemblyName>Dawn.Guard</AssemblyName>
+    <Product>Dawn Utils</Product>
+    <Version>0.1.0-alpha</Version>
+    <FileVersion>1.0.0</FileVersion>
     <RootNamespace>Dawn</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>$(OutputPath)bin/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties/Key.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Dawn.Guard</PackageId>
+    <Authors>Şafak Gür</Authors>
+    <Description>A high-performance, extensible argument validation library.</Description>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/safakgur/guard</PackageProjectUrl>
+    <Copyright>Copyright © 2017 Şafak Gür</Copyright>
+    <PackageTags>argument parameter guard validation fluent contract assertion</PackageTags>
+    <PackageReleaseNotes>Alpha package.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/safakgur/guard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
 
 </Project>
