@@ -151,8 +151,8 @@
             /// </param>
             /// <returns>The current argument.</returns>
             /// <exception cref="ArgumentException">
-            ///     <paramref name="predicate" /> returned <c>false</c> when
-            ///     supplied the value of <paramref name="argument" />.
+            ///     <paramref name="predicate" /> returned <c>false</c>
+            ///     when supplied the <see cref="Value" />.
             /// </exception>
             public ArgumentInfo<T> Require(Func<T, bool> predicate, Func<T, string> message = null)
                 => this.Require<ArgumentException>(predicate, message);
@@ -172,8 +172,8 @@
             /// </param>
             /// <returns>The current argument.</returns>
             /// <exception cref="Exception">
-            ///     <paramref name="predicate" /> returned <c>false</c> when
-            ///     supplied the value of <paramref name="argument" />.
+            ///     <paramref name="predicate" /> returned <c>false</c>
+            ///     when supplied the <see cref="Value" />.
             ///     The exception thrown is an instance of
             ///     type <typeparamref name="TException" />.
             /// </exception>

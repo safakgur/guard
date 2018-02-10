@@ -119,7 +119,7 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not <c>null</c> and
-        ///     contains less than the minimum number of characters.
+        ///     contains less than the specified number of characters.
         /// </exception>
         public static ref readonly ArgumentInfo<string> MinLength(
             in this ArgumentInfo<string> argument,
@@ -151,7 +151,7 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not <c>null</c> and
-        ///     contains more than the maximum number of characters.
+        ///     contains more than the specified number of characters.
         /// </exception>
         public static ref readonly ArgumentInfo<string> MaxLength(
             in this ArgumentInfo<string> argument,
@@ -171,28 +171,22 @@
         ///     Requires the argument to have a value whose length
         ///     is between the specified minimum and maximum values.
         /// </summary>
-        /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
-        /// <param name="minValue">
-        ///     The minimum value that the argument is allowed to have.
+        /// <param name="minLength">
+        ///     The minimum number of characters allowed in the argument value.
         /// </param>
-        /// <param name="maxValue">
-        ///     The maximum value that the argument is allowed to have.
+        /// <param name="maxLength">
+        ///     The maximum number of characters allowed in the argument value.
         /// </param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that
         ///     will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not between
-        ///     <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is not modified since it is initialized.
-        /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not between
-        ///     <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is modified after its initialization
+        ///     <paramref name="argument" /> value is not <c>null</c>
+        ///     and contains either less than <paramref name="minLength" />
+        ///     or more than <paramref name="maxLength" /> number of characters.
         /// </exception>
         public static ref readonly ArgumentInfo<string> LengthInRange(
             in this ArgumentInfo<string> argument,

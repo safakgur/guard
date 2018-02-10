@@ -59,7 +59,8 @@
         /// <summary>
         ///     Determines whether a type is derived from the specified type.
         /// </summary>
-        /// <param name="type">The type to check.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="baseType">The base type.</param>
         /// <returns>
         ///     <c>true</c>, if <paramref name="type" /> is derived from
         ///     <paramref name="baseType" /> otherwise, <c>false</c>.

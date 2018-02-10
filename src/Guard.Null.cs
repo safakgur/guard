@@ -43,9 +43,8 @@
         /// <remarks>
         ///     The argument value that is passed to <paramref name="message" />
         ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the
-        ///     calls to be ambiguous between this method and
-        ///     <see cref="Null{T}(ArgumentInfo{T}, Func{T, string})" />
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
         ///     when the message delegate accepts a non-nullable argument.
         /// </remarks>
         public static ref readonly ArgumentInfo<T?> Null<T>(
