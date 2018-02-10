@@ -6,7 +6,6 @@
     <AssemblyName>Dawn.Guard.Tests</AssemblyName>
     <RootNamespace>Dawn.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
-    <CodeAnalysisRuleSet>../style/global.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
