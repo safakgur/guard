@@ -22,7 +22,7 @@
             public static string Equal<T>(in ArgumentInfo<T> argument, in T other)
                 => $"{argument.Name} must be {other}.";
 
-            public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
+            public static string NotEqual<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} cannot be {argument.Value}.";
 
             public static string Require<T>(in ArgumentInfo<T> argument)
