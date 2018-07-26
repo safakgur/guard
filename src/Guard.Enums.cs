@@ -14,11 +14,11 @@
         /// <param name="argument">The enum argument.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     will be thrown if the argument type is not an enum.
         /// </param>
         /// <returns>A new <see cref="EnumArgumentInfo{T}" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> cannot represent an enum.
+        ///     <typeparamref name="T" /> is not an enum.
         /// </exception>
         public static EnumArgumentInfo<T> Enum<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
@@ -41,11 +41,11 @@
         /// <param name="argument">The enum argument.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     will be thrown if the argument type is not an enum.
         /// </param>
         /// <returns>A new <see cref="NullableEnumArgumentInfo{T}" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> cannot represent an enum.
+        ///     <typeparamref name="T" /> is not an enum.
         /// </exception>
         public static NullableEnumArgumentInfo<T> Enum<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
@@ -385,7 +385,7 @@
             ///     the argument is modified after its initialization.
             /// </exception>
             public EnumArgumentInfo<T> NotNull(string message = null)
-                => this.Argument.NotNull().Enum();
+                => this.Argument.NotNull(message).Enum();
 
             /// <summary>
             ///     Requires the nullable enum argument to be
