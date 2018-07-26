@@ -288,12 +288,24 @@
         ///     <paramref name="argument" /> value is not zero and
         ///     the argument is modified after its initialization
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<T?> Zero<T>(
-            in this ArgumentInfo<T?> argument, Func<T, string> message = null)
+            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a))
-                a.Zero(message);
+            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) != 0)
+            {
+                var m = message?.Invoke(a.Value) ?? Messages.Zero(a);
+                throw !a.Modified
+                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                     : new ArgumentException(m, a.Name);
+            }
 
             return ref argument;
         }
@@ -348,12 +360,24 @@
         ///     <paramref name="argument" /> value is zero and the
         ///     argument is modified after its initialization
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<T?> NotZero<T>(
-            in this ArgumentInfo<T?> argument, Func<T, string> message = null)
+            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a))
-                a.NotZero(message);
+            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) == 0)
+            {
+                var m = message?.Invoke(a.Value) ?? Messages.NotZero(a);
+                throw !a.Modified
+                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                     : new ArgumentException(m, a.Name);
+            }
 
             return ref argument;
         }
@@ -410,12 +434,24 @@
         ///     <paramref name="argument" /> value is zero or less, and
         ///     the argument is modified after its initialization
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<T?> Positive<T>(
-            in this ArgumentInfo<T?> argument, Func<T, string> message = null)
+            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a))
-                a.Positive(message);
+            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) <= 0)
+            {
+                var m = message?.Invoke(a.Value) ?? Messages.Positive(a);
+                throw !a.Modified
+                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                     : new ArgumentException(m, a.Name);
+            }
 
             return ref argument;
         }
@@ -472,12 +508,24 @@
         ///     <paramref name="argument" /> value is zero or greater,
         ///     and the argument is modified after its initialization
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<T?> Negative<T>(
-            in this ArgumentInfo<T?> argument, Func<T, string> message = null)
+            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a))
-                a.Negative(message);
+            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) >= 0)
+            {
+                var m = message?.Invoke(a.Value) ?? Messages.Negative(a);
+                throw !a.Modified
+                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                     : new ArgumentException(m, a.Name);
+            }
 
             return ref argument;
         }
