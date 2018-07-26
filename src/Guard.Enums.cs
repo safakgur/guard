@@ -224,11 +224,11 @@
             /// <exception cref="ArgumentException">
             ///     <see cref="Argument" /> value is equal to <paramref name="other" />.
             /// </exception>
-            public EnumArgumentInfo<T> NotEqual(T other, Func<T, T, string> message = null)
+            public EnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
                 if (EqualityComparer<T>.Default.Equals(this.Argument.Value, other))
                 {
-                    var m = message?.Invoke(this.Argument.Value, other) ?? Messages.NotEqual(this.Argument, other);
+                    var m = message?.Invoke(this.Argument.Value) ?? Messages.NotEqual(this.Argument);
                     throw new ArgumentException(m, this.Argument.Name);
                 }
 
@@ -486,7 +486,7 @@
             ///     <see cref="Argument" /> value is not <c>null</c>
             ///     and is equal to <paramref name="other" />.
             /// </exception>
-            public NullableEnumArgumentInfo<T> NotEqual(T other, Func<T, T, string> message = null)
+            public NullableEnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
                 if (this.NotNull(out var a))
                     a.NotEqual(other, message);
