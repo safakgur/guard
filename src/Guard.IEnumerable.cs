@@ -320,18 +320,15 @@
             private static Func<T, int, int> InitCount()
             {
                 var type = typeof(T);
-                var getter = type.GetPropertyGetter("Count");
-                if (getter?.IsStatic ?? true)
-                    getter = type.GetPropertyGetter("Length");
+                var integer = typeof(int);
 
-                if (getter?.IsStatic == false)
-                {
-                    var t = Expression.Parameter(type, "collection");
-                    var c = Expression.Call(t, getter);
-                    var l = Expression.Lambda<Func<T, int>>(c, t);
-                    var count = l.Compile();
-                    return (collection, max) => count(collection);
-                }
+                var getter = type.GetPropertyGetter("Count");
+                if (getter?.IsStatic == false && getter.ReturnType == integer)
+                    return Compile();
+
+                getter = type.GetPropertyGetter("Length");
+                if (getter?.IsStatic == false && getter.ReturnType == integer)
+                    return Compile();
 
                 return (collection, max) =>
                 {
@@ -350,6 +347,15 @@
 
                     return i;
                 };
+
+                Func<T, int, int> Compile()
+                {
+                    var t = Expression.Parameter(type, "collection");
+                    var c = Expression.Call(t, getter);
+                    var l = Expression.Lambda<Func<T, int>>(c, t);
+                    var count = l.Compile();
+                    return (collection, max) => count(collection);
+                }
             }
         }
 
