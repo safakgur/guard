@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
 
@@ -250,9 +251,9 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> ContainsNull<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
-            where T : IEnumerable<object>
+            where T : IEnumerable
         {
-            if (argument.HasValue() && !Collection<T, object>.Contains(argument.Value, null))
+            if (argument.HasValue() && !Collection<T>.ContainsNull(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionContains(argument, "null");
                 throw new ArgumentException(m, argument.Name);
@@ -277,9 +278,9 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> DoesNotContainNull<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
-            where T : IEnumerable<object>
+            where T : IEnumerable
         {
-            if (argument.HasValue() && Collection<T, object>.Contains(argument.Value, null))
+            if (argument.HasValue() && Collection<T>.ContainsNull(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionDoesNotContain(argument, "null");
                 throw new ArgumentException(m, argument.Name);
@@ -312,6 +313,19 @@
             ///     </para>
             /// </summary>
             public static readonly Func<T, int, int> Count = InitCount();
+
+            /// <summary>
+            ///     <para>
+            ///         A function that returns a value that indicates whether
+            ///         the specified collection contains a <c>null</c> element.
+            ///     </para>
+            ///     <para>
+            ///         It enumerates the collection and checks the elements one
+            ///         by one if the collection does not provide a Contains
+            ///         method that accepts a single, nullable argument.
+            ///     </para>
+            /// </summary>
+            public static readonly Func<T, bool> ContainsNull = InitContainsNull();
 
             /// <summary>Initializes <see cref="Count" />.</summary>
             /// <returns>
@@ -356,6 +370,82 @@
                     var l = Expression.Lambda<Func<T, int>>(c, t);
                     var count = l.Compile();
                     return (collection, max) => count(collection);
+                }
+            }
+
+            /// <summary>Initializes <see cref="ContainsNull" />.</summary>
+            /// <returns>
+            ///     A function that returns a value that indicates whether
+            ///     the specified collection contains a <c>null</c> element.
+            /// </returns>
+            private static Func<T, bool> InitContainsNull()
+            {
+                const string name = "Contains";
+                var type = typeof(T);
+
+                IEnumerable<MethodInfo> search;
+#if NETSTANDARD1_0
+                search = type.GetTypeInfo().GetDeclaredMethods(name).Where(m => m.IsPublic && !m.IsStatic);
+#else
+                search = type.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(m => m.Name == name);
+#endif
+
+                var methods = search.Where(m => m.ReturnType == typeof(bool)).ToList();
+                if (methods.Count > 0)
+                {
+                    var nullableContains = null as MethodInfo;
+                    var nullableContainsParamType = null as Type;
+                    var foundVal = false;
+                    foreach (var method in methods)
+                    {
+                        var parameters = method.GetParameters();
+                        if (parameters.Length != 1)
+                            continue;
+
+                        var paramType = parameters[0].ParameterType;
+                        if (!IsValueType(paramType) || paramType.IsGenericType(typeof(Nullable<>)))
+                        {
+                            nullableContains = method;
+                            nullableContainsParamType = paramType;
+                            break;
+                        }
+
+                        foundVal = true;
+                    }
+
+                    if (nullableContains != null)
+                    {
+                        var t = Expression.Parameter(type, "collection");
+                        var v = IsValueType(nullableContainsParamType)
+                            ? Activator.CreateInstance(nullableContainsParamType)
+                            : null;
+
+                        var i = Expression.Constant(v, nullableContainsParamType);
+                        var c = Expression.Call(t, nullableContains, i);
+                        var l = Expression.Lambda<Func<T, bool>>(c, t);
+                        return l.Compile();
+                    }
+
+                    if (foundVal)
+                        return collection => false;
+                }
+
+                return collection =>
+                {
+                    foreach (var item in collection)
+                        if (item == null)
+                            return true;
+
+                    return false;
+                };
+
+                bool IsValueType(Type t)
+                {
+#if NETSTANDARD1_0
+                    return t.IsValueType();
+#else
+                    return t.IsValueType;
+#endif
                 }
             }
         }
