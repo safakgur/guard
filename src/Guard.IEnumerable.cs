@@ -275,12 +275,12 @@
         ///     <paramref name="argument" /> contains <c>null</c>.
         /// </exception>
         public static ref readonly ArgumentInfo<T> DoesNotContainNull<T>(
-            in this ArgumentInfo<T> argument, string message = null)
+            in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : IEnumerable<object>
         {
             if (argument.HasValue() && Collection<T, object>.Contains(argument.Value, null))
             {
-                var m = message ?? Messages.CollectionDoesNotContain(argument, "null");
+                var m = message?.Invoke(argument.Value) ?? Messages.CollectionDoesNotContain(argument, "null");
                 throw new ArgumentException(m, argument.Name);
             }
 
