@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     /// <content>Provides preconditions for <see cref="IEnumerable" /> arguments.</content>
     public static partial class Guard
@@ -382,15 +383,25 @@
             {
                 var collectionType = typeof(TCollection);
                 var itemType = typeof(TItem);
-                var method = collectionType.GetMethod("Contains", new[] { itemType });
-                if (method?.IsStatic == false)
+                do
                 {
-                    var t = Expression.Parameter(collectionType, "collection");
-                    var i = Expression.Parameter(itemType, "item");
-                    var c = Expression.Call(t, method, i);
-                    var l = Expression.Lambda<Func<TCollection, TItem, bool>>(c, t, i);
-                    return l.Compile();
+                    var method = collectionType.GetMethod("Contains", new[] { itemType });
+                    if (method?.IsStatic == false && method.ReturnType == typeof(bool))
+                    {
+                        var t = Expression.Parameter(collectionType, "collection");
+                        var i = Expression.Parameter(itemType, "item");
+                        var c = Expression.Call(t, method, i);
+                        var l = Expression.Lambda<Func<TCollection, TItem, bool>>(c, t, i);
+                        return l.Compile();
+                    }
+
+#if NETSTANDARD1_0
+                    itemType = itemType.GetTypeInfo().BaseType;
+#else
+                    itemType = itemType.BaseType;
+#endif
                 }
+                while (itemType != null);
 
                 return (collection, item) =>
                 {
