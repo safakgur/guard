@@ -74,6 +74,21 @@
 #endif
         }
 
+        /// <summary>Returns the type from wich the specified type directly inherits.</summary>
+        /// <param name="type">The type whose base type that will be returned.</param>
+        /// <returns>
+        ///     The type from wich the <paramref name="type" /> directly inherits,
+        ///     if there is one; otherwise, <c>null</c>.
+        /// </returns>
+        private static Type GetBaseType(this Type type)
+        {
+#if NETSTANDARD1_0
+            return type.GetTypeInfo().BaseType;
+#else
+            return type.BaseType;
+#endif
+        }
+
         /// <summary>Returns the constructor with the specified parameters.</summary>
         /// <param name="type">The type that the constructor belongs to.</param>
         /// <param name="arguments">The types of the constructor parameters.</param>

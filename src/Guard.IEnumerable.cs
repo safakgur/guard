@@ -438,15 +438,6 @@
 
                     return false;
                 };
-
-                bool IsValueType(Type t)
-                {
-#if NETSTANDARD1_0
-                    return t.IsValueType();
-#else
-                    return t.IsValueType;
-#endif
-                }
             }
         }
 
@@ -485,11 +476,7 @@
                         return l.Compile();
                     }
 
-#if NETSTANDARD1_0
-                    itemType = itemType.GetTypeInfo().BaseType;
-#else
-                    itemType = itemType.BaseType;
-#endif
+                    itemType = itemType.GetBaseType();
                 }
                 while (itemType != null);
 
