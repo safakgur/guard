@@ -118,6 +118,9 @@
         private static bool IsSubclassOf(this Type type, Type baseType)
             => type.GetTypeInfo().IsSubclassOf(baseType);
 
+        private static FieldInfo GetField(this Type type, string name)
+            => type.GetTypeInfo().GetDeclaredField(name);
+
         private static ConstructorInfo GetConstructor(this Type type, Type[] arguments)
         {
             return type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(c => c
