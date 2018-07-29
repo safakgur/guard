@@ -264,7 +264,7 @@
             ///     <see cref="Value" /> cannot be assigned
             ///     to type <typeparamref name="TTarget" />.
             /// </exception>
-            public ArgumentInfo<TTarget> Cast<TTarget>(Func<object, string> message = null)
+            public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
             {
                 if (this.Value is TTarget value)
                     return new ArgumentInfo<TTarget>(value, this.Name, this.Modified);
