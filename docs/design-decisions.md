@@ -40,7 +40,7 @@ This takes away all the usability of Guard for people using the previous version
 of C# but it is somewhat acceptable because a) there is no other way that provides
 this level of readability with so little performance impact and b) as far as the
 binary compatibility is concerned, people can use Guard with C# 7.2 and still be
-able to target down to .NET Framework 3.5 or .NET Standard 1.0.
+able to target down to .NET Standard 1.0.
 
 A compile-time symbol to toggle byref arguments/returns may be added in the
 future, so a version that doesn't take advantage of the new features can be

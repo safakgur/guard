@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <LangVersion>7.2</LangVersion>
-    <TargetFrameworks>netstandard2.0;netstandard1.0;net35</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
     <AssemblyName>Dawn.Guard</AssemblyName>
     <Product>Dawn Utils</Product>
-    <Version>0.2.0-beta</Version>
+    <Version>0.2.1-beta</Version>
     <FileVersion>1.0.0</FileVersion>
     <RootNamespace>Dawn</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -26,7 +26,7 @@
     <PackageProjectUrl>https://github.com/safakgur/guard</PackageProjectUrl>
     <Copyright>Copyright © 2017 Şafak Gür</Copyright>
     <PackageTags>argument parameter guard validation fluent contract assertion</PackageTags>
-    <PackageReleaseNotes>Beta package.</PackageReleaseNotes>
+    <PackageReleaseNotes>Removed .NET Framework 3.5 support.</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/safakgur/guard</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <SignAssembly>true</SignAssembly>

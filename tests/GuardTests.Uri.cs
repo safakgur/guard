@@ -5,6 +5,10 @@
 
     public sealed partial class GuardTests
     {
+        private const string HttpUriScheme = "http"; // Uri.HttpUriScheme
+
+        private const string HttpsUriScheme = "https"; // Uri.HttpsUriScheme
+
         [Fact(DisplayName = "Guard supports URI preconditions.")]
         public void GuardSupportsUris()
         {
@@ -50,17 +54,17 @@
             Assert.StartsWith(message, ex.Message);
 
             // Scheme.
-            nullArg.Scheme(Uri.UriSchemeHttps).Scheme(Uri.UriSchemeHttp);
+            nullArg.Scheme(HttpsUriScheme).Scheme(HttpUriScheme);
 
-            httpsArg.Scheme(Uri.UriSchemeHttps);
+            httpsArg.Scheme(HttpsUriScheme);
             Assert.Throws<ArgumentException>(
-                nameof(https), () => Guard.Argument(() => https).Scheme(Uri.UriSchemeHttp));
+                nameof(https), () => Guard.Argument(() => https).Scheme(HttpUriScheme));
 
             ex = Assert.Throws<ArgumentException>(
-                nameof(https), () => Guard.Argument(() => https).Scheme(Uri.UriSchemeHttp, (u, scheme) =>
+                nameof(https), () => Guard.Argument(() => https).Scheme(HttpUriScheme, (u, scheme) =>
                 {
                     Assert.Same(https, u);
-                    Assert.Same(Uri.UriSchemeHttp, scheme);
+                    Assert.Same(HttpUriScheme, scheme);
                     return message;
                 }));
 
@@ -68,29 +72,29 @@
 
             var http = new Uri("http://github.com/safakgur/guard");
             var httpArg = Guard.Argument(() => http);
-            httpArg.Scheme(Uri.UriSchemeHttp);
+            httpArg.Scheme(HttpUriScheme);
 
             Assert.Throws<ArgumentException>(
-                nameof(http), () => Guard.Argument(() => http).Scheme(Uri.UriSchemeHttps));
+                nameof(http), () => Guard.Argument(() => http).Scheme(HttpsUriScheme));
 
             ex = Assert.Throws<ArgumentException>(
-                nameof(http), () => Guard.Argument(() => http).Scheme(Uri.UriSchemeHttps, (u, scheme) =>
+                nameof(http), () => Guard.Argument(() => http).Scheme(HttpsUriScheme, (u, scheme) =>
                 {
                     Assert.Same(http, u);
-                    Assert.Same(Uri.UriSchemeHttps, scheme);
+                    Assert.Same(HttpsUriScheme, scheme);
                     return message;
                 }));
 
             Assert.StartsWith(message, ex.Message);
 
             Assert.Throws<ArgumentException>(
-                nameof(relative), () => Guard.Argument(() => relative).Scheme(Uri.UriSchemeHttps));
+                nameof(relative), () => Guard.Argument(() => relative).Scheme(HttpsUriScheme));
 
             ex = Assert.Throws<ArgumentException>(
-                nameof(relative), () => Guard.Argument(() => relative).Scheme(Uri.UriSchemeHttps, (u, scheme) =>
+                nameof(relative), () => Guard.Argument(() => relative).Scheme(HttpsUriScheme, (u, scheme) =>
                 {
                     Assert.Same(relative, u);
-                    Assert.Same(Uri.UriSchemeHttps, scheme);
+                    Assert.Same(HttpsUriScheme, scheme);
                     return message;
                 }));
 

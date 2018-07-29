@@ -85,7 +85,6 @@ So in order to use Guard, you need to make sure your Visual Studio is up to date
 and you have `<LangVersion>7.2</LangVersion>` added in your .csproj file.
 
 Supported targets:
-* .NET Framework 3.5 and above.
 * .NET Standard 1.0 and above - See [.NET Standard compatibility table][3].
 
 ## Standard Validations
