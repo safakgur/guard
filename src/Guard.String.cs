@@ -69,7 +69,7 @@
         public static ref readonly ArgumentInfo<string> WhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
-            if (argument.Value != null && !IsWhiteSpace(argument.Value))
+            if (argument.Value != null && !string.IsNullOrWhiteSpace(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.StringWhiteSpace(argument);
                 throw new ArgumentException(m, argument.Name);
@@ -95,7 +95,7 @@
         public static ref readonly ArgumentInfo<string> NotWhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
-            if (argument.Value != null && IsWhiteSpace(argument.Value))
+            if (argument.Value != null && string.IsNullOrWhiteSpace(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.StringNotWhiteSpace(argument);
                 throw new ArgumentException(m, argument.Name);

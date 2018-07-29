@@ -87,33 +87,9 @@
 #endif
         }
 
-        /// <summary>
-        ///     Determines whether the specified string is empty
-        ///     or consists only of white-space characters.
-        /// </summary>
-        /// <param name="s">The string to check.</param>
-        /// <returns>
-        ///     <c>true</c>, if <paramref name="s" /> is empty
-        ///     or consists only of white-space characters.
-        /// </returns>
-        private static bool IsWhiteSpace(string s)
-        {
-#if NET35
-            for (var i = 0; i < s.Length; i++)
-            {
-                if (!char.IsWhiteSpace(s, i))
-                    return false;
-            }
-
-            return true;
-#else
-            return string.IsNullOrWhiteSpace(s);
-#endif
-        }
-
 #if NETSTANDARD1_0
         private static Type[] GetGenericArguments(this Type type)
-            => type.GetTypeInfo().GenericTypeParameters;
+            => type.GetTypeInfo().GenericTypeArguments;
 
         private static bool IsSubclassOf(this Type type, Type baseType)
             => type.GetTypeInfo().IsSubclassOf(baseType);
@@ -123,10 +99,11 @@
 
         private static ConstructorInfo GetConstructor(this Type type, Type[] arguments)
         {
-            return type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(c => c
-                .GetParameters()
-                .Select(p => p.ParameterType)
-                .SequenceEqual(arguments));
+            return type.GetTypeInfo().DeclaredConstructors
+                .FirstOrDefault(c => c.IsPublic && c
+                    .GetParameters()
+                    .Select(p => p.ParameterType)
+                    .SequenceEqual(arguments));
         }
 
         private static MethodInfo GetMethod(this Type type, string name, Type[] arguments)
@@ -138,7 +115,7 @@
         private static class Array<T>
         {
             /// <summary>Gets an empty array.</summary>
-#if NETSTANDARD1_0 || NET35
+#if NETSTANDARD1_0
             public static T[] Empty { get; } = new T[0];
 #else
             public static T[] Empty => Array.Empty<T>();
