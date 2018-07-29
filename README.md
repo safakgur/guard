@@ -95,8 +95,9 @@ Supported targets:
 For `ArgumentInfo<T>`
 * `Require(Func<T, bool>)`
 * `Require<TException>(Func<T, bool>)`
-* `Compatible<TTarget>()` - Returns an argument of `TTarget`.
+* `Compatible<TTarget>()`
 * `NotCompatible<TTarget>()`
+* `Cast<TTarget>` - Returns an argument of `TTarget`
 
 ### Nullable Arguments
 
@@ -135,22 +136,12 @@ For `ArgumentInfo<T> where T : IEnumerable`
 * `MinCount(int)`
 * `MaxCount(int)`
 * `CountInRange(int, int)`
-
-For `ArgumentInfo<TCollection> where TCollection : IEnumerable<TItem>
-* `Contains(TItem)`
-* `DoesNotContain(TItem)`
-
-For `ArgumentInfo<T> where T : IEnumerable<object>
 * `ContainsNull()`
 * `DoesNotContainNull()`
 
-### Object Arguments
-
-For `ArgumentInfo<object>`
-* `Type<T>()` - Returns an argument of `T`.
-* `NotType<T>()`
-* `Type(Type)`
-* `NotType(Type)`
+For `ArgumentInfo<TCollection> where TCollection : IEnumerable<TItem>`
+* `Contains(TItem)`
+* `DoesNotContain(TItem)`
 
 ### String Arguments
 
@@ -174,6 +165,8 @@ For `ArgumentInfo<bool>`
 ### URI Arguments
 
 For `ArgumentInfo<Uri>`
+* `Absolute`
+* `Relative`
 * `Scheme(string)`
 * `Http()`
 * `Http(bool)`
@@ -192,6 +185,14 @@ For `EnumArgumentInfo<T>`
 * `NotEqual(T)`
 * `HasFlag(T)`
 * `DoesNotHaveFlag(T)`
+
+### Object Arguments
+
+For `ArgumentInfo<object>`
+* `Type<T>()` - Returns an argument of `T`.
+* `NotType<T>()`
+* `Type(Type)`
+* `NotType(Type)`
 
 ### Modifications
 
