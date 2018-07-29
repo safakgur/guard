@@ -208,7 +208,7 @@
             /// </exception>
             public ArgumentInfo<T> Compatible<TTarget>(Func<T, string> message = null)
             {
-                if (this.HasValue() && this.Value is TTarget value)
+                if (!this.HasValue() || this.Value is TTarget value)
                     return this;
 
                 var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
