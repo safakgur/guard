@@ -60,6 +60,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(val0), () => Guard.Argument(() => val0).Modify(val0).Min(val1));
+
             // Min (struct).
             valNullArg.Min(valMin1).Min(val0).Min(val1);
 
@@ -76,6 +79,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(ref0), () => Guard.Argument(() => ref0).Modify(ref0).Min(ref1));
 
             // Max (class).
             refNullArg.Max(refMin1).Max(ref0).Max(ref1);
@@ -94,6 +100,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(ref0), () => Guard.Argument(() => ref0).Modify(ref0).Max(refMin1));
+
             // Max (struct).
             valNullArg.Max(valMin1).Max(val0).Max(val1);
 
@@ -110,6 +119,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(val0), () => Guard.Argument(() => val0).Modify(val0).Max(valMin1));
 
             // In range (class).
             refNullArg
@@ -138,6 +150,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(ref0), () => Guard.Argument(() => ref0).Modify(ref0).InRange(refMin2, refMin1));
+
             Assert.Throws<ArgumentOutOfRangeException>(
                nameof(ref0), () => Guard.Argument(() => ref0).InRange(ref1, ref2));
 
@@ -151,6 +166,9 @@
                }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+               nameof(ref0), () => Guard.Argument(() => ref0).Modify(ref0).InRange(ref1, ref2));
 
             // In range (struct).
             valNullArg
@@ -179,6 +197,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(val0), () => Guard.Argument(() => val0).Modify(val0).InRange(valMin2, valMin1));
+
             Assert.Throws<ArgumentOutOfRangeException>(
                nameof(val0), () => Guard.Argument(() => val0).InRange(val1, val2));
 
@@ -192,6 +213,9 @@
                }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+               nameof(val0), () => Guard.Argument(() => val0).Modify(val0).InRange(val1, val2));
 
             // Zero (struct).
             valNullArg.Zero();
@@ -209,6 +233,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(val1), () => Guard.Argument(() => val1).Modify(val1).Zero());
+
             // Zero (nullable struct).
             nil0Arg.Zero();
 
@@ -223,6 +250,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nil1), () => Guard.Argument(() => nil1).Modify(nil1).Zero());
 
             // Not zero (struct).
             valNullArg.NotZero();
@@ -240,6 +270,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(val0), () => Guard.Argument(() => val0).Modify(val0).NotZero());
+
             // Zero (nullable struct).
             nil1Arg.NotZero();
 
@@ -254,6 +287,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nil0), () => Guard.Argument(() => nil0).Modify(nil0).NotZero());
 
             // Positive (struct).
             valNullArg.Positive();
@@ -271,6 +307,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(val0), () => Guard.Argument(() => val0).Modify(val0).Positive());
+
             // Positive (nullable struct).
             nil1Arg.Positive();
 
@@ -285,6 +324,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nil0), () => Guard.Argument(() => nil0).Modify(nil0).Positive());
 
             // Negative (struct).
             valNullArg.Negative();
@@ -302,6 +344,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(val0), () => Guard.Argument(() => val0).Modify(val0).Negative());
+
             // Negative (nullable struct).
             nilMin1Arg.Negative();
 
@@ -316,6 +361,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nil0), () => Guard.Argument(() => nil0).Modify(nil0).Negative());
         }
     }
 }
