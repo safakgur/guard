@@ -41,6 +41,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+               nameof(@null), () => Guard.Argument(() => @null).Modify(@null).Enum().NotNull());
+
             // Not null.
             Assert.Equal(red, nullableRedArg.NotNull());
             Assert.Throws<ArgumentException>(
