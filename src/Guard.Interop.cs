@@ -56,41 +56,18 @@
 #endif
         }
 
-        /// <summary>
-        ///     Determines whether a type is derived from the specified type.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="baseType">The base type.</param>
+        /// <summary>Returns the type from wich the specified type directly inherits.</summary>
+        /// <param name="type">The type whose base type to return.</param>
         /// <returns>
-        ///     <c>true</c>, if <paramref name="type" /> is derived from
-        ///     <paramref name="baseType" /> otherwise, <c>false</c>.
+        ///     The type from wich the <paramref name="type" /> directly inherits,
+        ///     if there is one; otherwise, <c>null</c>.
         /// </returns>
-        private static bool IsSubclassOf(this Type type, Type baseType)
+        private static Type GetBaseType(this Type type)
         {
 #if NETSTANDARD1_0
-            return type.GetTypeInfo().IsSubclassOf(baseType);
+            return type.GetTypeInfo().BaseType;
 #else
-            return type.IsSubclassOf(baseType);
-#endif
-        }
-
-        /// <summary>Returns the constructor with the specified parameters.</summary>
-        /// <param name="type">The type that the constructor belongs to.</param>
-        /// <param name="arguments">The types of the constructor parameters.</param>
-        /// <returns>
-        ///     The constructor with the specified parameters if it can be
-        ///     found in <paramref name="type" />; otherwise, <c>null</c>.
-        /// </returns>
-        private static ConstructorInfo GetConstructor(this Type type, params Type[] arguments)
-        {
-#if NETSTANDARD1_0
-            return type.GetTypeInfo()
-                .DeclaredConstructors.FirstOrDefault(c => c
-                    .GetParameters()
-                    .Select(p => p.ParameterType)
-                    .SequenceEqual(arguments));
-#else
-            return type.GetConstructor(arguments);
+            return type.BaseType;
 #endif
         }
 
@@ -107,23 +84,6 @@
             return type.GetTypeInfo().GetDeclaredProperty(name)?.GetMethod;
 #else
             return type.GetProperty(name)?.GetGetMethod();
-#endif
-        }
-
-        /// <summary>Returns the method with the specified signature.</summary>
-        /// <param name="type">The type that the method belongs to.</param>
-        /// <param name="name">The name of the method.</param>
-        /// <param name="arguments">The types of the method arguments.</param>
-        /// <returns>
-        ///     The method with the specified signature if it can be found
-        ///     in <paramref name="type" />; otherwise, <c>null</c>.
-        /// </returns>
-        private static MethodInfo GetMethod(this Type type, string name, Type[] arguments)
-        {
-#if NETSTANDARD1_0
-            return type.GetRuntimeMethod(name, arguments);
-#else
-            return type.GetMethod(name, arguments);
 #endif
         }
 
@@ -148,6 +108,40 @@
             return true;
 #else
             return string.IsNullOrWhiteSpace(s);
+#endif
+        }
+
+#if NETSTANDARD1_0
+        private static Type[] GetGenericArguments(this Type type)
+            => type.GetTypeInfo().GenericTypeParameters;
+
+        private static bool IsSubclassOf(this Type type, Type baseType)
+            => type.GetTypeInfo().IsSubclassOf(baseType);
+
+        private static FieldInfo GetField(this Type type, string name)
+            => type.GetTypeInfo().GetDeclaredField(name);
+
+        private static ConstructorInfo GetConstructor(this Type type, Type[] arguments)
+        {
+            return type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(c => c
+                .GetParameters()
+                .Select(p => p.ParameterType)
+                .SequenceEqual(arguments));
+        }
+
+        private static MethodInfo GetMethod(this Type type, string name, Type[] arguments)
+            => type.GetRuntimeMethod(name, arguments);
+#endif
+
+        /// <summary>Provides a cached, empty array.</summary>
+        /// <typeparam name="T">The type of the array.</typeparam>
+        private static class Array<T>
+        {
+            /// <summary>Gets an empty array.</summary>
+#if NETSTANDARD1_0 || NET35
+            public static T[] Empty { get; } = new T[0];
+#else
+            public static T[] Empty => Array.Empty<T>();
 #endif
         }
     }

@@ -22,7 +22,7 @@
             public static string Equal<T>(in ArgumentInfo<T> argument, in T other)
                 => $"{argument.Name} must be {other}.";
 
-            public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
+            public static string NotEqual<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} cannot be {argument.Value}.";
 
             public static string Require<T>(in ArgumentInfo<T> argument)
@@ -133,14 +133,20 @@
             public static string CollectionDoesNotContain<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
                 => $"{argument.Name} cannot contain {item}.";
 
+            public static string UriAbsolute(in ArgumentInfo<Uri> argument)
+                => $"{argument.Name} must be an absolute URI.";
+
+            public static string UriRelative(in ArgumentInfo<Uri> argument)
+                => $"{argument.Name} must be a relative URI.";
+
             public static string UriScheme(in ArgumentInfo<Uri> argument, string scheme)
-                => $"{argument.Name} scheme must be {scheme}.";
+                => $"{argument.Name} must be an absolute URI with the {scheme} scheme.";
 
             public static string UriHttp(in ArgumentInfo<Uri> argument)
-                => $"{argument.Name} use the HTTP protocol.";
+                => $"{argument.Name} must be an absolute URI with the HTTP scheme.";
 
             public static string UriHttps(in ArgumentInfo<Uri> argument)
-                => $"{argument.Name} use the HTTPS protocol.";
+                => $"{argument.Name} must be an absolute URI with the HTTPS scheme.";
         }
     }
 }

@@ -109,9 +109,9 @@
                     => Guard.Argument(() => s).NotEqual(s, RandomStringComparison));
 
                 ex = Assert.Throws<ArgumentException>(nameof(s), ()
-                    => Guard.Argument(() => s).NotEqual(s, RandomStringComparison, (a, b) => a + b));
+                    => Guard.Argument(() => s).NotEqual(s, RandomStringComparison, a => a));
 
-                Assert.StartsWith(s + s, ex.Message);
+                Assert.StartsWith(s, ex.Message);
             }
 
             void TestLength()

@@ -208,7 +208,7 @@
             /// </exception>
             public ArgumentInfo<T> Compatible<TTarget>(Func<T, string> message = null)
             {
-                if (this.HasValue() && this.Value is TTarget value)
+                if (!this.HasValue() || this.Value is TTarget value)
                     return this;
 
                 var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
@@ -264,7 +264,7 @@
             ///     <see cref="Value" /> cannot be assigned
             ///     to type <typeparamref name="TTarget" />.
             /// </exception>
-            public ArgumentInfo<TTarget> Cast<TTarget>(Func<object, string> message = null)
+            public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
             {
                 if (this.Value is TTarget value)
                     return new ArgumentInfo<TTarget>(value, this.Name, this.Modified);
@@ -364,7 +364,7 @@
 
                 bool TryGetFactoryWithTwoStringArguments(out Func<string, string, T> factory)
                 {
-                    var ctor = type.GetConstructor(typeof(string), typeof(string));
+                    var ctor = type.GetConstructor(new[] { typeof(string), typeof(string) });
                     if (ctor != null)
                     {
                         var args = new[]
@@ -385,7 +385,7 @@
 
                 bool TryGetFactoryWithOneStringArgument(out Func<string, T> factory)
                 {
-                    var ctor = type.GetConstructor(typeof(string));
+                    var ctor = type.GetConstructor(new[] { typeof(string) });
                     if (ctor != null)
                     {
                         var arg = Expression.Parameter(typeof(string), "message");
@@ -401,7 +401,7 @@
 
                 bool TryGetFactoryWithNoArguments(out Func<T> factory)
                 {
-                    var ctor = type.GetConstructor();
+                    var ctor = type.GetConstructor(Array<Type>.Empty);
                     if (ctor != null)
                     {
                         factory = Expression.Lambda<Func<T>>(Expression.New(ctor)).Compile();
