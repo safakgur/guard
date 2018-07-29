@@ -263,11 +263,11 @@
             in this ArgumentInfo<string> argument,
             string other,
             StringComparison comparison,
-            Func<string, string, string> message = null)
+            Func<string, string> message = null)
         {
             if (argument.HasValue() && StringEqualityComparer(comparison).Equals(argument.Value, other))
             {
-                var m = message?.Invoke(argument.Value, other) ?? Messages.NotEqual(argument, other);
+                var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument);
                 throw new ArgumentException(m, argument.Name);
             }
 

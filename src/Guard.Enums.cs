@@ -14,11 +14,11 @@
         /// <param name="argument">The enum argument.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     will be thrown if the argument type is not an enum.
         /// </param>
         /// <returns>A new <see cref="EnumArgumentInfo{T}" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> cannot represent an enum.
+        ///     <typeparamref name="T" /> is not an enum.
         /// </exception>
         public static EnumArgumentInfo<T> Enum<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
@@ -41,11 +41,11 @@
         /// <param name="argument">The enum argument.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     will be thrown if the argument type is not an enum.
         /// </param>
         /// <returns>A new <see cref="NullableEnumArgumentInfo{T}" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> cannot represent an enum.
+        ///     <typeparamref name="T" /> is not an enum.
         /// </exception>
         public static NullableEnumArgumentInfo<T> Enum<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
@@ -224,11 +224,11 @@
             /// <exception cref="ArgumentException">
             ///     <see cref="Argument" /> value is equal to <paramref name="other" />.
             /// </exception>
-            public EnumArgumentInfo<T> NotEqual(T other, Func<T, T, string> message = null)
+            public EnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
                 if (EqualityComparer<T>.Default.Equals(this.Argument.Value, other))
                 {
-                    var m = message?.Invoke(this.Argument.Value, other) ?? Messages.NotEqual(this.Argument, other);
+                    var m = message?.Invoke(this.Argument.Value) ?? Messages.NotEqual(this.Argument);
                     throw new ArgumentException(m, this.Argument.Name);
                 }
 
@@ -385,7 +385,7 @@
             ///     the argument is modified after its initialization.
             /// </exception>
             public EnumArgumentInfo<T> NotNull(string message = null)
-                => this.Argument.NotNull().Enum();
+                => this.Argument.NotNull(message).Enum();
 
             /// <summary>
             ///     Requires the nullable enum argument to be
@@ -486,7 +486,7 @@
             ///     <see cref="Argument" /> value is not <c>null</c>
             ///     and is equal to <paramref name="other" />.
             /// </exception>
-            public NullableEnumArgumentInfo<T> NotEqual(T other, Func<T, T, string> message = null)
+            public NullableEnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
                 if (this.NotNull(out var a))
                     a.NotEqual(other, message);
