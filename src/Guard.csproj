@@ -5,16 +5,21 @@
     <TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
     <AssemblyName>Dawn.Guard</AssemblyName>
     <Product>Dawn Utils</Product>
-    <Version>0.2.1-beta</Version>
+      <Version>0.2.1-beta</Version>
     <FileVersion>1.0.0</FileVersion>
     <RootNamespace>Dawn</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>$(OutputPath)bin/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
+    <Configurations>Debug;Release;CI</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release' OR '$(Configuration)'=='CI'">
+    <Optimize>true</Optimize>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties/Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties/Key.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
