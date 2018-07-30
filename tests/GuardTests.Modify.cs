@@ -48,9 +48,12 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+        }
 
-            // Clone without modification.
 #if !NETCOREAPP1_0
+        [Fact(DisplayName = "Guard supports cloning.")]
+        public void GuardSupportsCloning()
+        {
             var cloneable = new TestCloneable();
             Assert.False(cloneable.IsCloned);
 
@@ -70,10 +73,8 @@
             Assert.Equal(modifiedCloneableArg.Name, modifedClonedArg.Name);
             Assert.True(modifedClonedArg.Value.IsCloned);
             Assert.Equal(modifiedCloneableArg.Modified, modifedClonedArg.Modified);
-#endif
         }
 
-#if !NETCOREAPP1_0
         private sealed class TestCloneable : ICloneable
         {
             public TestCloneable()
