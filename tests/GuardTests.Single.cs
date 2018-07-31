@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports singles.")]
+        [Fact(DisplayName = T + "Guard supports singles.")]
         public void GuardSupportsSingles()
         {
             // "Not a number".

@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports doubles.")]
+        [Fact(DisplayName = T + "Guard supports doubles.")]
         public void GuardSupportsDoubles()
         {
             // "Not a number".

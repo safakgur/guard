@@ -8,7 +8,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports collection preconditions.")]
+        [Fact(DisplayName = T + "Guard supports collection preconditions.")]
         public void GuardSupportsCollections()
         {
             var message = RandomMessage;

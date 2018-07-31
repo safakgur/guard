@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports enum preconditions.")]
+        [Fact(DisplayName = T + "Guard supports enum preconditions.")]
         public void GuardSupportsEnums()
         {
             var red = Colors.Red;
