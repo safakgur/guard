@@ -109,11 +109,13 @@ For `ArgumentInfo<T> where T : class` and `ArgumentInfo<T?> where T : struct`
 
 ### Equatable Arguments
 
-For `ArgumentInfo<T> where T : IEquatable<T>`
+For `ArgumentInfo<T>`
 * `Equal(T)`
+* `Equal(T, IEqualityComparer<T>)`
 * `NotEqual(T)`
+* `NotEqual(T, IEqualityComparer<T>)`
 
-For `ArgumentInfo<T> where T : struct, IEquatable<T>`
+For `ArgumentInfo<T> where T : struct`
 * `Default()`
 * `NotDefault()`
 
