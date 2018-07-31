@@ -8,8 +8,6 @@
         [Fact(DisplayName = T + "Guard supports strings.")]
         public void GuardSupportsStrings()
         {
-            var message = RandomMessage;
-
             // Null allows all.
             string s = null;
             Guard.Argument(() => s)
@@ -21,7 +19,15 @@
                 .MaxLength(RandomNumber)
                 .LengthInRange(RandomNumber, RandomNumber)
                 .Equal("s", RandomStringComparison)
-                .NotEqual("s", RandomStringComparison);
+                .NotEqual("s", RandomStringComparison)
+                .StartsWith("s")
+                .StartsWith("s", RandomStringComparison)
+                .DoesNotStartWith("s")
+                .DoesNotStartWith("s", RandomStringComparison)
+                .EndsWith("s")
+                .EndsWith("s", RandomStringComparison)
+                .DoesNotEndWith("s")
+                .DoesNotEndWith("s", RandomStringComparison);
 
             // Empty string.
             s = string.Empty;
@@ -29,6 +35,7 @@
             Assert.Throws<ArgumentException>(nameof(s), ()
                 => Guard.Argument(() => s).NotEmpty());
 
+            var message = RandomMessage;
             var ex = Assert.Throws<ArgumentException>(nameof(s), ()
                 => Guard.Argument(() => s).NotEmpty(message));
 
@@ -88,6 +95,182 @@
 
             TestEqual();
             TestLength();
+
+            // Starts with
+            s = "AB";
+            Guard.Argument(() => s)
+                .StartsWith("A")
+                .StartsWith("A", RandomStringComparison)
+                .StartsWith("AB")
+                .StartsWith("AB", RandomStringComparison);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).StartsWith("B"));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).StartsWith("B", (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("B", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).StartsWith("B", RandomStringComparison));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).StartsWith("B", RandomStringComparison, (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("B", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            // Does not start with
+            Guard.Argument(() => s)
+                .DoesNotStartWith("B")
+                .DoesNotStartWith("B", RandomStringComparison);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("A"));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("A", (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("A", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("A", RandomStringComparison));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("A", RandomStringComparison, (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("A", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("AB"));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("AB", (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("AB", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("AB", RandomStringComparison));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotStartWith("AB", RandomStringComparison, (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("AB", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            // Ends with
+            Guard.Argument(() => s)
+                .EndsWith("B")
+                .EndsWith("B", RandomStringComparison)
+                .EndsWith("AB")
+                .EndsWith("AB", RandomStringComparison);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).EndsWith("A"));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).EndsWith("A", (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("A", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            // Does not end with
+            Guard.Argument(() => s).DoesNotEndWith("A");
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("B"));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("B", (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("B", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("B", RandomStringComparison));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("B", RandomStringComparison, (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("B", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("AB"));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("AB", (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("AB", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("AB", RandomStringComparison));
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentException>(
+                nameof(s), () => Guard.Argument(() => s).DoesNotEndWith("AB", RandomStringComparison, (a, value) =>
+                {
+                    Assert.Equal(s, a);
+                    Assert.Equal("AB", value);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
 
             void TestEqual()
             {

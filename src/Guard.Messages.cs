@@ -106,6 +106,18 @@
             public static string StringLengthInRange(in ArgumentInfo<string> argument, int minLength, int maxLength)
                 => $"{argument.Name} must contain {minLength} to {maxLength} characters.";
 
+            public static string StringStartsWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} must start with '{value}'.";
+
+            public static string StringDoesNotStartWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} cannot start with '{value}'.";
+
+            public static string StringEndsWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} must end with '{value}'.";
+
+            public static string StringDoesNotEndWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} cannot end with '{value}'.";
+
             public static string True<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be true.";
 
