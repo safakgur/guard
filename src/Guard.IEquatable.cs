@@ -23,9 +23,9 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> Default<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
-            where T : struct, IEquatable<T>
+            where T : struct
         {
-            if (!argument.Value.Equals(default))
+            if (!EqualityComparer<T>.Default.Equals(argument.Value, default))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Default(argument);
                 throw new ArgumentException(m, argument.Name);
@@ -51,9 +51,9 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> NotDefault<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
-            where T : struct, IEquatable<T>
+            where T : struct
         {
-            if (argument.Value.Equals(default))
+            if (EqualityComparer<T>.Default.Equals(argument.Value, default))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotDefault(argument);
                 throw new ArgumentException(m, argument.Name);
@@ -77,7 +77,6 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> Equal<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, T, string> message = null)
-            where T : IEquatable<T>
         {
             if (argument.HasValue() && !EqualityComparer<T>.Default.Equals(argument.Value, other))
             {
@@ -136,7 +135,6 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, string> message = null)
-            where T : IEquatable<T>
         {
             if (argument.HasValue() && EqualityComparer<T>.Default.Equals(argument.Value, other))
             {
