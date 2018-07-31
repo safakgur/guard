@@ -61,6 +61,30 @@
             public static string InRange<T>(in ArgumentInfo<T> argument, in T minValue, in T maxValue)
                 => $"{argument.Name} must be between {minValue} and {maxValue}";
 
+            public static string NaN<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be not a number (NaN).";
+
+            public static string NotNaN<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be not a number (NaN).";
+
+            public static string Infinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be positive or negative infinity.";
+
+            public static string NotInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be positive or negative infinity.";
+
+            public static string PositiveInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be positive infinity (∞).";
+
+            public static string NotPositiveInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be positive infinity (∞).";
+
+            public static string NegativeInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be negative infinity -(∞).";
+
+            public static string NotNegativeInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be negative infinity (-∞).";
+
             public static string StringEmpty(in ArgumentInfo<string> argument)
                 => $"{argument.Name} must be empty.";
 

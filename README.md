@@ -164,6 +164,18 @@ For `ArgumentInfo<bool>`
 * `True()`
 * `False()`
 
+### Floating-Point Numeric Arguments
+
+For `ArgumentInfo<float>` and `ArgumentInfo<double>`
+* NaN()
+* NotNaN()
+* Infinity()
+* NotInfinity()
+* PositiveInfinity()
+* NotPositiveInfinity()
+* NegativeInfinity()
+* NotNegativeInfinity()
+
 ### URI Arguments
 
 For `ArgumentInfo<Uri>`
