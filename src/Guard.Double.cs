@@ -15,7 +15,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is not <see cref="double.NaN" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double> NaN(
@@ -40,7 +40,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
         ///     <see cref="double.NaN" />.
         /// </exception>
@@ -65,7 +65,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is <see cref="double.NaN" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double> NotNaN(
@@ -89,7 +89,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is <see cref="double.NaN" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double?> NotNaN(
@@ -115,7 +115,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <see cref="double.PositiveInfinity" />
         ///     nor <see cref="double.NegativeInfinity" />.
         /// </exception>
@@ -142,7 +142,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is not <c>null</c>, not
         ///     <see cref="double.PositiveInfinity" /> and not <see cref="double.NegativeInfinity" />.
         /// </exception>
@@ -168,7 +168,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
         ///     or <see cref="double.NegativeInfinity" />.
         /// </exception>
@@ -194,7 +194,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
         ///     or <see cref="double.NegativeInfinity" />.
         /// </exception>
@@ -220,7 +220,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is not <see cref="double.PositiveInfinity" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double> PositiveInfinity(
@@ -245,7 +245,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
         ///     <see cref="double.PositiveInfinity" />.
         /// </exception>
@@ -270,7 +270,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double> NotPositiveInfinity(
@@ -294,7 +294,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double?> NotPositiveInfinity(
@@ -319,7 +319,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is not <see cref="double.NegativeInfinity" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double> NegativeInfinity(
@@ -344,7 +344,7 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
         ///     <see cref="double.NegativeInfinity" />.
         /// </exception>
@@ -369,7 +369,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double> NotNegativeInfinity(
@@ -393,7 +393,7 @@
         ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
+        /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />.
         /// </exception>
         public static ref readonly ArgumentInfo<double?> NotNegativeInfinity(
