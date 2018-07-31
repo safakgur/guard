@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports strings.")]
+        [Fact(DisplayName = T + "Guard supports strings.")]
         public void GuardSupportsStrings()
         {
             var message = RandomMessage;
