@@ -157,6 +157,15 @@ For `ArgumentInfo<string>`
 * `LengthInRange(int, int)`
 * `Equal(string, StringComparison)`
 * `NotEqual(string, StringComparison)`
+* `StartsWith(string)`
+* `StartsWith(string, StringComparison)`
+* `DoesNotStartWith(string)`
+* `DoesNotStartWith(string, StringComparison)`
+* `EndsWith(string)`
+* `EndsWith(string, StringComparison)`
+* `DoesNotEndWith(string)`
+* `DoesNotEndWith(string, StringComparison)`
+
 
 ### Boolean Arguments
 
@@ -167,14 +176,14 @@ For `ArgumentInfo<bool>`
 ### Floating-Point Numeric Arguments
 
 For `ArgumentInfo<float>` and `ArgumentInfo<double>`
-* NaN()
-* NotNaN()
-* Infinity()
-* NotInfinity()
-* PositiveInfinity()
-* NotPositiveInfinity()
-* NegativeInfinity()
-* NotNegativeInfinity()
+* `NaN()`
+* `NotNaN()`
+* `Infinity()`
+* `NotInfinity()`
+* `PositiveInfinity()`
+* `NotPositiveInfinity()`
+* `NegativeInfinity()`
+* `NotNegativeInfinity()`
 
 ### URI Arguments
 
