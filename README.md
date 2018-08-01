@@ -190,29 +190,10 @@ For `ArgumentInfo<Uri>`
 * `Https()`
 
 ### Enum Guards
-
-For `ArgumentInfo<T|T?> where T : struct, IComparable, IFormattable, IConvertible`
-* `Enum()` - Returns an `EnumArgumentInfo<T>` or `NullableEnumArgumentInfo<T>`.
-
-For `NullableEnumArgumentInfo<T>`
-* `Null()`
-* `NotNull()` - Returns an `EnumArgumentInfo<T>`.
-
-For `EnumArgumentInfo<T>` and `NullableEnumArgumentInfo<T>`
+For `ArgumentInfo<T|T?> where T : enum`
 * `Defined()`
-* `None()`
-* `NotNone()`
-* `Equal(T)`
-* `NotEqual(T)`
 * `HasFlag(T)`
 * `DoesNotHaveFlag(T)`
-
-### Custom Guards
-
-For `ArgumentInfo<T>`
-* `Require(Func<T, bool>)`
-* `Require<TException>(Func<T, bool>)`
-
 
 ### Type Guards
 
@@ -227,7 +208,7 @@ For `ArgumentInfo<object>`
 * `Type(Type)`
 * `NotType(Type)`
 
-### Modifying Guards
+### Normalization Guards
 
 For `ArgumentInfo<T>`
 * `Modify(T value)`
@@ -236,6 +217,12 @@ For `ArgumentInfo<T>`
 
 For `ArgumentInfo<T> where T : class, ICloneable`
 * `Clone()`
+
+### Predicate Guards
+
+For `ArgumentInfo<T>`
+* `Require(Func<T, bool>)`
+* `Require<TException>(Func<T, bool>)`
 
 [1]: docs/design-decisions.md
 [2]: docs/extensibility.md
