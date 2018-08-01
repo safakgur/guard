@@ -53,13 +53,43 @@
                 => $"{argument.Name} cannot be zero.";
 
             public static string Positive<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} must have a positive value.";
+                => $"{argument.Name} must be greater than zero.";
+
+            public static string NotPositive<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be zero or less.";
 
             public static string Negative<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} must have a negative value.";
+                => $"{argument.Name} must be less than zero.";
+
+            public static string NotNegative<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be zero or greater.";
 
             public static string InRange<T>(in ArgumentInfo<T> argument, in T minValue, in T maxValue)
                 => $"{argument.Name} must be between {minValue} and {maxValue}";
+
+            public static string NaN<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be not a number (NaN).";
+
+            public static string NotNaN<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be not a number (NaN).";
+
+            public static string Infinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be positive or negative infinity.";
+
+            public static string NotInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be positive or negative infinity.";
+
+            public static string PositiveInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be positive infinity (∞).";
+
+            public static string NotPositiveInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be positive infinity (∞).";
+
+            public static string NegativeInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be negative infinity -(∞).";
+
+            public static string NotNegativeInfinity<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} cannot be negative infinity (-∞).";
 
             public static string StringEmpty(in ArgumentInfo<string> argument)
                 => $"{argument.Name} must be empty.";
@@ -81,6 +111,18 @@
 
             public static string StringLengthInRange(in ArgumentInfo<string> argument, int minLength, int maxLength)
                 => $"{argument.Name} must contain {minLength} to {maxLength} characters.";
+
+            public static string StringStartsWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} must start with '{value}'.";
+
+            public static string StringDoesNotStartWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} cannot start with '{value}'.";
+
+            public static string StringEndsWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} must end with '{value}'.";
+
+            public static string StringDoesNotEndWith(in ArgumentInfo<string> argument, string value)
+                => $"{argument.Name} cannot end with '{value}'.";
 
             public static string True<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be true.";

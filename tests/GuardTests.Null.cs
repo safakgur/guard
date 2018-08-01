@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports null preconditions.")]
+        [Fact(DisplayName = T + "Guard supports null preconditions.")]
         public void GuardSupportsNullPreconditions()
         {
             var s = null as string;

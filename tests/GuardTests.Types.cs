@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports type preconditions.")]
+        [Fact(DisplayName = T + "Guard supports type preconditions.")]
         public void GuardSupportsTypes()
         {
             var message = RandomMessage;

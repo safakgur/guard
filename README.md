@@ -92,45 +92,40 @@ Supported targets:
 
 ## Standard Validations
 
-### All Arguments
-
-For `ArgumentInfo<T>`
-* `Require(Func<T, bool>)`
-* `Require<TException>(Func<T, bool>)`
-* `Compatible<TTarget>()`
-* `NotCompatible<TTarget>()`
-* `Cast<TTarget>` - Returns an argument of `TTarget`
-
-### Nullable Arguments
+### Null Guards
 
 For `ArgumentInfo<T> where T : class` and `ArgumentInfo<T?> where T : struct`
 * `Null()`
 * `NotNull()` - When called for an argument of `T?`, returns an argument of `T`.
 
-### Equatable Arguments
+### Equality Guards
 
-For `ArgumentInfo<T> where T : IEquatable<T>`
+For `ArgumentInfo<T>`
 * `Equal(T)`
+* `Equal(T, IEqualityComparer<T>)`
 * `NotEqual(T)`
+* `NotEqual(T, IEqualityComparer<T>)`
 
-For `ArgumentInfo<T> where T : struct, IEquatable<T>`
+For `ArgumentInfo<T|T?> where T : struct`
 * `Default()`
 * `NotDefault()`
 
-### Comparable Arguments
+### Comparison Guards
 
 For `ArgumentInfo<T> where T : IComparable<T>`
 * `Min(T)`
 * `Max(T)`
 * `InRange(T, T)`
 
-For `ArgumentInfo<T> where T : struct, IComparable<T>`
+For `ArgumentInfo<T|T?> where T : struct, IComparable<T>`
 * `Zero()`
 * `NotZero()`
 * `Positive()`
+* `NotPositive()`
 * `Negative()`
+* `NotNegative()`
 
-### Collection Arguments
+### Collection Guards
 
 For `ArgumentInfo<T> where T : IEnumerable`
 * `Empty()`
@@ -145,7 +140,7 @@ For `ArgumentInfo<TCollection> where TCollection : IEnumerable<TItem>`
 * `Contains(TItem)`
 * `DoesNotContain(TItem)`
 
-### String Arguments
+### String Guards
 
 For `ArgumentInfo<string>`
 * `Empty()`
@@ -157,14 +152,34 @@ For `ArgumentInfo<string>`
 * `LengthInRange(int, int)`
 * `Equal(string, StringComparison)`
 * `NotEqual(string, StringComparison)`
+* `StartsWith(string)`
+* `StartsWith(string, StringComparison)`
+* `DoesNotStartWith(string)`
+* `DoesNotStartWith(string, StringComparison)`
+* `EndsWith(string)`
+* `EndsWith(string, StringComparison)`
+* `DoesNotEndWith(string)`
+* `DoesNotEndWith(string, StringComparison)`
 
-### Boolean Arguments
+### Floating-Point Number Guards
 
-For `ArgumentInfo<bool>`
+For `ArgumentInfo<float|float?|double|double?>`
+* `NaN()`
+* `NotNaN()`
+* `Infinity()`
+* `NotInfinity()`
+* `PositiveInfinity()`
+* `NotPositiveInfinity()`
+* `NegativeInfinity()`
+* `NotNegativeInfinity()`
+
+### Boolean Guards
+
+For `ArgumentInfo<bool|bool?>`
 * `True()`
 * `False()`
 
-### URI Arguments
+### URI Guards
 
 For `ArgumentInfo<Uri>`
 * `Absolute`
@@ -174,21 +189,18 @@ For `ArgumentInfo<Uri>`
 * `Http(bool)`
 * `Https()`
 
-### Enum Arguments
-
-For `ArgumentInfo<T> where T : struct, IComparable, IFormattable, IConvertible`
-* `Enum()` - Returns an `EnumArgumentInfo<T>`.
-
-For `EnumArgumentInfo<T>`
+### Enum Guards
+For `ArgumentInfo<T|T?> where T : enum`
 * `Defined()`
-* `None()`
-* `NotNone()`
-* `Equal(T)`
-* `NotEqual(T)`
 * `HasFlag(T)`
 * `DoesNotHaveFlag(T)`
 
-### Object Arguments
+### Type Guards
+
+For `ArgumentInfo<T>`
+* `Compatible<TTarget>()`
+* `NotCompatible<TTarget>()`
+* `Cast<TTarget>` - Returns an argument of `TTarget`
 
 For `ArgumentInfo<object>`
 * `Type<T>()` - Returns an argument of `T`.
@@ -196,7 +208,7 @@ For `ArgumentInfo<object>`
 * `Type(Type)`
 * `NotType(Type)`
 
-### Modifications
+### Normalization Guards
 
 For `ArgumentInfo<T>`
 * `Modify(T value)`
@@ -205,6 +217,12 @@ For `ArgumentInfo<T>`
 
 For `ArgumentInfo<T> where T : class, ICloneable`
 * `Clone()`
+
+### Predicate Guards
+
+For `ArgumentInfo<T>`
+* `Require(Func<T, bool>)`
+* `Require<TException>(Func<T, bool>)`
 
 [1]: docs/design-decisions.md
 [2]: docs/extensibility.md
