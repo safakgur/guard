@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports modifications.")]
+        [Fact(DisplayName = T + "Guard supports modifications.")]
         public void GuardSupportsModifications()
         {
             // Modify with value.
@@ -51,7 +51,7 @@
         }
 
 #if !NETCOREAPP1_0
-        [Fact(DisplayName = "Guard supports cloning.")]
+        [Fact(DisplayName = T + "Guard supports cloning.")]
         public void GuardSupportsCloning()
         {
             var cloneable = new TestCloneable();

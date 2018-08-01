@@ -9,7 +9,7 @@
 
         private const string HttpsUriScheme = "https"; // Uri.HttpsUriScheme
 
-        [Fact(DisplayName = "Guard supports URI preconditions.")]
+        [Fact(DisplayName = T + "Guard supports URI preconditions.")]
         public void GuardSupportsUris()
         {
             var message = RandomMessage;

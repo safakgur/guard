@@ -5,11 +5,9 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports comparing preconditions.")]
+        [Fact(DisplayName = T + "Guard supports comparing preconditions.")]
         public void GuardSupportsComparables()
         {
-            var message = RandomMessage;
-
             // Class constants.
             var refNull = null as string;
             var refNullArg = Guard.Argument(() => refNull);
@@ -50,6 +48,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Min(val1));
 
+            var message = RandomMessage;
             var ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Min(val1, (a, b) =>
                 {
@@ -70,6 +69,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(ref0), () => Guard.Argument(() => ref0).Min(ref1));
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(ref0), () => Guard.Argument(() => ref0).Min(ref1, (a, b) =>
                 {
@@ -90,6 +90,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(ref0), () => Guard.Argument(() => ref0).Max(refMin1));
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(ref0), () => Guard.Argument(() => ref0).Max(refMin1, (a, b) =>
                 {
@@ -110,6 +111,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Max(valMin1));
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Max(valMin1, (a, b) =>
                 {
@@ -139,6 +141,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(ref0), () => Guard.Argument(() => ref0).InRange(refMin2, refMin1));
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(ref0), () => Guard.Argument(() => ref0).InRange(refMin2, refMin1, (a, min, max) =>
                 {
@@ -156,6 +159,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                nameof(ref0), () => Guard.Argument(() => ref0).InRange(ref1, ref2));
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                nameof(ref0), () => Guard.Argument(() => ref0).InRange(ref1, ref2, (a, min, max) =>
                {
@@ -186,6 +190,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).InRange(valMin2, valMin1));
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).InRange(valMin2, valMin1, (a, min, max) =>
                 {
@@ -203,6 +208,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                nameof(val0), () => Guard.Argument(() => val0).InRange(val1, val2));
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                nameof(val0), () => Guard.Argument(() => val0).InRange(val1, val2, (a, min, max) =>
                {
@@ -224,6 +230,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val1), () => Guard.Argument(() => val1).Zero());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val1), () => Guard.Argument(() => val1).Zero(a =>
                 {
@@ -242,6 +249,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil1), () => Guard.Argument(() => nil1).Zero());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil1), () => Guard.Argument(() => nil1).Zero(a =>
                 {
@@ -261,6 +269,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).NotZero());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).NotZero(a =>
                 {
@@ -279,6 +288,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).NotZero());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).NotZero(a =>
                 {
@@ -298,6 +308,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Positive());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Positive(a =>
                 {
@@ -316,6 +327,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).Positive());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).Positive(a =>
                 {
@@ -328,6 +340,47 @@
             Assert.Throws<ArgumentException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).Modify(nil0).Positive());
 
+            // Not positive (struct).
+            valNullArg.NotPositive();
+            val0Arg.NotPositive();
+            valMin1Arg.NotPositive();
+
+            Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(val1), () => Guard.Argument(() => val1).NotPositive());
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(val1), () => Guard.Argument(() => val1).NotPositive(a =>
+                {
+                    Assert.Equal(val1, a);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(val1), () => Guard.Argument(() => val1).Modify(val1).NotPositive());
+
+            // Not positive (nullable struct).
+            nil0Arg.NotPositive();
+            nilMin1Arg.NotPositive();
+
+            Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(nil1), () => Guard.Argument(() => nil1).NotPositive());
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(nil1), () => Guard.Argument(() => nil1).NotPositive(a =>
+                {
+                    Assert.Equal(nil1, a);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nil1), () => Guard.Argument(() => nil1).Modify(nil1).NotPositive());
+
             // Negative (struct).
             valNullArg.Negative();
             valMin1Arg.Negative();
@@ -335,6 +388,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Negative());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(val0), () => Guard.Argument(() => val0).Negative(a =>
                 {
@@ -353,6 +407,7 @@
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).Negative());
 
+            message = RandomMessage;
             ex = Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).Negative(a =>
                 {
@@ -364,6 +419,47 @@
 
             Assert.Throws<ArgumentException>(
                 nameof(nil0), () => Guard.Argument(() => nil0).Modify(nil0).Negative());
+
+            // Not negative (struct).
+            valNullArg.NotNegative();
+            val0Arg.NotNegative();
+            val1Arg.NotNegative();
+
+            Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(valMin1), () => Guard.Argument(() => valMin1).NotNegative());
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(valMin1), () => Guard.Argument(() => valMin1).NotNegative(a =>
+                {
+                    Assert.Equal(valMin1, a);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(valMin1), () => Guard.Argument(() => valMin1).Modify(valMin1).NotNegative());
+
+            // Not negative (nullable struct).
+            nil0Arg.NotNegative();
+            nil1Arg.NotNegative();
+
+            Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(nilMin1), () => Guard.Argument(() => nilMin1).NotNegative());
+
+            message = RandomMessage;
+            ex = Assert.Throws<ArgumentOutOfRangeException>(
+                nameof(nilMin1), () => Guard.Argument(() => nilMin1).NotNegative(a =>
+                {
+                    Assert.Equal(nilMin1, a);
+                    return message;
+                }));
+
+            Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nilMin1), () => Guard.Argument(() => nilMin1).Modify(nilMin1).NotNegative());
         }
     }
 }

@@ -6,9 +6,16 @@
 
     public sealed partial class GuardTests
     {
+        /// <summary>A prefix for the test names identifying the current compilation target.</summary>
+#if NETCOREAPP1_0
+        const string T = "NS1: "; // Targeting .NET Standard 1.0.
+#elif NETCOREAPP2_0
+        const string T = "NS2: "; // Targeting .NET Standard 2.0.
+#endif
+
         #region Methods
 
-        [Fact(DisplayName = "Guard can initialize arguments.")]
+        [Fact(DisplayName = T + "Guard can initialize arguments.")]
         public void GuardCanInitializeArguments()
         {
             var i = 1;
@@ -57,7 +64,7 @@
             Assert.Equal($"The {typeof(string)} argument", stringArg.Name);
         }
 
-        [Fact(DisplayName = "Guard supports custom preconditions.")]
+        [Fact(DisplayName = T + "Guard supports custom preconditions.")]
         public void GuardSupportsCustomPreconditions()
         {
             var number = 1;
@@ -122,7 +129,7 @@
             Assert.StartsWith(number.ToString(), inner.Message);
         }
 
-        [Fact(DisplayName = "Guard supports compatibility preconditions.")]
+        [Fact(DisplayName = T + "Guard supports compatibility preconditions.")]
         public void GuardSupportsCompatibilityPreconditions()
         {
             var message = RandomMessage;

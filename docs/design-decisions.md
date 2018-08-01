@@ -220,19 +220,3 @@ The same goes for `ArgumentOutOfRangeException`s. If the original argument is
 modified, an `ArgumentException` is thrown instead of a more specialized exception.
 For validations to detect whether the argument is modified, `ArgumentInfo<T>`
 contains a boolean `Modified` flag along with the argument's name and value.
-
-## Enum Arguments
-
-C# currently can't constrain a generic type parameter to be an enum without weaving.
-The closest we can get is `where T : struct, IComparable, IFormattable, IConvertible`
-but writing extension methods for enums using these type constraints would clutter
-the intellisense for all primitive numeric types.
-
-That's why I opted to create an `EnumArgumentInfo<T>` struct with these
-type constraints and define all enum-related functionality in it.
-
-```c#
-Guard.Argument(() => color)
-    .Enum() // Returns an EnumArgumentInfo<T>
-    .Defined(); // Enum validations.
-```

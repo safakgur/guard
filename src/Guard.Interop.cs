@@ -33,11 +33,9 @@
         {
 #if NETSTANDARD1_0
             var info = type.GetTypeInfo();
-            return type.GetTypeInfo().IsGenericType
-                && info.GetGenericTypeDefinition() == definition;
+            return info.IsGenericType && info.GetGenericTypeDefinition() == definition;
 #else
-            return type.IsGenericType
-                && type.GetGenericTypeDefinition() == definition;
+            return type.IsGenericType && type.GetGenericTypeDefinition() == definition;
 #endif
         }
 

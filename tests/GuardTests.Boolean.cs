@@ -5,7 +5,7 @@
 
     public sealed partial class GuardTests
     {
-        [Fact(DisplayName = "Guard supports booleans.")]
+        [Fact(DisplayName = T + "Guard supports booleans.")]
         public void GuardSupportsBooleans()
         {
             var message = RandomMessage;

@@ -275,6 +275,246 @@
         }
 
         /// <summary>
+        ///     Requires the beginning of the string argument
+        ///     to match with the specified string.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the beginning of the argument.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value does not start with
+        ///     <paramref name="value" /> when a case-sensitive and
+        ///     culture-sensitive comparison is performed.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> StartsWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            Func<string, string, string> message = null)
+            => ref argument.StartsWith(value, StringComparison.CurrentCulture, message);
+
+        /// <summary>
+        ///     Requires the beginning of the string argument to match with
+        ///     the specified string when compared by the specified rules.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the beginning of the argument.
+        /// </param>
+        /// <param name="comparison">
+        ///     The rules that specify how the strings will be compared.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value does not start with
+        ///     <paramref name="value" /> when compared by the comparison
+        ///     rules specified in <paramref name="comparison" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> StartsWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            StringComparison comparison,
+            Func<string, string, string> message = null)
+        {
+            if (argument.HasValue() && !argument.Value.StartsWith(value, comparison))
+            {
+                var m = message?.Invoke(argument.Value, value) ?? Messages.StringStartsWith(argument, value);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the beginning of the string argument
+        ///     to be different than the specified string.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the beginning of the argument.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value starts with
+        ///     <paramref name="value" /> when a case-sensitive
+        ///     and culture-sensitive comparison is performed.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> DoesNotStartWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            Func<string, string, string> message = null)
+            => ref argument.DoesNotStartWith(value, StringComparison.CurrentCulture, message);
+
+        /// <summary>
+        ///     Requires the beginning of the string argument to be different
+        ///     than the specified string when compared by the specified rules.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the beginning of the argument.
+        /// </param>
+        /// <param name="comparison">
+        ///     The rules that specify how the strings will be compared.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value starts with
+        ///     <paramref name="value" /> when compared by the comparison
+        ///     rules specified in <paramref name="comparison" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> DoesNotStartWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            StringComparison comparison,
+            Func<string, string, string> message = null)
+        {
+            if (argument.HasValue() && argument.Value.StartsWith(value, comparison))
+            {
+                var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotStartWith(argument, value);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the end of the string argument
+        ///     to match with the specified string.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the end of the argument.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value does not end with
+        ///     <paramref name="value" /> when a case-sensitive and
+        ///     culture-sensitive comparison is performed.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> EndsWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            Func<string, string, string> message = null)
+            => ref argument.EndsWith(value, StringComparison.CurrentCulture, message);
+
+        /// <summary>
+        ///     Requires the end of the string argument to match with
+        ///     the specified string when compared by the specified rules.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the end of the argument.
+        /// </param>
+        /// <param name="comparison">
+        ///     The rules that specify how the strings will be compared.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value does not end with
+        ///     <paramref name="value" /> when compared by the comparison
+        ///     rules specified in <paramref name="comparison" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> EndsWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            StringComparison comparison,
+            Func<string, string, string> message = null)
+        {
+            if (argument.HasValue() && !argument.Value.EndsWith(value, comparison))
+            {
+                var m = message?.Invoke(argument.Value, value) ?? Messages.StringEndsWith(argument, value);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the end of the string argument
+        ///     to be different than the specified string.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the end of the argument.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value ends with
+        ///     <paramref name="value" /> when a case-sensitive
+        ///     and culture-sensitive comparison is performed.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> DoesNotEndWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            Func<string, string, string> message = null)
+            => ref argument.DoesNotEndWith(value, StringComparison.CurrentCulture, message);
+
+        /// <summary>
+        ///     Requires the end of the string argument to be different
+        ///     than the specified string when compared by the specified rules.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="value">
+        ///     The string to search in the end of the argument.
+        /// </param>
+        /// <param name="comparison">
+        ///     The rules that specify how the strings will be compared.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value ends with
+        ///     <paramref name="value" /> when compared by the comparison
+        ///     rules specified in <paramref name="comparison" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<string> DoesNotEndWith(
+            in this ArgumentInfo<string> argument,
+            string value,
+            StringComparison comparison,
+            Func<string, string, string> message = null)
+        {
+            if (argument.HasValue() && argument.Value.EndsWith(value, comparison))
+            {
+                var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotEndWith(argument, value);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
         ///     Returns the string comparer that is most
         ///     relevant to the specified enumeration value.
         /// </summary>
