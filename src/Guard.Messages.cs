@@ -53,10 +53,16 @@
                 => $"{argument.Name} cannot be zero.";
 
             public static string Positive<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} must have a positive value.";
+                => $"{argument.Name} must be greater than zero.";
+
+            public static string NotPositive<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be zero or less.";
 
             public static string Negative<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} must have a negative value.";
+                => $"{argument.Name} must be less than zero.";
+
+            public static string NotNegative<T>(in ArgumentInfo<T> argument)
+                => $"{argument.Name} must be zero or greater.";
 
             public static string InRange<T>(in ArgumentInfo<T> argument, in T minValue, in T maxValue)
                 => $"{argument.Name} must be between {minValue} and {maxValue}";
