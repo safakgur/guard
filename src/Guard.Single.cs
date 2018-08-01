@@ -16,7 +16,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not <see cref="float.NaN" />.
+        ///     <paramref name="argument" /> value is not <see cref="float.NaN" />, and the
+        ///     argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <see cref="float.NaN" />, and the
+        ///     argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> NaN(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
@@ -24,7 +29,9 @@
             if (!float.IsNaN(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NaN(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -42,7 +49,11 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
-        ///     <see cref="float.NaN" />.
+        ///     <see cref="float.NaN" />, and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is neither <c>null</c> nor
+        ///     <see cref="float.NaN" />, and the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> NaN(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
@@ -50,7 +61,9 @@
             if (argument.NotNull(out var a) && !float.IsNaN(a.Value))
             {
                 var m = message?.Invoke(a.Value) ?? Messages.NaN(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;
@@ -66,7 +79,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="float.NaN" />.
+        ///     <paramref name="argument" /> value is <see cref="float.NaN" />, and the argument is
+        ///     not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is <see cref="float.NaN" />, and the argument is
+        ///     modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> NotNaN(
             in this ArgumentInfo<float> argument, string message = null)
@@ -74,7 +92,9 @@
             if (float.IsNaN(argument.Value))
             {
                 var m = message ?? Messages.NotNaN(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -90,7 +110,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="float.NaN" />.
+        ///     <paramref name="argument" /> value is <see cref="float.NaN" />, and the argument is
+        ///     not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is <see cref="float.NaN" />, and the argument is
+        ///     modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> NotNaN(
             in this ArgumentInfo<float?> argument, string message = null)
@@ -98,7 +123,9 @@
             if (argument.NotNull(out var a) && float.IsNaN(a.Value))
             {
                 var m = message ?? Messages.NotNaN(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;
@@ -117,7 +144,13 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <see cref="float.PositiveInfinity" />
-        ///     nor <see cref="float.NegativeInfinity" />.
+        ///     nor <see cref="float.NegativeInfinity" />, and the argument is not modified since
+        ///     it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is neither <see cref="float.PositiveInfinity" />
+        ///     nor <see cref="float.NegativeInfinity" />, and the argument is modified after its
+        ///     initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> Infinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
@@ -125,7 +158,9 @@
             if (!float.IsInfinity(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Infinity(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -144,7 +179,13 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is not <c>null</c>, not
-        ///     <see cref="float.PositiveInfinity" /> and not <see cref="float.NegativeInfinity" />.
+        ///     <see cref="float.PositiveInfinity" /> and not <see cref="float.NegativeInfinity" />,
+        ///     and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <c>null</c>, not
+        ///     <see cref="float.PositiveInfinity" /> and not <see cref="float.NegativeInfinity" />,
+        ///     and the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> Infinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
@@ -152,7 +193,9 @@
             if (argument.NotNull(out var a) && !float.IsInfinity(a.Value))
             {
                 var m = message?.Invoke(a.Value) ?? Messages.Infinity(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;
@@ -170,7 +213,13 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is either <see cref="float.PositiveInfinity" />
-        ///     or <see cref="float.NegativeInfinity" />.
+        ///     or <see cref="float.NegativeInfinity" />, and the argument is not modified since it
+        ///     is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is either <see cref="float.PositiveInfinity" />
+        ///     or <see cref="float.NegativeInfinity" />, and the argument is modified after its
+        ///     initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> NotInfinity(
             in this ArgumentInfo<float> argument, string message = null)
@@ -178,7 +227,9 @@
             if (float.IsInfinity(argument.Value))
             {
                 var m = message ?? Messages.NotInfinity(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -196,7 +247,13 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is either <see cref="float.PositiveInfinity" />
-        ///     or <see cref="float.NegativeInfinity" />.
+        ///     or <see cref="float.NegativeInfinity" />, and the argument is not modified since it
+        ///     is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is either <see cref="float.PositiveInfinity" />
+        ///     or <see cref="float.NegativeInfinity" />, and the argument is modified after its
+        ///     initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> NotInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
@@ -204,7 +261,9 @@
             if (argument.NotNull(out var a) && float.IsInfinity(a.Value))
             {
                 var m = message ?? Messages.NotInfinity(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;
@@ -221,7 +280,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not <see cref="float.PositiveInfinity" />.
+        ///     <paramref name="argument" /> value is not <see cref="float.PositiveInfinity" />,
+        ///     and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <see cref="float.PositiveInfinity" />,
+        ///     and the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> PositiveInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
@@ -229,7 +293,9 @@
             if (!float.IsPositiveInfinity(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.PositiveInfinity(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -247,7 +313,13 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
-        ///     <see cref="float.PositiveInfinity" />.
+        ///     <see cref="float.PositiveInfinity" />, and the argument is not modified
+        ///     since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is neither <c>null</c> nor
+        ///     <see cref="float.PositiveInfinity" />, and the argument is modified
+        ///     after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> PositiveInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
@@ -255,7 +327,9 @@
             if (argument.NotNull(out var a) && !float.IsPositiveInfinity(a.Value))
             {
                 var m = message?.Invoke(a.Value) ?? Messages.PositiveInfinity(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;
@@ -271,7 +345,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="float.PositiveInfinity" />.
+        ///     <paramref name="argument" /> value is <see cref="float.PositiveInfinity" />, and
+        ///     the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is <see cref="float.PositiveInfinity" />, and
+        ///     the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> NotPositiveInfinity(
             in this ArgumentInfo<float> argument, string message = null)
@@ -279,7 +358,9 @@
             if (float.IsPositiveInfinity(argument.Value))
             {
                 var m = message ?? Messages.NotPositiveInfinity(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -295,7 +376,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="float.PositiveInfinity" />.
+        ///     <paramref name="argument" /> value is <see cref="float.PositiveInfinity" />, and
+        ///     the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is <see cref="float.PositiveInfinity" />, and
+        ///     the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> NotPositiveInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
@@ -303,7 +389,9 @@
             if (argument.NotNull(out var a) && float.IsPositiveInfinity(a.Value))
             {
                 var m = message ?? Messages.NotPositiveInfinity(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;
@@ -320,7 +408,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not <see cref="float.NegativeInfinity" />.
+        ///     <paramref name="argument" /> value is not <see cref="float.NegativeInfinity" />,
+        ///     and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <see cref="float.NegativeInfinity" />,
+        ///     and the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> NegativeInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
@@ -328,7 +421,9 @@
             if (!float.IsNegativeInfinity(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NegativeInfinity(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -346,7 +441,13 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
-        ///     <see cref="float.NegativeInfinity" />.
+        ///     <see cref="float.NegativeInfinity" />, and the argument is not
+        ///     modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is neither <c>null</c> nor
+        ///     <see cref="float.NegativeInfinity" />, and the argument is
+        ///     modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> NegativeInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
@@ -354,7 +455,9 @@
             if (argument.NotNull(out var a) && !float.IsNegativeInfinity(a.Value))
             {
                 var m = message?.Invoke(a.Value) ?? Messages.NegativeInfinity(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;
@@ -370,7 +473,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="float.NegativeInfinity" />.
+        ///     <paramref name="argument" /> value is <see cref="float.NegativeInfinity" />, and
+        ///     the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is <see cref="float.NegativeInfinity" />, and
+        ///     the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float> NotNegativeInfinity(
             in this ArgumentInfo<float> argument, string message = null)
@@ -378,7 +486,9 @@
             if (float.IsNegativeInfinity(argument.Value))
             {
                 var m = message ?? Messages.NotNegativeInfinity(argument);
-                throw new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
             }
 
             return ref argument;
@@ -394,7 +504,12 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="float.NegativeInfinity" />.
+        ///     <paramref name="argument" /> value is <see cref="float.NegativeInfinity" />, and
+        ///     the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is <see cref="float.NegativeInfinity" />, and
+        ///     the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<float?> NotNegativeInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
@@ -402,7 +517,9 @@
             if (argument.NotNull(out var a) && float.IsNegativeInfinity(a.Value))
             {
                 var m = message ?? Messages.NotNegativeInfinity(a);
-                throw new ArgumentOutOfRangeException(a.Name, a.Value, m);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
             }
 
             return ref argument;

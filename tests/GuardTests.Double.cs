@@ -28,6 +28,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(zero), () => Guard.Argument(() => zero).Modify(zero).NaN());
+
             // Nullable "not a number".
             var @null = null as double?;
             var nullArg = Guard.Argument(() => @null);
@@ -52,6 +55,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullableZero), () => Guard.Argument(() => nullableZero).Modify(nullableZero).NaN());
+
             // Not "not a number".
             zeroArg.NotNaN();
 
@@ -63,6 +69,9 @@
                 nameof(nan), () => Guard.Argument(() => nan).NotNaN(message));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nan), () => Guard.Argument(() => nan).Modify(nan).NotNaN());
 
             // Nullable not "not a number".
             nullArg.NotNaN();
@@ -76,6 +85,9 @@
                 nameof(nullableNaN), () => Guard.Argument(() => nullableNaN).NotNaN(message));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nullableNaN), () => Guard.Argument(() => nullableNaN).Modify(nullableNaN).NotNaN());
 
             // Infinity.
             var negInfinity = double.NegativeInfinity;
@@ -99,6 +111,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nan), () => Guard.Argument(() => nan).Modify(nan).Infinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(zero), () => Guard.Argument(() => zero).Infinity());
 
@@ -111,6 +126,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(zero), () => Guard.Argument(() => zero).Modify(zero).Infinity());
 
             // Nullable infinity.
             nullArg.Infinity();
@@ -136,6 +154,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullableNaN), () => Guard.Argument(() => nullableNaN).Modify(nullableNaN).Infinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nullableZero), () => Guard.Argument(() => nullableZero).Infinity());
 
@@ -148,6 +169,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nullableZero), () => Guard.Argument(() => nullableZero).Modify(nullableZero).Infinity());
 
             // Not infinity.
             nanArg.NotInfinity();
@@ -162,6 +186,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(posInfinity), () => Guard.Argument(() => posInfinity).Modify(posInfinity).NotInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(negInfinity), () => Guard.Argument(() => negInfinity).NotInfinity());
 
@@ -170,6 +197,9 @@
                 nameof(negInfinity), () => Guard.Argument(() => negInfinity).NotInfinity(message));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(negInfinity), () => Guard.Argument(() => negInfinity).Modify(negInfinity).NotInfinity());
 
             // Nullable not infinity.
             nullArg.NotInfinity();
@@ -186,6 +216,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullablePosInfinity), () => Guard.Argument(() => nullablePosInfinity).Modify(nullablePosInfinity).NotInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nullableNegInfinity), () => Guard.Argument(() => nullableNegInfinity).NotInfinity());
 
@@ -194,6 +227,9 @@
                 nameof(nullableNegInfinity), () => Guard.Argument(() => nullableNegInfinity).NotInfinity(message));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nullableNegInfinity), () => Guard.Argument(() => nullableNegInfinity).Modify(nullableNegInfinity).NotInfinity());
 
             // Positive infinity.
             posInfinityArg.PositiveInfinity();
@@ -211,6 +247,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nan), () => Guard.Argument(() => nan).Modify(nan).PositiveInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(negInfinity), () => Guard.Argument(() => negInfinity).PositiveInfinity());
 
@@ -224,6 +263,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(negInfinity), () => Guard.Argument(() => negInfinity).Modify(negInfinity).PositiveInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(zero), () => Guard.Argument(() => zero).PositiveInfinity());
 
@@ -236,6 +278,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(zero), () => Guard.Argument(() => zero).Modify(zero).PositiveInfinity());
 
             // Nullable positive infinity.
             nullArg.PositiveInfinity();
@@ -255,6 +300,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullableNaN), () => Guard.Argument(() => nullableNaN).Modify(nullableNaN).PositiveInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nullableNegInfinity), () => Guard.Argument(() => nullableNegInfinity).PositiveInfinity());
 
@@ -267,6 +315,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nullableNegInfinity), () => Guard.Argument(() => nullableNegInfinity).Modify(nullableNegInfinity).PositiveInfinity());
 
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nullableZero), () => Guard.Argument(() => nullableZero).PositiveInfinity());
@@ -281,6 +332,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullableZero), () => Guard.Argument(() => nullableZero).Modify(nullableZero).PositiveInfinity());
+
             // Not positive infinity.
             nanArg.NotPositiveInfinity();
             negInfinityArg.NotPositiveInfinity();
@@ -294,6 +348,9 @@
                 nameof(posInfinity), () => Guard.Argument(() => posInfinity).NotPositiveInfinity(message));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(posInfinity), () => Guard.Argument(() => posInfinity).Modify(posInfinity).NotPositiveInfinity());
 
             // Nullable not positive infinity.
             nullArg.NotPositiveInfinity();
@@ -311,6 +368,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullablePosInfinity), () => Guard.Argument(() => nullablePosInfinity).Modify(nullablePosInfinity).NotPositiveInfinity());
+
             // Negative infinity.
             negInfinityArg.NegativeInfinity();
 
@@ -327,6 +387,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nan), () => Guard.Argument(() => nan).Modify(nan).NegativeInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(posInfinity), () => Guard.Argument(() => posInfinity).NegativeInfinity());
 
@@ -340,6 +403,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(posInfinity), () => Guard.Argument(() => posInfinity).Modify(posInfinity).NegativeInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(zero), () => Guard.Argument(() => zero).NegativeInfinity());
 
@@ -352,6 +418,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(zero), () => Guard.Argument(() => zero).Modify(zero).NegativeInfinity());
 
             // Nullable negative infinity.
             nullArg.NegativeInfinity();
@@ -371,6 +440,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullableNaN), () => Guard.Argument(() => nullableNaN).Modify(nullableNaN).NegativeInfinity());
+
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nullablePosInfinity), () => Guard.Argument(() => nullablePosInfinity).NegativeInfinity());
 
@@ -383,6 +455,9 @@
                 }));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nullablePosInfinity), () => Guard.Argument(() => nullablePosInfinity).Modify(nullablePosInfinity).NegativeInfinity());
 
             Assert.Throws<ArgumentOutOfRangeException>(
                 nameof(nullableZero), () => Guard.Argument(() => nullableZero).NegativeInfinity());
@@ -397,6 +472,9 @@
 
             Assert.StartsWith(message, ex.Message);
 
+            Assert.Throws<ArgumentException>(
+                nameof(nullableZero), () => Guard.Argument(() => nullableZero).Modify(nullableZero).NegativeInfinity());
+
             // Not negative infinity.
             nanArg.NotNegativeInfinity();
             posInfinityArg.NotNegativeInfinity();
@@ -410,6 +488,9 @@
                 nameof(negInfinity), () => Guard.Argument(() => negInfinity).NotNegativeInfinity(message));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(negInfinity), () => Guard.Argument(() => negInfinity).Modify(negInfinity).NotNegativeInfinity());
 
             // Nullable not negative infinity.
             nullArg.NotNegativeInfinity();
@@ -426,6 +507,9 @@
                 nameof(nullableNegInfinity), () => Guard.Argument(() => nullableNegInfinity).NotNegativeInfinity(message));
 
             Assert.StartsWith(message, ex.Message);
+
+            Assert.Throws<ArgumentException>(
+                nameof(nullableNegInfinity), () => Guard.Argument(() => nullableNegInfinity).Modify(nullableNegInfinity).NotNegativeInfinity());
         }
     }
 }
