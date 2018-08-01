@@ -28,7 +28,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is less than
         ///     <paramref name="minValue" /> and the argument
-        ///     is modified after its initialization
+        ///     is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T> Min<T>(
             in this ArgumentInfo<T> argument, in T minValue, Func<T, T, string> message = null)
@@ -68,7 +68,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is less than
         ///     <paramref name="minValue" /> and the argument
-        ///     is modified after its initialization
+        ///     is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T?> Min<T>(
             in this ArgumentInfo<T?> argument, in T minValue, Func<T, T, string> message = null)
@@ -102,7 +102,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is greater than
         ///     <paramref name="maxValue" /> and the argument
-        ///     is modified after its initialization
+        ///     is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T> Max<T>(
             in this ArgumentInfo<T> argument, in T maxValue, Func<T, T, string> message = null)
@@ -142,7 +142,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is greater than
         ///     <paramref name="maxValue" /> and the argument
-        ///     is modified after its initialization
+        ///     is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T?> Max<T>(
             in this ArgumentInfo<T?> argument, in T maxValue, Func<T, T, string> message = null)
@@ -179,7 +179,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not between
         ///     <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is modified after its initialization
+        ///     And the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T> InRange<T>(
             in this ArgumentInfo<T> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
@@ -226,7 +226,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not <c>null</c> and is not
         ///     between <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is modified after its initialization
+        ///     And the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T?> InRange<T>(
             in this ArgumentInfo<T?> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
@@ -252,7 +252,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not zero and
-        ///     the argument is modified after its initialization
+        ///     the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T> Zero<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
@@ -286,7 +286,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not zero and
-        ///     the argument is modified after its initialization
+        ///     the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
         ///     The argument value that is passed to <paramref name="message" />
@@ -324,7 +324,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is zero and the
-        ///     argument is modified after its initialization
+        ///     argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T> NotZero<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
@@ -358,7 +358,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is zero and the
-        ///     argument is modified after its initialization
+        ///     argument is modified after its initialization.
         /// </exception>
         /// <remarks>
         ///     The argument value that is passed to <paramref name="message" />
@@ -398,7 +398,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is zero or less, and
-        ///     the argument is modified after its initialization
+        ///     the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T> Positive<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
@@ -432,7 +432,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is zero or less, and
-        ///     the argument is modified after its initialization
+        ///     the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
         ///     The argument value that is passed to <paramref name="message" />
@@ -457,6 +457,80 @@
         }
 
         /// <summary>
+        ///     Requires the argument to have a value that is not greater than zero.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is greater than zero,
+        ///     and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is greater than zero,
+        ///     and the argument is modified after its initialization.
+        /// </exception>
+        public static ref readonly ArgumentInfo<T> NotPositive<T>(
+            in this ArgumentInfo<T> argument, Func<T, string> message = null)
+            where T : struct, IComparable<T>
+        {
+            if (Comparer<T>.Default.Compare(argument.Value, default) > 0)
+            {
+                var m = message?.Invoke(argument.Value) ?? Messages.NotPositive(argument);
+                throw !argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                     : new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the nullable argument to have
+        ///     a value that is not greater than zero.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is greater than zero,
+        ///     and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is greater than zero,
+        ///     and the argument is modified after its initialization.
+        /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
+        public static ref readonly ArgumentInfo<T?> NotPositive<T>(
+            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
+            where T : struct, IComparable<T>
+        {
+            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) > 0)
+            {
+                var m = message?.Invoke(a.Value) ?? Messages.NotPositive(a);
+                throw !a.Modified
+                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                     : new ArgumentException(m, a.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
         ///     Requires the argument to have a value that is less than zero.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
@@ -472,7 +546,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is zero or greater,
-        ///     and the argument is modified after its initialization
+        ///     and the argument is modified after its initialization.
         /// </exception>
         public static ref readonly ArgumentInfo<T> Negative<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
@@ -506,7 +580,7 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is zero or greater,
-        ///     and the argument is modified after its initialization
+        ///     and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
         ///     The argument value that is passed to <paramref name="message" />
@@ -522,6 +596,80 @@
             if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) >= 0)
             {
                 var m = message?.Invoke(a.Value) ?? Messages.Negative(a);
+                throw !a.Modified
+                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                     : new ArgumentException(m, a.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a value that is not less than zero.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is less than zero,
+        ///     and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is less than zero,
+        ///     and the argument is modified after its initialization.
+        /// </exception>
+        public static ref readonly ArgumentInfo<T> NotNegative<T>(
+            in this ArgumentInfo<T> argument, Func<T, string> message = null)
+            where T : struct, IComparable<T>
+        {
+            if (Comparer<T>.Default.Compare(argument.Value, default) < 0)
+            {
+                var m = message?.Invoke(argument.Value) ?? Messages.NotNegative(argument);
+                throw !argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                     : new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the nullable argument to have
+        ///     a value that is not less than zero.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that
+        ///     will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is less than zero,
+        ///     and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is less than zero,
+        ///     and the argument is modified after its initialization.
+        /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
+        public static ref readonly ArgumentInfo<T?> NotNegative<T>(
+            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
+            where T : struct, IComparable<T>
+        {
+            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) < 0)
+            {
+                var m = message?.Invoke(a.Value) ?? Messages.NotNegative(a);
                 throw !a.Modified
                      ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
                      : new ArgumentException(m, a.Name);

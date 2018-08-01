@@ -130,7 +130,9 @@ For `ArgumentInfo<T> where T : struct, IComparable<T>`
 * `Zero()`
 * `NotZero()`
 * `Positive()`
+* `NotPositive()`
 * `Negative()`
+* `NotNegative()`
 
 ### Collection Arguments
 
