@@ -257,7 +257,8 @@
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
-        ///     The message of the exception that will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -326,7 +327,8 @@
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
-        ///     The message of the exception that will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
