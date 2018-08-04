@@ -31,11 +31,36 @@
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage)
         {
-            Assert.Throws<ArgumentException>(argument.Name, () => testWithoutMessage(argument));
+            Assert.Throws<ArgumentException>(
+                argument.Name,
+                () => testWithoutMessage(argument));
 
             var message = RandomMessage;
-            var ex = Assert.Throws<ArgumentException>(argument.Name, () => testWithMessage(argument, message));
+            var ex = Assert.Throws<ArgumentException>(
+                argument.Name,
+                () => testWithMessage(argument, message));
+
             Assert.StartsWith(message, ex.Message);
+        }
+
+        protected static void ThrowsArgumentOutOfRangeException<T>(
+            Guard.ArgumentInfo<T> argument,
+            Action<Guard.ArgumentInfo<T>> testWithoutMessage,
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(
+                argument.Name,
+                () => testWithoutMessage(argument));
+
+            var message = RandomMessage;
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(
+                argument.Name,
+                () => testWithMessage(argument, message));
+
+            Assert.StartsWith(message, ex.Message);
+
+            var modified = argument.Modify(argument.Value);
+            ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
         }
 
         protected static class RandomUtils
