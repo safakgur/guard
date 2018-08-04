@@ -326,13 +326,45 @@
         ///     <paramref name="argument" /> value is zero and the
         ///     argument is modified after its initialization.
         /// </exception>
+        [Obsolete("Use the NotZero overload that accepts the message as a string.")]
         public static ref readonly ArgumentInfo<T> NotZero<T>(
-            in this ArgumentInfo<T> argument, Func<T, string> message = null)
+            in this ArgumentInfo<T> argument, Func<T, string> message)
             where T : struct, IComparable<T>
         {
             if (Comparer<T>.Default.Compare(argument.Value, default) == 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotZero(argument);
+                throw !argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                     : new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>Requires the argument to have a value that is not zero.</summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="message">
+        ///     The message of the exception that will be thrown
+        ///     if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is zero and the
+        ///     argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is zero and the
+        ///     argument is modified after its initialization.
+        /// </exception>
+        public static ref readonly ArgumentInfo<T> NotZero<T>(
+            in this ArgumentInfo<T> argument, string message = null)
+            where T : struct, IComparable<T>
+        {
+            if (Comparer<T>.Default.Compare(argument.Value, default) == 0)
+            {
+                var m = message ?? Messages.NotZero(argument);
                 throw !argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
                      : new ArgumentException(m, argument.Name);
@@ -367,13 +399,55 @@
         ///     to be ambiguous between this method and its overload
         ///     when the message delegate accepts a non-nullable argument.
         /// </remarks>
+        [Obsolete("Use the NotZero overload that accepts the message as a string.")]
         public static ref readonly ArgumentInfo<T?> NotZero<T>(
-            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
+            in this ArgumentInfo<T?> argument, Func<T?, string> message)
             where T : struct, IComparable<T>
         {
             if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) == 0)
             {
                 var m = message?.Invoke(a.Value) ?? Messages.NotZero(a);
+                throw !a.Modified
+                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                     : new ArgumentException(m, a.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the nullable argument to have a value
+        ///     that either is not zero or is <c>null</c>.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="message">
+        ///     The message of the exception that will be thrown
+        ///     if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is zero and the
+        ///     argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is zero and the
+        ///     argument is modified after its initialization.
+        /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
+        public static ref readonly ArgumentInfo<T?> NotZero<T>(
+            in this ArgumentInfo<T?> argument, string message = null)
+            where T : struct, IComparable<T>
+        {
+            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) == 0)
+            {
+                var m = message ?? Messages.NotZero(a);
                 throw !a.Modified
                      ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
                      : new ArgumentException(m, a.Name);
