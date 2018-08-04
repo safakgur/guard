@@ -55,6 +55,13 @@
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
         ///     <see cref="double.NaN" />, and the argument is modified after its initialization.
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<double?> NaN(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -187,6 +194,13 @@
         ///     <see cref="double.PositiveInfinity" /> and not <see cref="double.NegativeInfinity" />,
         ///     and the argument is modified after its initialization.
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<double?> Infinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -221,8 +235,9 @@
         ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
         ///     initialization.
         /// </exception>
+        [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double, string>`.")]
         public static ref readonly ArgumentInfo<double> NotInfinity(
-            in this ArgumentInfo<double> argument, string message = null)
+            in this ArgumentInfo<double> argument, string message)
         {
             if (double.IsInfinity(argument.Value))
             {
@@ -255,12 +270,88 @@
         ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
         ///     initialization.
         /// </exception>
+        public static ref readonly ArgumentInfo<double> NotInfinity(
+            in this ArgumentInfo<double> argument, Func<double, string> message = null)
+        {
+            if (double.IsInfinity(argument.Value))
+            {
+                var m = message?.Invoke(argument.Value) ?? Messages.NotInfinity(argument);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    : new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the double-precision floating-point argument to have a value that is
+        ///     neither positive infinity (<see cref="double.PositiveInfinity" />) nor negative
+        ///     infinity (<see cref="double.NegativeInfinity" />).
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="message">
+        ///     The message of the exception that will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is not modified since it
+        ///     is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
+        ///     initialization.
+        /// </exception>
+        [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double?, string>`.")]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
-            in this ArgumentInfo<double?> argument, string message = null)
+            in this ArgumentInfo<double?> argument, string message)
         {
             if (argument.NotNull(out var a) && double.IsInfinity(a.Value))
             {
                 var m = message ?? Messages.NotInfinity(a);
+                throw !a.Modified
+                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    : new ArgumentException(m, a.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the double-precision floating-point argument to have a value that is
+        ///     neither positive infinity (<see cref="double.PositiveInfinity" />) nor negative
+        ///     infinity (<see cref="double.NegativeInfinity" />).
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="message">
+        ///     The message of the exception that will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is not modified since it
+        ///     is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
+        ///     initialization.
+        /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
+        public static ref readonly ArgumentInfo<double?> NotInfinity(
+            in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
+        {
+            if (argument.NotNull(out var a) && double.IsInfinity(a.Value))
+            {
+                var m = message?.Invoke(a.Value) ?? Messages.NotInfinity(a);
                 throw !a.Modified
                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
                     : new ArgumentException(m, a.Name);
@@ -321,6 +412,13 @@
         ///     <see cref="double.PositiveInfinity" />, and the argument is modified
         ///     after its initialization.
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<double?> PositiveInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -449,6 +547,13 @@
         ///     <see cref="double.NegativeInfinity" />, and the argument is
         ///     modified after its initialization.
         /// </exception>
+        /// <remarks>
+        ///     The argument value that is passed to <paramref name="message" />
+        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
+        ///     This is because passing a lambda would cause the calls
+        ///     to be ambiguous between this method and its overload
+        ///     when the message delegate accepts a non-nullable argument.
+        /// </remarks>
         public static ref readonly ArgumentInfo<double?> NegativeInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
