@@ -58,7 +58,7 @@
 
         /// <summary>Represents a method argument.</summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
-        public readonly ref struct ArgumentInfo<T>
+        public readonly struct ArgumentInfo<T>
         {
             #region Fields
 
