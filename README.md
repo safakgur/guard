@@ -185,6 +185,7 @@ For `ArgumentInfo<Uri>`
 * `Absolute`
 * `Relative`
 * `Scheme(string)`
+* `NotScheme(string)`
 * `Http()`
 * `Http(bool)`
 * `Https()`

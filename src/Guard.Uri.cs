@@ -14,13 +14,12 @@
         /// <summary>Requires the argument value to be an absolute URI.</summary>
         /// <param name="argument">The URI argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not
-        ///     <c>null</c> and is not an absolute URI.
+        ///     <paramref name="argument" /> value is neither <c>null</c> nor an absolute URI.
         /// </exception>
         public static ref readonly ArgumentInfo<Uri> Absolute(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
@@ -37,13 +36,12 @@
         /// <summary>Requires the argument value to be a relative URI.</summary>
         /// <param name="argument">The URI argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not
-        ///     <c>null</c> and is not a relative URI.
+        ///     <paramref name="argument" /> value is neither <c>null</c> nor a relative URI.
         /// </exception>
         public static ref readonly ArgumentInfo<Uri> Relative(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
@@ -58,19 +56,18 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have an absolute
-        ///     URI with the specified scheme.
+        ///     Requires the argument value to be an absolute URI with the specified scheme.
         /// </summary>
         /// <param name="argument">The URI argument.</param>
         /// <param name="scheme">The URI scheme to compare.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c>
-        ///     and does not have the specified scheme.
+        ///     <paramref name="argument" /> value is neither <c>null</c> nor an absolute URI with
+        ///     the scheme specified by <paramref name="scheme" />.
         /// </exception>
         public static ref readonly ArgumentInfo<Uri> Scheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
@@ -88,41 +85,65 @@
             return ref argument;
         }
 
-        /// <summary>
-        ///     Requires the argument to have an absolute
-        ///     URI with the HTTP or HTTPS scheme.
-        /// </summary>
+        /// <summary>Requires the argument value to not have the specified scheme.</summary>
         /// <param name="argument">The URI argument.</param>
+        /// <param name="scheme">The URI scheme to compare.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c>
-        ///     and its scheme is neither HTTP nor HTTPS.
+        ///     <paramref name="argument" /> value is an absolute URI with the scheme specified by
+        ///     <paramref name="scheme" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<Uri> NotScheme(
+            in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
+        {
+            if (argument.HasValue() &&
+                argument.Value.IsAbsoluteUri &&
+                argument.Value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase))
+            {
+                var m = message?.Invoke(argument.Value, scheme) ?? Messages.UriNotScheme(argument, scheme);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument value to be an absolute URI with the HTTP or HTTPS scheme.
+        /// </summary>
+        /// <param name="argument">The URI argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <c>null</c> and its scheme is neither HTTP
+        ///     nor HTTPS.
         /// </exception>
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
             => ref argument.Http(true, message);
 
         /// <summary>
-        ///     Requires the argument to have an absolute
-        ///     URI with the HTTP or HTTPS scheme.
+        ///     Requires the argument value to be an absolute URI with the HTTP or HTTPS scheme.
         /// </summary>
         /// <param name="argument">The URI argument.</param>
         /// <param name="allowHttps">
-        ///     Pass <c>true</c> to allow both the HTTP and HTTPS schemes
-        ///     or <c>false</c> to allow only the HTTP scheme.
+        ///     Pass <c>true</c> to allow both the HTTP and HTTPS schemes or <c>false</c> to allow
+        ///     only the HTTP scheme.
         /// </param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c>
-        ///     and does not have one of the required schemes.
+        ///     <paramref name="argument" /> value is not <c>null</c> and does not have one of the
+        ///     required schemes.
         /// </exception>
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, bool allowHttps, Func<Uri, string> message = null)
@@ -144,17 +165,17 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have an absolute URI with the HTTPS scheme.
+        ///     Requires the argument value to be an absolute URI with the HTTPS scheme.
         /// </summary>
         /// <param name="argument">The URI argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c>
-        ///     and does not have the HTTPS scheme.
+        ///     <paramref name="argument" /> value is not <c>null</c> and does not have the
+        ///     HTTPS scheme.
         /// </exception>
         public static ref readonly ArgumentInfo<Uri> Https(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
