@@ -184,6 +184,9 @@
             public static string UriScheme(in ArgumentInfo<Uri> argument, string scheme)
                 => $"{argument.Name} must be an absolute URI with the {scheme} scheme.";
 
+            public static string UriNotScheme(in ArgumentInfo<Uri> argument, string scheme)
+                => $"{argument.Name} cannot have the {scheme} scheme.";
+
             public static string UriHttp(in ArgumentInfo<Uri> argument)
                 => $"{argument.Name} must be an absolute URI with the HTTP scheme.";
 
