@@ -7,9 +7,9 @@
     public abstract class BaseTests
     {
 #if NETCOREAPP1_0
-        protected const string T = "NS1: "; // Targeting .NET Standard 1.0.
+        protected const string T = "NS1 "; // Targeting .NET Standard 1.0.
 #elif NETCOREAPP2_0
-        protected const string T = "NS2: "; // Targeting .NET Standard 2.0.
+        protected const string T = "NS2 "; // Targeting .NET Standard 2.0.
 #endif
 
         private const string Alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -26,21 +26,24 @@
             }
         }
 
-        protected static void ThrowsArgumentException<T>(
+        protected static void ThrowsArgumentNullException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage)
         {
-            Assert.Throws<ArgumentException>(
+            Assert.Throws<ArgumentNullException>(
                 argument.Name,
                 () => testWithoutMessage(argument));
 
             var message = RandomMessage;
-            var ex = Assert.Throws<ArgumentException>(
+            var ex = Assert.Throws<ArgumentNullException>(
                 argument.Name,
                 () => testWithMessage(argument, message));
 
             Assert.StartsWith(message, ex.Message);
+
+            var modified = argument.Modify(argument.Value);
+            ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
         }
 
         protected static void ThrowsArgumentOutOfRangeException<T>(
@@ -61,6 +64,23 @@
 
             var modified = argument.Modify(argument.Value);
             ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
+        }
+
+        protected static void ThrowsArgumentException<T>(
+            Guard.ArgumentInfo<T> argument,
+            Action<Guard.ArgumentInfo<T>> testWithoutMessage,
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+        {
+            Assert.Throws<ArgumentException>(
+                argument.Name,
+                () => testWithoutMessage(argument));
+
+            var message = RandomMessage;
+            var ex = Assert.Throws<ArgumentException>(
+                argument.Name,
+                () => testWithMessage(argument, message));
+
+            Assert.StartsWith(message, ex.Message);
         }
 
         protected static class RandomUtils
