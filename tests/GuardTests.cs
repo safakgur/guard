@@ -8,61 +8,12 @@
     {
         /// <summary>A prefix for the test names identifying the current compilation target.</summary>
 #if NETCOREAPP1_0
-        const string T = "NS1: "; // Targeting .NET Standard 1.0.
+        const string T = "NS1 "; // Targeting .NET Standard 1.0.
 #elif NETCOREAPP2_0
-        const string T = "NS2: "; // Targeting .NET Standard 2.0.
+        const string T = "NS2 "; // Targeting .NET Standard 2.0.
 #endif
 
         #region Methods
-
-        [Fact(DisplayName = T + "Guard can initialize arguments.")]
-        public void GuardCanInitializeArguments()
-        {
-            var i = 1;
-
-            // Assigns the right value and name.
-            var int32Arg = Guard.Argument(i, nameof(i));
-            Assert.Equal(i, int32Arg.Value);
-            Assert.Equal(nameof(i), int32Arg.Name);
-
-            int32Arg = Guard.Argument(() => i);
-            Assert.Equal(i, int32Arg.Value);
-            Assert.Equal(nameof(i), int32Arg.Name);
-
-            int32Arg = Guard.Argument(i);
-            Assert.Equal(i, int32Arg.Value);
-            Assert.Equal($"The {typeof(int)} argument", int32Arg.Name);
-
-            Assert.Throws<ArgumentNullException>("e", () => Guard.Argument<int>(null));
-            Assert.Throws<ArgumentException>("e", () => Guard.Argument(() => 1));
-
-            // Allows null values.
-            string s = null;
-
-            var stringArg = Guard.Argument(s, nameof(s));
-            Assert.Equal(s, stringArg.Value);
-            Assert.Equal(nameof(s), stringArg.Name);
-
-            stringArg = Guard.Argument(() => s);
-            Assert.Equal(s, stringArg.Value);
-            Assert.Equal(nameof(s), stringArg.Name);
-
-            stringArg = Guard.Argument(s);
-            Assert.Equal(s, stringArg.Value);
-            Assert.Equal($"The {typeof(string)} argument", stringArg.Name);
-
-            Assert.Throws<ArgumentNullException>("e", () => Guard.Argument<string>(null));
-            Assert.Throws<ArgumentException>("e", () => Guard.Argument<string>(() => null));
-
-            // Has the correct name when unitialized.
-            int32Arg = default;
-            Assert.Equal(0, int32Arg.Value);
-            Assert.Equal($"The {typeof(int)} argument", int32Arg.Name);
-
-            stringArg = default;
-            Assert.Null(stringArg.Value);
-            Assert.Equal($"The {typeof(string)} argument", stringArg.Name);
-        }
 
         [Fact(DisplayName = T + "Guard supports custom preconditions.")]
         public void GuardSupportsCustomPreconditions()
