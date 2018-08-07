@@ -83,6 +83,27 @@
             Assert.StartsWith(message, ex.Message);
         }
 
+        protected static void ThrowsException<T, TException>(
+            Guard.ArgumentInfo<T> argument,
+            Action<Guard.ArgumentInfo<T>> testWithoutMessage,
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage,
+            bool allowMessageMismatch = false)
+            where TException : Exception
+        {
+            var ex = Assert.Throws<TException>(() => testWithoutMessage(argument));
+            if (ex is ArgumentException argEx)
+                Assert.Same(argument.Name, argEx.ParamName);
+
+            var message = RandomMessage;
+            ex = Assert.Throws<TException>(() => testWithMessage(argument, message));
+            argEx = ex as ArgumentException;
+            if (argEx != null)
+                Assert.Same(argument.Name, argEx.ParamName);
+
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, ex.Message);
+        }
+
         protected static class RandomUtils
         {
             private static readonly Random seeder = new Random();
