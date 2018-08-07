@@ -13,73 +13,6 @@
         const string T = "NS2 "; // Targeting .NET Standard 2.0.
 #endif
 
-        #region Methods
-
-        [Fact(DisplayName = T + "Guard supports custom preconditions.")]
-        public void GuardSupportsCustomPreconditions()
-        {
-            var number = 1;
-
-            Guard.Argument(() => number).Require(i => i < 2, i => i.ToString());
-
-            // The default exception.
-            Assert.Throws<ArgumentException>(nameof(number), () =>
-                Guard.Argument(() => number).Require(i => i > 2));
-
-            var argEx = Assert.Throws<ArgumentException>(nameof(number), () =>
-                Guard.Argument(() => number).Require(i => i > 2, i => i.ToString()));
-
-            Assert.StartsWith(number.ToString(), argEx.Message);
-
-            // Custom argument exception.
-            Assert.Throws<TestArgException>(nameof(number), () =>
-                Guard.Argument(() => number).Require<TestArgException>(i => i > 2));
-
-            var customArgEx = Assert.Throws<TestArgException>(nameof(number), () =>
-                Guard.Argument(() => number).Require<TestArgException>(i => i > 2, i => i.ToString()));
-
-            Assert.StartsWith(number.ToString(), customArgEx.Message);
-
-            // Custom argument exception without message.
-            Assert.Throws<TestArgExceptionNoMessage>(nameof(number), () =>
-                Guard.Argument(() => number).Require<TestArgExceptionNoMessage>(i => i > 2));
-
-            var customArgExNoMsg = Assert.Throws<TestArgExceptionNoMessage>(nameof(number), () =>
-                Guard.Argument(() => number).Require<TestArgExceptionNoMessage>(i => i > 2, i => i.ToString()));
-
-            // Custom exception.
-            Assert.Throws<TestException>(() =>
-                Guard.Argument(() => number).Require<TestException>(i => i > 2));
-
-            var customEx = Assert.Throws<TestException>(() =>
-                Guard.Argument(() => number).Require<TestException>(i => i > 2, i => i.ToString()));
-
-            Assert.Equal(number.ToString(), customEx.Message);
-
-            // Custom exception without message.
-            Assert.Throws<TestExceptionNoMessage>(() =>
-                Guard.Argument(() => number).Require<TestExceptionNoMessage>(i => i > 2));
-
-            var customExNoMsg = Assert.Throws<TestExceptionNoMessage>(() =>
-                Guard.Argument(() => number).Require<TestExceptionNoMessage>(i => i > 2, i => i.ToString()));
-
-            Assert.NotEqual(number.ToString(), customExNoMsg.Message);
-
-            // Custom exception without public constructor.
-            Assert.Throws<ArgumentException>(() =>
-                Guard.Argument(() => number).Require<TestExceptionNoCtor>(i => i > 2));
-
-            var customExNoCtor = Assert.Throws<ArgumentException>(() =>
-                Guard.Argument(() => number).Require<TestExceptionNoCtor>(i => i > 2, i => i.ToString()));
-
-            Assert.Null(customExNoCtor.ParamName);
-            Assert.NotEqual(number.ToString(), customExNoCtor.Message);
-
-            var inner = Assert.IsType<ArgumentException>(customExNoCtor.InnerException);
-            Assert.Equal(nameof(number), inner.ParamName);
-            Assert.StartsWith(number.ToString(), inner.Message);
-        }
-
         [Fact(DisplayName = T + "Guard supports compatibility preconditions.")]
         public void GuardSupportsCompatibilityPreconditions()
         {
@@ -166,46 +99,5 @@
                 Assert.StartsWith(message, ex.Message);
             }
         }
-
-        #endregion Methods
-
-        #region Classes
-
-        private sealed class TestArgException : ArgumentException
-        {
-            public TestArgException(string paramName, string message)
-                : base(message, paramName)
-            {
-            }
-        }
-
-        private sealed class TestArgExceptionNoMessage : ArgumentException
-        {
-            public TestArgExceptionNoMessage(string paramName)
-                : base(null, paramName)
-            {
-            }
-        }
-
-        private sealed class TestException : Exception
-        {
-            public TestException(string message)
-                : base(message)
-            {
-            }
-        }
-
-        private sealed class TestExceptionNoMessage : Exception
-        {
-        }
-
-        private sealed class TestExceptionNoCtor : Exception
-        {
-            private TestExceptionNoCtor()
-            {
-            }
-        }
-
-        #endregion Classes
     }
 }
