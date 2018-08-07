@@ -26,26 +26,30 @@
             var relativeUri = GetUri(relativeUriString);
             var relativeUriArg = Guard.Argument(() => relativeUri).Relative();
 
-            if (absoluteUri != null)
+            if (absoluteUri == null)
             {
-                ThrowsArgumentException(
-                    relativeUriArg,
-                    arg => arg.Absolute(),
-                    (arg, message) => arg.Absolute(u =>
-                    {
-                        Assert.Same(relativeUri, u);
-                        return message;
-                    }));
-
-                ThrowsArgumentException(
-                    absoluteUriArg,
-                    arg => arg.Relative(),
-                    (arg, message) => arg.Relative(u =>
-                    {
-                        Assert.Same(absoluteUri, u);
-                        return message;
-                    }));
+                absoluteUriArg.Relative();
+                relativeUriArg.Absolute();
+                return;
             }
+
+            ThrowsArgumentException(
+                relativeUriArg,
+                arg => arg.Absolute(),
+                (arg, message) => arg.Absolute(u =>
+                {
+                    Assert.Same(relativeUri, u);
+                    return message;
+                }));
+
+            ThrowsArgumentException(
+                absoluteUriArg,
+                arg => arg.Relative(),
+                (arg, message) => arg.Relative(u =>
+                {
+                    Assert.Same(absoluteUri, u);
+                    return message;
+                }));
         }
 
         [Theory(DisplayName = T + "URI: Scheme")]
@@ -62,28 +66,32 @@
             var invalidUri = GetUri(invalidUriString);
             var invalidUriArg = Guard.Argument(() => invalidUri).NotScheme(scheme);
 
-            if (validUri != null)
+            if (validUri == null)
             {
-                ThrowsArgumentException(
-                    invalidUriArg,
-                    arg => arg.Scheme(scheme),
-                    (arg, message) => arg.Scheme(scheme, (u, s) =>
-                    {
-                        Assert.Same(invalidUri, u);
-                        Assert.Same(scheme, s);
-                        return message;
-                    }));
-
-                ThrowsArgumentException(
-                    validUriArg,
-                    arg => arg.NotScheme(scheme),
-                    (arg, message) => arg.NotScheme(scheme, (u, s) =>
-                    {
-                        Assert.Same(validUri, u);
-                        Assert.Same(scheme, s);
-                        return message;
-                    }));
+                validUriArg.NotScheme(scheme);
+                invalidUriArg.Scheme(scheme);
+                return;
             }
+
+            ThrowsArgumentException(
+                invalidUriArg,
+                arg => arg.Scheme(scheme),
+                (arg, message) => arg.Scheme(scheme, (u, s) =>
+                {
+                    Assert.Same(invalidUri, u);
+                    Assert.Same(scheme, s);
+                    return message;
+                }));
+
+            ThrowsArgumentException(
+                validUriArg,
+                arg => arg.NotScheme(scheme),
+                (arg, message) => arg.NotScheme(scheme, (u, s) =>
+                {
+                    Assert.Same(validUri, u);
+                    Assert.Same(scheme, s);
+                    return message;
+                }));
         }
 
         [Theory(DisplayName = T + "URI: HTTP")]
@@ -95,20 +103,23 @@
             var validUri = GetUri(validUriString);
             var validUriArg = Guard.Argument(() => validUri).Http().Http(false);
 
-            if (validUri != null)
-            {
-                var invalidUri = GetUri(invalidUriString);
-                var invalidUriArg = Guard.Argument(() => invalidUri);
+            var invalidUri = GetUri(invalidUriString);
+            var invalidUriArg = Guard.Argument(() => invalidUri);
 
-                ThrowsArgumentException(
-                    invalidUriArg,
-                    arg => arg.Http(false),
-                    (arg, message) => arg.Http(false, u =>
-                    {
-                        Assert.Same(invalidUri, u);
-                        return message;
-                    }));
+            if (validUri == null)
+            {
+                invalidUriArg.Http(false);
+                return;
             }
+
+            ThrowsArgumentException(
+                invalidUriArg,
+                arg => arg.Http(false),
+                (arg, message) => arg.Http(false, u =>
+                {
+                    Assert.Same(invalidUri, u);
+                    return message;
+                }));
         }
 
         [Theory(DisplayName = T + "URI: HTTP/S")]
@@ -120,29 +131,33 @@
             var validUri = GetUri(validUriString);
             var validUriArg = Guard.Argument(() => validUri).Http().Http(true);
 
-            if (validUri != null)
+            var invalidUri = GetUri(invalidUriString);
+            var invalidUriArg = Guard.Argument(() => invalidUri);
+
+            if (validUri == null)
             {
-                var invalidUri = GetUri(invalidUriString);
-                var invalidUriArg = Guard.Argument(() => invalidUri);
-
-                ThrowsArgumentException(
-                    invalidUriArg,
-                    arg => arg.Http(),
-                    (arg, message) => arg.Http(u =>
-                    {
-                        Assert.Same(invalidUri, u);
-                        return message;
-                    }));
-
-                ThrowsArgumentException(
-                    invalidUriArg,
-                    arg => arg.Http(true),
-                    (arg, message) => arg.Http(true, u =>
-                    {
-                        Assert.Same(invalidUri, u);
-                        return message;
-                    }));
+                invalidUriArg.Http();
+                invalidUriArg.Http(true);
+                return;
             }
+
+            ThrowsArgumentException(
+                invalidUriArg,
+                arg => arg.Http(),
+                (arg, message) => arg.Http(u =>
+                {
+                    Assert.Same(invalidUri, u);
+                    return message;
+                }));
+
+            ThrowsArgumentException(
+                invalidUriArg,
+                arg => arg.Http(true),
+                (arg, message) => arg.Http(true, u =>
+                {
+                    Assert.Same(invalidUri, u);
+                    return message;
+                }));
         }
 
         [Theory(DisplayName = T + "URI: HTTPS")]
@@ -154,20 +169,23 @@
             var validUri = GetUri(validUriString);
             var validUriArg = Guard.Argument(() => validUri).Https();
 
-            if (validUri != null)
-            {
-                var invalidUri = GetUri(invalidUriString);
-                var invalidUriArg = Guard.Argument(() => invalidUri);
+            var invalidUri = GetUri(invalidUriString);
+            var invalidUriArg = Guard.Argument(() => invalidUri);
 
-                ThrowsArgumentException(
-                    invalidUriArg,
-                    arg => arg.Https(),
-                    (arg, message) => arg.Https(u =>
-                    {
-                        Assert.Same(invalidUri, u);
-                        return message;
-                    }));
+            if (validUri == null)
+            {
+                invalidUriArg.Https();
+                return;
             }
+
+            ThrowsArgumentException(
+                invalidUriArg,
+                arg => arg.Https(),
+                (arg, message) => arg.Https(u =>
+                {
+                    Assert.Same(invalidUri, u);
+                    return message;
+                }));
         }
 
         Uri GetUri(string uriString)
