@@ -6,7 +6,7 @@
     /// <content>Provides generic preconditions.</content>
     public static partial class Guard
     {
-    /// <content>Contains the preconditions with generic type arguments that cannot be inferred.</content>
+        /// <content>Contains the preconditions with generic type arguments that cannot be inferred.</content>
         public readonly partial struct ArgumentInfo<T>
         {
             /// <summary>Requires the argument to satisfy a condition.</summary>
@@ -31,7 +31,7 @@
             ///     The type of the exception to throw if the argument does not satisfy the
             ///     specified condition.
             /// </typeparam>
-            /// <param name="predicate">The function to test the the argument value.</param>
+            /// <param name="predicate">The function to test the argument value.</param>
             /// <param name="message">
             ///     The factory to initialize the message of the exception that will be thrown if
             ///     the precondition is not satisfied.
