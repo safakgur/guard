@@ -162,15 +162,7 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> Equal<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, T, string> message = null)
-        {
-            if (argument.HasValue() && !EqualityComparer<T>.Default.Equals(argument.Value, other))
-            {
-                var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other);
-                throw new ArgumentException(m, argument.Name);
-            }
-
-            return ref argument;
-        }
+            => ref argument.Equal(other, null, message);
 
         /// <summary>Requires the argument to have the specified value.</summary>
         /// <typeparam name="T">The type of the equatable argument.</typeparam>
@@ -220,15 +212,7 @@
         /// </exception>
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, string> message = null)
-        {
-            if (argument.HasValue() && EqualityComparer<T>.Default.Equals(argument.Value, other))
-            {
-                var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument);
-                throw new ArgumentException(m, argument.Name);
-            }
-
-            return ref argument;
-        }
+            => ref argument.NotEqual(other, null, message);
 
         /// <summary>
         ///     Requires the argument to have a value that
@@ -253,7 +237,6 @@
             in T other,
             IEqualityComparer<T> comparer,
             Func<T, string> message = null)
-            where T : IEquatable<T>
         {
             if (argument.HasValue() && (comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
