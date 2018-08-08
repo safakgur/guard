@@ -133,12 +133,12 @@ For `ArgumentInfo<T> where T : IEnumerable`
 * `MinCount(int)`
 * `MaxCount(int)`
 * `CountInRange(int, int)`
+* `Contains(TItem)`
+* `Contains(TItem, IEqualityComparer<TItem>)`
+* `DoesNotContain(TItem)`
+* `DoesNotContain(TItem, IEqualityComparer<TItem>)`
 * `ContainsNull()`
 * `DoesNotContainNull()`
-
-For `ArgumentInfo<TCollection> where TCollection : IEnumerable<TItem>`
-* `Contains(TItem)`
-* `DoesNotContain(TItem)`
 
 ### String Guards
 
