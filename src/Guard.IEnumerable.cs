@@ -12,9 +12,7 @@
     {
         #region Methods
 
-        /// <summary>
-        ///     Requires the argument to have a collection value that is empty.
-        /// </summary>
+        /// <summary>Requires the argument to have a collection value that is empty.</summary>
         /// <typeparam name="T">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="message">
@@ -39,8 +37,7 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a
-        ///     collection value that is not empty.
+        ///     Requires the argument to have a collection value that is not empty.
         /// </summary>
         /// <typeparam name="T">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
@@ -66,23 +63,21 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value that
-        ///     contains at least the specified number of items.
+        ///     Requires the argument to have a collection value that contains at least the
+        ///     specified number of items.
         /// </summary>
         /// <typeparam name="T">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="minCount">
-        ///     The minimum number of items the the
-        ///     argument value is allowed to contain.
+        ///     The minimum number of items that the argument value is allowed to contain.
         /// </param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> contains less
-        ///     than the specified number of items.
+        ///     <paramref name="argument" /> contains less than the specified number of items.
         /// </exception>
         public static ref readonly ArgumentInfo<T> MinCount<T>(
             in this ArgumentInfo<T> argument, int minCount, Func<T, int, string> message = null)
@@ -98,23 +93,21 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value that does
-        ///     not contain more than the specified number of items.
+        ///     Requires the argument to have a collection value that does not contain more than the
+        ///     specified number of items.
         /// </summary>
         /// <typeparam name="T">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="maxCount">
-        ///     The maximum number of items the argument
-        ///     value is allowed to contain.
+        ///     The maximum number of items that the argument value is allowed to contain.
         /// </param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> contains more
-        ///     than the specified number of items.
+        ///     <paramref name="argument" /> contains more than the specified number of items.
         /// </exception>
         public static ref readonly ArgumentInfo<T> MaxCount<T>(
             in this ArgumentInfo<T> argument, int maxCount, Func<T, int, string> message = null)
@@ -130,28 +123,25 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value whose number
-        ///     of items is between the specified minimum and maximum values.
+        ///     Requires the argument to have a collection value whose number of items is between
+        ///     the specified minimum and maximum values.
         /// </summary>
         /// <typeparam name="T">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="minCount">
-        ///     The minimum number of items the argument
-        ///     value is allowed to contain.
+        ///     The minimum number of items that the argument value is allowed to contain.
         /// </param>
         /// <param name="maxCount">
-        ///     The maximum number of items the argument
-        ///     value is allowed to contain.
+        ///     The maximum number of items that the argument value is allowed to contain.
         /// </param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     The number of items that the <paramref name="argument" />
-        ///     contains is either less than <paramref name="minCount" />
-        ///     or greater than <paramref name="maxCount" />.
+        ///     The number of items that the <paramref name="argument" /> value contains is either
+        ///     less than <paramref name="minCount" /> or greater than <paramref name="maxCount" />.
         /// </exception>
         public static ref readonly ArgumentInfo<T> CountInRange<T>(
             in this ArgumentInfo<T> argument, int minCount, int maxCount, Func<T, int, int, string> message = null)
@@ -173,29 +163,25 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection
-        ///     value that contains the specified item.
+        ///     Requires the argument to have a collection value that contains the specified item.
         /// </summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <typeparam name="TItem">The type of the collection items.</typeparam>
         /// <param name="argument">The collection argument.</param>
-        /// <param name="item">
-        ///     The item that the argument value is required to contain.
-        /// </param>
+        /// <param name="item">The item that the argument value is required to contain.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> does not
-        ///     contain <paramref name="item" />.
+        ///     <paramref name="argument" /> does not contain <paramref name="item" />.
         /// </exception>
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
         {
-            if (argument.HasValue() && !Collection<TCollection, TItem>.Contains(argument.Value, item))
+            if (argument.HasValue() && !Collection<TCollection>.Contains(argument.Value, item, null))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionContains(argument, item);
                 throw new ArgumentException(m, argument.Name);
@@ -205,18 +191,16 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value
-        ///     that does not contain the specified item.
+        ///     Requires the argument to have a collection value that does not contain the
+        ///     specified item.
         /// </summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <typeparam name="TItem">The type of the collection items.</typeparam>
         /// <param name="argument">The collection argument.</param>
-        /// <param name="item">
-        ///     The item that the argument value is required not to contain.
-        /// </param>
+        /// <param name="item">The item that the argument value is required not to contain.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
@@ -224,9 +208,9 @@
         /// </exception>
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
         {
-            if (argument.HasValue() && Collection<TCollection, TItem>.Contains(argument.Value, item))
+            if (argument.HasValue() && Collection<TCollection>.Contains(argument.Value, item, null))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionDoesNotContain(argument, item);
                 throw new ArgumentException(m, argument.Name);
@@ -236,14 +220,13 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection
-        ///     value that contains a <c>null</c> element.
+        ///     Requires the argument to have a collection value that contains a <c>null</c> element.
         /// </summary>
         /// <typeparam name="T">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
@@ -263,14 +246,14 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value
-        ///     that does not contain a <c>null</c> element.
+        ///     Requires the argument to have a collection value that does not contain a
+        ///     <c>null</c> element.
         /// </summary>
         /// <typeparam name="T">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
@@ -295,11 +278,11 @@
 
         /// <summary>
         ///     Provides cached collection utilities for
-        ///     the type <typeparamref name="T" />.
+        ///     the type <typeparamref name="TCollection" />.
         /// </summary>
-        /// <typeparam name="T">The type of the collection.</typeparam>
-        private static class Collection<T>
-            where T : IEnumerable
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        private static class Collection<TCollection>
+            where TCollection : IEnumerable
         {
             /// <summary>
             ///     <para>
@@ -312,7 +295,7 @@
             ///         The integer parameter specifies the maximum number of iterations.
             ///     </para>
             /// </summary>
-            public static readonly Func<T, int, int> Count = InitCount();
+            public static readonly Func<TCollection, int, int> Count = InitCount();
 
             /// <summary>
             ///     <para>
@@ -325,16 +308,33 @@
             ///         method that accepts a single, nullable argument.
             ///     </para>
             /// </summary>
-            public static readonly Func<T, bool> ContainsNull = InitContainsNull();
+            public static readonly Func<TCollection, bool> ContainsNull = InitContainsNull();
+
+            /// <summary>
+            ///     Determines whether a generic collection contains the specified element.
+            /// </summary>
+            /// <typeparam name="TItem">The type of the item to find.</typeparam>
+            /// <param name="collection">The collection to search.</param>
+            /// <param name="item">The item to find.</param>
+            /// <param name="comparer">
+            ///     The equality comparer to. Pass <c>null</c> to use the default equality comparer.
+            /// </param>
+            /// <returns>
+            ///     <c>true</c>, if <paramref name="collection" /> contains
+            ///     <paramref name="item" />; otherwise, <c>false</c>.
+            /// </returns>
+            public static bool Contains<TItem>(
+                TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
+                => Typed<TItem>.Contains(collection, item, comparer);
 
             /// <summary>Initializes <see cref="Count" />.</summary>
             /// <returns>
             ///     A function that returns the number of
             ///     elements in the specified collection.
             /// </returns>
-            private static Func<T, int, int> InitCount()
+            private static Func<TCollection, int, int> InitCount()
             {
-                var type = typeof(T);
+                var type = typeof(TCollection);
                 var integer = typeof(int);
 
                 var getter = type.GetPropertyGetter("Count");
@@ -363,11 +363,11 @@
                     return i;
                 };
 
-                Func<T, int, int> Compile()
+                Func<TCollection, int, int> Compile()
                 {
                     var t = Expression.Parameter(type, "collection");
                     var c = Expression.Call(t, getter);
-                    var l = Expression.Lambda<Func<T, int>>(c, t);
+                    var l = Expression.Lambda<Func<TCollection, int>>(c, t);
                     var count = l.Compile();
                     return (collection, max) => count(collection);
                 }
@@ -378,10 +378,10 @@
             ///     A function that returns a value that indicates whether
             ///     the specified collection contains a <c>null</c> element.
             /// </returns>
-            private static Func<T, bool> InitContainsNull()
+            private static Func<TCollection, bool> InitContainsNull()
             {
                 const string name = "Contains";
-                var type = typeof(T);
+                var type = typeof(TCollection);
 
                 IEnumerable<MethodInfo> search;
 #if NETSTANDARD1_0
@@ -422,7 +422,7 @@
 
                         var i = Expression.Constant(v, nullableContainsParamType);
                         var c = Expression.Call(t, nullableContains, i);
-                        var l = Expression.Lambda<Func<T, bool>>(c, t);
+                        var l = Expression.Lambda<Func<TCollection, bool>>(c, t);
                         return l.Compile();
                     }
 
@@ -439,55 +439,68 @@
                     return false;
                 };
             }
-        }
 
-        /// <summary>
-        ///     Provides cached utilities for <typeparamref name="TItem" /> collections.
-        /// </summary>
-        /// <typeparam name="TCollection">The type of the collection.</typeparam>
-        /// <typeparam name="TItem">The type of the collection items.</typeparam>
-        private static class Collection<TCollection, TItem>
-            where TCollection : IEnumerable<TItem>
-        {
             /// <summary>
-            ///     A function that determines whether a generic
-            ///     collection contains the specified element.
+            ///     Provides cached collection utilities for collections that contain instances of
+            ///     <typeparamref name="TItem" />.
             /// </summary>
-            public static readonly Func<TCollection, TItem, bool> Contains = InitContains();
-
-            /// <summary>Initializes <see cref="Contains" />.</summary>
-            /// <returns>
-            ///     A function that determines whether a generic
-            ///     collection contains the specified element.
-            /// </returns>
-            private static Func<TCollection, TItem, bool> InitContains()
+            /// <typeparam name="TItem">The type of the collection items.</typeparam>
+            private static class Typed<TItem>
             {
-                var collectionType = typeof(TCollection);
-                var itemType = typeof(TItem);
-                do
+                /// <summary>
+                ///     A function that determines whether a generic collection contains the
+                ///     specified element.
+                /// </summary>
+                public static readonly Func<TCollection, TItem, IEqualityComparer<TItem>, bool> Contains
+                    = InitContains();
+
+                /// <summary>Initializes <see cref="Contains" />.</summary>
+                /// <returns>
+                ///     A function that determines whether a generic collection contains the
+                ///     specified element.
+                /// </returns>
+                private static Func<TCollection, TItem, IEqualityComparer<TItem>, bool> InitContains()
                 {
-                    var method = collectionType.GetMethod("Contains", new[] { itemType });
-                    if (method?.IsStatic == false && method.ReturnType == typeof(bool))
+                    var collectionType = typeof(TCollection);
+                    var itemType = typeof(TItem);
+                    do
                     {
-                        var t = Expression.Parameter(collectionType, "collection");
-                        var i = Expression.Parameter(itemType, "item");
-                        var c = Expression.Call(t, method, i);
-                        var l = Expression.Lambda<Func<TCollection, TItem, bool>>(c, t, i);
-                        return l.Compile();
+                        var method = collectionType.GetMethod("Contains", new[] { itemType });
+                        if (method?.IsStatic == false && method.ReturnType == typeof(bool))
+                        {
+                            var t = Expression.Parameter(collectionType, "collection");
+                            var i = Expression.Parameter(itemType, "item");
+                            var c = Expression.Call(t, method, i);
+                            var l = Expression.Lambda<Func<TCollection, TItem, bool>>(c, t, i);
+                            var contains = l.Compile();
+                            return (collection, item, comparer) => contains(collection, item);
+                        }
+
+                        itemType = itemType.GetBaseType();
                     }
+                    while (itemType != null);
 
-                    itemType = itemType.GetBaseType();
+                    return (collection, item, comparer) =>
+                    {
+                        if (comparer is null)
+                            comparer = EqualityComparer<TItem>.Default;
+
+                        if (collection is IEnumerable<TItem> typed)
+                        {
+                            foreach (var current in typed)
+                                if (comparer.Equals(current, item))
+                                    return true;
+                        }
+                        else
+                        {
+                            foreach (var current in collection)
+                                if (current is TItem c && comparer.Equals(c, item))
+                                    return true;
+                        }
+
+                        return false;
+                    };
                 }
-                while (itemType != null);
-
-                return (collection, item) =>
-                {
-                    foreach (var current in collection)
-                        if (EqualityComparer<TItem>.Default.Equals(current, item))
-                            return true;
-
-                    return false;
-                };
             }
         }
 
