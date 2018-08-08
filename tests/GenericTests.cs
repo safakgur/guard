@@ -1,6 +1,7 @@
 ﻿namespace Dawn.Tests
 {
     using System;
+    using System.IO;
     using Xunit;
 
     public sealed class GenericTests : BaseTests
@@ -144,6 +145,98 @@
                         throw ex.InnerException;
                     }
                 });
+        }
+
+        [Fact(DisplayName = T + "Generic: Compatible/NotCompatible")]
+        public void Compatible()
+        {
+            using (var memory = new MemoryStream() as Stream)
+            {
+                var @null = null as Stream;
+                var nullArg = Guard.Argument(() => @null)
+                    .Compatible<object>()
+                    .Compatible<MemoryStream>()
+                    .Compatible<string>();
+
+                var memoryArg = Guard.Argument(() => memory)
+                    .Compatible<object>()
+                    .Compatible<MemoryStream>();
+
+                ThrowsArgumentException(
+                    memoryArg,
+                    arg => arg.Compatible<string>(),
+                    (arg, message) => arg.Compatible<string>(s =>
+                    {
+                        Assert.Same(memory, s);
+                        return message;
+                    }));
+
+                nullArg
+                    .NotCompatible<object>()
+                    .NotCompatible<MemoryStream>()
+                    .NotCompatible<string>();
+
+                memoryArg.NotCompatible<string>();
+
+                ThrowsArgumentException(
+                    memoryArg,
+                    arg => arg.NotCompatible<object>(),
+                    (arg, message) => arg.NotCompatible<object>(o =>
+                    {
+                        Assert.Same(memory, o);
+                        return message;
+                    }));
+
+                ThrowsArgumentException(
+                    memoryArg,
+                    arg => arg.NotCompatible<MemoryStream>(),
+                    (arg, message) => arg.NotCompatible<MemoryStream>(s =>
+                    {
+                        Assert.Same(memory, s);
+                        return message;
+                    }));
+            }
+        }
+
+        [Fact(DisplayName = T + "Generic: Cast")]
+        public void Cast()
+        {
+            using (var memory = new MemoryStream() as Stream)
+            {
+                var @null = null as Stream;
+                var nullArg = Guard.Argument(() => @null);
+
+                ThrowsArgumentException(
+                    nullArg,
+                    arg => arg.Cast<object>(),
+                    (arg, message) => arg.Cast<object>(s =>
+                    {
+                        Assert.Null(s);
+                        return message;
+                    }));
+
+                ThrowsArgumentException(
+                    nullArg,
+                    arg => arg.Cast<MemoryStream>(),
+                    (arg, message) => arg.Cast<MemoryStream>(s =>
+                    {
+                        Assert.Null(s);
+                        return message;
+                    }));
+
+                var memoryArg = Guard.Argument(() => memory);
+                Assert.Same(memory, memoryArg.Cast<object>().Value);
+                Assert.Same(memory, memoryArg.Cast<MemoryStream>().Value);
+
+                ThrowsArgumentException(
+                    memoryArg,
+                    arg => arg.Cast<string>(),
+                    (arg, message) => arg.Cast<string>(s =>
+                    {
+                        Assert.Same(memory, s);
+                        return message;
+                    }));
+            }
         }
 
         private static bool Success<T>(T v)
