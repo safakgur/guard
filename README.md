@@ -13,6 +13,7 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 * [Standard Validations](#standard-validations)
 * [Design Decisions][1]
 * [Extensibility][2]
+* [Future](#future)
 
 ## Introduction
 
@@ -242,6 +243,26 @@ For `ArgumentInfo<T>`
 * `Require(Func<T, bool>)`
 * `Require<TException>(Func<T, bool>)`
 
+## Future
+
+The development branch where you can see the works in proress is [`dev`][5]. [`master`][4] is only
+updated for releases.
+
+### What Is to Come
+
+* More validations.
+* Test coverage with a badge.
+* Online documentation.
+
+### What Is Not to Come
+
+* Compound validations, e.g. `TrimmedNotNullOrEmpty` for strings.
+* Validations for types where a better suited type exists, e.g. `Email` or `IPAddress` for strings.
+You should use the `MailAddress` class to accept email addresses and `IPAddress` class to accept IP
+addresses.
+
 [1]: docs/design-decisions.md
 [2]: docs/extensibility.md
 [3]: https://docs.microsoft.com/dotnet/standard/net-standard
+[4]: https://github.com/safakgur/guard/tree/master
+[5]: https://github.com/safakgur/guard/tree/dev
