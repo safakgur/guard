@@ -97,7 +97,12 @@
                 .InRange(value.Value, value.Value)
                 .InRange(value.Value, moreThanValue);
 
-            var valueArg = Guard.Argument(value.Value, nameof(value)).InRange(lessThanValue, moreThanValue);
+            var valueArg = Guard.Argument(value.Value, nameof(value))
+                .InRange(lessThanValue, value.Value)
+                .InRange(value.Value, value.Value)
+                .InRange(value.Value, moreThanValue)
+                .InRange(lessThanValue, moreThanValue);
+
             for (var i = 0; i < 2; i++)
             {
                 var limit = i == 0 ? lessThanValue : moreThanValue;
@@ -113,7 +118,7 @@
                     }));
 
                 ThrowsArgumentOutOfRangeException(
-                    nullableValueArg,
+                    valueArg,
                     arg => arg.InRange(limit, limit),
                     (arg, message) => arg.InRange(limit, limit, (v, min, max) =>
                     {
@@ -123,6 +128,7 @@
                         return message;
                     }));
             }
+
         }
 
         [Theory(DisplayName = T + "Comparable: Zero/NotZero")]
