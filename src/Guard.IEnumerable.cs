@@ -329,25 +329,37 @@
             ///     The <see cref="Collection{TCollection}.Count" /> delegates cached by their
             ///     collection types.
             /// </summary>
-            public static readonly IDictionary<Type, Func<object, int, int>> CachedCounts
+            public static readonly IDictionary<Type, Func<object, int, int>> CachedCountFunctions
                 = new Dictionary<Type, Func<object, int, int>>();
 
             /// <summary>
-            ///     The locker that synchronizes access to <see cref="CachedCounts" />.
+            ///     The locker that synchronizes access to <see cref="CachedCountFunctions" />.
             /// </summary>
-            public static readonly ReaderWriterLockSlim CachedCountsLocker = new ReaderWriterLockSlim();
+            public static readonly ReaderWriterLockSlim CachedCountFunctionsLocker = new ReaderWriterLockSlim();
+
+            /// <summary>
+            ///     The <see cref="Collection{TCollection}.ContainsNull" /> delegates cached by
+            ///     their collection types.
+            /// </summary>
+            public static readonly IDictionary<Type, Func<object, bool>> CachedContainsNullFunctions
+                = new Dictionary<Type, Func<object, bool>>();
+
+            /// <summary>
+            ///     The locker that synchronizes access to <see cref="CachedContainsNullFunctions" />.
+            /// </summary>
+            public static readonly ReaderWriterLockSlim CachedContainsNullFunctionsLocker = new ReaderWriterLockSlim();
 
             /// <summary>
             ///     The <see cref="Collection{TCollection}.Typed{TItem}.Contains" /> delegates
             ///     cached by their collection and item types.
             /// </summary>
-            public static readonly IDictionary<(Type, Type), Delegate> CachedContains
+            public static readonly IDictionary<(Type, Type), Delegate> CachedContainsFunctions
                 = new Dictionary<(Type, Type), Delegate>();
 
             /// <summary>
-            ///     The locker that synchronizes access to <see cref="CachedContains" />.
+            ///     The locker that synchronizes access to <see cref="CachedContainsFunctions" />.
             /// </summary>
-            public static readonly ReaderWriterLockSlim CachedContainsLocker = new ReaderWriterLockSlim();
+            public static readonly ReaderWriterLockSlim CachedContainsFunctionsLocker = new ReaderWriterLockSlim();
         }
 
         /// <summary>
@@ -428,10 +440,10 @@
 
                 int ProxyCount(TCollection collection, int max)
                 {
-                    Collection.CachedCountsLocker.EnterUpgradeableReadLock();
+                    Collection.CachedCountFunctionsLocker.EnterUpgradeableReadLock();
                     try
                     {
-                        if (!Collection.CachedCounts.TryGetValue(collection.GetType(), out var func))
+                        if (!Collection.CachedCountFunctions.TryGetValue(collection.GetType(), out var func))
                         {
                             var f = Expression.Field(null, typeof(Collection<>)
                                 .MakeGenericType(collection.GetType())
@@ -443,14 +455,14 @@
                             var l = Expression.Lambda<Func<object, int, int>>(i, o, m);
                             func = l.Compile();
 
-                            Collection.CachedCountsLocker.EnterWriteLock();
+                            Collection.CachedCountFunctionsLocker.EnterWriteLock();
                             try
                             {
-                                Collection.CachedCounts[collection.GetType()] = func;
+                                Collection.CachedCountFunctions[collection.GetType()] = func;
                             }
                             finally
                             {
-                                Collection.CachedCountsLocker.ExitWriteLock();
+                                Collection.CachedCountFunctionsLocker.ExitWriteLock();
                             }
                         }
 
@@ -458,7 +470,7 @@
                     }
                     finally
                     {
-                        Collection.CachedCountsLocker.ExitUpgradeableReadLock();
+                        Collection.CachedCountFunctionsLocker.ExitUpgradeableReadLock();
                     }
                 }
             }
@@ -471,13 +483,13 @@
             private static Func<TCollection, bool> InitContainsNull()
             {
                 const string name = "Contains";
-                var type = typeof(TCollection);
+                var collectionType = typeof(TCollection);
 
                 IEnumerable<MethodInfo> search;
 #if NETSTANDARD1_0
-                search = type.GetTypeInfo().GetDeclaredMethods(name).Where(m => m.IsPublic && !m.IsStatic);
+                search = collectionType.GetTypeInfo().GetDeclaredMethods(name).Where(m => m.IsPublic && !m.IsStatic);
 #else
-                search = type.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(m => m.Name == name);
+                search = collectionType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(m => m.Name == name);
 #endif
 
                 var methods = search.Where(m => m.ReturnType == typeof(bool)).ToList();
@@ -505,7 +517,7 @@
 
                     if (nullableContains != null)
                     {
-                        var t = Expression.Parameter(type, "collection");
+                        var t = Expression.Parameter(collectionType, "collection");
                         var v = IsValueType(nullableContainsParamType)
                             ? Activator.CreateInstance(nullableContainsParamType)
                             : null;
@@ -520,14 +532,54 @@
                         return collection => false;
                 }
 
-                return collection =>
+                return EnumeratingContainsNull;
+
+                bool EnumeratingContainsNull(TCollection collection)
                 {
+                    if (collectionType != collection.GetType())
+                        return ProxyContainsNull(collection);
+
                     foreach (var item in collection)
-                        if (item == null)
+                        if (item is null)
                             return true;
 
                     return false;
-                };
+                }
+
+                bool ProxyContainsNull(TCollection collection)
+                {
+                    Collection.CachedContainsNullFunctionsLocker.EnterUpgradeableReadLock();
+                    try
+                    {
+                        if (!Collection.CachedContainsNullFunctions.TryGetValue(collection.GetType(), out var func))
+                        {
+                            var f = Expression.Field(null, typeof(Collection<>)
+                                .MakeGenericType(collection.GetType())
+                                .GetField(nameof(ContainsNull)));
+
+                            var o = Expression.Parameter(typeof(object), nameof(collection));
+                            var i = Expression.Invoke(f, Expression.Convert(o, collection.GetType()));
+                            var l = Expression.Lambda<Func<object, bool>>(i, o);
+                            func = l.Compile();
+
+                            Collection.CachedContainsNullFunctionsLocker.EnterWriteLock();
+                            try
+                            {
+                                Collection.CachedContainsNullFunctions[collection.GetType()] = func;
+                            }
+                            finally
+                            {
+                                Collection.CachedContainsNullFunctionsLocker.ExitWriteLock();
+                            }
+                        }
+
+                        return (func as Func<object, bool>)(collection);
+                    }
+                    finally
+                    {
+                        Collection.CachedContainsNullFunctionsLocker.ExitUpgradeableReadLock();
+                    }
+                }
             }
 
             /// <summary>
@@ -604,11 +656,11 @@
 
                     bool ProxyContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
                     {
-                        Collection.CachedContainsLocker.EnterUpgradeableReadLock();
+                        Collection.CachedContainsFunctionsLocker.EnterUpgradeableReadLock();
                         try
                         {
                             var key = (collection.GetType(), typeof(TItem));
-                            if (!Collection.CachedContains.TryGetValue(key, out var func))
+                            if (!Collection.CachedContainsFunctions.TryGetValue(key, out var func))
                             {
                                 var f = Expression.Field(null, typeof(Collection<>)
                                     .GetNestedType("Typed`1")
@@ -622,14 +674,14 @@
                                 var l = Expression.Lambda<Func<object, TItem, IEqualityComparer<TItem>, bool>>(n, o, i, e);
                                 func = l.Compile();
 
-                                Collection.CachedContainsLocker.EnterWriteLock();
+                                Collection.CachedContainsFunctionsLocker.EnterWriteLock();
                                 try
                                 {
-                                    Collection.CachedContains[key] = func;
+                                    Collection.CachedContainsFunctions[key] = func;
                                 }
                                 finally
                                 {
-                                    Collection.CachedContainsLocker.ExitWriteLock();
+                                    Collection.CachedContainsFunctionsLocker.ExitWriteLock();
                                 }
                             }
 
@@ -637,7 +689,7 @@
                         }
                         finally
                         {
-                            Collection.CachedContainsLocker.ExitUpgradeableReadLock();
+                            Collection.CachedContainsFunctionsLocker.ExitUpgradeableReadLock();
                         }
                     }
                 }
