@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using System.Linq.Expressions;
 
     /// <summary>Validates argument preconditions.</summary>
@@ -20,6 +21,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="e" /> is not a <see cref="MemberExpression" />.
         /// </exception>
+        [DebuggerStepThrough]
         public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e)
         {
             if (e == null)
@@ -47,6 +49,7 @@
         ///     </para>
         /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
+        [DebuggerStepThrough]
         public static ArgumentInfo<T> Argument<T>(T value, string name = null)
             => new ArgumentInfo<T>(value, name);
 
@@ -84,6 +87,7 @@
             ///     Whether the original method argument is modified
             ///     before the initialization of this instance.
             /// </param>
+            [DebuggerStepThrough]
             public ArgumentInfo(T value, string name, bool modified = false)
             {
                 this.Value = value;
@@ -142,6 +146,7 @@
             ///     <c>true</c>, if <see cref="Value" /> is
             ///     not <c>null</c>; otherwise, <c>false</c>.
             /// </returns>
+            [DebuggerStepThrough]
             public bool HasValue() => hasValue(this.Value);
 
             /// <summary>Determines whether the argument value is <c>null</c>.</summary>
