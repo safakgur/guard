@@ -249,8 +249,9 @@ updated for releases.
 ### What Is to Come
 
 * More validations.
-* Test coverage with a badge.
+* Coverage checks per push.
 * Online documentation.
+* Performance benchmarks.
 
 ### What Is Not to Come
 
