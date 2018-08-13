@@ -39,9 +39,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.0'">
-        <PackageReference Include="System.ValueTuple" Version="4.5.0">
-            <PrivateAssets>All</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     </ItemGroup>
 
 </Project>
