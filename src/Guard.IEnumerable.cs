@@ -557,11 +557,17 @@
                         var method = collectionType.GetMethod("Contains", new[] { itemType });
                         if (method?.IsStatic == false && method.ReturnType == typeof(bool))
                         {
-                            var t = Expression.Parameter(collectionType, "collection");
-                            var i = Expression.Parameter(itemType, "item");
-                            var c = Expression.Call(t, method, i);
-                            var l = Expression.Lambda<Func<TCollection, TItem, bool>>(c, t, i);
-                            var compiled = l.Compile();
+                            var p = method.GetParameters()[0];
+                            var colParam = Expression.Parameter(collectionType, "collection");
+                            var itemParam = Expression.Parameter(itemType, "item");
+
+                            var convert = itemParam as Expression;
+                            if (p.ParameterType != itemType && p.ParameterType.IsGenericType(typeof(Nullable<>)))
+                                convert = Expression.Convert(itemParam, p.ParameterType);
+
+                            var call = Expression.Call(colParam, method, convert);
+                            var lambda = Expression.Lambda<Func<TCollection, TItem, bool>>(call, colParam, itemParam);
+                            var compiled = lambda.Compile();
                             return (collection, item, comparer) => comparer != null
                                 ? EnumeratingContains(collection, item, comparer)
                                 : compiled(collection, item);
