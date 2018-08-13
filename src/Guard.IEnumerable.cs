@@ -6,12 +6,11 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Threading;
 
     /// <content>Provides preconditions for <see cref="IEnumerable" /> arguments.</content>
     public static partial class Guard
     {
-        #region Methods
-
         /// <summary>Requires the argument to have a collection value that is empty.</summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
@@ -206,7 +205,7 @@
             Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
         {
-            if (argument.HasValue() && !Collection<TCollection>.Contains(argument.Value, item, comparer))
+            if (argument.HasValue() && !Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionContains(argument, item);
                 throw new ArgumentException(m, argument.Name);
@@ -261,7 +260,7 @@
             Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
         {
-            if (argument.HasValue() && Collection<TCollection>.Contains(argument.Value, item, comparer))
+            if (argument.HasValue() && Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionDoesNotContain(argument, item);
                 throw new ArgumentException(m, argument.Name);
@@ -323,9 +322,33 @@
             return ref argument;
         }
 
-        #endregion Methods
+        /// <summary>Provides cached, non-generic collection utilities.</summary>
+        private static class Collection
+        {
+            /// <summary>
+            ///     The <see cref="Collection{TCollection}.Count" /> delegates cached by their
+            ///     collection types.
+            /// </summary>
+            public static readonly IDictionary<Type, Func<object, int, int>> CachedCounts
+                = new Dictionary<Type, Func<object, int, int>>();
 
-        #region Classes
+            /// <summary>
+            ///     The locker that synchronizes access to <see cref="CachedCounts" />.
+            /// </summary>
+            public static readonly ReaderWriterLockSlim CachedCountsLocker = new ReaderWriterLockSlim();
+
+            /// <summary>
+            ///     The <see cref="Collection{TCollection}.Typed{TItem}.Contains" /> delegates
+            ///     cached by their collection and item types.
+            /// </summary>
+            public static readonly IDictionary<(Type, Type), Delegate> CachedContains
+                = new Dictionary<(Type, Type), Delegate>();
+
+            /// <summary>
+            ///     The locker that synchronizes access to <see cref="CachedContains" />.
+            /// </summary>
+            public static readonly ReaderWriterLockSlim CachedContainsLocker = new ReaderWriterLockSlim();
+        }
 
         /// <summary>
         ///     Provides cached collection utilities for the type
@@ -351,21 +374,6 @@
             /// </summary>
             public static readonly Func<TCollection, bool> ContainsNull = InitContainsNull();
 
-            /// <summary>
-            ///     Determines whether a generic collection contains the specified element.
-            /// </summary>
-            /// <typeparam name="TItem">The type of the item to find.</typeparam>
-            /// <param name="collection">The collection to search.</param>
-            /// <param name="item">The item to find.</param>
-            /// <param name="comparer">The equality comparer to use.</param>
-            /// <returns>
-            ///     <c>true</c>, if <paramref name="collection" /> contains
-            ///     <paramref name="item" />; otherwise, <c>false</c>.
-            /// </returns>
-            public static bool Contains<TItem>(
-                TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
-                => Typed<TItem>.Contains(collection, item, comparer);
-
             /// <summary>Initializes <see cref="Count" />.</summary>
             /// <returns>
             ///     A function that returns the number of elements in the specified collection.
@@ -377,14 +385,31 @@
 
                 var getter = type.GetPropertyGetter("Count");
                 if (getter?.IsStatic == false && getter.ReturnType == integer)
-                    return Compile();
+                    return CompileGetter();
 
                 getter = type.GetPropertyGetter("Length");
                 if (getter?.IsStatic == false && getter.ReturnType == integer)
-                    return Compile();
+                    return CompileGetter();
 
-                return (collection, max) =>
+                return EnumerableCount;
+
+                Func<TCollection, int, int> CompileGetter()
                 {
+                    var t = Expression.Parameter(type, "collection");
+                    var c = Expression.Call(t, getter);
+                    var l = Expression.Lambda<Func<TCollection, int>>(c, t);
+                    var count = l.Compile();
+                    return (collection, max) => count(collection);
+                }
+
+                int EnumerableCount(TCollection collection, int max)
+                {
+                    if (type != collection.GetType())
+                        return ProxyCount(collection, max);
+
+                    if (max == 0)
+                        return 0;
+
                     var i = 0;
                     var enumerator = collection.GetEnumerator();
                     try
@@ -399,15 +424,42 @@
                     }
 
                     return i;
-                };
+                }
 
-                Func<TCollection, int, int> Compile()
+                int ProxyCount(TCollection collection, int max)
                 {
-                    var t = Expression.Parameter(type, "collection");
-                    var c = Expression.Call(t, getter);
-                    var l = Expression.Lambda<Func<TCollection, int>>(c, t);
-                    var count = l.Compile();
-                    return (collection, max) => count(collection);
+                    Collection.CachedCountsLocker.EnterUpgradeableReadLock();
+                    try
+                    {
+                        if (!Collection.CachedCounts.TryGetValue(collection.GetType(), out var func))
+                        {
+                            var f = Expression.Field(null, typeof(Collection<>)
+                                .MakeGenericType(collection.GetType())
+                                .GetField(nameof(Count)));
+
+                            var o = Expression.Parameter(typeof(object), nameof(collection));
+                            var m = Expression.Parameter(typeof(int), nameof(max));
+                            var i = Expression.Invoke(f, Expression.Convert(o, collection.GetType()), m);
+                            var l = Expression.Lambda<Func<object, int, int>>(i, o, m);
+                            func = l.Compile();
+
+                            Collection.CachedCountsLocker.EnterWriteLock();
+                            try
+                            {
+                                Collection.CachedCounts[collection.GetType()] = func;
+                            }
+                            finally
+                            {
+                                Collection.CachedCountsLocker.ExitWriteLock();
+                            }
+                        }
+
+                        return func(collection, max);
+                    }
+                    finally
+                    {
+                        Collection.CachedCountsLocker.ExitUpgradeableReadLock();
+                    }
                 }
             }
 
@@ -483,14 +535,13 @@
             ///     <typeparamref name="TItem" />.
             /// </summary>
             /// <typeparam name="TItem">The type of the collection items.</typeparam>
-            private static class Typed<TItem>
+            public static class Typed<TItem>
             {
                 /// <summary>
                 ///     A function that determines whether a generic collection contains the
                 ///     specified element.
                 /// </summary>
-                public static readonly Func<TCollection, TItem, IEqualityComparer<TItem>, bool> Contains
-                    = InitContains();
+                public static readonly Func<TCollection, TItem, IEqualityComparer<TItem>, bool> Contains = InitContains();
 
                 /// <summary>Initializes <see cref="Contains" />.</summary>
                 /// <returns>
@@ -520,42 +571,71 @@
                     }
                     while (itemType != null);
                     return EnumeratingContains;
-                }
 
-                /// <summary>
-                ///     Determines whether a generic collection contains the specified element by
-                ///     enumerating the collection and checking the items one by one.
-                /// </summary>
-                /// <param name="collection">The collection to search.</param>
-                /// <param name="item">The item to find.</param>
-                /// <param name="comparer">The equality comparer to use.</param>
-                /// <returns>
-                ///     <c>true</c>, if <paramref name="collection" /> contains
-                ///     <paramref name="item" />; otherwise, <c>false</c>.
-                /// </returns>
-                private static bool EnumeratingContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
-                {
-                    if (comparer is null)
-                        comparer = EqualityComparer<TItem>.Default;
+                    bool EnumeratingContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
+                    {
+                        if (collectionType != collection.GetType())
+                            return ProxyContains(collection, item, comparer);
 
-                    if (collection is IEnumerable<TItem> typed)
-                    {
-                        foreach (var current in typed)
-                            if (comparer.Equals(current, item))
-                                return true;
-                    }
-                    else
-                    {
-                        foreach (var current in collection)
-                            if (current is TItem c && comparer.Equals(c, item))
-                                return true;
+                        if (comparer is null)
+                            comparer = EqualityComparer<TItem>.Default;
+
+                        if (collection is IEnumerable<TItem> typed)
+                        {
+                            foreach (var current in typed)
+                                if (comparer.Equals(current, item))
+                                    return true;
+                        }
+                        else
+                        {
+                            foreach (var current in collection)
+                                if (current is TItem c && comparer.Equals(c, item))
+                                    return true;
+                        }
+
+                        return false;
                     }
 
-                    return false;
+                    bool ProxyContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
+                    {
+                        Collection.CachedContainsLocker.EnterUpgradeableReadLock();
+                        try
+                        {
+                            var key = (collection.GetType(), typeof(TItem));
+                            if (!Collection.CachedContains.TryGetValue(key, out var func))
+                            {
+                                var f = Expression.Field(null, typeof(Collection<>)
+                                    .GetNestedType("Typed`1")
+                                    .MakeGenericType(collection.GetType(), typeof(TItem))
+                                    .GetField(nameof(Contains)));
+
+                                var o = Expression.Parameter(typeof(object), nameof(collection));
+                                var i = Expression.Parameter(typeof(TItem), nameof(item));
+                                var e = Expression.Parameter(typeof(IEqualityComparer<TItem>), nameof(comparer));
+                                var n = Expression.Invoke(f, Expression.Convert(o, collection.GetType()), i, e);
+                                var l = Expression.Lambda<Func<object, TItem, IEqualityComparer<TItem>, bool>>(n, o, i, e);
+                                func = l.Compile();
+
+                                Collection.CachedContainsLocker.EnterWriteLock();
+                                try
+                                {
+                                    Collection.CachedContains[key] = func;
+                                }
+                                finally
+                                {
+                                    Collection.CachedContainsLocker.ExitWriteLock();
+                                }
+                            }
+
+                            return (func as Func<object, TItem, IEqualityComparer<TItem>, bool>)(collection, item, comparer);
+                        }
+                        finally
+                        {
+                            Collection.CachedContainsLocker.ExitUpgradeableReadLock();
+                        }
+                    }
                 }
             }
         }
-
-        #endregion Classes
     }
 }
