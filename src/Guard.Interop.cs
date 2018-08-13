@@ -86,6 +86,9 @@
         }
 
 #if NETSTANDARD1_0
+        private static Type GetNestedType(this Type type, string name)
+            => type.GetTypeInfo().DeclaredNestedTypes.FirstOrDefault(t => t.Name == name)?.AsType();
+
         private static Type[] GetGenericArguments(this Type type)
             => type.GetTypeInfo().GenericTypeArguments;
 
