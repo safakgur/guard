@@ -26,61 +26,67 @@
             }
         }
 
-        protected static void ThrowsArgumentNullException<T>(
+        protected static ArgumentNullException[] ThrowsArgumentNullException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage)
         {
-            Assert.Throws<ArgumentNullException>(
+            var exWithoutMessage = Assert.Throws<ArgumentNullException>(
                 argument.Name,
                 () => testWithoutMessage(argument));
 
             var message = RandomMessage;
-            var ex = Assert.Throws<ArgumentNullException>(
+            var exWithMessage = Assert.Throws<ArgumentNullException>(
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, ex.Message);
+            Assert.StartsWith(message, exWithMessage.Message);
 
             var modified = argument.Modify(argument.Value);
             ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
+
+            return new[] { exWithoutMessage, exWithMessage };
         }
 
-        protected static void ThrowsArgumentOutOfRangeException<T>(
+        protected static ArgumentOutOfRangeException[] ThrowsArgumentOutOfRangeException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(
+            var exWithoutMessage = Assert.Throws<ArgumentOutOfRangeException>(
                 argument.Name,
                 () => testWithoutMessage(argument));
 
             var message = RandomMessage;
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(
+            var exWithMessage = Assert.Throws<ArgumentOutOfRangeException>(
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, ex.Message);
+            Assert.StartsWith(message, exWithMessage.Message);
 
             var modified = argument.Modify(argument.Value);
             ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
+
+            return new[] { exWithoutMessage, exWithMessage };
         }
 
-        protected static void ThrowsArgumentException<T>(
+        protected static ArgumentException[] ThrowsArgumentException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage)
         {
-            Assert.Throws<ArgumentException>(
+            var exWithoutMessage = Assert.Throws<ArgumentException>(
                 argument.Name,
                 () => testWithoutMessage(argument));
 
             var message = RandomMessage;
-            var ex = Assert.Throws<ArgumentException>(
+            var exWithMessage = Assert.Throws<ArgumentException>(
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, ex.Message);
+            Assert.StartsWith(message, exWithMessage.Message);
+
+            return new[] { exWithoutMessage, exWithMessage };
         }
 
         protected static void ThrowsException<T, TException>(
