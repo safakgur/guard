@@ -243,7 +243,7 @@ For `ArgumentInfo<T>`
 
 ## Future
 
-The development branch where you can see the works in proress is [`dev`][5]. [`master`][4] is only
+The development branch where you can see the works in progress is [`dev`][5]. [`master`][4] is only
 updated for releases.
 
 ### What Is to Come
@@ -255,10 +255,12 @@ updated for releases.
 
 ### What Is Not to Come
 
-* Compound validations, e.g. `TrimmedNotNullOrEmpty` for strings.
-* Validations for types where a better suited type exists, e.g. `Email` or `IPAddress` for strings.
-You should use the `MailAddress` class to accept email addresses and `IPAddress` class to accept IP
-addresses.
+* Compound validations.  
+  E.g. `TrimmedNotNullOrEmpty` for strings.
+* Validations for types where a better suited type exists.  
+  E.g. `Email` or `IPAddress` for strings since there is already a `MailAddress` class that should
+  be used to accept email addresses and an `IPAddress` class that should be used to accept IP
+  addresses.
 
 [1]: docs/design-decisions.md
 [2]: docs/extensibility.md
