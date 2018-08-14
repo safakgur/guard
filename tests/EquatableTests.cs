@@ -1,7 +1,6 @@
 ﻿namespace Dawn.Tests
 {
     using System;
-    using System.Collections.Generic;
     using Xunit;
 
     public sealed class EquatableTests : BaseTests
@@ -87,7 +86,7 @@
         [InlineData(null, null, null, StringComparison.Ordinal)]
         [InlineData("A", "A", "a", StringComparison.Ordinal)]
         [InlineData("A", "a", "B", StringComparison.OrdinalIgnoreCase)]
-        public void EqualWithComparer(string value, string equal, string unequal, StringComparison? comparison)
+        public void EqualWithComparer(string value, string equal, string unequal, StringComparison comparison)
         {
             var valueArg = Guard.Argument(() => value);
             var comparer = comparison == StringComparison.Ordinal
