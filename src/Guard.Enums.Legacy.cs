@@ -66,7 +66,7 @@
         /// <summary>Represents a method argument with an enumeration value.</summary>
         /// <typeparam name="T">The type of the enum.</typeparam>
         [Obsolete("Use the enum preconditions directly, e.g. `arg.Defined()` instead of `arg.Enum().Defined()`.")]
-        public readonly ref struct EnumArgumentInfo<T>
+        public readonly struct EnumArgumentInfo<T>
             where T : struct, IComparable, IFormattable
         {
             #region Constructors
@@ -267,7 +267,7 @@
         /// <summary>Represents a method argument with a nullable enumeration value.</summary>
         /// <typeparam name="T">The type of the enum.</typeparam>
         [Obsolete("Use the enum preconditions directly, e.g. `arg.Defined()` instead of `arg.Enum().Defined()`.")]
-        public readonly ref struct NullableEnumArgumentInfo<T>
+        public readonly struct NullableEnumArgumentInfo<T>
             where T : struct, IComparable, IFormattable
         {
             #region Constructors

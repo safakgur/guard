@@ -13,6 +13,7 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 * [Standard Validations](#standard-validations)
 * [Design Decisions][1]
 * [Extensibility][2]
+* [Future](#future)
 
 ## Introduction
 
@@ -52,16 +53,15 @@ public Person(string firstName, string lastName)
 }
 ```
 
-If this looks like too much allocations to you, you can use the overload that
-accepts the argument name as a separate parameter and write:
-`Guard.Argument(firstName, nameof(firstName))`.
+If this looks like too much allocations to you, you can use the overload that accepts the argument
+name as a separate parameter and write: `Guard.Argument(firstName, nameof(firstName))`.
 
 See the [design decisions][1] for details.
 
 ## What's Wrong with Vanilla?
 
-There is nothing wrong with writing your own checks but when you have lots
-of types you need to validate, the task gets very tedious, very quickly.
+There is nothing wrong with writing your own checks but when you have lots of types you need to
+validate, the task gets very tedious, very quickly.
 
 Let's analyze the example above.
 * We have an argument (firstName) that we need to be a non-null, non-empty string.
@@ -69,28 +69,44 @@ Let's analyze the example above.
 * We then check if it's empty and throw an `ArgumentException` if it is.
 * We specify the same parameter name for each validation.
 * We write an error message for each validation.
-* `ArgumentNullException` accepts the parameter name as its first argument and error message as its second while it's the other way around for the `ArgumentException`. An inconsistency that many of us sometimes find it hard to remember.
+* `ArgumentNullException` accepts the parameter name as its first argument and error message as its
+second while it's the other way around for the `ArgumentException`. An inconsistency that many of us
+sometimes find it hard to remember.
 
-In reality, all we need to express should be the first bullet,
-that we want our argument non-null and non-empty.
+In reality, all we need to express should be the first bullet, that we want our argument non-null
+and non-empty.
 
-With Guard, if you want to guard an argument against null, you just write `NotNull`
-and that's it. If the argument is passed null, you'll get an `ArgumentNullException`
-thrown with the correct parameter name and a clear error message out of the box.
-The [standard validations](#standard-validations) have fully documented, meaningful
-defaults that get out of your way and let you focus on your business logic.
+With Guard, if you want to guard an argument against null, you just write `NotNull` and that's it.
+If the argument is passed null, you'll get an `ArgumentNullException` thrown with the correct
+parameter name and a clear error message out of the box. The [standard validations](#standard-validations)
+have fully documented, meaningful defaults that get out of your way and let you focus on your project.
 
 ## Requirements
 
-**C# 7.2 or later is required.**  
-Guard takes advantage of almost all the new features introduced in C# 7.2.
-So in order to use Guard, you need to make sure your Visual Studio is up to date
-and you have `<LangVersion>7.2</LangVersion>` added in your .csproj file.
+**C# 7.2 or later is required.** Guard takes advantage of almost all the new features introduced in
+C# 7.2. So in order to use Guard, you need to make sure your Visual Studio is up to date and you
+have `<LangVersion>7.2</LangVersion>` or later added in your .csproj file.
 
-Supported targets:
-* .NET Standard 1.0 and above - See [.NET Standard compatibility table][3].
+**.NET Standard 1.0** and above are supported. [Microsoft Docs][3] lists the following platform
+versions as .NET Standard 1.0 compliant but keep in mind that currently, the unit tests are only
+targeting .NET Core 1.0 and 2.0.
+
+| Platform                   | Version |
+| -------------------------- | ------- |
+| .NET Core                  | `1.0`   |
+| .NET Framework             | `4.5`   |
+| Mono                       | `4.6`   |
+| Xamarin.iOS                | `10.0`  |
+| Xamarin.Mac                | `3.0`   |
+| Xamarin.Android            | `7.0`   |
+| Universal Windows Platform | `10.0`  |
+| Windows                    | `8.0`   |
+| Windows Phone              | `8.1`   |
+| Windows Phone Silverlight  | `8.0`   |
 
 ## Standard Validations
+
+Below is a complete list of validations that are included with the library.
 
 ### Null Guards
 
@@ -133,12 +149,12 @@ For `ArgumentInfo<T> where T : IEnumerable`
 * `MinCount(int)`
 * `MaxCount(int)`
 * `CountInRange(int, int)`
+* `Contains(TItem)`
+* `Contains(TItem, IEqualityComparer<TItem>)`
+* `DoesNotContain(TItem)`
+* `DoesNotContain(TItem, IEqualityComparer<TItem>)`
 * `ContainsNull()`
 * `DoesNotContainNull()`
-
-For `ArgumentInfo<TCollection> where TCollection : IEnumerable<TItem>`
-* `Contains(TItem)`
-* `DoesNotContain(TItem)`
 
 ### String Guards
 
@@ -185,6 +201,7 @@ For `ArgumentInfo<Uri>`
 * `Absolute`
 * `Relative`
 * `Scheme(string)`
+* `NotScheme(string)`
 * `Http()`
 * `Http(bool)`
 * `Https()`
@@ -224,6 +241,27 @@ For `ArgumentInfo<T>`
 * `Require(Func<T, bool>)`
 * `Require<TException>(Func<T, bool>)`
 
+## Future
+
+The development branch where you can see the works in proress is [`dev`][5]. [`master`][4] is only
+updated for releases.
+
+### What Is to Come
+
+* More validations.
+* Coverage checks per push.
+* Online documentation.
+* Performance benchmarks.
+
+### What Is Not to Come
+
+* Compound validations, e.g. `TrimmedNotNullOrEmpty` for strings.
+* Validations for types where a better suited type exists, e.g. `Email` or `IPAddress` for strings.
+You should use the `MailAddress` class to accept email addresses and `IPAddress` class to accept IP
+addresses.
+
 [1]: docs/design-decisions.md
 [2]: docs/extensibility.md
 [3]: https://docs.microsoft.com/dotnet/standard/net-standard
+[4]: https://github.com/safakgur/guard/tree/master
+[5]: https://github.com/safakgur/guard/tree/dev
