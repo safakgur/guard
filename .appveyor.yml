@@ -3,12 +3,22 @@ skip_tags: true
 image: Visual Studio 2017
 configuration: CI
 before_build:
-- cmd: dotnet restore
+- ps: dotnet restore --verbosity m
+- ps: choco install codecov --no-progress
+build:
+  verbosity: minimal
+test_script:
+- ps: dotnet test tests/ /p:DebugType=full /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput='../artifacts/coverage.xml'
+- ps: codecov -f 'artifacts/coverage.xml'
 artifacts:
-- path: '**\*.nupkg'
+- path: artifacts/*.nupkg
+  name: nupkg
+- path: artifacts/coverage.xml
+  name: coverage
 deploy:
 - provider: NuGet
   api_key:
     secure: 7exHzq8I96c5RKQn+R6bho0U4DdjiO/vEvdZtXge+dmoHMhzIHzgEX+uDl1zuKj/
+  artifact: nupkg
   on:
     branch: master

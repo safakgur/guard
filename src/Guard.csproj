@@ -21,6 +21,7 @@
 
     <PropertyGroup Condition="'$(Configuration)'=='CI'">
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>../artifacts/</PackageOutputPath>
     </PropertyGroup>
 
     <PropertyGroup>
