@@ -1,7 +1,8 @@
 # Guard
 
-[![NuGet Status](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
-[![Build status](https://ci.appveyor.com/api/projects/status/add0vx8i2yacvprf/branch/master?svg=true)](https://ci.appveyor.com/project/safak/guard/branch/master)
+[![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
+[![Build](https://ci.appveyor.com/api/projects/status/add0vx8i2yacvprf/branch/master?svg=true)](https://ci.appveyor.com/project/safak/guard/branch/master)
+[![Coverage](https://codecov.io/gh/safakgur/guard/branch/master/graph/badge.svg)](https://codecov.io/gh/safakgur/guard)
 
 ![Logo](media/guard-64.png)
 
@@ -256,7 +257,6 @@ updated for releases.
 ### What Is to Come
 
 * More validations.
-* Coverage checks per push.
 * Online documentation.
 * Performance benchmarks.
 
