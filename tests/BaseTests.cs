@@ -1,6 +1,7 @@
 ﻿namespace Dawn.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Xunit;
 
@@ -24,6 +25,29 @@
                     .Range(0, RandomUtils.Current.Next(5, 21))
                     .Select(i => Alphabet[RandomUtils.Current.Next(Alphabet.Length)]));
             }
+        }
+
+        protected interface ITestEnumerable<T> : IEnumerable<T>
+        {
+            IEnumerable<T> Items { get; }
+
+            bool Enumerated { get; }
+
+            int EnumerationCount { get; }
+
+            void Reset();
+        }
+
+        protected interface ITestEnumerableWithCount<T> : ITestEnumerable<T>, IReadOnlyCollection<T>
+        {
+            bool CountCalled { get; }
+        }
+
+        protected interface ITestEnumerableWithContains<T> : ITestEnumerable<T>
+        {
+            bool Contains(T item);
+
+            bool ContainsCalled { get; }
         }
 
         protected static ArgumentNullException[] ThrowsArgumentNullException<T>(
@@ -108,6 +132,62 @@
 
             if (!allowMessageMismatch)
                 Assert.StartsWith(message, ex.Message);
+        }
+
+        protected static void CheckAndReset<T>(
+            ITestEnumerable<T> enumerable,
+            bool? countCalled = null,
+            bool? containsCalled = null,
+            int? enumerationCount = null,
+            bool? enumerated = null,
+            bool? forceEnumerated = null)
+        {
+            if (enumerable is null)
+                return;
+
+            var withCount = enumerable as ITestEnumerableWithCount<T>;
+            if (withCount != null && countCalled.HasValue)
+            {
+                Assert.Equal(countCalled, withCount.CountCalled);
+                Assert.Equal(forceEnumerated ?? !countCalled, enumerable.Enumerated);
+
+                if (countCalled.Value && forceEnumerated != true)
+                    Assert.Equal(0, enumerable.EnumerationCount);
+            }
+
+            var withContains = enumerable as ITestEnumerableWithContains<T>;
+            if (withContains != null && containsCalled.HasValue)
+            {
+                Assert.Equal(containsCalled, withContains.ContainsCalled);
+                Assert.Equal(forceEnumerated ?? !containsCalled, enumerable.Enumerated);
+
+                if (containsCalled.Value && forceEnumerated != true)
+                    Assert.Equal(0, enumerable.EnumerationCount);
+            }
+
+            if (withCount is null && withContains is null)
+            {
+                enumerated = forceEnumerated ?? enumerated;
+
+                if (!enumerated.HasValue && enumerationCount.HasValue)
+                    enumerated = enumerationCount > 0;
+
+                if (enumerated.HasValue)
+                    Assert.Equal(enumerated, enumerable.Enumerated);
+
+                if (enumerationCount.HasValue)
+                    Assert.Equal(enumerationCount, enumerable.EnumerationCount);
+            }
+
+            enumerable.Reset();
+            Assert.False(enumerable.Enumerated);
+            Assert.Equal(0, enumerable.EnumerationCount);
+
+            if (withCount != null)
+                Assert.False(withCount.CountCalled);
+
+            if (withContains != null)
+                Assert.False(withContains.ContainsCalled);
         }
 
         protected static class RandomUtils
