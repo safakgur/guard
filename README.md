@@ -212,6 +212,13 @@ For `ArgumentInfo<T|T?> where T : enum`
 * `HasFlag(T)`
 * `DoesNotHaveFlag(T)`
 
+### Email Guards
+For `ArgumentInfo<MailAddress>`
+* `HasHost(string)`
+* `DoesNotHaveHost(string)`
+* `HostIn(IEnumerable<string>)`
+* `HostNotIn(IEnumerable<string>)`
+
 ### Type Guards
 
 For `ArgumentInfo<T>`
@@ -258,9 +265,7 @@ updated for releases.
 * Compound validations.  
   E.g. `TrimmedNotNullOrEmpty` for strings.
 * Validations for types where a better suited type exists.  
-  E.g. `Email` or `IPAddress` for strings since there is already a `MailAddress` class that should
-  be used to accept email addresses and an `IPAddress` class that should be used to accept IP
-  addresses.
+  E.g. `IPAddress` for strings since there is already an `IPAddress` class.
 
 [1]: docs/design-decisions.md
 [2]: docs/extensibility.md

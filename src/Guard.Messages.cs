@@ -1,6 +1,11 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+#if !NETSTANDARD1_0
+    using System.Net.Mail;
+#endif
 
     /// <content>Provides error messages for the common preconditions.</content>
     public static partial class Guard
@@ -192,6 +197,27 @@
 
             public static string UriHttps(in ArgumentInfo<Uri> argument)
                 => $"{argument.Name} must be an absolute URI with the HTTPS scheme.";
+
+#if !NETSTANDARD1_0
+            public static string EmailHasHost(in ArgumentInfo<MailAddress> argument, string host)
+                => $"{argument.Name} must have the host '{host}'.";
+
+            public static string EmailDoesNotHaveHost(in ArgumentInfo<MailAddress> argument, string host)
+                => $"{argument.Name} cannot have the host '{host}'.";
+
+            public static string EmailHostIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
+                => $"{argument.Name} must have one of the following hosts: {Join(hosts)}.";
+
+            public static string EmailHostNotIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
+                => $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}.";
+#endif
+
+            private static string Join<T>(IEnumerable<T> collection, bool quoted = true)
+            {
+                return quoted
+                    ? string.Join(", ", collection.Select(i => $"'{i}'"))
+                    : string.Join(", ", collection);
+            }
         }
     }
 }
