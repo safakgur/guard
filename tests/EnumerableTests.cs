@@ -425,7 +425,7 @@
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
         }
 
-        private static TestEnumerable<T> GetEnumerable<T>(CollectionOptions options, int maxCount = 10)
+        private static ITestEnumerable<T> GetEnumerable<T>(CollectionOptions options, int maxCount = 10)
         {
             if (options == CollectionOptions.Null)
                 return null;
@@ -487,72 +487,7 @@
             return new TestEnumerable<T>(list);
         }
 
-        private static void CheckAndReset<T>(
-            TestEnumerable<T> enumerable,
-            bool? countCalled = null,
-            bool? containsCalled = null,
-            int? enumerationCount = null,
-            bool? enumerated = null)
-        {
-            if (enumerable is null)
-                return;
-
-            var withCount = enumerable as IEnumerableWithCount<T>;
-            if (withCount != null && countCalled.HasValue)
-            {
-                Assert.Equal(countCalled, withCount.CountCalled);
-                Assert.Equal(!countCalled, enumerable.Enumerated);
-
-                if (countCalled.Value)
-                    Assert.Equal(0, enumerable.EnumerationCount);
-            }
-
-            var withContains = enumerable as IEnumerableWithContains<T>;
-            if (withContains != null && containsCalled.HasValue)
-            {
-                Assert.Equal(containsCalled, withContains.ContainsCalled);
-                Assert.Equal(!containsCalled, enumerable.Enumerated);
-
-                if (containsCalled.Value)
-                    Assert.Equal(0, enumerable.EnumerationCount);
-            }
-
-            if (withCount is null && withContains is null)
-            {
-                if (!enumerated.HasValue && enumerationCount.HasValue)
-                    enumerated = enumerationCount > 0;
-
-                if (enumerated.HasValue)
-                    Assert.Equal(enumerated, enumerable.Enumerated);
-
-                if (enumerationCount.HasValue)
-                    Assert.Equal(enumerationCount, enumerable.EnumerationCount);
-            }
-
-            enumerable.Reset();
-            Assert.False(enumerable.Enumerated);
-            Assert.Equal(0, enumerable.EnumerationCount);
-
-            if (withCount != null)
-                Assert.False(withCount.CountCalled);
-
-            if (withContains != null)
-                Assert.False(withContains.ContainsCalled);
-        }
-
-        private interface IEnumerableWithCount<T> : IReadOnlyCollection<T>
-        {
-            bool CountCalled { get; }
-        }
-
-        private interface IEnumerableWithContains<T> : IEnumerable<T>
-        {
-            bool Contains(T item);
-
-            bool ContainsCalled { get; }
-        }
-
-        private class TestEnumerable<T> : IEnumerable<T>
+        public class TestEnumerable<T> : ITestEnumerable<T>
         {
             public TestEnumerable(IEnumerable<T> items) => this.Items = items;
 
@@ -581,7 +516,7 @@
             }
         }
 
-        private class TestEnumerableWithCount<T> : TestEnumerable<T>, IEnumerableWithCount<T>
+        public class TestEnumerableWithCount<T> : TestEnumerable<T>, ITestEnumerableWithCount<T>
         {
             private readonly int count;
 
@@ -606,7 +541,7 @@
             }
         }
 
-        private class TestEnumerableWithContains<T> : TestEnumerable<T>, IEnumerableWithContains<T>
+        public class TestEnumerableWithContains<T> : TestEnumerable<T>, ITestEnumerableWithContains<T>
         {
             public TestEnumerableWithContains(IEnumerable<T> items)
                 : base(items)
@@ -628,8 +563,8 @@
             }
         }
 
-        private class TestEnumerableWithCountAndContains<T>
-            : TestEnumerableWithCount<T>, IEnumerableWithCount<T>, IEnumerableWithContains<T>
+        public class TestEnumerableWithCountAndContains<T>
+            : TestEnumerableWithCount<T>, ITestEnumerableWithCount<T>, ITestEnumerableWithContains<T>
         {
             public TestEnumerableWithCountAndContains(IEnumerable<T> items)
                 : base(items)
