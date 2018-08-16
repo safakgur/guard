@@ -154,6 +154,7 @@
             ///     <c>true</c>, if <see cref="Value" /> is
             ///     <c>null</c>; otherwise, <c>false</c>.
             /// </returns>
+            [Obsolete("Use the HasValue method to check against null.")]
             public bool IsNull() => !hasValue(this.Value);
 
             /// <summary>Initializes <see cref="hasValue" />.</summary>

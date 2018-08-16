@@ -80,7 +80,7 @@
             in this ArgumentInfo<T> argument, string message = null)
             where T : class
         {
-            if (argument.IsNull())
+            if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
                 throw !argument.Modified
@@ -111,7 +111,7 @@
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct
         {
-            if (argument.IsNull())
+            if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
                 throw !argument.Modified
