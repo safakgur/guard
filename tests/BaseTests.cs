@@ -53,7 +53,8 @@
         protected static ArgumentNullException[] ThrowsArgumentNullException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
-            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage,
+            bool allowMessageMismatch = false)
         {
             var exWithoutMessage = Assert.Throws<ArgumentNullException>(
                 argument.Name,
@@ -64,7 +65,8 @@
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, exWithMessage.Message);
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, exWithMessage.Message);
 
             var modified = argument.Modify(argument.Value);
             ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
@@ -75,7 +77,8 @@
         protected static ArgumentOutOfRangeException[] ThrowsArgumentOutOfRangeException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
-            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage,
+            bool allowMessageMismatch = false)
         {
             var exWithoutMessage = Assert.Throws<ArgumentOutOfRangeException>(
                 argument.Name,
@@ -86,7 +89,8 @@
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, exWithMessage.Message);
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, exWithMessage.Message);
 
             var modified = argument.Modify(argument.Value);
             ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
@@ -97,7 +101,8 @@
         protected static ArgumentException[] ThrowsArgumentException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
-            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage,
+            bool allowMessageMismatch = false)
         {
             var exWithoutMessage = Assert.Throws<ArgumentException>(
                 argument.Name,
@@ -108,7 +113,8 @@
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, exWithMessage.Message);
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, exWithMessage.Message);
 
             return new[] { exWithoutMessage, exWithMessage };
         }

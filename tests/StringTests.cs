@@ -1,10 +1,14 @@
 ﻿namespace Dawn.Tests
 {
     using System;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
     using Xunit;
 
     public sealed class StringTests : BaseTests
     {
+        private static readonly TimeSpan matchTimeout = TimeSpan.FromMilliseconds(10);
+
         [Theory(DisplayName = T + "String: Empty/NotEmpty")]
         [InlineData(null, null)]
         [InlineData("", "A")]
@@ -350,6 +354,247 @@
                     Assert.Same(tail, other);
                     return message;
                 }));
+        }
+
+        [Theory(DisplayName = T + "String: Matches/DoesNotMatch")]
+        [InlineData(null, null, null, null, null)]
+        [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", "ABC", "[", "([A-Z]+)*!")]
+        public void Matches(
+            string withMatch,
+            string withoutMatch,
+            string validPattern,
+            string invalidPattern,
+            string timeoutPattern)
+        {
+            var validRegexWithoutTimeout = validPattern is null ? null : new Regex(validPattern);
+            var validRegexWithTimeout = validPattern is null ? null : new Regex(validPattern, RegexOptions.None, matchTimeout);
+            var timeoutRegex = timeoutPattern is null ? null : new Regex(timeoutPattern, RegexOptions.None, matchTimeout);
+
+            var withMatchArg = Guard.Argument(() => withMatch)
+                .Matches(validPattern)
+                .Matches(validPattern, matchTimeout)
+                .Matches(validRegexWithoutTimeout)
+                .Matches(validRegexWithTimeout);
+
+            var withoutMatchArg = Guard.Argument(() => withoutMatch)
+                .DoesNotMatch(validPattern)
+                .DoesNotMatch(validPattern, matchTimeout)
+                .DoesNotMatch(validRegexWithoutTimeout)
+                .DoesNotMatch(validRegexWithTimeout);
+
+            if (withMatch is null)
+            {
+                withMatchArg
+                    .Matches(invalidPattern)
+                    .Matches(invalidPattern, matchTimeout)
+                    .Matches(timeoutPattern)
+                    .Matches(timeoutPattern, matchTimeout)
+                    .DoesNotMatch(invalidPattern)
+                    .DoesNotMatch(invalidPattern, matchTimeout)
+                    .DoesNotMatch(timeoutPattern)
+                    .DoesNotMatch(timeoutPattern, matchTimeout)
+                    .DoesNotMatch(validPattern)
+                    .DoesNotMatch(validPattern, matchTimeout)
+                    .DoesNotMatch(validRegexWithoutTimeout)
+                    .DoesNotMatch(validRegexWithTimeout)
+                    .Matches(timeoutRegex)
+                    .DoesNotMatch(timeoutRegex);
+
+                withoutMatchArg
+                    .Matches(invalidPattern)
+                    .Matches(invalidPattern, matchTimeout)
+                    .Matches(timeoutPattern)
+                    .Matches(timeoutPattern, matchTimeout)
+                    .DoesNotMatch(invalidPattern)
+                    .DoesNotMatch(invalidPattern, matchTimeout)
+                    .DoesNotMatch(timeoutPattern)
+                    .DoesNotMatch(timeoutPattern, matchTimeout)
+                    .Matches(validPattern)
+                    .Matches(validPattern, matchTimeout)
+                    .Matches(validRegexWithoutTimeout)
+                    .Matches(validRegexWithTimeout)
+                    .Matches(timeoutRegex)
+                    .DoesNotMatch(timeoutRegex);
+
+                return;
+            }
+
+            var timeoutTasks = new[]
+            {
+                // Matches - timeout pattern
+                Task.Run(() =>
+                {
+                    ThrowsArgumentException(
+                        withMatchArg,
+                        arg => arg.Matches(timeoutPattern, matchTimeout),
+                        (arg, message) => arg.Matches(timeoutPattern, matchTimeout, (s, t) =>
+                        {
+                            Assert.Same(withMatch, s);
+                            Assert.True(t);
+                            return message;
+                        }),
+                        true);
+                }),
+
+                // Matches - timeout expression
+                Task.Run(() =>
+                {
+                    ThrowsArgumentException(
+                        withMatchArg,
+                        arg => arg.Matches(timeoutRegex),
+                        (arg, message) => arg.Matches(timeoutRegex, (s, t) =>
+                        {
+                            Assert.Same(withMatch, s);
+                            Assert.True(t);
+                            return message;
+                        }),
+                        true);
+                }),
+
+                // Does not match - timeout pattern
+                Task.Run(() =>
+                {
+                    ThrowsArgumentException(
+                        withMatchArg,
+                        arg => arg.DoesNotMatch(timeoutPattern, matchTimeout),
+                        (arg, message) => arg.DoesNotMatch(timeoutPattern, matchTimeout, (s, t) =>
+                        {
+                            Assert.Same(withMatch, s);
+                            Assert.True(t);
+                            return message;
+                        }),
+                        true);
+                }),
+
+                // Does not match - timeout expression
+                Task.Run(() =>
+                {
+                    ThrowsArgumentException(
+                        withMatchArg,
+                        arg => arg.DoesNotMatch(timeoutRegex),
+                        (arg, message) => arg.DoesNotMatch(timeoutRegex, (s, t) =>
+                        {
+                            Assert.Same(withMatch, s);
+                            Assert.True(t);
+                            return message;
+                        }),
+                        true);
+                })
+            };
+
+            // Matches - invalid pattern
+            ThrowsArgumentException(
+                Guard.Argument(withMatch, "pattern"),
+                arg => arg.Matches(invalidPattern),
+                (arg, message) => arg.Matches(invalidPattern, (s, t) =>
+                {
+                    Assert.Same(withMatch, s);
+                    Assert.False(t);
+                    return message;
+                }),
+                true);
+
+            // Matches - valid pattern w/o timeout
+            ThrowsArgumentException(
+                withoutMatchArg,
+                arg => arg.Matches(validPattern),
+                (arg, message) => arg.Matches(validPattern, (s, t) =>
+                {
+                    Assert.Same(withoutMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            // Matches - valid pattern w/ timeout
+            ThrowsArgumentException(
+                withoutMatchArg,
+                arg => arg.Matches(validPattern, matchTimeout),
+                (arg, message) => arg.Matches(validPattern, matchTimeout, (s, t) =>
+                {
+                    Assert.Same(withoutMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            // Matches - valid expression w/o timeout
+            ThrowsArgumentException(
+                withoutMatchArg,
+                arg => arg.Matches(validRegexWithoutTimeout),
+                (arg, message) => arg.Matches(validRegexWithoutTimeout, (s, t) =>
+                {
+                    Assert.Same(withoutMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            // Matches - valid expression w/ timeout
+            ThrowsArgumentException(
+                withoutMatchArg,
+                arg => arg.Matches(validRegexWithTimeout),
+                (arg, message) => arg.Matches(validRegexWithTimeout, (s, t) =>
+                {
+                    Assert.Same(withoutMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            // Does not match - invalid pattern
+            ThrowsArgumentException(
+                Guard.Argument(withoutMatch, "pattern"),
+                arg => arg.DoesNotMatch(invalidPattern),
+                (arg, message) => arg.DoesNotMatch(invalidPattern, (s, t) =>
+                {
+                    Assert.Same(withoutMatch, s);
+                    Assert.False(t);
+                    return message;
+                }),
+                true);
+
+            // Does not match - valid pattern w/o timeout
+            ThrowsArgumentException(
+                withMatchArg,
+                arg => arg.DoesNotMatch(validPattern),
+                (arg, message) => arg.DoesNotMatch(validPattern, (s, t) =>
+                {
+                    Assert.Same(withMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            // Does not match - valid pattern w/ timeout
+            ThrowsArgumentException(
+                withMatchArg,
+                arg => arg.DoesNotMatch(validPattern, matchTimeout),
+                (arg, message) => arg.DoesNotMatch(validPattern, matchTimeout, (s, t) =>
+                {
+                    Assert.Same(withMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            // Does not match - valid expression w/o timeout
+            ThrowsArgumentException(
+                withMatchArg,
+                arg => arg.DoesNotMatch(validRegexWithoutTimeout),
+                (arg, message) => arg.DoesNotMatch(validRegexWithoutTimeout, (s, t) =>
+                {
+                    Assert.Same(withMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            // Does not match - valid expression w/ timeout
+            ThrowsArgumentException(
+                withMatchArg,
+                arg => arg.DoesNotMatch(validRegexWithTimeout),
+                (arg, message) => arg.DoesNotMatch(validRegexWithTimeout, (s, t) =>
+                {
+                    Assert.Same(withMatch, s);
+                    Assert.False(t);
+                    return message;
+                }));
+
+            Task.WaitAll(timeoutTasks);
         }
     }
 }

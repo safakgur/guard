@@ -129,6 +129,18 @@
             public static string StringDoesNotEndWith(in ArgumentInfo<string> argument, string value)
                 => $"{argument.Name} cannot end with '{value}'.";
 
+            public static string StringMatches(in ArgumentInfo<string> argument, string pattern)
+                => $"No match in {argument.Name} could be found by the regular expression '{pattern}'.";
+
+            public static string StringMatchesTimeout(in ArgumentInfo<string> argument, string pattern, TimeSpan matchTimeout)
+                => $"No match in {argument.Name} could be found by the regular expression '{pattern}' in {matchTimeout}";
+
+            public static string StringDoesNotMatch(in ArgumentInfo<string> argument, string pattern)
+                => $"A match in {argument.Name} is found by the regular expression '{pattern}'.";
+
+            public static string StringDoesNotMatchTimeout(in ArgumentInfo<string> argument, string pattern, TimeSpan matchTimeout)
+                => $"{argument.Name} could not entirely be searched by the regular expression '{pattern}' due to time-out {matchTimeout}";
+
             public static string True<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be true.";
 
