@@ -177,6 +177,12 @@ For `ArgumentInfo<string>`
 * `EndsWith(string, StringComparison)`
 * `DoesNotEndWith(string)`
 * `DoesNotEndWith(string, StringComparison)`
+* `Matches(string)`
+* `Matches(string, TimeSpan)`
+* `Matches(Regex)`
+* `DoesNotMatch(string)`
+* `DoesNotMatch(string, TimeSpan)`
+* `DoesNotMatch(Regex)`
 
 ### Floating-Point Number Guards
 
