@@ -225,6 +225,8 @@ For `ArgumentInfo<MailAddress>`
 * `DoesNotHaveHost(string)`
 * `HostIn(IEnumerable<string>)`
 * `HostNotIn(IEnumerable<string>)`
+* `HasDisplayName()`
+* `DoesNotHaveDisplayName()`
 
 ### Type Guards
 
