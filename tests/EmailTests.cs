@@ -108,6 +108,43 @@ namespace Dawn.Tests
             CheckAndReset(hosts, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
         }
 
+        [Theory(DisplayName = T + "Email: HasDisplayName/DoesNotHaveDisplayName")]
+        [InlineData(null, null)]
+        [InlineData("A <a@b.c>", "a@b.c")]
+        public void HasDisplayName(string stringWithDisplayName, string stringWithoutDisplayName)
+        {
+            var withDisplayName = stringWithDisplayName is null ? null : new MailAddress(stringWithDisplayName);
+            var withDisplayNameArg = Guard.Argument(() => withDisplayName).HasDisplayName();
+
+            var withoutDisplayName = stringWithoutDisplayName is null ? null : new MailAddress(stringWithoutDisplayName);
+            var withoutDisplayNameArg = Guard.Argument(() => withoutDisplayName).DoesNotHaveDisplayName();
+
+            if (withDisplayName is null)
+            {
+                withDisplayNameArg.DoesNotHaveDisplayName();
+                withoutDisplayNameArg.HasDisplayName();
+                return;
+            }
+
+            ThrowsArgumentException(
+                withoutDisplayNameArg,
+                arg => arg.HasDisplayName(),
+                (arg, message) => arg.HasDisplayName(e =>
+                {
+                    Assert.Same(withoutDisplayName, e);
+                    return message;
+                }));
+
+            ThrowsArgumentException(
+                withDisplayNameArg,
+                arg => arg.DoesNotHaveDisplayName(),
+                (arg, message) => arg.DoesNotHaveDisplayName(e =>
+                {
+                    Assert.Same(withDisplayName, e);
+                    return message;
+                }));
+        }
+
         private static ITestEnumerable<string> GetHosts(
             string hostsString, bool hasContains, out int count)
         {

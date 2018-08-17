@@ -120,6 +120,50 @@ namespace Dawn
 
             return ref argument;
         }
+
+        /// <summary>Requires the argument value to have a display name specified.</summary>
+        /// <param name="argument">The email address argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value does not have a display name specified.
+        /// </exception>
+        public static ref readonly ArgumentInfo<MailAddress> HasDisplayName(
+            in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
+        {
+            if (argument.HasValue() && argument.Value.DisplayName.Length == 0)
+            {
+                var m = message?.Invoke(argument.Value) ?? Messages.EmailHasDisplayName(argument);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>Requires the argument value to not have a display name specified.</summary>
+        /// <param name="argument">The email address argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value has a display name specified.
+        /// </exception>
+        public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveDisplayName(
+            in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
+        {
+            if (argument.HasValue() && argument.Value.DisplayName.Length > 0)
+            {
+                var m = message?.Invoke(argument.Value) ?? Messages.EmailDoesNotHaveDisplayName(argument);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
     }
 }
 #endif

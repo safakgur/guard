@@ -222,6 +222,12 @@
 
             public static string EmailHostNotIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
                 => $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}.";
+
+            public static string EmailHasDisplayName(in ArgumentInfo<MailAddress> argument)
+                => $"{argument.Name} must have a display name specified.";
+
+            public static string EmailDoesNotHaveDisplayName(in ArgumentInfo<MailAddress> argument)
+                => $"{argument.Name} cannot have a display name specified.";
 #endif
 
             private static string Join<T>(IEnumerable<T> collection, bool quoted = true)
