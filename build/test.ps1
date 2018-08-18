@@ -24,6 +24,7 @@ IF (-not (Test-Path $SdkPath))
 
 & $SdkPath restore $PSScriptRoot/../tests --verbosity m
 & $SdkPath test $PSScriptRoot/../tests/ `
+    -c $Configuration `
     /p:DebugType=full `
     /p:CollectCoverage=$Coverage `
     /p:CoverletOutputFormat=$CoverageFormat `
