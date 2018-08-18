@@ -8,7 +8,7 @@ param(
 
 IF ($NoInstall -eq $false)
 {
-    & $PSScriptRoot/install.ps1
+    & $PSScriptRoot/install-dotnet.ps1
 }
 
 $SdkPath = "../artifacts/dotnet/dotnet.exe"
