@@ -9,7 +9,12 @@ IF ($NoInstall -eq $false)
     & $PSScriptRoot/install-dotnet.ps1
 }
 
-$SdkPath = "../artifacts/dotnet/dotnet.exe"
+$SdkPath = "$PSScriptRoot/../artifacts/dotnet/dotnet"
+IF ($IsWindows -or $env:OS -like "Windows*")
+{
+    $SdkPath += ".exe"
+}
+
 IF (-not (Test-Path $SdkPath))
 {
     $SdkPath = "dotnet"
