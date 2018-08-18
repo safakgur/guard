@@ -1,10 +1,10 @@
-IF ($Env:APPVEYOR_BUILD_WORKER_IMAGE -eq "Ubuntu")
-{
-	& $PSScriptRoot/test.ps1 -NoInstall -Configuration Release
-}
-ELSE
+IF ($IsWindows -or $env:OS -like "Windows*")
 {
     & $PSScriptRoot/test.ps1 -NoInstall -Configuration CI -Coverage
 	choco install codecov --no-progress
-	codecov -f artifacts/coverage.xml
+	codecov -f $PSScriptRoot/../artifacts/coverage.xml
+}
+ELSE
+{
+    & $PSScriptRoot/test.ps1 -NoInstall -Configuration Release
 }
