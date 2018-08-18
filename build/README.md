@@ -9,7 +9,7 @@ You need PowerShell or PowerShell Core.
 **Install the .NET Core CLI** - `install-dotnet.ps1`
 
 * Downloads portable .NET Core SDKs 2.1.400 and 1.1.9 to the "artifacts/dotnet".
-* Skips the download if these versions already exists on the folder.
+* Skips the download if these versions already exist on the folder.
 
 **Build the Library** - `build.ps1`
 
