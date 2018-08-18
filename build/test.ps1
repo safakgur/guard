@@ -8,17 +8,23 @@ param(
 
 IF ($NoInstall -eq $false)
 {
-    & $PSScriptRoot/install.ps1
+    & $PSScriptRoot/install-dotnet.ps1
 }
 
-$SdkPath = "../artifacts/dotnet/dotnet.exe"
+$SdkPath = "$PSScriptRoot/../artifacts/dotnet/dotnet"
+IF ($IsWindows -or $env:OS -like "Windows*")
+{
+    $SdkPath += ".exe"
+}
+
 IF (-not (Test-Path $SdkPath))
 {
     $SdkPath = "dotnet"
 }
 
-& $SdkPath restore $PSScriptRoot/../src --verbosity m
+& $SdkPath restore $PSScriptRoot/../tests --verbosity m
 & $SdkPath test $PSScriptRoot/../tests/ `
+    -c $Configuration `
     /p:DebugType=full `
     /p:CollectCoverage=$Coverage `
     /p:CoverletOutputFormat=$CoverageFormat `
