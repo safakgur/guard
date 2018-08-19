@@ -43,8 +43,11 @@
         public static ref readonly ArgumentInfo<bool?> True(
             in this ArgumentInfo<bool?> argument, string message = null)
         {
-            if (argument.NotNull(out var a))
-                a.True(message);
+            if (argument.HasValue() && !argument.Value.Value)
+            {
+                var m = message ?? Messages.True(argument);
+                throw new ArgumentException(m, argument.Name);
+            }
 
             return ref argument;
         }
@@ -87,8 +90,11 @@
         public static ref readonly ArgumentInfo<bool?> False(
             in this ArgumentInfo<bool?> argument, string message = null)
         {
-            if (argument.NotNull(out var a))
-                a.False(message);
+            if (argument.HasValue() && argument.Value.Value)
+            {
+                var m = message ?? Messages.False(argument);
+                throw new ArgumentException(m, argument.Name);
+            }
 
             return ref argument;
         }
