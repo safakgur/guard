@@ -8,10 +8,9 @@
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Configurations>Debug;Release;CI</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release' OR '$(Configuration)'=='CI'">
-    <Optimize>true</Optimize>
+    <Optimize Condition="'$(Configuration)'=='Release' OR '$(Configuration)'=='CI'">true</Optimize>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../src/Properties/Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
