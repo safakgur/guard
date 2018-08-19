@@ -101,7 +101,7 @@ namespace Dawn.Tests
                 }));
 
             // 1st for test w/o message, 2nd for the auto-generated message and 3rd for test w/ message.
-            enumerationCount = (hostIndex + 1) * 3;
+            enumerationCount = (hostIndex + 1) * 2 + hostsCount;
             if (enumerationCount == 0)
                 enumerationCount++;
 
