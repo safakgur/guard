@@ -46,7 +46,7 @@
                 Func<T, bool> predicate, Func<T, string> message = null)
                 where TException : Exception
             {
-                if (predicate?.Invoke(this.Value) == false)
+                if (this.HasValue() && predicate?.Invoke(this.Value) == false)
                 {
                     var m = message?.Invoke(this.Value) ?? Messages.Require(this);
                     throw Exception<TException>.Factory(this.Name, m);
