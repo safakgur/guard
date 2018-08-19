@@ -9,7 +9,7 @@ You need PowerShell or PowerShell Core.
 **Install the .NET Core CLI** - `install-dotnet.ps1`
 
 * Downloads portable .NET Core SDKs 2.1.400 and 1.1.9 to the "artifacts/dotnet".
-* Skips the download if these versions already exist on the folder.
+* Skips the download if these versions already exist in the folder.
 
 **Build the Library** - `build.ps1`
 
@@ -42,7 +42,7 @@ Options
 
 `-CoverageOutput`: The output path of the coverage results. The default is "artifacts/coverage.xml".
 
-**Use Your Existing .NET CLI**
+**Use Your Existing .NET Core CLI**
 
 The build and test scripts assume that `dotnet` is in PATH when `-NoInstall` is set and the SDKs
 are not found in the "artifacts/dotnet".
