@@ -105,7 +105,7 @@ What Did We Do?
 
 Being a struct, `ArgumentInfo<T>` is subject to copy-by-value semantics. This means that it would
 get copied once to send it as a parameter, and once to return it to the caller with each validation.
-Think of a validation chain like `.NotNull().LengthInRange(1, 5).DoesNotContainNull()`.
+Think of a validation chain like `.NotNull().CountInRange(1, 5).DoesNotContainNull()`.
 This would cause our argument instance to be copied six times if we didn't accept and returned
 it as reference.
 
