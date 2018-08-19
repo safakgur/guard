@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Threading;
 
     /// <content>Provides preconditions for <see cref="IEnumerable" /> arguments.</content>
@@ -176,6 +177,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> does not contain <paramref name="item" />.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
@@ -230,6 +232,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> contains <paramref name="item" />.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
@@ -338,6 +341,7 @@
         ///     <paramref name="collection" /> does not contain the <paramref name="argument" />
         ///     value.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -397,6 +401,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="collection" /> contains the <paramref name="argument" /> value.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,

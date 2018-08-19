@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
 
     /// <content>Provides preconditions for <see cref="IEquatable{T}" /> arguments.</content>
     public static partial class Guard
@@ -168,6 +169,7 @@
         ///     <paramref name="argument" /> value is
         ///     different than <paramref name="other" />.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<T> Equal<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, T, string> message = null)
             => ref argument.Equal(other, null, message);
@@ -218,6 +220,7 @@
         ///     <paramref name="argument" /> value is
         ///     equal to <paramref name="other" />.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, string> message = null)
             => ref argument.NotEqual(other, null, message);

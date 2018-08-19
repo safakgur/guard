@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using System.Text.RegularExpressions;
 
     /// <content>Provides preconditions for <see cref="string" /> arguments.</content>
@@ -287,6 +288,7 @@
         ///     <paramref name="argument" /> value does not start with <paramref name="value" />
         ///     when a case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> StartsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -341,6 +343,7 @@
         ///     <paramref name="argument" /> value starts with <paramref name="value" /> when a
         ///     case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> DoesNotStartWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -394,6 +397,7 @@
         ///     <paramref name="argument" /> value does not end with <paramref name="value" /> when
         ///     a case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> EndsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -447,6 +451,7 @@
         ///     <paramref name="argument" /> value ends with <paramref name="value" /> when a
         ///     case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> DoesNotEndWith(
             in this ArgumentInfo<string> argument,
             string value,

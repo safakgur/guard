@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Threading;
 
     /// <content>Provides routed member preconditions.</content>
@@ -27,6 +28,7 @@
         ///     member value cannot be retrieved using the compiled member expression, or
         ///     <paramref name="validation" /> has thrown an exception.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<T> Member<T, TMember>(
             in this ArgumentInfo<T> argument,
             Expression<Func<T, TMember>> member,
@@ -129,6 +131,7 @@
         ///     member value cannot be retrieved using the compiled member expression, or
         ///     <paramref name="validation" /> has thrown an exception.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<T?> Member<T, TMember>(
             in this ArgumentInfo<T?> argument,
             Expression<Func<T, TMember>> member,
