@@ -156,5 +156,7 @@ For `ArgumentInfo<T> where T : class, ICloneable`
 ### Predicate Guards
 
 For `ArgumentInfo<T>`
+* `Require(bool)`
+* `Require<TException>(bool)`
 * `Require(Func<T, bool>)`
 * `Require<TException>(Func<T, bool>)`
