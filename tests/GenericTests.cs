@@ -17,6 +17,11 @@
         {
             currentValue = value;
             var valueArg = Guard.Argument(() => value).Require(Success);
+            if (value == null)
+            {
+                valueArg.Require(Fail);
+                return;
+            }
 
             ThrowsArgumentException(
                 valueArg,
@@ -36,6 +41,11 @@
         {
             currentValue = value;
             var valueArg = Guard.Argument(() => value).Require<TestArgException>(Success);
+            if (value == null)
+            {
+                valueArg.Require<TestArgException>(Fail);
+                return;
+            }
 
             ThrowsException<T, TestArgException>(
                 valueArg,
@@ -55,6 +65,11 @@
         {
             currentValue = value;
             var valueArg = Guard.Argument(() => value).Require<TestArgExceptionNoMessage>(Success);
+            if (value == null)
+            {
+                valueArg.Require<TestArgExceptionNoMessage>(Fail);
+                return;
+            }
 
             ThrowsException<T, TestArgExceptionNoMessage>(
                 valueArg,
@@ -74,6 +89,11 @@
         {
             currentValue = value;
             var valueArg = Guard.Argument(() => value).Require<TestException>(Success);
+            if (value == null)
+            {
+                valueArg.Require<TestException>(Fail);
+                return;
+            }
 
             ThrowsException<T, TestException>(
                 valueArg,
@@ -93,6 +113,11 @@
         {
             currentValue = value;
             var valueArg = Guard.Argument(() => value).Require<TestExceptionNoMessage>(Success);
+            if (value == null)
+            {
+                valueArg.Require<TestExceptionNoMessage>(Fail);
+                return;
+            }
 
             ThrowsException<T, TestExceptionNoMessage>(
                 valueArg,
@@ -112,6 +137,11 @@
         {
             currentValue = value;
             var valueArg = Guard.Argument(() => value).Require<TestExceptionNoCtor>(Success);
+            if (value == null)
+            {
+                valueArg.Require<TestExceptionNoCtor>(Fail);
+                return;
+            }
 
             ThrowsArgumentException(
                 valueArg,
