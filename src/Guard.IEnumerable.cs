@@ -322,6 +322,125 @@
             return ref argument;
         }
 
+        /// <summary>Requires the specified collection to contain the argument value.</summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="collection">
+        ///     The collection that is required to contain the argument value.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="collection" /> does not contain the <paramref name="argument" />
+        ///     value.
+        /// </exception>
+        public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
+            in this ArgumentInfo<TItem> argument,
+            TCollection collection,
+            Func<TItem, TCollection, string> message = null)
+            where TCollection : IEnumerable<TItem>
+            => ref argument.In(collection, null, message);
+
+        /// <summary>Requires the specified collection to contain the argument value.</summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="collection">
+        ///     The collection that is required to contain the argument value.
+        /// </param>
+        /// <param name="comparer">The equality comparer to use.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="collection" /> does not contain the <paramref name="argument" />
+        ///     value by the comparison made by <paramref name="comparer" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
+            in this ArgumentInfo<TItem> argument,
+            TCollection collection,
+            IEqualityComparer<TItem> comparer,
+            Func<TItem, TCollection, string> message = null)
+            where TCollection : IEnumerable<TItem>
+        {
+            if (argument.HasValue() &&
+                NullChecker<TCollection>.HasValue(collection) &&
+                !Collection<TCollection>.Typed<TItem>.Contains(collection, argument.Value, comparer))
+            {
+                var m = message?.Invoke(argument.Value, collection)
+                    ?? Messages.InCollection(argument, collection);
+
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>Requires the specified collection not to contain the argument value.</summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="collection">
+        ///     The collection that is required not to contain the argument value.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="collection" /> contains the <paramref name="argument" /> value.
+        /// </exception>
+        public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
+            in this ArgumentInfo<TItem> argument,
+            TCollection collection,
+            Func<TItem, TCollection, string> message = null)
+            where TCollection : IEnumerable<TItem>
+            => ref argument.NotIn(collection, null, message);
+
+        /// <summary>Requires the specified collection not to contain the argument value.</summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="collection">
+        ///     The collection that is required not to contain the argument value.
+        /// </param>
+        /// <param name="comparer">The equality comparer to use.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="collection" /> contains the <paramref name="argument" /> value by
+        ///     the comparison made by <paramref name="comparer" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
+            in this ArgumentInfo<TItem> argument,
+            TCollection collection,
+            IEqualityComparer<TItem> comparer,
+            Func<TItem, TCollection, string> message = null)
+            where TCollection : IEnumerable<TItem>
+        {
+            if (argument.HasValue() &&
+                NullChecker<TCollection>.HasValue(collection) &&
+                Collection<TCollection>.Typed<TItem>.Contains(collection, argument.Value, comparer))
+            {
+                var m = message?.Invoke(argument.Value, collection)
+                    ?? Messages.NotInCollection(argument, collection);
+
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
         /// <summary>Provides cached, non-generic collection utilities.</summary>
         private static class Collection
         {

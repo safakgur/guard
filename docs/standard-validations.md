@@ -47,12 +47,18 @@ For `ArgumentInfo<T> where T : IEnumerable`
 * `MinCount(int)`
 * `MaxCount(int)`
 * `CountInRange(int, int)`
-* `Contains(TItem)`
-* `Contains(TItem, IEqualityComparer<TItem>)`
-* `DoesNotContain(TItem)`
-* `DoesNotContain(TItem, IEqualityComparer<TItem>)`
+* `Contains<TItem>(TItem)`
+* `Contains<TItem>(TItem, IEqualityComparer<TItem>)`
+* `DoesNotContain<TItem>(TItem)`
+* `DoesNotContain<TItem>(TItem, IEqualityComparer<TItem>)`
 * `ContainsNull()`
 * `DoesNotContainNull()`
+
+For `ArgumentInfo<T>`
+* `In<TCollection>(TCollection)`
+* `In<TCollection>(TCollection, IEqualityComparer<T>)`
+* `NotIn<TCollection>(TCollection)`
+* `NotIn<TCollection>(TCollection, IEqualityComparer<T>)`
 
 ### String Guards
 

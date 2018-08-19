@@ -192,6 +192,14 @@
             public static string CollectionDoesNotContain<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
                 => $"{argument.Name} cannot contain {item}.";
 
+            public static string InCollection<TCollection, TItem>(ArgumentInfo<TItem> argument, TCollection collection)
+                where TCollection : IEnumerable<TItem>
+                => $"{argument.Name} must be one of {Join(collection)}.";
+
+            public static string NotInCollection<TCollection, TItem>(ArgumentInfo<TItem> argument, TCollection collection)
+                where TCollection : IEnumerable<TItem>
+                => $"{argument.Name} cannot be one of {Join(collection)}.";
+
             public static string UriAbsolute(in ArgumentInfo<Uri> argument)
                 => $"{argument.Name} must be an absolute URI.";
 
@@ -230,9 +238,9 @@
                 => $"{argument.Name} cannot have a display name specified.";
 #endif
 
-            private static string Join<T>(IEnumerable<T> collection, bool quoted = true)
+            private static string Join<T>(IEnumerable<T> collection)
             {
-                return quoted
+                return typeof(T) == typeof(string)
                     ? string.Join(", ", collection.Select(i => $"'{i}'"))
                     : string.Join(", ", collection);
             }
