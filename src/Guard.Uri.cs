@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Runtime.CompilerServices;
 
     /// <content>Provides preconditions for <see cref="Uri" /> arguments.</content>
     public static partial class Guard
@@ -124,6 +125,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and its scheme is neither HTTP
         ///     nor HTTPS.
         /// </exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
             => ref argument.Http(true, message);
