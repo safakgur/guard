@@ -212,3 +212,39 @@ The same goes for `ArgumentOutOfRangeException`s. If the original argument is mo
 `ArgumentException` is thrown instead of a more specialized exception. For validations to detect
 whether the argument is modified, `ArgumentInfo<T>` contains a boolean `Modified` flag along with
 the argument's name and value.
+
+## Validating Argument Members
+
+Some arguments may contain fields/properties that we want to validate individually. Guard provides
+`Member` overloads that can be used to validate these members without modifying the arguments.
+
+```c#
+public void BuyCar(Person buyer, Car car)
+{
+    Guard.Argument(() => buyer)
+        .NotNull()
+        .Member(p => p.Age, a => a.Min(18))
+        .Member(p => p.Address.City, c => c.NotNull().NotEmpty());
+
+    Guard.Argument(() => car)
+        .NotNull()
+        .Member(c => c.Owner, o => o.Null());
+
+    car.Owner = buyer;
+}
+```
+
+What makes `Member` overloads powerful is that they provide members as guarded arguments so you can
+directly start chaining validations. What's better is when a member validation fails, the exception
+is still thrown for the original argument (same `ParamName`) but also with a clear error message
+that contains the actual member's name.
+
+```c#
+var address = new Address { City = null };
+var buyer = new Person { Age = 18, Address = address };
+var car = new Car("Dodge", "Power Wagon");
+BuyCar(buyer, car);
+```
+
+The above code throws an `ArgumentException` with the parameter name "buyer" and message
+"Address.City cannot be null.".

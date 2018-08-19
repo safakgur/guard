@@ -111,7 +111,7 @@ For `ArgumentInfo<Uri>`
 * `Https()`
 
 ### Enum Guards
-For `ArgumentInfo<T|T?> where T : enum`
+For `ArgumentInfo<T|T?> where T : struct, Enum`
 * `Defined()`
 * `HasFlag(T)`
 * `DoesNotHaveFlag(T)`
@@ -137,6 +137,11 @@ For `ArgumentInfo<object>`
 * `NotType<T>()`
 * `Type(Type)`
 * `NotType(Type)`
+
+### Member Guards
+For `ArgumentInfo<T>`
+* `Member<TMember>(Expression<Func<T, TMember>>, Action<ArgumentInfo<TMember>>)`
+* `Member<TMember>(Expression<Func<T, TMember>>, Action<ArgumentInfo<TMember>>, bool)`
 
 ### Normalization Guards
 
