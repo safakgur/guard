@@ -19,10 +19,15 @@
     <AssemblyOriginatorKeyFile>Properties/Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='CI'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>../artifacts/</PackageOutputPath>
-  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Dawn.Guard.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.0'">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
 
   <PropertyGroup>
     <PackageId>Dawn.Guard</PackageId>
@@ -36,10 +41,8 @@
     <RepositoryUrl>https://github.com/safakgur/guard</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <SignAssembly>true</SignAssembly>
+    <GeneratePackageOnBuild Condition="'$(Configuration)'=='CI'">true</GeneratePackageOnBuild>
+    <PackageOutputPath>../artifacts/</PackageOutputPath>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.0'">
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-  </ItemGroup>
 
 </Project>
