@@ -137,6 +137,7 @@
         ///     <c>true</c>, if the <paramref name="argument" />
         ///     is not <c>null</c>; otherwise, <c>false</c>.
         /// </returns>
+        [Obsolete("Use the HasValue method to check against null.")]
         public static bool NotNull<T>(
             in this ArgumentInfo<T?> argument, out ArgumentInfo<T> result)
             where T : struct

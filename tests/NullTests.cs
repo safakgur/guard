@@ -1,6 +1,5 @@
 ﻿namespace Dawn.Tests
 {
-    using System;
     using Xunit;
 
     public sealed class NullTests : BaseTests
@@ -34,15 +33,13 @@
         {
             var @null = null as int?;
             var nullArg = Guard.Argument(@null).Null();
-            Assert.False(nullArg.NotNull(out var a));
-            Assert.Equal(default, a);
+            Assert.False(nullArg.HasValue());
 
             var nonNull = 1 as int?;
             var nonNullArg = Guard.Argument(nonNull);
             Assert.IsType<Guard.ArgumentInfo<int?>>(nonNullArg);
             Assert.IsType<Guard.ArgumentInfo<int>>(nonNullArg.NotNull());
-            Assert.True(nonNullArg.NotNull(out a));
-            Assert.IsType<Guard.ArgumentInfo<int>>(a);
+            Assert.True(nonNullArg.HasValue());
 
             ThrowsArgumentException(
                 nonNullArg,

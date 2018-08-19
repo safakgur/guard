@@ -53,10 +53,14 @@
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct
         {
-            if (argument.NotNull(out var a) && !EqualityComparer<T>.Default.Equals(a.Value, default))
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.Default(a);
-                throw new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (!EqualityComparer<T>.Default.Equals(value, default))
+                {
+                    var m = message?.Invoke(value) ?? Messages.Default(argument);
+                    throw new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -138,10 +142,14 @@
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct
         {
-            if (argument.NotNull(out var a) && EqualityComparer<T>.Default.Equals(a.Value, default))
+            if (argument.HasValue())
             {
-                var m = message ?? Messages.NotDefault(a);
-                throw new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (EqualityComparer<T>.Default.Equals(value, default))
+                {
+                    var m = message ?? Messages.NotDefault(argument);
+                    throw new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
