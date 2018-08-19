@@ -16,12 +16,21 @@
         public void RequireDefaultException<T>(T value)
         {
             currentValue = value;
-            var valueArg = Guard.Argument(() => value).Require(Success);
+            var valueArg = Guard.Argument(() => value).Require(true).Require(Success);
             if (value == null)
             {
-                valueArg.Require(Fail);
+                valueArg.Require(false).Require(Fail);
                 return;
             }
+
+            ThrowsArgumentException(
+                valueArg,
+                arg => arg.Require(false),
+                (arg, message) => arg.Require(false, v =>
+                {
+                    Assert.Equal(value, v);
+                    return message;
+                }));
 
             ThrowsArgumentException(
                 valueArg,
@@ -40,12 +49,27 @@
         public void RequireArgumentExceptionWithMessage<T>(T value)
         {
             currentValue = value;
-            var valueArg = Guard.Argument(() => value).Require<TestArgException>(Success);
+            var valueArg = Guard.Argument(() => value)
+                .Require<TestArgException>(true)
+                .Require<TestArgException>(Success);
+
             if (value == null)
             {
-                valueArg.Require<TestArgException>(Fail);
+                valueArg
+                    .Require<TestArgException>(false)
+                    .Require<TestArgException>(Fail);
+
                 return;
             }
+
+            ThrowsException<T, TestArgException>(
+                valueArg,
+                arg => arg.Require<TestArgException>(false),
+                (arg, message) => arg.Require<TestArgException>(false, v =>
+                {
+                    Assert.Equal(value, v);
+                    return message;
+                }));
 
             ThrowsException<T, TestArgException>(
                 valueArg,
@@ -64,12 +88,27 @@
         public void RequireArgumentExceptionWithoutMessage<T>(T value)
         {
             currentValue = value;
-            var valueArg = Guard.Argument(() => value).Require<TestArgExceptionNoMessage>(Success);
+            var valueArg = Guard.Argument(() => value)
+                .Require<TestArgExceptionNoMessage>(true)
+                .Require<TestArgExceptionNoMessage>(Success);
+
             if (value == null)
             {
-                valueArg.Require<TestArgExceptionNoMessage>(Fail);
+                valueArg
+                    .Require<TestArgExceptionNoMessage>(false)
+                    .Require<TestArgExceptionNoMessage>(Fail);
+
                 return;
             }
+
+            ThrowsException<T, TestArgExceptionNoMessage>(
+                valueArg,
+                arg => arg.Require<TestArgExceptionNoMessage>(false),
+                (arg, message) => arg.Require<TestArgExceptionNoMessage>(false, v =>
+                {
+                    Assert.Equal(value, v);
+                    return message;
+                }), true);
 
             ThrowsException<T, TestArgExceptionNoMessage>(
                 valueArg,
@@ -88,12 +127,27 @@
         public void RequireCommonExceptionWithMessage<T>(T value)
         {
             currentValue = value;
-            var valueArg = Guard.Argument(() => value).Require<TestException>(Success);
+            var valueArg = Guard.Argument(() => value)
+                .Require<TestException>(true)
+                .Require<TestException>(Success);
+
             if (value == null)
             {
-                valueArg.Require<TestException>(Fail);
+                valueArg
+                    .Require<TestException>(false)
+                    .Require<TestException>(Fail);
+
                 return;
             }
+
+            ThrowsException<T, TestException>(
+                valueArg,
+                arg => arg.Require<TestException>(false),
+                (arg, message) => arg.Require<TestException>(false, v =>
+                {
+                    Assert.Equal(value, v);
+                    return message;
+                }));
 
             ThrowsException<T, TestException>(
                 valueArg,
@@ -112,12 +166,27 @@
         public void RequireCommonExceptionWithoutMessage<T>(T value)
         {
             currentValue = value;
-            var valueArg = Guard.Argument(() => value).Require<TestExceptionNoMessage>(Success);
+            var valueArg = Guard.Argument(() => value)
+                .Require<TestExceptionNoMessage>(true)
+                .Require<TestExceptionNoMessage>(Success);
+
             if (value == null)
             {
-                valueArg.Require<TestExceptionNoMessage>(Fail);
+                valueArg
+                    .Require<TestExceptionNoMessage>(false)
+                    .Require<TestExceptionNoMessage>(Fail);
+
                 return;
             }
+
+            ThrowsException<T, TestExceptionNoMessage>(
+                valueArg,
+                arg => arg.Require<TestExceptionNoMessage>(false),
+                (arg, message) => arg.Require<TestExceptionNoMessage>(false, v =>
+                {
+                    Assert.Equal(value, v);
+                    return message;
+                }), true);
 
             ThrowsException<T, TestExceptionNoMessage>(
                 valueArg,
@@ -136,12 +205,51 @@
         public void RequireExceptionWithoutConstructor<T>(T value)
         {
             currentValue = value;
-            var valueArg = Guard.Argument(() => value).Require<TestExceptionNoCtor>(Success);
+            var valueArg = Guard.Argument(() => value)
+                .Require<TestExceptionNoCtor>(true)
+                .Require<TestExceptionNoCtor>(Success);
+
             if (value == null)
             {
-                valueArg.Require<TestExceptionNoCtor>(Fail);
+                valueArg
+                    .Require<TestExceptionNoCtor>(false)
+                    .Require<TestExceptionNoCtor>(Fail);
+
                 return;
             }
+
+            ThrowsArgumentException(
+                valueArg,
+                arg =>
+                {
+                    try
+                    {
+                        arg.Require<TestExceptionNoCtor>(false);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Assert.Null(ex.ParamName);
+                        Assert.Contains(typeof(TestExceptionNoCtor).ToString(), ex.Message);
+                        throw ex.InnerException;
+                    }
+                },
+                (arg, message) =>
+                {
+                    try
+                    {
+                        arg.Require<TestExceptionNoCtor>(false, v =>
+                        {
+                            Assert.Equal(value, v);
+                            return message;
+                        });
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Assert.Null(ex.ParamName);
+                        Assert.Contains(typeof(TestExceptionNoCtor).ToString(), ex.Message);
+                        throw ex.InnerException;
+                    }
+                });
 
             ThrowsArgumentException(
                 valueArg,

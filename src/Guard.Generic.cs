@@ -9,6 +9,51 @@
         /// <content>Contains the preconditions with generic type arguments that cannot be inferred.</content>
         public readonly partial struct ArgumentInfo<T>
         {
+
+            /// <summary>Requires the argument to satisfy a condition.</summary>
+            /// <param name="condition">Whether the precondition is satisfied.</param>
+            /// <param name="message">
+            ///     The factory to initialize the message of the exception that will be thrown if
+            ///     the precondition is not satisfied.
+            /// </param>
+            /// <returns>The current argument.</returns>
+            /// <exception cref="ArgumentException">
+            ///     <paramref name="condition" /> is <c>false</c>.
+            /// </exception>
+            public ArgumentInfo<T> Require(bool condition, Func<T, string> message = null)
+                => this.Require<ArgumentException>(condition, message);
+
+            /// <summary>
+            ///     Requires the argument to satisfy a condition and throws the specified type of
+            ///     exception if the condition is not met.
+            /// </summary>
+            /// <typeparam name="TException">
+            ///     The type of the exception to throw if the argument does not satisfy the
+            ///     specified condition.
+            /// </typeparam>
+            /// <param name="condition">Whether the precondition is satisfied.</param>
+            /// <param name="message">
+            ///     The factory to initialize the message of the exception that will be thrown if
+            ///     the precondition is not satisfied.
+            /// </param>
+            /// <returns>The current argument.</returns>
+            /// <exception cref="Exception">
+            ///     <paramref name="condition" /> is <c>false</c>. The exception thrown is an
+            ///     instance of type <typeparamref name="TException" />.
+            /// </exception>
+            public ArgumentInfo<T> Require<TException>(
+                bool condition, Func<T, string> message = null)
+                where TException : Exception
+            {
+                if (this.HasValue() && !condition)
+                {
+                    var m = message?.Invoke(this.Value) ?? Messages.Require(this);
+                    throw Exception<TException>.Factory(this.Name, m);
+                }
+
+                return this;
+            }
+
             /// <summary>Requires the argument to satisfy a condition.</summary>
             /// <param name="predicate">The function to test the argument value.</param>
             /// <param name="message">
