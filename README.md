@@ -2,6 +2,7 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
 [![Build](https://ci.appveyor.com/api/projects/status/add0vx8i2yacvprf/branch/dev?svg=true)](https://ci.appveyor.com/project/safak/guard/branch/dev)
+[![Tests](https://img.shields.io/appveyor/tests/safak/guard/dev.svg)](https://ci.appveyor.com/project/safak/guard/branch/dev)
 [![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)
 
 ![Logo](media/guard-64.png)
