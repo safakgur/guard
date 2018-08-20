@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.Linq.Expressions;
+    using System.Runtime.CompilerServices;
 
     /// <summary>Validates argument preconditions.</summary>
     /// <content>Contains the argument initialization methods.</content>
@@ -55,11 +56,11 @@
 
         /// <summary>Represents a method argument.</summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
+        [DebuggerDisplay("{DebuggerDisplay,nq}")]
         public readonly partial struct ArgumentInfo<T>
         {
             /// <summary>
-            ///     The default name for the arguments
-            ///     of type <typeparamref name="T" />.
+            ///     The default name for the arguments of type <typeparamref name="T" />.
             /// </summary>
             private static readonly string defaultName = $"The {typeof(T)} argument";
 
@@ -72,8 +73,8 @@
             /// <param name="value">The value of the method argument.</param>
             /// <param name="name">The name of the method argument.</param>
             /// <param name="modified">
-            ///     Whether the original method argument is modified
-            ///     before the initialization of this instance.
+            ///     Whether the original method argument is modified before the initialization of
+            ///     this instance.
             /// </param>
             [DebuggerStepThrough]
             public ArgumentInfo(T value, string name, bool modified = false)
@@ -90,33 +91,50 @@
             public string Name => this.name ?? defaultName;
 
             /// <summary>
-            ///     Gets a value indicating whether the the original
-            ///     method argument is modified before the
-            ///     initialization of this instance.
+            ///     Gets a value indicating whether the original method argument is modified before
+            ///     the initialization of this instance.
             /// </summary>
             public bool Modified { get; }
+
+            /// <summary>
+            ///     Gets how the layout is displayed in the debugger variable windows.
+            /// </summary>
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+            private string DebuggerDisplay
+            {
+                get
+                {
+                    var name = this.name;
+                    var value = this.HasValue() ? this.Value.ToString() : "null";
+                    return name is null ? value : $"{name}: {value}";
+                }
+            }
 
             /// <summary>Gets the value of an argument.</summary>
             /// <param name="argument">The argument whose value to return.</param>
             /// <returns><see cref="Value" />.</returns>
-            public static implicit operator T(ArgumentInfo<T> argument)
-                => argument.Value;
+            public static implicit operator T(ArgumentInfo<T> argument) => argument.Value;
 
             /// <summary>Determines whether the argument value is not <c>null</c>.</summary>
             /// <returns>
-            ///     <c>true</c>, if <see cref="Value" /> is
-            ///     not <c>null</c>; otherwise, <c>false</c>.
+            ///     <c>true</c>, if <see cref="Value" /> is not <c>null</c>; otherwise,
+            ///     <c>false</c>.
             /// </returns>
             [DebuggerStepThrough]
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool HasValue() => NullChecker<T>.HasValue(this.Value);
 
             /// <summary>Determines whether the argument value is <c>null</c>.</summary>
             /// <returns>
-            ///     <c>true</c>, if <see cref="Value" /> is
-            ///     <c>null</c>; otherwise, <c>false</c>.
+            ///     <c>true</c>, if <see cref="Value" /> is <c>null</c>; otherwise, <c>false</c>.
             /// </returns>
             [Obsolete("Use the HasValue method to check against null.")]
             public bool IsNull() => !this.HasValue();
+
+            /// <summary>Returns the string representation of the argument value.</summary>
+            /// <returns>String representation of the argument value.</returns>
+            public override string ToString()
+                => this.HasValue() ? this.Value.ToString() : string.Empty;
         }
     }
 }
