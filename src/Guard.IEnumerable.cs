@@ -346,7 +346,7 @@
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
             => ref argument.In(collection, null, message);
 
         /// <summary>Requires the specified collection to contain the argument value.</summary>
@@ -371,7 +371,7 @@
             TCollection collection,
             IEqualityComparer<TItem> comparer,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
         {
             if (argument.HasValue() &&
                 NullChecker<TCollection>.HasValue(collection) &&
@@ -406,7 +406,7 @@
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
             => ref argument.NotIn(collection, null, message);
 
         /// <summary>Requires the specified collection not to contain the argument value.</summary>
@@ -431,7 +431,7 @@
             TCollection collection,
             IEqualityComparer<TItem> comparer,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
         {
             if (argument.HasValue() &&
                 NullChecker<TCollection>.HasValue(collection) &&
