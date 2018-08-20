@@ -76,12 +76,17 @@
             ///     Whether the original method argument is modified before the initialization of
             ///     this instance.
             /// </param>
+            /// <param name="secure">
+            ///     Pass <c>true</c> for the information about validation parameters to be excluded
+            ///     in the exception messages of failed validations.
+            /// </param>
             [DebuggerStepThrough]
-            public ArgumentInfo(T value, string name, bool modified = false)
+            public ArgumentInfo(T value, string name, bool modified = false, bool secure = false)
             {
                 this.Value = value;
                 this.name = name;
                 this.Modified = modified;
+                this.Secure = secure;
             }
 
             /// <summary>Gets the argument value.</summary>
@@ -95,6 +100,13 @@
             ///     the initialization of this instance.
             /// </summary>
             public bool Modified { get; }
+
+            /// <summary>
+            ///     Gets a value indicating whether sensitive information may be used to validate
+            ///     the argument. If <c>true</c>, exception messages provide less information about
+            ///     the validation parameters.
+            /// </summary>
+            public bool Secure { get; }
 
             /// <summary>
             ///     Gets how the layout is displayed in the debugger variable windows.
