@@ -425,7 +425,7 @@
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
         }
 
-        [Theory(DisplayName = T + "Enumerable: In/NotIn")]
+        [Theory(DisplayName = T + "Enumerable: In/NotIn collection")]
         [InlineData(CollectionOptions.Null, 3, 2, -1)]
         [InlineData(CollectionOptions.Null, 3, null, null)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, -1)]
@@ -434,7 +434,7 @@
         [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1)]
         [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, null, -1)]
         [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, null)]
-        public void In(CollectionOptions options, int count, int? contained, int? nonContained)
+        public void InCollection(CollectionOptions options, int count, int? contained, int? nonContained)
         {
             var containedArg = Guard.Argument(() => contained);
             var nonContainedArg = Guard.Argument(() => nonContained);
@@ -583,6 +583,68 @@
                     enumerationCount++;
 
                 CheckAndReset(enumerable, containsCalled: false, enumerationCount: enumerationCount, forceEnumerated: true);
+            }
+        }
+
+        [Theory(DisplayName = T + "Enumerable: In/NotIn array")]
+        [InlineData(null, null, null)]
+        [InlineData(null, "a", "b")]
+        [InlineData('a', null, null)]
+        [InlineData('a', "a", "b")]
+        public void InArray(char? value, string containingString, string nonContainingString)
+        {
+            var nullableContaining = containingString?.Select(c => c as char?).ToArray();
+            var nullableNonContaining = nonContainingString?.Select(c => c as char?).ToArray();
+            var nullableValueArg = Guard.Argument(() => value)
+                .In(nullableContaining)
+                .NotIn(nullableNonContaining);
+
+            if (!value.HasValue)
+            {
+                nullableValueArg
+                    .In(nullableNonContaining)
+                    .NotIn(nullableContaining);
+
+                return;
+            }
+
+            var valueArg = Guard.Argument(value.Value, nameof(value));
+            if (nullableNonContaining is null)
+            {
+                nullableValueArg.In(nullableNonContaining);
+                valueArg.In(null as char[]);
+            }
+            else
+            {
+                Assert.Throws<ArgumentException>(
+                    nullableValueArg.Name,
+                    () => nullableValueArg.In(nullableNonContaining));
+
+                var nonContaining = nonContainingString.ToCharArray();
+                valueArg.NotIn(nonContaining);
+
+                Assert.Throws<ArgumentException>(
+                    valueArg.Name,
+                    () => valueArg.In(nonContaining));
+            }
+
+            if (nullableContaining is null)
+            {
+                nullableValueArg.NotIn(nullableContaining);
+                valueArg.NotIn(null as char[]);
+            }
+            else
+            {
+                Assert.Throws<ArgumentException>(
+                    nullableValueArg.Name,
+                    () => nullableValueArg.NotIn(nullableContaining));
+
+                var containing = containingString.ToCharArray();
+                valueArg.In(containing);
+
+                Assert.Throws<ArgumentException>(
+                    valueArg.Name,
+                    () => valueArg.NotIn(containing));
             }
         }
 
