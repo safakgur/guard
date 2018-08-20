@@ -74,8 +74,17 @@
             in this ArgumentInfo<T?> argument, in T minValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a))
-                a.Min(minValue, message);
+            if (argument.HasValue())
+            {
+                var value = argument.Value.Value;
+                if (argument.HasValue() && Comparer<T>.Default.Compare(value, minValue) < 0)
+                {
+                    var m = message?.Invoke(value, minValue) ?? Messages.Min(argument, minValue);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
+            }
 
             return ref argument;
         }
@@ -148,8 +157,17 @@
             in this ArgumentInfo<T?> argument, in T maxValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a))
-                a.Max(maxValue, message);
+            if (argument.HasValue())
+            {
+                var value = argument.Value.Value;
+                if (argument.HasValue() && Comparer<T>.Default.Compare(value, maxValue) > 0)
+                {
+                    var m = message?.Invoke(value, maxValue) ?? Messages.Max(argument, maxValue);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
+            }
 
             return ref argument;
         }
@@ -232,8 +250,22 @@
             in this ArgumentInfo<T?> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a))
-                a.InRange(minValue, maxValue, message);
+            if (argument.HasValue())
+            {
+                var value = argument.Value.Value;
+                if (argument.HasValue())
+                {
+                    var comparer = Comparer<T>.Default;
+                    if (comparer.Compare(value, minValue) < 0 ||
+                        comparer.Compare(value, maxValue) > 0)
+                    {
+                        var m = message?.Invoke(value, minValue, maxValue) ?? Messages.InRange(argument, minValue, maxValue);
+                        throw !argument.Modified
+                            ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                            : new ArgumentException(m, argument.Name);
+                    }
+                }
+            }
 
             return ref argument;
         }
@@ -299,12 +331,16 @@
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) != 0)
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.Zero(a);
-                throw !a.Modified
-                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                     : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (Comparer<T>.Default.Compare(value, default) != 0)
+                {
+                    var m = message?.Invoke(value) ?? Messages.Zero(argument);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -445,12 +481,16 @@
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) == 0)
+            if (argument.HasValue())
             {
-                var m = message ?? Messages.NotZero(a);
-                throw !a.Modified
-                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                     : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (Comparer<T>.Default.Compare(value, default) == 0)
+                {
+                    var m = message ?? Messages.NotZero(argument);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -519,12 +559,16 @@
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) <= 0)
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.Positive(a);
-                throw !a.Modified
-                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                     : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (Comparer<T>.Default.Compare(value, default) <= 0)
+                {
+                    var m = message?.Invoke(value) ?? Messages.Positive(argument);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -593,12 +637,16 @@
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) > 0)
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.NotPositive(a);
-                throw !a.Modified
-                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                     : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (Comparer<T>.Default.Compare(value, default) > 0)
+                {
+                    var m = message?.Invoke(value) ?? Messages.NotPositive(argument);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -667,12 +715,16 @@
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) >= 0)
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.Negative(a);
-                throw !a.Modified
-                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                     : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (Comparer<T>.Default.Compare(value, default) >= 0)
+                {
+                    var m = message?.Invoke(value) ?? Messages.Negative(argument);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -741,12 +793,16 @@
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) < 0)
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.NotNegative(a);
-                throw !a.Modified
-                     ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                     : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (Comparer<T>.Default.Compare(value, default) < 0)
+                {
+                    var m = message?.Invoke(value) ?? Messages.NotNegative(argument);
+                    throw !argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                         : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;

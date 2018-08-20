@@ -65,12 +65,16 @@
         public static ref readonly ArgumentInfo<double?> NaN(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
-            if (argument.NotNull(out var a) && !double.IsNaN(a.Value))
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.NaN(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (!double.IsNaN(value))
+                {
+                    var m = message?.Invoke(value) ?? Messages.NaN(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -127,12 +131,16 @@
         public static ref readonly ArgumentInfo<double?> NotNaN(
             in this ArgumentInfo<double?> argument, string message = null)
         {
-            if (argument.NotNull(out var a) && double.IsNaN(a.Value))
+            if (argument.HasValue())
             {
-                var m = message ?? Messages.NotNaN(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (double.IsNaN(value))
+                {
+                    var m = message ?? Messages.NotNaN(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -204,12 +212,16 @@
         public static ref readonly ArgumentInfo<double?> Infinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
-            if (argument.NotNull(out var a) && !double.IsInfinity(a.Value))
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.Infinity(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (!double.IsInfinity(value))
+                {
+                    var m = message?.Invoke(value) ?? Messages.Infinity(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -351,12 +363,16 @@
         public static ref readonly ArgumentInfo<double?> NotInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
-            if (argument.NotNull(out var a) && double.IsInfinity(a.Value))
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.NotInfinity(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (double.IsInfinity(value))
+                {
+                    var m = message?.Invoke(value) ?? Messages.NotInfinity(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -424,12 +440,16 @@
         public static ref readonly ArgumentInfo<double?> PositiveInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
-            if (argument.NotNull(out var a) && !double.IsPositiveInfinity(a.Value))
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.PositiveInfinity(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (!double.IsPositiveInfinity(value))
+                {
+                    var m = message?.Invoke(value) ?? Messages.PositiveInfinity(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -486,12 +506,16 @@
         public static ref readonly ArgumentInfo<double?> NotPositiveInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {
-            if (argument.NotNull(out var a) && double.IsPositiveInfinity(a.Value))
+            if (argument.HasValue())
             {
-                var m = message ?? Messages.NotPositiveInfinity(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (double.IsPositiveInfinity(value))
+                {
+                    var m = message ?? Messages.NotPositiveInfinity(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -559,12 +583,16 @@
         public static ref readonly ArgumentInfo<double?> NegativeInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
-            if (argument.NotNull(out var a) && !double.IsNegativeInfinity(a.Value))
+            if (argument.HasValue())
             {
-                var m = message?.Invoke(a.Value) ?? Messages.NegativeInfinity(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (!double.IsNegativeInfinity(value))
+                {
+                    var m = message?.Invoke(value) ?? Messages.NegativeInfinity(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;
@@ -621,12 +649,16 @@
         public static ref readonly ArgumentInfo<double?> NotNegativeInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {
-            if (argument.NotNull(out var a) && double.IsNegativeInfinity(a.Value))
+            if (argument.HasValue())
             {
-                var m = message ?? Messages.NotNegativeInfinity(a);
-                throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
-                    : new ArgumentException(m, a.Name);
+                var value = argument.Value.Value;
+                if (double.IsNegativeInfinity(value))
+                {
+                    var m = message ?? Messages.NotNegativeInfinity(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        : new ArgumentException(m, argument.Name);
+                }
             }
 
             return ref argument;

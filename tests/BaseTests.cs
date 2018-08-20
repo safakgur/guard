@@ -1,6 +1,7 @@
 ﻿namespace Dawn.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Xunit;
 
@@ -26,10 +27,34 @@
             }
         }
 
+        protected interface ITestEnumerable<T> : IEnumerable<T>
+        {
+            IEnumerable<T> Items { get; }
+
+            bool Enumerated { get; }
+
+            int EnumerationCount { get; }
+
+            void Reset();
+        }
+
+        protected interface ITestEnumerableWithCount<T> : ITestEnumerable<T>, IReadOnlyCollection<T>
+        {
+            bool CountCalled { get; }
+        }
+
+        protected interface ITestEnumerableWithContains<T> : ITestEnumerable<T>
+        {
+            bool Contains(T item);
+
+            bool ContainsCalled { get; }
+        }
+
         protected static ArgumentNullException[] ThrowsArgumentNullException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
-            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage,
+            bool allowMessageMismatch = false)
         {
             var exWithoutMessage = Assert.Throws<ArgumentNullException>(
                 argument.Name,
@@ -40,7 +65,8 @@
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, exWithMessage.Message);
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, exWithMessage.Message);
 
             var modified = argument.Modify(argument.Value);
             ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
@@ -51,7 +77,8 @@
         protected static ArgumentOutOfRangeException[] ThrowsArgumentOutOfRangeException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
-            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage,
+            bool allowMessageMismatch = false)
         {
             var exWithoutMessage = Assert.Throws<ArgumentOutOfRangeException>(
                 argument.Name,
@@ -62,7 +89,8 @@
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, exWithMessage.Message);
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, exWithMessage.Message);
 
             var modified = argument.Modify(argument.Value);
             ThrowsArgumentException(modified, testWithoutMessage, testWithMessage);
@@ -73,7 +101,8 @@
         protected static ArgumentException[] ThrowsArgumentException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
-            Action<Guard.ArgumentInfo<T>, string> testWithMessage)
+            Action<Guard.ArgumentInfo<T>, string> testWithMessage,
+            bool allowMessageMismatch = false)
         {
             var exWithoutMessage = Assert.Throws<ArgumentException>(
                 argument.Name,
@@ -84,7 +113,8 @@
                 argument.Name,
                 () => testWithMessage(argument, message));
 
-            Assert.StartsWith(message, exWithMessage.Message);
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, exWithMessage.Message);
 
             return new[] { exWithoutMessage, exWithMessage };
         }
@@ -108,6 +138,62 @@
 
             if (!allowMessageMismatch)
                 Assert.StartsWith(message, ex.Message);
+        }
+
+        protected static void CheckAndReset<T>(
+            ITestEnumerable<T> enumerable,
+            bool? countCalled = null,
+            bool? containsCalled = null,
+            int? enumerationCount = null,
+            bool? enumerated = null,
+            bool? forceEnumerated = null)
+        {
+            if (enumerable is null)
+                return;
+
+            var withCount = enumerable as ITestEnumerableWithCount<T>;
+            if (withCount != null && countCalled.HasValue)
+            {
+                Assert.Equal(countCalled, withCount.CountCalled);
+                Assert.Equal(forceEnumerated ?? !countCalled, enumerable.Enumerated);
+
+                if (countCalled.Value && forceEnumerated != true)
+                    Assert.Equal(0, enumerable.EnumerationCount);
+            }
+
+            var withContains = enumerable as ITestEnumerableWithContains<T>;
+            if (withContains != null && containsCalled.HasValue)
+            {
+                Assert.Equal(containsCalled, withContains.ContainsCalled);
+                Assert.Equal(forceEnumerated ?? !containsCalled, enumerable.Enumerated);
+
+                if (containsCalled.Value && forceEnumerated != true)
+                    Assert.Equal(0, enumerable.EnumerationCount);
+            }
+
+            if (withCount is null && withContains is null)
+            {
+                enumerated = forceEnumerated ?? enumerated;
+
+                if (!enumerated.HasValue && enumerationCount.HasValue)
+                    enumerated = enumerationCount > 0;
+
+                if (enumerated.HasValue)
+                    Assert.Equal(enumerated, enumerable.Enumerated);
+
+                if (enumerationCount.HasValue)
+                    Assert.Equal(enumerationCount, enumerable.EnumerationCount);
+            }
+
+            enumerable.Reset();
+            Assert.False(enumerable.Enumerated);
+            Assert.Equal(0, enumerable.EnumerationCount);
+
+            if (withCount != null)
+                Assert.False(withCount.CountCalled);
+
+            if (withContains != null)
+                Assert.False(withContains.ContainsCalled);
         }
 
         protected static class RandomUtils

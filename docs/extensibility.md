@@ -4,22 +4,25 @@ This document describes how to add custom validations to Guard by writing simple
 
 ## A Basic Validation
 
-Here is a basic extension that throws an `ArgumentException` if a GUID argument is
-passed uninitialized. It is not included among the standard validations because the
-`NotDefault` method defined for `IEquatable<T>` arguments covers its functionality.
+Here is a basic extension that throws an `ArgumentException` if a GUID argument is passed
+uninitialized. It is not included among the standard validations because the `NotDefault` method
+defined for `IEquatable<T>` structs covers its functionality.
 
 ```c#
 public static class GuardExtensions
 {
-    public static Guard.ArgumentInfo<Guid> NotEmpty(this Guard.ArgumentInfo<Guid> argument)
+    public static ref readonly Guard.ArgumentInfo<Guid> NotEmpty(
+        in this Guard.ArgumentInfo<Guid> argument)
     {
-        if (argument.Value == default)
+        if (argument.Value == default) // Check whether the GUID is empty.
+        {
             throw new ArgumentException(
                 $"{argument.Name} is not initialized. " +
                 "Consider using the static Guid.NewGuid method.",
                 argument.Name);
+        }
 
-        return argument;
+        return ref argument;
     }
 }
 
@@ -32,7 +35,14 @@ public class Program
 }
 ```
 
-But what if the argument was nullable?
+What Did We Do?
+
+* We wrote an extension method for `ArgumentInfo<Guid>`.
+* We accepted the argument as a [readonly reference](#accepting-and-returning-the-argument-by-reference)
+  and returned the same reference.
+* We passed the argument name to the `ArgumentException`, also mentioning it in the exception message.
+
+What if the argument was nullable?
 
 ```c#
 public class Program
@@ -42,34 +52,35 @@ public class Program
         // This won't compile since the id is not a Guid, it's a Nullable<Guid>.
         Guard.Argument(() => id).Valid();
     
-        // We can do this instead:
-        Guard.Argument(() => id)
-            // Calling NotNull converts the ArgumentInfo<Guid?> to an ArgumentInfo<Guid>.
-            .NotNull()
-            // After that we can use our NotEmpty extension.
-            .NotEmpty();
+        // Calling NotNull converts the ArgumentInfo<Guid?> to an ArgumentInfo<Guid>.
+        // After that we can use our NotEmpty extension.
+        Guard.Argument(() => id).NotNull().NotEmpty();
     }
 }
 ```
 
-In the above example we forced the argument to be non-null. Standard validations
-in Guard follow a convention where the validations on null arguments are ignored.
-See the [relevant section in the design decisions][1] for the rationale.
+But forcing the argument to be non-null contradicts the convention followed by the standard
+validations where null arguments are ignored. See the [relevant section in the design decisions][1]
+for the rationale.
 
-Let's write another extension to support nullable GUIDs.
+Let's add an overload to our extension, this time specifically for nullable GUIDs.
 
 ```c#
 public static class GuardExtensions
 {
-    // This time we accept and return a Nullable<Guid>.
-    public static Guard.ArgumentInfo<Guid?> NotEmpty(this Guard.ArgumentInfo<Guid?> argument)
+    public static ref readonly Guard.ArgumentInfo<Guid?> NotEmpty(
+        in this Guard.ArgumentInfo<Guid?> argument)
     {
-        // NotNull gets an `ArgumentInfo<Guid>` if the argument value
-        // is not null, so we can call our original NotEmpty extension.
-        if (argument.NotNull(out var a))
-            a.NotEmpty();
+        if (argument.HasValue() && // Ignore if the GUID is null.
+            argument.Value.Value == default) // Check whether the GUID is empty.
+        {
+            throw new ArgumentException(
+                $"{argument.Name} is not initialized. " +
+                "Consider using the static Guid.NewGuid method.",
+                argument.Name);
+        }
 
-        return argument;
+        return ref argument;
     }
 }
 
@@ -77,70 +88,70 @@ public class Program
 {
     public Record GetRecord(Guid? id)
     {
-        // Will only validate id if it is not null.
+        // Ignored if `id` is null.
         Guard.Argument(() => id).NotEmpty();
     }
 }
 ```
 
-## Null Arguments
+What Did We Do?
 
-`ArgumentInfo<T>` provides two methods that you can use to check whether the
-value is null: `IsNull` and its opposite, `HasValue`. The reason why these
-methods are recommended over direct checks like `argument.Value != null`
-is because they don't cause boxing when the argument value is a struct.
-
-```c#
-public interface IFoo
-{
-    bool Bar();
-}
-
-public static class GuardExtensions
-{
-    public static Guard.ArgumentInfo<T> Bar<T>(this Guard.ArgumentInfo<T> argument)
-        where T : IFoo
-    {
-        // Ignore if the value is null.
-        if (argument.HasValue() && !argument.Value.Bar())
-            throw new ArgumentException($"{argument.Name} must bar.", argument.Name);
-
-        return argument;
-    }
-}
-
-public class Program
-{
-    public void FooBar(IFoo foo)
-    {
-        // Ignored if foo is null.
-        // Throws if it's not *and* foo.Bar() returns false
-        Guard.Argument(() => foo).Bar();
-    }
-}
-```
+* We wrote an extension method for `ArgumentInfo<Guid?>`.
+* We used the [HasValue](#the-hasvalue-method) method to check whether the GUID is null.
+* We ignored the arguments that are null.
+* The rest is the same with our non-nullable validation.
 
 ## Accepting and Returning the Argument by Reference
 
-In the following example, we accept the argument using the `in` keyword which makes the
-caller to pass the argument as a readonly reference. So the argument and therefore, its
-value, are not copied for the method call. We also mark the return type as `ref readonly`,
-so the return value is also a reference to the argument we accepted with the `in` keyword.
-You can do this to prevent copying of large struct values with each validation.
+Being a struct, `ArgumentInfo<T>` is subject to copy-by-value semantics. This means that it would
+get copied once to send it as a parameter, and once to return it to the caller with each validation.
+Think of a validation chain like `.NotNull().CountInRange(1, 5).DoesNotContainNull()`.
+This would cause our argument instance to be copied six times if we didn't accept and returned
+it as reference.
+
+Sending and returning values as reference add a small overhead but it's negligible for values
+heavier than four bytes and the benefits start to overweight this overhead as the value gets bigger.
+An `ArgumentInfo<T>` instance contains three fields:
+* The value of the argument of type `T`.
+* A string that contains the argument name.
+* A boolean that is used to determine whether the argument is modified.
+
+So an `ArgumentInfo<int>` instance on a 32-bit system is _at least_ 9 bytes and an `ArgumentInfo<long>`
+instance on a 64-bit system is _at least_ 17 bytes. Even more if we use heavier structs like a `Guid`
+or `decimal`. So accepting and returning our validation arguments as reference allows us to avoid
+copying heavier instances around.
+
+## The HasValue Method
+
+In our examples above where we specifically targeted GUID arguments, we could just check whether the
+argument is null by writing `argument.Value != null`.  Using `argument.HasValue()` here made no
+difference. But if we targeted a generic argument `T` where `T` is a struct, the `argument.Value != null` check
+would cause boxing.
 
 ```c#
+public interface IDuck
+{
+    bool CanQuack { get; }
+
+    string Quack();
+}
+
+public class RefDuck : IDuck { /*...*/ }
+
+public struct ValueDuck : IDuck { /*...*/ }
+
 public static class GuardExtensions
 {
-    public static ref readonly Guard.ArgumentInfo<MyLargeStruct> Valid(
-        in this Guard.ArgumentInfo<MyLargeStruct> argument,
-        Func<MyLargeStruct, string> message = null)
+    public static ref readonly Guard.ArgumentInfo<T> CanQuack<T>(
+        in this Guard.ArgumentInfo<T> argument)
+        where T : IDuck
     {
-        if (! /** Custom validation logic. **/)
+        // Writing `argument.Value != null` here would box a `ValueDuck`.
+        if (argument.HasValue() && !argument.Value.CanQuack)
         {
-            var m = message?.Invoke(argument.Value)
-                ?? $"{argument.Name} is not a valid MyLargeStruct.";
-
-            throw new ArgumentException(m, argument.Name);
+            // Throw is it is a non-null duck who sadly cannot quack.
+            throw new ArgumentException(
+                $"{argument.Name} must be able to quack.", argument.Name);
         }
 
         return ref argument;
@@ -149,59 +160,21 @@ public static class GuardExtensions
 
 public class Program
 {
-    public void Process(MyLargeStruct value)
+    public static void Main()
     {
-        // Initialize the guarded argument.
-        // The value is copied once.
-        Guard.Argument(() => value)
-            // Call the extension, the value is not copied.
-            .Valid()
-            // Chain any standard validation that accepts the
-            // argument by ref and the value is still not copied.
-            .NotEqual(MyLargeStruct.InvalidValue);
-    }
-}
-```
+        var refDuck = new RefDuck();
+        MakeItQuack(refDuck);
 
-We can do the same as we did for our GUID extension to support nullable `MyLargeStruct`
-arguments. But if we made this much effort to pass our argument by reference, calling
-`NotNull(out var a)` may not be desirable since it will copy the argument value.
-Here is an example that supports both regular and nullable `MyLargeStruct`
-arguments without copying their values:
-
-```c#
-public static class GuardExtensions
-{
-    public static ref readonly Guard.ArgumentInfo<MyLargeStruct> Valid(
-        in this Guard.ArgumentInfo<MyLargeStruct> argument,
-        Func<MyLargeStruct, string> message = null)
-    {
-        Valid(argument.Value, argument.Name, message);
-        return ref argument;
+        var valueDuck = new ValueDuck();
+        MakeItQuack(valueDuck); // No boxing.
     }
 
-    public static ref readonly Guard.ArgumentInfo<MyLargeStruct?> Valid(
-        in this Guard.ArgumentInfo<MyLargeStruct?> argument,
-        Func<MyLargeStruct, string> message = null)
+    public static void MakeItQuack<T>(T duck)
+        where T : IDuck
     {
-        if (argument.HasValue())
-            Valid(argument.Value.Value, argument.Name, message);
+        Guard.Argument(() => duck).CanQuack();
 
-        return ref argument;
-    }
-
-    private static void Valid(
-        in MyLargeStruct value,
-        string name,
-        Func<MyLargeStruct, string> message)
-    {
-        if (! /** Custom validation logic. **/)
-        {
-            var m = message?.Invoke(value)
-                ?? $"{name} is not a valid MyLargeStruct.";
-
-            throw new ArgumentException(m, name);
-        }
+        Console.WriteLine(duck.Quack());
     }
 }
 ```
