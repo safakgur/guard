@@ -194,10 +194,10 @@
                 => $"{argument.Name} cannot contain {item}.";
 
             public static string InCollection<T>(ArgumentInfo<T> argument, IEnumerable collection)
-                => $"{argument.Name} must be one of {Join(collection)}.";
+                => $"{argument.Name} must be one of the following: {Join(collection)}";
 
             public static string NotInCollection<T>(ArgumentInfo<T> argument, IEnumerable collection)
-                => $"{argument.Name} cannot be one of {Join(collection)}.";
+                => $"{argument.Name} cannot be one of the following: {Join(collection)}";
 
             public static string UriAbsolute(in ArgumentInfo<Uri> argument)
                 => $"{argument.Name} must be an absolute URI.";
@@ -225,10 +225,10 @@
                 => $"{argument.Name} cannot have the host '{host}'.";
 
             public static string EmailHostIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
-                => $"{argument.Name} must have one of the following hosts: {Join(hosts)}.";
+                => $"{argument.Name} must have one of the following hosts: {Join(hosts)}";
 
             public static string EmailHostNotIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
-                => $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}.";
+                => $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}";
 
             public static string EmailHasDisplayName(in ArgumentInfo<MailAddress> argument)
                 => $"{argument.Name} must have a display name specified.";
@@ -239,9 +239,22 @@
 
             private static string Join(IEnumerable collection)
             {
-                return collection is IEnumerable<string> e
-                    ? string.Join(", ", e.Select(i => $"'{i}'"))
-                    : string.Join(", ", collection.Cast<object>());
+                const int max = 5;
+
+                var objects = collection is IEnumerable<string> e
+                    ? e.Select(i => $"\"{i}\"") as IEnumerable<object>
+                    : collection.Cast<object>();
+
+                var list = objects.Take(max + 1).ToList();
+                var ellipsis = list.Count > max;
+                if (ellipsis)
+                    list.RemoveAt(max);
+
+                var result = string.Join(", ", list);
+                if (ellipsis)
+                    result += "...";
+
+                return result;
             }
         }
     }
