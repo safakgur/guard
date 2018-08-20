@@ -425,7 +425,168 @@
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
         }
 
-        private static TestEnumerable<T> GetEnumerable<T>(CollectionOptions options, int maxCount = 10)
+        [Theory(DisplayName = T + "Enumerable: In/NotIn")]
+        [InlineData(CollectionOptions.Null, 3, 2, -1)]
+        [InlineData(CollectionOptions.Null, 3, null, null)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1)]
+        [InlineData(CollectionOptions.NotEmpty, 3, null, -1)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, null)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, null, -1)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, null)]
+        public void In(CollectionOptions options, int count, int? contained, int? nonContained)
+        {
+            var containedArg = Guard.Argument(() => contained);
+            var nonContainedArg = Guard.Argument(() => nonContained);
+
+            var enumerable = GetEnumerable<int?>(options, count);
+            var index = enumerable?.Items.TakeWhile(i => i != contained).Count() ?? RandomNumber;
+            var comparer = EqualityComparer<int?>.Default;
+
+            if (!contained.HasValue || enumerable is null)
+            {
+                containedArg
+                    .In(enumerable)
+                    .In(enumerable, null)
+                    .In(enumerable, comparer)
+                    .NotIn(enumerable)
+                    .NotIn(enumerable, null)
+                    .NotIn(enumerable, comparer);
+            }
+            else
+            {
+                containedArg.In(enumerable);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: index + 1);
+
+                containedArg.In(enumerable, null);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: index + 1);
+
+                containedArg.In(enumerable, comparer);
+                CheckAndReset(enumerable, containsCalled: false, enumerationCount: index + 1);
+
+                ThrowsArgumentException(
+                    containedArg,
+                    arg => arg.NotIn(enumerable),
+                    (arg, message) => arg.NotIn(enumerable, (i, e) =>
+                    {
+                        Assert.Equal(contained, i);
+                        Assert.Same(enumerable, e);
+                        return message;
+                    }));
+
+                // 1st for test w/o message, 2nd for the auto-generated message and 3rd for test w/ message.
+                var enumerationCount = (index + 1) * 2 + count;
+                if (enumerationCount == 0)
+                    enumerationCount++;
+
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+
+                ThrowsArgumentException(
+                    containedArg,
+                    arg => arg.NotIn(enumerable, null),
+                    (arg, message) => arg.NotIn(enumerable, null, (i, e) =>
+                    {
+                        Assert.Equal(contained, i);
+                        Assert.Same(enumerable, e);
+                        return message;
+                    }));
+
+                enumerationCount = (index + 1) * 2 + count;
+                if (enumerationCount == 0)
+                    enumerationCount++;
+
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+
+                ThrowsArgumentException(
+                    containedArg,
+                    arg => arg.NotIn(enumerable, comparer),
+                    (arg, message) => arg.NotIn(enumerable, comparer, (i, e) =>
+                    {
+                        Assert.Equal(contained, i);
+                        Assert.Same(enumerable, e);
+                        return message;
+                    }));
+
+                enumerationCount = (index + 1) * 2 + count;
+                if (enumerationCount == 0)
+                    enumerationCount++;
+
+                CheckAndReset(enumerable, containsCalled: false, enumerationCount: enumerationCount, forceEnumerated: true);
+            }
+
+            if (!nonContained.HasValue || enumerable is null)
+            {
+                nonContainedArg
+                    .In(enumerable)
+                    .In(enumerable, null)
+                    .In(enumerable, comparer)
+                    .NotIn(enumerable)
+                    .NotIn(enumerable, null)
+                    .NotIn(enumerable, comparer);
+            }
+            else
+            {
+                nonContainedArg.NotIn(enumerable);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: count, enumerated: true);
+
+                nonContainedArg.NotIn(enumerable, null);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: count, enumerated: true);
+
+                nonContainedArg.NotIn(enumerable, comparer);
+                CheckAndReset(enumerable, containsCalled: false, enumerationCount: count, enumerated: true);
+
+                ThrowsArgumentException(
+                    nonContainedArg,
+                    arg => arg.In(enumerable),
+                    (arg, message) => arg.In(enumerable, (i, e) =>
+                    {
+                        Assert.Equal(nonContained, i);
+                        Assert.Same(enumerable, e);
+                        return message;
+                    }));
+
+                // 1st for test w/o message, 2nd for the auto-generated message and 3rd for test w/ message.
+                var enumerationCount = count * 3;
+                if (enumerationCount == 0)
+                    enumerationCount++;
+
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+
+                ThrowsArgumentException(
+                    nonContainedArg,
+                    arg => arg.In(enumerable, null),
+                    (arg, message) => arg.In(enumerable, null, (i, e) =>
+                    {
+                        Assert.Equal(nonContained, i);
+                        Assert.Same(enumerable, e);
+                        return message;
+                    }));
+
+                enumerationCount = count * 3;
+                if (enumerationCount == 0)
+                    enumerationCount++;
+
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+
+                ThrowsArgumentException(
+                    nonContainedArg,
+                    arg => arg.In(enumerable, comparer),
+                    (arg, message) => arg.In(enumerable, comparer, (i, e) =>
+                    {
+                        Assert.Equal(nonContained, i);
+                        Assert.Same(enumerable, e);
+                        return message;
+                    }));
+
+                enumerationCount = count * 3;
+                if (enumerationCount == 0)
+                    enumerationCount++;
+
+                CheckAndReset(enumerable, containsCalled: false, enumerationCount: enumerationCount, forceEnumerated: true);
+            }
+        }
+
+        private static ITestEnumerable<T> GetEnumerable<T>(CollectionOptions options, int maxCount = 10)
         {
             if (options == CollectionOptions.Null)
                 return null;
@@ -487,72 +648,7 @@
             return new TestEnumerable<T>(list);
         }
 
-        private static void CheckAndReset<T>(
-            TestEnumerable<T> enumerable,
-            bool? countCalled = null,
-            bool? containsCalled = null,
-            int? enumerationCount = null,
-            bool? enumerated = null)
-        {
-            if (enumerable is null)
-                return;
-
-            var withCount = enumerable as IEnumerableWithCount<T>;
-            if (withCount != null && countCalled.HasValue)
-            {
-                Assert.Equal(countCalled, withCount.CountCalled);
-                Assert.Equal(!countCalled, enumerable.Enumerated);
-
-                if (countCalled.Value)
-                    Assert.Equal(0, enumerable.EnumerationCount);
-            }
-
-            var withContains = enumerable as IEnumerableWithContains<T>;
-            if (withContains != null && containsCalled.HasValue)
-            {
-                Assert.Equal(containsCalled, withContains.ContainsCalled);
-                Assert.Equal(!containsCalled, enumerable.Enumerated);
-
-                if (containsCalled.Value)
-                    Assert.Equal(0, enumerable.EnumerationCount);
-            }
-
-            if (withCount is null && withContains is null)
-            {
-                if (!enumerated.HasValue && enumerationCount.HasValue)
-                    enumerated = enumerationCount > 0;
-
-                if (enumerated.HasValue)
-                    Assert.Equal(enumerated, enumerable.Enumerated);
-
-                if (enumerationCount.HasValue)
-                    Assert.Equal(enumerationCount, enumerable.EnumerationCount);
-            }
-
-            enumerable.Reset();
-            Assert.False(enumerable.Enumerated);
-            Assert.Equal(0, enumerable.EnumerationCount);
-
-            if (withCount != null)
-                Assert.False(withCount.CountCalled);
-
-            if (withContains != null)
-                Assert.False(withContains.ContainsCalled);
-        }
-
-        private interface IEnumerableWithCount<T> : IReadOnlyCollection<T>
-        {
-            bool CountCalled { get; }
-        }
-
-        private interface IEnumerableWithContains<T> : IEnumerable<T>
-        {
-            bool Contains(T item);
-
-            bool ContainsCalled { get; }
-        }
-
-        private class TestEnumerable<T> : IEnumerable<T>
+        public class TestEnumerable<T> : ITestEnumerable<T>
         {
             public TestEnumerable(IEnumerable<T> items) => this.Items = items;
 
@@ -581,7 +677,7 @@
             }
         }
 
-        private class TestEnumerableWithCount<T> : TestEnumerable<T>, IEnumerableWithCount<T>
+        public class TestEnumerableWithCount<T> : TestEnumerable<T>, ITestEnumerableWithCount<T>
         {
             private readonly int count;
 
@@ -606,7 +702,7 @@
             }
         }
 
-        private class TestEnumerableWithContains<T> : TestEnumerable<T>, IEnumerableWithContains<T>
+        public class TestEnumerableWithContains<T> : TestEnumerable<T>, ITestEnumerableWithContains<T>
         {
             public TestEnumerableWithContains(IEnumerable<T> items)
                 : base(items)
@@ -628,8 +724,8 @@
             }
         }
 
-        private class TestEnumerableWithCountAndContains<T>
-            : TestEnumerableWithCount<T>, IEnumerableWithCount<T>, IEnumerableWithContains<T>
+        public class TestEnumerableWithCountAndContains<T>
+            : TestEnumerableWithCount<T>, ITestEnumerableWithCount<T>, ITestEnumerableWithContains<T>
         {
             public TestEnumerableWithCountAndContains(IEnumerable<T> items)
                 : base(items)

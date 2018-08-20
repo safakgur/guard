@@ -1,7 +1,9 @@
 # Guard
 
-[![NuGet Status](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
-[![Build status](https://ci.appveyor.com/api/projects/status/add0vx8i2yacvprf/branch/master?svg=true)](https://ci.appveyor.com/project/safak/guard/branch/master)
+[![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
+[![Build](https://ci.appveyor.com/api/projects/status/add0vx8i2yacvprf/branch/dev?svg=true)](https://ci.appveyor.com/project/safak/guard/branch/dev)
+[![Tests](https://img.shields.io/appveyor/tests/safak/guard/dev.svg)](https://ci.appveyor.com/project/safak/guard/branch/dev)
+[![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)
 
 ![Logo](media/guard-64.png)
 
@@ -11,9 +13,9 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 * [What's Wrong with Vanilla?](#whats-wrong-with-vanilla)
 * [Requirements](#requirements)
 * [Standard Validations](#standard-validations)
-* [Design Decisions][1]
-* [Extensibility][2]
-* [Future](#future)
+* [Design Decisions](#design-decisions)
+* [Extensibility](#extensibility)
+* [What's Next](#whats-next)
 
 ## Introduction
 
@@ -53,9 +55,8 @@ public Person(string firstName, string lastName)
 }
 ```
 
-If this looks like too much allocations to you, you can use the overload that accepts the argument
-name as a separate parameter and write: `Guard.Argument(firstName, nameof(firstName))`.
-
+If this looks like too much allocations to you, fear not. The arguments are read-only structs that
+are passed by reference, and there are ways other than member expressions to initialize them.
 See the [design decisions][1] for details.
 
 ## What's Wrong with Vanilla?
@@ -87,7 +88,7 @@ have fully documented, meaningful defaults that get out of your way and let you 
 C# 7.2. So in order to use Guard, you need to make sure your Visual Studio is up to date and you
 have `<LangVersion>7.2</LangVersion>` or later added in your .csproj file.
 
-**.NET Standard 1.0** and above are supported. [Microsoft Docs][3] lists the following platform
+**.NET Standard 1.0** and above are supported. [Microsoft Docs][2] lists the following platform
 versions as .NET Standard 1.0 compliant but keep in mind that currently, the unit tests are only
 targeting .NET Core 1.0 and 2.0.
 
@@ -104,164 +105,32 @@ targeting .NET Core 1.0 and 2.0.
 | Windows Phone              | `8.1`   |
 | Windows Phone Silverlight  | `8.0`   |
 
-## Standard Validations
+## More
 
-Below is a complete list of validations that are included with the library.
+### Standard Validations
 
-### Null Guards
+[Click here][3] for a list of the validations that are included in the library.
 
-For `ArgumentInfo<T> where T : class` and `ArgumentInfo<T?> where T : struct`
-* `Null()`
-* `NotNull()` - When called for an argument of `T?`, returns an argument of `T`.
+### Design Decisions
 
-### Equality Guards
+[Click here][1] for the document that explains the motives behind the Guard's API design.
 
-For `ArgumentInfo<T>`
-* `Equal(T)`
-* `Equal(T, IEqualityComparer<T>)`
-* `NotEqual(T)`
-* `NotEqual(T, IEqualityComparer<T>)`
+### Extensibility
 
-For `ArgumentInfo<T|T?> where T : struct`
-* `Default()`
-* `NotDefault()`
+[Click here][4] to see how to add custom validations to Guard by writing simple extension methods.
 
-### Comparison Guards
+### What's Next
 
-For `ArgumentInfo<T> where T : IComparable<T>`
-* `Min(T)`
-* `Max(T)`
-* `InRange(T, T)`
+Right now the following are on the horizon:
 
-For `ArgumentInfo<T|T?> where T : struct, IComparable<T>`
-* `Zero()`
-* `NotZero()`
-* `Positive()`
-* `NotPositive()`
-* `Negative()`
-* `NotNegative()`
-
-### Collection Guards
-
-For `ArgumentInfo<T> where T : IEnumerable`
-* `Empty()`
-* `NotEmpty()`
-* `MinCount(int)`
-* `MaxCount(int)`
-* `CountInRange(int, int)`
-* `Contains(TItem)`
-* `Contains(TItem, IEqualityComparer<TItem>)`
-* `DoesNotContain(TItem)`
-* `DoesNotContain(TItem, IEqualityComparer<TItem>)`
-* `ContainsNull()`
-* `DoesNotContainNull()`
-
-### String Guards
-
-For `ArgumentInfo<string>`
-* `Empty()`
-* `NotEmpty()`
-* `WhiteSpace()`
-* `NotWhiteSpace()`
-* `MinLength(int)`
-* `MaxLength(int)`
-* `LengthInRange(int, int)`
-* `Equal(string, StringComparison)`
-* `NotEqual(string, StringComparison)`
-* `StartsWith(string)`
-* `StartsWith(string, StringComparison)`
-* `DoesNotStartWith(string)`
-* `DoesNotStartWith(string, StringComparison)`
-* `EndsWith(string)`
-* `EndsWith(string, StringComparison)`
-* `DoesNotEndWith(string)`
-* `DoesNotEndWith(string, StringComparison)`
-
-### Floating-Point Number Guards
-
-For `ArgumentInfo<float|float?|double|double?>`
-* `NaN()`
-* `NotNaN()`
-* `Infinity()`
-* `NotInfinity()`
-* `PositiveInfinity()`
-* `NotPositiveInfinity()`
-* `NegativeInfinity()`
-* `NotNegativeInfinity()`
-
-### Boolean Guards
-
-For `ArgumentInfo<bool|bool?>`
-* `True()`
-* `False()`
-
-### URI Guards
-
-For `ArgumentInfo<Uri>`
-* `Absolute`
-* `Relative`
-* `Scheme(string)`
-* `NotScheme(string)`
-* `Http()`
-* `Http(bool)`
-* `Https()`
-
-### Enum Guards
-For `ArgumentInfo<T|T?> where T : enum`
-* `Defined()`
-* `HasFlag(T)`
-* `DoesNotHaveFlag(T)`
-
-### Type Guards
-
-For `ArgumentInfo<T>`
-* `Compatible<TTarget>()`
-* `NotCompatible<TTarget>()`
-* `Cast<TTarget>` - Returns an argument of `TTarget`
-
-For `ArgumentInfo<object>`
-* `Type<T>()` - Returns an argument of `T`.
-* `NotType<T>()`
-* `Type(Type)`
-* `NotType(Type)`
-
-### Normalization Guards
-
-For `ArgumentInfo<T>`
-* `Modify(T value)`
-* `Modify<TTarget>(Func<T, TTarget>)` - Returns an argument of `TTarget`
-* `Wrap<TTarget>(Func<T, TTarget>)` - Returns an argument of `TTarget`
-
-For `ArgumentInfo<T> where T : class, ICloneable`
-* `Clone()`
-
-### Predicate Guards
-
-For `ArgumentInfo<T>`
-* `Require(Func<T, bool>)`
-* `Require<TException>(Func<T, bool>)`
-
-## Future
-
-The development branch where you can see the works in proress is [`dev`][5]. [`master`][4] is only
-updated for releases.
-
-### What Is to Come
-
-* More validations.
-* Coverage checks per push.
-* Online documentation.
-* Performance benchmarks.
-
-### What Is Not to Come
-
-* Compound validations, e.g. `TrimmedNotNullOrEmpty` for strings.
-* Validations for types where a better suited type exists, e.g. `Email` or `IPAddress` for strings.
-You should use the `MailAddress` class to accept email addresses and `IPAddress` class to accept IP
-addresses.
+* Tests on more platforms
+* More validations
+* Online documentation
+* Performance benchmarks
 
 [1]: docs/design-decisions.md
-[2]: docs/extensibility.md
-[3]: https://docs.microsoft.com/dotnet/standard/net-standard
-[4]: https://github.com/safakgur/guard/tree/master
+[2]: https://docs.microsoft.com/dotnet/standard/net-standard
+[3]: docs/standard-validations.md
+[4]: docs/extensibility.md
 [5]: https://github.com/safakgur/guard/tree/dev
+[6]: https://github.com/safakgur/guard/tree/master

@@ -1,8 +1,9 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Linq.Expressions;
 
-    /// <content>Nullness preconditions.</content>
+    /// <content>Nullability preconditions.</content>
     public static partial class Guard
     {
         /// <summary>Requires the argument to be <c>null</c>.</summary>
@@ -80,7 +81,7 @@
             in this ArgumentInfo<T> argument, string message = null)
             where T : class
         {
-            if (argument.IsNull())
+            if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
                 throw !argument.Modified
@@ -111,7 +112,7 @@
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct
         {
-            if (argument.IsNull())
+            if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
                 throw !argument.Modified
@@ -136,6 +137,7 @@
         ///     <c>true</c>, if the <paramref name="argument" />
         ///     is not <c>null</c>; otherwise, <c>false</c>.
         /// </returns>
+        [Obsolete("Use the HasValue method to check against null.")]
         public static bool NotNull<T>(
             in this ArgumentInfo<T?> argument, out ArgumentInfo<T> result)
             where T : struct
@@ -148,6 +150,51 @@
 
             result = default;
             return false;
+        }
+
+        /// <summary>Provides a <c>null</c> checking helper.</summary>
+        /// <typeparam name="T">The type of the instance to check against <c>null</c>.</typeparam>
+        private static class NullChecker<T>
+        {
+            /// <summary>
+            ///     A function that determines whether a specified instance of type
+            ///     <typeparamref name="T" /> is not <c>null</c>.
+            /// </summary>
+            public static readonly IsNotNull HasValue = InitHasValue();
+
+            /// <summary>
+            ///     A delegate that checks whether an instance of <typeparamref name="T" /> is not
+            ///     <c>null</c>.
+            /// </summary>
+            /// <param name="value">The value to check against <c>null</c>.</param>
+            /// <returns>
+            ///     <c>true</c>, if <paramref name="value" /> is not <c>null</c>; otherwise,
+            ///     <c>false</c>.
+            /// </returns>
+            public delegate bool IsNotNull(in T value);
+
+            /// <summary>Initializes <see cref="HasValue" />.</summary>
+            /// <returns>
+            ///     A function that determines whether a specified instance of type
+            ///     <typeparamref name="T" /> is not <c>null</c>.
+            /// </returns>
+            private static IsNotNull InitHasValue()
+            {
+                var type = typeof(T);
+                if (!type.IsValueType())
+                    return (in T v) => v != null;
+
+                if (type.IsGenericType(typeof(Nullable<>)))
+                {
+                    var value = Expression.Parameter(type.MakeByRefType(), "value");
+                    var get = type.GetPropertyGetter("HasValue");
+                    var call = Expression.Call(value, get);
+                    var lambda = Expression.Lambda<IsNotNull>(call, value);
+                    return lambda.Compile();
+                }
+
+                return (in T v) => true;
+            }
         }
     }
 }
