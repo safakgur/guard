@@ -386,6 +386,34 @@
             return ref argument;
         }
 
+        /// <summary>Requires the specified items to contain the argument value.</summary>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="items">
+        ///     The items that is required to contain the argument value.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="items" /> does not contain the <paramref name="argument" />
+        ///     value.
+        /// </exception>
+        public static ref readonly ArgumentInfo<TItem> In<TItem>(
+            in this ArgumentInfo<TItem> argument, params TItem[] items)
+        {
+            if (argument.HasValue() && items != null)
+            {
+                var comparer = EqualityComparer<TItem>.Default;
+                for (var i = 0; i < items.Length; i++)
+                    if (comparer.Equals(argument.Value, items[i]))
+                        return ref argument;
+
+                var m = Messages.InCollection(argument, items);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
         /// <summary>Requires the specified collection not to contain the argument value.</summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <typeparam name="TItem">The type of the argument.</typeparam>
@@ -441,6 +469,33 @@
                     ?? Messages.NotInCollection(argument, collection);
 
                 throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>Requires the specified items not to contain the argument value.</summary>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="items">
+        ///     The items that is required not to contain the argument value.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="items" /> contains the <paramref name="argument" /> value.
+        /// </exception>
+        internal static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
+            in this ArgumentInfo<TItem> argument, params TItem[] items)
+        {
+            if (argument.HasValue() && items != null)
+            {
+                var comparer = EqualityComparer<TItem>.Default;
+                for (var i = 0; i < items.Length; i++)
+                    if (comparer.Equals(argument.Value, items[i]))
+                    {
+                        var m = Messages.NotInCollection(argument, items);
+                        throw new ArgumentException(m, argument.Name);
+                    }
             }
 
             return ref argument;
