@@ -34,7 +34,8 @@
                 throw new ArgumentException(m, argument.Name);
             }
 
-            return new ArgumentInfo<T>((T)argument.Value, argument.Name, argument.Modified);
+            return new ArgumentInfo<T>(
+                (T)argument.Value, argument.Name, argument.Modified, argument.Secure);
         }
 
         /// <summary>
@@ -90,7 +91,8 @@
                 throw new ArgumentException(m, argument.Name);
             }
 
-            return new ArgumentInfo<object>(argument.Value, argument.Name, argument.Modified);
+            return new ArgumentInfo<object>(
+                argument.Value, argument.Name, argument.Modified, argument.Secure);
         }
 
         /// <summary>

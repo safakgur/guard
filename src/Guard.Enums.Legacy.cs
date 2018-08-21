@@ -512,7 +512,8 @@
                         new ArgumentInfo<T>(
                             this.Argument.Value.Value,
                             this.Argument.Name,
-                            this.Argument.Modified));
+                            this.Argument.Modified,
+                            this.Argument.Secure));
 
                     return true;
                 }

@@ -96,7 +96,7 @@
                 }
 
                 // Validate the member.
-                var memberArgument = Argument(memberValue, info.Name);
+                var memberArgument = Argument(memberValue, info.Name, argument.Secure);
                 try
                 {
                     validation(memberArgument);
@@ -201,7 +201,7 @@
                 }
 
                 // Validate the member.
-                var memberArgument = Argument(memberValue, info.Name);
+                var memberArgument = Argument(memberValue, info.Name, argument.Secure);
                 try
                 {
                     validation(memberArgument);
