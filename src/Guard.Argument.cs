@@ -15,6 +15,10 @@
         /// </summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
         /// <param name="e">An expression that specifies a method argument.</param>
+        /// <param name="secure">
+        ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
+        ///     messages of failed validations.
+        /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
         /// <exception cref="ArgumentNullException">
         ///     <paramref name="e" /> is <c>null</c>.
@@ -23,13 +27,13 @@
         ///     <paramref name="e" /> is not a <see cref="MemberExpression" />.
         /// </exception>
         [DebuggerStepThrough]
-        public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e)
+        public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e, bool secure = false)
         {
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
 
             return e.Body is MemberExpression m
-                ? Argument(e.Compile()(), m.Member.Name)
+                ? Argument(e.Compile()(), m.Member.Name, secure)
                 : throw new ArgumentException("A member expression is expected.", nameof(e));
         }
 
@@ -49,10 +53,14 @@
         ///         violating the preconditions can be easily identified.
         ///     </para>
         /// </param>
+        /// <param name="secure">
+        ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
+        ///     messages of failed validations.
+        /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
         [DebuggerStepThrough]
-        public static ArgumentInfo<T> Argument<T>(T value, string name = null)
-            => new ArgumentInfo<T>(value, name);
+        public static ArgumentInfo<T> Argument<T>(T value, string name = null, bool secure = false)
+            => new ArgumentInfo<T>(value, name, secure: secure);
 
         /// <summary>Represents a method argument.</summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
@@ -76,12 +84,17 @@
             ///     Whether the original method argument is modified before the initialization of
             ///     this instance.
             /// </param>
+            /// <param name="secure">
+            ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
+            ///     messages of failed validations.
+            /// </param>
             [DebuggerStepThrough]
-            public ArgumentInfo(T value, string name, bool modified = false)
+            public ArgumentInfo(T value, string name, bool modified = false, bool secure = false)
             {
                 this.Value = value;
                 this.name = name;
                 this.Modified = modified;
+                this.Secure = secure;
             }
 
             /// <summary>Gets the argument value.</summary>
@@ -97,6 +110,13 @@
             public bool Modified { get; }
 
             /// <summary>
+            ///     Gets a value indicating whether sensitive information may be used to validate
+            ///     the argument. If <c>true</c>, exception messages provide less information about
+            ///     the validation parameters.
+            /// </summary>
+            public bool Secure { get; }
+
+            /// <summary>
             ///     Gets how the layout is displayed in the debugger variable windows.
             /// </summary>
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -106,7 +126,8 @@
                 {
                     var name = this.name;
                     var value = this.HasValue() ? this.Value.ToString() : "null";
-                    return name is null ? value : $"{name}: {value}";
+                    var result = name is null ? value : $"{name}: {value}";
+                    return this.Secure ? $"[SECURE] {result}" : result;
                 }
             }
 

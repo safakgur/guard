@@ -155,6 +155,37 @@ In the second example, we see that the `NotNull` validation accepts the error me
 instead of a factory. This is because it only throws an exception if the argument value is null.
 Therefore the only possible value that can be passed to a factory would be null.
 
+## Secure Arguments
+
+Exceptions thrown for failed Guard validations contain very descriptive messages.
+
+```c#
+// Throws with message: "token must be a2C-p."
+Guard.Argument("abc", "token").Equal("a2C-p");
+
+// Throws with message: "number must be one of the following: 1, 2, 3"
+Guard.Argument(0, "number").In(1, 2, 3);
+```
+
+There may be cases where you don't want to expose that additional data to the caller. For these
+scenarios, you can specify the optional "secure" flag when you initialize the argument.
+
+```c#
+// Throws with message: "token is invalid."
+Guard.Argument("abc", "token", true).Equal("a2C-p");
+
+// Throws with message: "number is invalid."
+Guard.Argument(0, "number", true).In(1, 2, 3);
+```
+
+Things to note:
+
+* Parameter names are never secured.
+* Min/Max values of range checks are never secured.
+* Type names are never secured.
+* Exceptions that are not directly thrown by the library are never secured.
+* When in doubt, see [the source][1] that provides the default messages.
+
 ## Automatic Nullable Value Conversions
 
 Using the `NotNull` validation on a nullable value type would convert the `ArgumentInfo<T?>` to an
@@ -248,3 +279,5 @@ BuyCar(buyer, car);
 
 The above code throws an `ArgumentException` with the parameter name "buyer" and message
 "Address.City cannot be null.".
+
+[1]: ../src/Guard.Messages.cs
