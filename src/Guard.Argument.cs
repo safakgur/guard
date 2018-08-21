@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
 
     /// <summary>Validates argument preconditions.</summary>
     /// <content>Contains the argument initialization methods.</content>
@@ -65,6 +66,7 @@
         /// <summary>Represents a method argument.</summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
         [DebuggerDisplay("{DebuggerDisplay,nq}")]
+        [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArgumentInfo<T>
         {
             /// <summary>
