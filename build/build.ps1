@@ -22,3 +22,5 @@ IF (-not (Test-Path $SdkPath))
 
 & $SdkPath restore $PSScriptRoot/../src --verbosity m
 & $SdkPath build $PSScriptRoot/../src -c $Configuration -o ../artifacts/build/$Framework/ -f $Framework
+
+exit $lastexitcode
