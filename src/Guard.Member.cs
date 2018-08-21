@@ -106,7 +106,7 @@
                     var m = message?.Invoke(argument.Value, memberValue, ex) ?? ex.Message;
                     throw !validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m);
                 }
             }
 
@@ -211,7 +211,7 @@
                     var m = message?.Invoke(argument.Value.Value, memberValue, ex) ?? ex.Message;
                     throw !validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m);
                 }
             }
 
