@@ -114,12 +114,14 @@ heavier than four bytes and the benefits start to overweight this overhead as th
 An `ArgumentInfo<T>` instance contains three fields:
 * The value of the argument of type `T`.
 * A string that contains the argument name.
-* A boolean that is used to determine whether the argument is modified.
+* A boolean that is used to determine whether the argument is [modified][2].
+* A boolean that is used to determine whether the exception messages should not contain [sensitive
+  information][3].
 
-So an `ArgumentInfo<int>` instance on a 32-bit system is _at least_ 9 bytes and an `ArgumentInfo<long>`
-instance on a 64-bit system is _at least_ 17 bytes. Even more if we use heavier structs like a `Guid`
-or `decimal`. So accepting and returning our validation arguments as reference allows us to avoid
-copying heavier instances around.
+So an `ArgumentInfo<int>` instance on a 32-bit system is _at least_ 10 bytes and an
+`ArgumentInfo<long>` instance on a 64-bit system is _at least_ 18 bytes. Even more if we use heavier
+structs like a `Guid` or `decimal`. So accepting and returning our validation arguments as reference
+allows us to avoid copying heavier instances around.
 
 ## The HasValue Method
 
@@ -180,3 +182,5 @@ public class Program
 ```
 
 [1]: design-decisions.md#optional-preconditions
+[2]: design-decisions.md#modifying-arguments
+[3]: design-decisions.md#secure-arguments
