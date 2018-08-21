@@ -13,7 +13,7 @@
         /// <param name="value">The new argument value.</param>
         /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
         public static ArgumentInfo<T> Modify<T>(in this ArgumentInfo<T> argument, T value)
-            => new ArgumentInfo<T>(value, argument.Name, true);
+            => new ArgumentInfo<T>(value, argument.Name, true, argument.Secure);
 
         /// <summary>
         ///     Returns a new argument with the same name and a value that
@@ -34,7 +34,8 @@
             in this ArgumentInfo<TSource> argument, Func<TSource, TTarget> convert)
         {
             Argument(convert, nameof(convert)).NotNull();
-            return new ArgumentInfo<TTarget>(convert(argument.Value), argument.Name, true);
+            return new ArgumentInfo<TTarget>(
+                convert(argument.Value), argument.Name, true, argument.Secure);
         }
 
         /// <summary>
@@ -73,7 +74,8 @@
             Argument(convert, nameof(convert)).NotNull();
             try
             {
-                return new ArgumentInfo<TTarget>(convert(argument.Value), argument.Name, true);
+                return new ArgumentInfo<TTarget>(
+                    convert(argument.Value), argument.Name, true, argument.Secure);
             }
             catch (Exception x)
             {
@@ -93,9 +95,12 @@
         public static ArgumentInfo<T> Clone<T>(in this ArgumentInfo<T> argument)
             where T : class, ICloneable
         {
-            return argument.HasValue()
-                ? new ArgumentInfo<T>(argument.Value.Clone() as T, argument.Name, argument.Modified)
-                : argument;
+            if (!argument.HasValue())
+                return argument;
+
+            return new ArgumentInfo<T>(
+                argument.Value.Clone() as T, argument.Name, argument.Modified, argument.Secure);
+
         }
 #endif
     }

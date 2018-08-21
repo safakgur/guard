@@ -173,7 +173,7 @@
             public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
             {
                 if (this.Value is TTarget value)
-                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified);
+                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
 
                 var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
                 throw new ArgumentException(m, this.Name);
