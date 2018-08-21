@@ -264,10 +264,10 @@
                     var key = (mexp.Member, i);
                     if (!Cache.TryGetValue(key, out var info))
                     {
+                        info = new ArgumentMemberInfo<T, TMember>(mexp, lexp.Compile());
                         CacheLock.EnterWriteLock();
                         try
                         {
-                            info = new ArgumentMemberInfo<T, TMember>(mexp, lexp.Compile());
                             Cache[key] = info;
                         }
                         finally
