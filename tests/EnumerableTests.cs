@@ -186,17 +186,24 @@
         }
 
         [Theory(DisplayName = T + "Enumerable: Contains/DoesNotContain")]
-        [InlineData(CollectionOptions.Null, 3, 2, -1)]
-        [InlineData(CollectionOptions.Empty, 0, null, 1)]
-        [InlineData(CollectionOptions.Empty | CollectionOptions.HasContains, 0, null, 1)]
-        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, 3, null, -1)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1)]
-        public void Contains(CollectionOptions options, int count, int? contained, int? nonContained)
+        [InlineData(CollectionOptions.Null, 3, 2, -1, false)]
+        [InlineData(CollectionOptions.Empty, 0, null, 1, false)]
+        [InlineData(CollectionOptions.Empty, 0, null, 1, true)]
+        [InlineData(CollectionOptions.Empty | CollectionOptions.HasContains, 0, null, 1, false)]
+        [InlineData(CollectionOptions.Empty | CollectionOptions.HasContains, 0, null, 1, true)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, 3, null, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, 3, null, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, true)]
+        public void Contains(
+            CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
         {
             var enumerable = GetEnumerable<int?>(options, count);
-            var enumerableArg = Guard.Argument(() => enumerable);
+            var enumerableArg = Guard.Argument(() => enumerable, secure);
 
             var index = enumerable?.Items.TakeWhile(i => i != contained).Count() ?? RandomNumber;
             var comparer = EqualityComparer<int?>.Default;
@@ -247,6 +254,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.Contains(nonContained.Value),
+                    m => secure != m.Contains(nonContained.ToString()),
                     (arg, message) => arg.Contains(nonContained.Value, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -259,6 +267,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.Contains(nonContained.Value, null),
+                    m => secure != m.Contains(nonContained.ToString()),
                     (arg, message) => arg.Contains(nonContained.Value, null, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -271,6 +280,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.Contains(nonContained.Value, comparer),
+                    m => secure != m.Contains(nonContained.ToString()),
                     (arg, message) => arg.Contains(nonContained.Value, comparer, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -286,6 +296,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.DoesNotContain(contained.Value),
+                    m => secure != m.Contains(contained.ToString()),
                     (arg, message) => arg.DoesNotContain(contained.Value, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -298,6 +309,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.DoesNotContain(contained.Value, null),
+                    m => secure != m.Contains(contained.ToString()),
                     (arg, message) => arg.DoesNotContain(contained.Value, null, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -310,6 +322,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.DoesNotContain(contained.Value, comparer),
+                    m => secure != m.Contains(contained.ToString()),
                     (arg, message) => arg.DoesNotContain(contained.Value, comparer, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -426,23 +439,32 @@
         }
 
         [Theory(DisplayName = T + "Enumerable: In/NotIn collection")]
-        [InlineData(CollectionOptions.Null, 3, 2, -1)]
-        [InlineData(CollectionOptions.Null, 3, null, null)]
-        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1)]
-        [InlineData(CollectionOptions.NotEmpty, 3, null, -1)]
-        [InlineData(CollectionOptions.NotEmpty, 3, 2, null)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, null, -1)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, null)]
-        public void InCollection(CollectionOptions options, int count, int? contained, int? nonContained)
+        [InlineData(CollectionOptions.Null, 3, 2, -1, false)]
+        [InlineData(CollectionOptions.Null, 3, null, null, false)]
+        [InlineData(CollectionOptions.Null, 3, null, null, true)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty, 3, null, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty, 3, null, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, null, false)]
+        [InlineData(CollectionOptions.NotEmpty, 3, 2, null, true)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, null, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, null, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, null, false)]
+        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, null, true)]
+        public void InCollection(
+            CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
         {
-            var containedArg = Guard.Argument(() => contained);
-            var nonContainedArg = Guard.Argument(() => nonContained);
+            var containedArg = Guard.Argument(() => contained, secure);
+            var nonContainedArg = Guard.Argument(() => nonContained, secure);
 
             var enumerable = GetEnumerable<int?>(options, count);
             var index = enumerable?.Items.TakeWhile(i => i != contained).Count() ?? RandomNumber;
             var comparer = EqualityComparer<int?>.Default;
 
+            var forceEnumerated = !secure ? true : default(bool?);
             if (!contained.HasValue || enumerable is null)
             {
                 containedArg
@@ -467,6 +489,7 @@
                 ThrowsArgumentException(
                     containedArg,
                     arg => arg.NotIn(enumerable),
+                    TestGeneratedMessage,
                     (arg, message) => arg.NotIn(enumerable, (i, e) =>
                     {
                         Assert.Equal(contained, i);
@@ -474,16 +497,13 @@
                         return message;
                     }));
 
-                // 1st for test w/o message, 2nd for the auto-generated message and 3rd for test w/ message.
-                var enumerationCount = (index + 1) * 2 + count;
-                if (enumerationCount == 0)
-                    enumerationCount++;
-
-                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+                var enumerationCount = GetEnumerationCount(true);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
 
                 ThrowsArgumentException(
                     containedArg,
                     arg => arg.NotIn(enumerable, null),
+                    TestGeneratedMessage,
                     (arg, message) => arg.NotIn(enumerable, null, (i, e) =>
                     {
                         Assert.Equal(contained, i);
@@ -491,15 +511,13 @@
                         return message;
                     }));
 
-                enumerationCount = (index + 1) * 2 + count;
-                if (enumerationCount == 0)
-                    enumerationCount++;
-
-                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+                enumerationCount = GetEnumerationCount(true);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
 
                 ThrowsArgumentException(
                     containedArg,
                     arg => arg.NotIn(enumerable, comparer),
+                    TestGeneratedMessage,
                     (arg, message) => arg.NotIn(enumerable, comparer, (i, e) =>
                     {
                         Assert.Equal(contained, i);
@@ -507,11 +525,8 @@
                         return message;
                     }));
 
-                enumerationCount = (index + 1) * 2 + count;
-                if (enumerationCount == 0)
-                    enumerationCount++;
-
-                CheckAndReset(enumerable, containsCalled: false, enumerationCount: enumerationCount, forceEnumerated: true);
+                enumerationCount = GetEnumerationCount(true);
+                CheckAndReset(enumerable, containsCalled: false, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
             }
 
             if (!nonContained.HasValue || enumerable is null)
@@ -538,6 +553,7 @@
                 ThrowsArgumentException(
                     nonContainedArg,
                     arg => arg.In(enumerable),
+                    TestGeneratedMessage,
                     (arg, message) => arg.In(enumerable, (i, e) =>
                     {
                         Assert.Equal(nonContained, i);
@@ -545,16 +561,13 @@
                         return message;
                     }));
 
-                // 1st for test w/o message, 2nd for the auto-generated message and 3rd for test w/ message.
-                var enumerationCount = count * 3;
-                if (enumerationCount == 0)
-                    enumerationCount++;
-
-                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+                var enumerationCount = GetEnumerationCount(false);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
 
                 ThrowsArgumentException(
                     nonContainedArg,
                     arg => arg.In(enumerable, null),
+                    TestGeneratedMessage,
                     (arg, message) => arg.In(enumerable, null, (i, e) =>
                     {
                         Assert.Equal(nonContained, i);
@@ -562,15 +575,13 @@
                         return message;
                     }));
 
-                enumerationCount = count * 3;
-                if (enumerationCount == 0)
-                    enumerationCount++;
-
-                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+                enumerationCount = GetEnumerationCount(false);
+                CheckAndReset(enumerable, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
 
                 ThrowsArgumentException(
                     nonContainedArg,
                     arg => arg.In(enumerable, comparer),
+                    TestGeneratedMessage,
                     (arg, message) => arg.In(enumerable, comparer, (i, e) =>
                     {
                         Assert.Equal(nonContained, i);
@@ -578,73 +589,79 @@
                         return message;
                     }));
 
-                enumerationCount = count * 3;
-                if (enumerationCount == 0)
-                    enumerationCount++;
-
-                CheckAndReset(enumerable, containsCalled: false, enumerationCount: enumerationCount, forceEnumerated: true);
+                enumerationCount = GetEnumerationCount(false);
+                CheckAndReset(enumerable, containsCalled: false, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
             }
+
+            int GetEnumerationCount(bool found)
+            {
+                int result;
+                if (found)
+                    result = (index + 1) * 2 + (secure ? 0 : count);
+                else
+                    result = count * (secure ? 2 : 3);
+
+                if (result == 0)
+                    result++;
+
+                return result;
+            }
+
+            bool TestGeneratedMessage(string message)
+                => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
         }
 
         [Theory(DisplayName = T + "Enumerable: In/NotIn array")]
-        [InlineData(null, null, null)]
-        [InlineData(null, "a", "b")]
-        [InlineData('a', null, null)]
-        [InlineData('a', "a", "b")]
-        public void InArray(char? value, string containingString, string nonContainingString)
+        [InlineData(null, null, null, false)]
+        [InlineData(null, "AB,BC", "BC,DE", false)]
+        [InlineData(null, "AB,BC", "BC,DE", true)]
+        [InlineData("AB", null, null, false)]
+        [InlineData("AB", null, null, true)]
+        [InlineData("AB", "AB,BC", "BC,DE", false)]
+        [InlineData("AB", "AB,BC", "BC,DE", true)]
+        public void InArray(string value, string containingString, string nonContainingString, bool secure)
         {
-            var nullableContaining = containingString?.Select(c => c as char?).ToArray();
-            var nullableNonContaining = nonContainingString?.Select(c => c as char?).ToArray();
-            var nullableValueArg = Guard.Argument(() => value)
-                .In(nullableContaining)
-                .NotIn(nullableNonContaining);
+            var containing = containingString?.Split(',');
+            var nonContaining = nonContainingString?.Split(',');
+            var valueArg = Guard.Argument(() => value, secure)
+                .In(containing)
+                .NotIn(nonContaining);
 
-            if (!value.HasValue)
+            if (value is null)
             {
-                nullableValueArg
-                    .In(nullableNonContaining)
-                    .NotIn(nullableContaining);
+                valueArg
+                    .In(nonContaining)
+                    .NotIn(containing);
 
                 return;
             }
 
-            var valueArg = Guard.Argument(value.Value, nameof(value));
-            if (nullableNonContaining is null)
+            if (nonContaining is null)
             {
-                nullableValueArg.In(nullableNonContaining);
-                valueArg.In(null as char[]);
+                valueArg.In(nonContaining);
+                valueArg.In(null as string[]);
             }
             else
             {
-                Assert.Throws<ArgumentException>(
-                    nullableValueArg.Name,
-                    () => nullableValueArg.In(nullableNonContaining));
-
-                var nonContaining = nonContainingString.ToCharArray();
                 valueArg.NotIn(nonContaining);
-
-                Assert.Throws<ArgumentException>(
-                    valueArg.Name,
-                    () => valueArg.In(nonContaining));
+                Throws(arg => arg.In(nonContaining), nonContaining);
             }
 
-            if (nullableContaining is null)
+            if (containing is null)
             {
-                nullableValueArg.NotIn(nullableContaining);
-                valueArg.NotIn(null as char[]);
+                valueArg.NotIn(containing);
+                valueArg.NotIn(null as string[]);
             }
             else
             {
-                Assert.Throws<ArgumentException>(
-                    nullableValueArg.Name,
-                    () => nullableValueArg.NotIn(nullableContaining));
-
-                var containing = containingString.ToCharArray();
                 valueArg.In(containing);
+                Throws(arg => arg.NotIn(containing), containing);
+            }
 
-                Assert.Throws<ArgumentException>(
-                    valueArg.Name,
-                    () => valueArg.NotIn(containing));
+            void Throws(Action<Guard.ArgumentInfo<string>> test, string[] tested)
+            {
+                var exception = Assert.Throws<ArgumentException>(valueArg.Name, () => test(valueArg));
+                Assert.NotEqual(secure, tested.All(i => exception.Message.Contains(i)));
             }
         }
 
