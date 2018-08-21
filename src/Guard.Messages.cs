@@ -26,10 +26,10 @@
                 => $"{argument.Name} cannot be {default(T)}.";
 
             public static string Equal<T>(in ArgumentInfo<T> argument, in T other)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must be {other}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must be {ToString(other)}.";
 
-            public static string NotEqual<T>(in ArgumentInfo<T> argument)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be {argument.Value}.";
+            public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be {ToString(other)}.";
 
             public static string Require<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} is invalid.";
@@ -182,10 +182,10 @@
                 => $"{argument.Name} must contain {minCount} to {maxCount} items.";
 
             public static string CollectionContains<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must contain {item}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must contain {ToString(item)}.";
 
             public static string CollectionDoesNotContain<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot contain {item}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot contain {ToString(item)}.";
 
             public static string InCollection<T>(ArgumentInfo<T> argument, IEnumerable collection)
                 => argument.Secure ? Require(argument) : $"{argument.Name} must be one of the following: {Join(collection)}";
@@ -230,6 +230,8 @@
             public static string EmailDoesNotHaveDisplayName(in ArgumentInfo<MailAddress> argument)
                 => $"{argument.Name} cannot have a display name specified.";
 #endif
+
+            private static string ToString(object obj) => obj?.ToString() ?? "null";
 
             private static string Join(IEnumerable collection)
             {
