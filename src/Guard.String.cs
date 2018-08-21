@@ -319,7 +319,7 @@
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && !argument.Value.StartsWith(value, comparison))
+            if (argument.HasValue() && value != null && !argument.Value.StartsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringStartsWith(argument, value);
                 throw new ArgumentException(m, argument.Name);
@@ -374,7 +374,7 @@
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && argument.Value.StartsWith(value, comparison))
+            if (argument.HasValue() && value != null && argument.Value.StartsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotStartWith(argument, value);
                 throw new ArgumentException(m, argument.Name);
@@ -428,7 +428,7 @@
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && !argument.Value.EndsWith(value, comparison))
+            if (argument.HasValue() && value != null && !argument.Value.EndsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringEndsWith(argument, value);
                 throw new ArgumentException(m, argument.Name);
@@ -482,7 +482,7 @@
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && argument.Value.EndsWith(value, comparison))
+            if (argument.HasValue() && value != null && argument.Value.EndsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotEndWith(argument, value);
                 throw new ArgumentException(m, argument.Name);
