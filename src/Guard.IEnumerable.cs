@@ -619,10 +619,12 @@
 
                 int ProxyCount(TCollection collection, int max)
                 {
+                    Func<object, int, int> func;
+
                     Collection.CachedCountFunctionsLocker.EnterUpgradeableReadLock();
                     try
                     {
-                        if (!Collection.CachedCountFunctions.TryGetValue(collection.GetType(), out var func))
+                        if (!Collection.CachedCountFunctions.TryGetValue(collection.GetType(), out func))
                         {
                             var f = Expression.Field(null, typeof(Collection<>)
                                 .MakeGenericType(collection.GetType())
@@ -644,13 +646,13 @@
                                 Collection.CachedCountFunctionsLocker.ExitWriteLock();
                             }
                         }
-
-                        return func(collection, max);
                     }
                     finally
                     {
                         Collection.CachedCountFunctionsLocker.ExitUpgradeableReadLock();
                     }
+
+                    return func(collection, max);
                 }
             }
 
@@ -727,10 +729,12 @@
 
                 bool ProxyContainsNull(TCollection collection)
                 {
+                    Func<object, bool> func;
+
                     Collection.CachedContainsNullFunctionsLocker.EnterUpgradeableReadLock();
                     try
                     {
-                        if (!Collection.CachedContainsNullFunctions.TryGetValue(collection.GetType(), out var func))
+                        if (!Collection.CachedContainsNullFunctions.TryGetValue(collection.GetType(), out var del))
                         {
                             var f = Expression.Field(null, typeof(Collection<>)
                                 .MakeGenericType(collection.GetType())
@@ -739,12 +743,12 @@
                             var o = Expression.Parameter(typeof(object), nameof(collection));
                             var i = Expression.Invoke(f, Expression.Convert(o, collection.GetType()));
                             var l = Expression.Lambda<Func<object, bool>>(i, o);
-                            func = l.Compile();
+                            del = l.Compile();
 
                             Collection.CachedContainsNullFunctionsLocker.EnterWriteLock();
                             try
                             {
-                                Collection.CachedContainsNullFunctions[collection.GetType()] = func;
+                                Collection.CachedContainsNullFunctions[collection.GetType()] = del;
                             }
                             finally
                             {
@@ -752,12 +756,14 @@
                             }
                         }
 
-                        return (func as Func<object, bool>)(collection);
+                        func = del as Func<object, bool>;
                     }
                     finally
                     {
                         Collection.CachedContainsNullFunctionsLocker.ExitUpgradeableReadLock();
                     }
+
+                    return func(collection);
                 }
             }
 
@@ -835,11 +841,13 @@
 
                     bool ProxyContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
                     {
+                        Func<object, TItem, IEqualityComparer<TItem>, bool> func;
+
                         Collection.CachedContainsFunctionsLocker.EnterUpgradeableReadLock();
                         try
                         {
                             var key = (collection.GetType(), typeof(TItem));
-                            if (!Collection.CachedContainsFunctions.TryGetValue(key, out var func))
+                            if (!Collection.CachedContainsFunctions.TryGetValue(key, out var del))
                             {
                                 var f = Expression.Field(null, typeof(Collection<>)
                                     .GetNestedType("Typed`1")
@@ -851,12 +859,12 @@
                                 var e = Expression.Parameter(typeof(IEqualityComparer<TItem>), nameof(comparer));
                                 var n = Expression.Invoke(f, Expression.Convert(o, collection.GetType()), i, e);
                                 var l = Expression.Lambda<Func<object, TItem, IEqualityComparer<TItem>, bool>>(n, o, i, e);
-                                func = l.Compile();
+                                del = l.Compile();
 
                                 Collection.CachedContainsFunctionsLocker.EnterWriteLock();
                                 try
                                 {
-                                    Collection.CachedContainsFunctions[key] = func;
+                                    Collection.CachedContainsFunctions[key] = del;
                                 }
                                 finally
                                 {
@@ -864,12 +872,14 @@
                                 }
                             }
 
-                            return (func as Func<object, TItem, IEqualityComparer<TItem>, bool>)(collection, item, comparer);
+                            func = del as Func<object, TItem, IEqualityComparer<TItem>, bool>;
                         }
                         finally
                         {
                             Collection.CachedContainsFunctionsLocker.ExitUpgradeableReadLock();
                         }
+
+                        return func(collection, item, comparer);
                     }
                 }
             }

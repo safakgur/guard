@@ -189,20 +189,23 @@
             /// </remarks>
             public static bool CanBeConvertedTo(object obj, Type targetType)
             {
+                Func<object, bool> func;
+
                 locker.EnterUpgradeableReadLock();
                 try
                 {
-                    if (!canBeConvertedTo.TryGetValue(targetType, out var func))
+                    if (!canBeConvertedTo.TryGetValue(targetType, out func))
                     {
+                        var t = typeof(TypeInfo<>).MakeGenericType(targetType);
+                        var f = Expression.Field(null, t.GetField(nameof(TypeInfo<object>.CanBeInitializedFrom)));
+                        var o = Expression.Parameter(typeof(object), "obj");
+                        var c = Expression.Invoke(f, o);
+                        var l = Expression.Lambda<Func<object, bool>>(c, o);
+                        func = l.Compile();
+
                         locker.EnterWriteLock();
                         try
                         {
-                            var t = typeof(TypeInfo<>).MakeGenericType(targetType);
-                            var f = Expression.Field(null, t.GetField(nameof(TypeInfo<object>.CanBeInitializedFrom)));
-                            var o = Expression.Parameter(typeof(object), "obj");
-                            var c = Expression.Invoke(f, o);
-                            var l = Expression.Lambda<Func<object, bool>>(c, o);
-                            func = l.Compile();
                             canBeConvertedTo[targetType] = func;
                         }
                         finally
@@ -210,13 +213,13 @@
                             locker.ExitWriteLock();
                         }
                     }
-
-                    return func(obj);
                 }
                 finally
                 {
                     locker.ExitUpgradeableReadLock();
                 }
+
+                return func(obj);
             }
         }
     }
