@@ -29,3 +29,5 @@ IF (-not (Test-Path $SdkPath))
     /p:CollectCoverage=$Coverage `
     /p:CoverletOutputFormat=$CoverageFormat `
     /p:CoverletOutput="$CoverageOutput"
+
+exit $lastexitcode
