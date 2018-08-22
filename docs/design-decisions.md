@@ -44,20 +44,6 @@ A compile-time symbol to toggle byref arguments/returns may be added in the futu
 that doesn't take advantage of the new features can be compiled with copy-by-value semantics and
 live as a separate package.
 
-## Experimenting with `ref struct`s
-
-C# 7.2 also introduced the concept of `ref struct`s. Value types declared as `ref struct` must be
-stack allocated, so they can never be created on the heap as a member of another class. They can't
-implement interfaces, be boxed, or be declared as local variables inside state machines
-(iterators/async methods). They are also not allowed as delegate parameters.
-
-Although these restrictions are introduced mainly for structures that interop with unmanaged memory,
-I thought they could also work for us, preventing many ways of misusing the guarded arguments.
-
-But unfortunately, these limitations make the library very hard to test for so little benefits.
-I may look into writing some Roslyn analyzers to check for correct usage at some point but I think
-that too wouldn't worth the effort, considering the use of this library being pretty straightforward.
-
 ## Initializing a Guarded Argument
 
 Guard needs to know the argument's value to test it against preconditions and its name to include in
