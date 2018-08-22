@@ -50,11 +50,11 @@
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
         /// </param>
-        /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
+        /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is an instance of type <typeparamref name="T" />.
         /// </exception>
-        public static ArgumentInfo<object> NotType<T>(
+        public static ref readonly ArgumentInfo<object> NotType<T>(
             in this ArgumentInfo<object> argument, Func<T, string> message = null)
         {
             if (argument.HasValue() && TypeInfo<T>.CanBeInitializedFrom(argument.Value))
@@ -63,7 +63,7 @@
                 throw new ArgumentException(m, argument.Name);
             }
 
-            return argument;
+            return ref argument;
         }
 
         /// <summary>
@@ -77,12 +77,12 @@
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
         /// </param>
-        /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
+        /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not an instance of the type represented by
         ///     <paramref name="type" />.
         /// </exception>
-        public static ArgumentInfo<object> Type(
+        public static ref readonly ArgumentInfo<object> Type(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
             if (argument.HasValue() && !TypeInfo.CanBeConvertedTo(argument.Value, type))
@@ -91,8 +91,7 @@
                 throw new ArgumentException(m, argument.Name);
             }
 
-            return new ArgumentInfo<object>(
-                argument.Value, argument.Name, argument.Modified, argument.Secure);
+            return ref argument;
         }
 
         /// <summary>
@@ -106,12 +105,12 @@
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
         /// </param>
-        /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
+        /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is an instance of the type represented by
         ///     <paramref name="type" />.
         /// </exception>
-        public static ArgumentInfo<object> NotType(
+        public static ref readonly ArgumentInfo<object> NotType(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
             if (argument.HasValue() && TypeInfo.CanBeConvertedTo(argument.Value, type))
@@ -120,7 +119,7 @@
                 throw new ArgumentException(m, argument.Name);
             }
 
-            return argument;
+            return ref argument;
         }
 
         /// <summary>Provides cached utilities for <typeparamref name="T" />.</summary>
