@@ -339,7 +339,7 @@
         [Fact(DisplayName = T + "Generic: Cast")]
         public void Cast()
         {
-            using (var memory = new MemoryStream() as Stream)
+            using (var stream = new MemoryStream() as Stream)
             {
                 var @null = null as Stream;
                 var nullArg = Guard.Argument(() => @null);
@@ -362,18 +362,30 @@
                         return message;
                     }));
 
-                var memoryArg = Guard.Argument(() => memory);
-                Assert.Same(memory, memoryArg.Cast<object>().Value);
-                Assert.Same(memory, memoryArg.Cast<MemoryStream>().Value);
+                for (var i = 0; i < 2; i++)
+                {
+                    var streamArg = Guard.Argument(() => stream, i == 1);
 
-                ThrowsArgumentException(
-                    memoryArg,
-                    arg => arg.Cast<string>(),
-                    (arg, message) => arg.Cast<string>(s =>
-                    {
-                        Assert.Same(memory, s);
-                        return message;
-                    }));
+                    var objectCastedArg = streamArg.Cast<object>();
+                    Assert.Same(streamArg.Name, objectCastedArg.Name);
+                    Assert.Equal(streamArg.Modified, objectCastedArg.Modified);
+                    Assert.Equal(streamArg.Secure, objectCastedArg.Secure);
+                    Assert.Same(stream, objectCastedArg.Value);
+
+                    var msCastedArg = streamArg.Cast<MemoryStream>();
+                    Assert.Equal(streamArg.Modified, msCastedArg.Modified);
+                    Assert.Equal(streamArg.Secure, msCastedArg.Secure);
+                    Assert.Same(stream, msCastedArg.Value);
+
+                    ThrowsArgumentException(
+                        streamArg,
+                        arg => arg.Cast<string>(),
+                        (arg, message) => arg.Cast<string>(s =>
+                        {
+                            Assert.Same(stream, s);
+                            return message;
+                        }));
+                }
             }
         }
 
