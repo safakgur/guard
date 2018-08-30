@@ -188,7 +188,7 @@
                 }));
         }
 
-        Uri GetUri(string uriString)
+        private static Uri GetUri(string uriString)
             => uriString != null ? new Uri(uriString, UriKind.RelativeOrAbsolute) : null;
     }
 }

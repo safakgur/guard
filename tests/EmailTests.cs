@@ -1,4 +1,5 @@
 ﻿#if !NETCOREAPP1_0
+
 namespace Dawn.Tests
 {
     using System;
@@ -116,11 +117,9 @@ namespace Dawn.Tests
 
             int GetEnumerationCount(int? index, int count)
             {
-                int result;
-                if (index.HasValue)
-                    result = (index.Value + 1) * 2 + (secure ? 0 : count);
-                else
-                    result = count * (secure ? 2 : 3);
+                var result = index.HasValue
+                    ? (index.Value + 1) * 2 + (secure ? 0 : count)
+                    : count * (secure ? 2 : 3);
 
                 if (result == 0)
                     result++;
@@ -181,4 +180,5 @@ namespace Dawn.Tests
         }
     }
 }
+
 #endif

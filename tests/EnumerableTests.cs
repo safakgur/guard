@@ -595,11 +595,9 @@
 
             int GetEnumerationCount(bool found)
             {
-                int result;
-                if (found)
-                    result = (index + 1) * 2 + (secure ? 0 : count);
-                else
-                    result = count * (secure ? 2 : 3);
+                var result = found
+                    ? (index + 1) * 2 + (secure ? 0 : count)
+                    : count * (secure ? 2 : 3);
 
                 if (result == 0)
                     result++;
