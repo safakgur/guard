@@ -57,7 +57,7 @@ public Person(string firstName, string lastName)
 
 If this looks like too much allocations to you, fear not. The arguments are read-only structs that
 are passed by reference, and there are ways other than member expressions to initialize them.
-See the [design decisions][1] for details.
+See the [design decisions](#design-decisions) for details.
 
 ## What's Wrong with Vanilla?
 
