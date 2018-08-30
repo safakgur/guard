@@ -32,28 +32,36 @@
         public void NullValue()
         {
             var @null = null as int?;
-            var nullArg = Guard.Argument(@null).Null();
+            var nullArg = Guard.Argument(() => @null).Null();
             Assert.False(nullArg.HasValue());
-
-            var nonNull = 1 as int?;
-            var nonNullArg = Guard.Argument(nonNull);
-            Assert.IsType<Guard.ArgumentInfo<int?>>(nonNullArg);
-            Assert.IsType<Guard.ArgumentInfo<int>>(nonNullArg.NotNull());
-            Assert.True(nonNullArg.HasValue());
-
-            ThrowsArgumentException(
-                nonNullArg,
-                arg => arg.Null(),
-                (arg, message) => arg.Null(i =>
-                {
-                    Assert.Equal(nonNull, i);
-                    return message;
-                }));
 
             ThrowsArgumentNullException(
                 nullArg,
                 arg => arg.NotNull(),
                 (arg, message) => arg.NotNull(message));
+
+            var one = 1 as int?;
+            for (var i = 0; i < 2; i++)
+            {
+                var nullableOneArg = Guard.Argument(() => one, i == 1);
+                Assert.IsType<Guard.ArgumentInfo<int?>>(nullableOneArg);
+                Assert.True(nullableOneArg.HasValue());
+
+                ThrowsArgumentException(
+                    nullableOneArg,
+                    arg => arg.Null(),
+                    (arg, message) => arg.Null(v =>
+                    {
+                        Assert.Equal(one, v);
+                        return message;
+                    }));
+
+                var oneArg = nullableOneArg.NotNull();
+                Assert.IsType<Guard.ArgumentInfo<int>>(oneArg);
+                Assert.True(oneArg.HasValue());
+                Assert.Equal(nullableOneArg.Value, oneArg.Value);
+                Assert.Equal(nullableOneArg.Secure, oneArg.Secure);
+            }
         }
     }
 }

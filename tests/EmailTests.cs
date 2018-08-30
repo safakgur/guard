@@ -1,4 +1,5 @@
 ﻿#if !NETCOREAPP1_0
+
 namespace Dawn.Tests
 {
     using System;
@@ -11,13 +12,15 @@ namespace Dawn.Tests
     public sealed class EmailTests : BaseTests
     {
         [Theory(DisplayName = T + "Email: HasHost/DoesNotHaveHost")]
-        [InlineData(null, "A", "B")]
-        [InlineData("a@b.c", "b.c", "c.b")]
-        [InlineData("a@b.c", "B.C", "C.B")] // Ordinal case-insensitive.
-        public void HasHost(string emailString, string host, string nonHost)
+        [InlineData(null, "A", "B", false)]
+        [InlineData("a@b.c", "b.c", "c.b", false)]
+        [InlineData("a@b.c", "b.c", "c.b", true)]
+        [InlineData("a@b.c", "B.C", "C.B", false)] // Ordinal case-insensitive.
+        [InlineData("a@b.c", "B.C", "C.B", true)]
+        public void HasHost(string emailString, string host, string nonHost, bool secure)
         {
             var email = emailString is null ? null : new MailAddress(emailString);
-            var emailArgument = Guard.Argument(() => email).HasHost(host).DoesNotHaveHost(nonHost);
+            var emailArgument = Guard.Argument(() => email, secure).HasHost(host).DoesNotHaveHost(nonHost);
 
             if (email is null)
             {
@@ -28,6 +31,7 @@ namespace Dawn.Tests
             ThrowsArgumentException(
                 emailArgument,
                 arg => arg.HasHost(nonHost),
+                m => secure != m.Contains(nonHost),
                 (arg, message) => arg.HasHost(nonHost, (e, h) =>
                 {
                     Assert.Same(email, e);
@@ -38,6 +42,7 @@ namespace Dawn.Tests
             ThrowsArgumentException(
                 emailArgument,
                 arg => arg.DoesNotHaveHost(host),
+                m => secure != m.Contains(host),
                 (arg, message) => arg.DoesNotHaveHost(host, (e, h) =>
                 {
                     Assert.Same(email, e);
@@ -47,18 +52,26 @@ namespace Dawn.Tests
         }
 
         [Theory(DisplayName = T + "Email: HostIn/HostNotIn")]
-        [InlineData(null, "A;B", "C;D", false)]
-        [InlineData(null, "A;B", "C;D", true)]
-        [InlineData("a@b.c", "a.b;b.c", "c.d;d.e", false)]
-        [InlineData("a@b.c", "a.b;b.c", "c.d;d.e", true)]
-        [InlineData("a@b.c", "a.b;b.c", "A.B;B.C", false)] // The default comparer.
-        [InlineData("a@b.c", "a.b;b.c", "A.B;B.C", true)] // Collection type's Contains method.
-        [InlineData("a@b.c", "a.b;b.c", "", false)]
-        [InlineData("a@b.c", "a.b;b.c", "", true)]
-        public void HostIn(string emailString, string hostsString, string nonHostsString, bool hasContains)
+        [InlineData(null, "A;B", "C;D", false, false)]
+        [InlineData(null, "A;B", "C;D", true, false)]
+        [InlineData(null, "A;B", "C;D", true, true)]
+        [InlineData("a@b.c", "a.b;b.c", "c.d;d.e", false, false)]
+        [InlineData("a@b.c", "a.b;b.c", "c.d;d.e", false, true)]
+        [InlineData("a@b.c", "a.b;b.c", "c.d;d.e", true, false)]
+        [InlineData("a@b.c", "a.b;b.c", "c.d;d.e", true, true)]
+        [InlineData("a@b.c", "a.b;b.c", "A.B;B.C", false, false)] // The default comparer.
+        [InlineData("a@b.c", "a.b;b.c", "A.B;B.C", false, true)]
+        [InlineData("a@b.c", "a.b;b.c", "A.B;B.C", true, false)] // Collection type's Contains method.
+        [InlineData("a@b.c", "a.b;b.c", "A.B;B.C", true, true)]
+        [InlineData("a@b.c", "a.b;b.c", "", false, false)]
+        [InlineData("a@b.c", "a.b;b.c", "", false, true)]
+        [InlineData("a@b.c", "a.b;b.c", "", true, false)]
+        [InlineData("a@b.c", "a.b;b.c", "", true, true)]
+        public void HostIn(
+            string emailString, string hostsString, string nonHostsString, bool hasContains, bool secure)
         {
             var email = emailString is null ? null : new MailAddress(emailString);
-            var emailArg = Guard.Argument(() => email);
+            var emailArg = Guard.Argument(() => email, secure);
             var hosts = GetHosts(hostsString, hasContains, out var hostsCount);
             var hostIndex = email is null ? RandomNumber : hosts.Items.TakeWhile(h => h != email.Host).Count();
             var nonHosts = GetHosts(nonHostsString, hasContains, out var nonHostsCount);
@@ -75,6 +88,7 @@ namespace Dawn.Tests
             ThrowsArgumentException(
                 emailArg,
                 arg => arg.HostIn(nonHosts),
+                m => TestGeneratedMessage(m, nonHosts),
                 (arg, message) => arg.HostIn(nonHosts, (e, h) =>
                 {
                     Assert.Same(email, e);
@@ -82,17 +96,15 @@ namespace Dawn.Tests
                     return message;
                 }));
 
-            // 1st for test w/o message, 2nd for the auto-generated message and 3rd for test w/ message.
-            var enumerationCount = nonHostsCount * 3;
-            if (enumerationCount == 0)
-                enumerationCount++;
-
-            CheckAndReset(nonHosts, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+            var enumerationCount = GetEnumerationCount(null, nonHostsCount);
+            var forceEnumerated = !secure ? true : default(bool?);
+            CheckAndReset(nonHosts, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
 
             CheckAndReset(hosts, containsCalled: true, enumerationCount: hostIndex + 1);
             ThrowsArgumentException(
                 emailArg,
                 arg => arg.HostNotIn(hosts),
+                m => TestGeneratedMessage(m, hosts),
                 (arg, message) => arg.HostNotIn(hosts, (e, h) =>
                 {
                     Assert.Same(email, e);
@@ -100,12 +112,23 @@ namespace Dawn.Tests
                     return message;
                 }));
 
-            // 1st for test w/o message, 2nd for the auto-generated message and 3rd for test w/ message.
-            enumerationCount = (hostIndex + 1) * 2 + hostsCount;
-            if (enumerationCount == 0)
-                enumerationCount++;
+            enumerationCount = GetEnumerationCount(hostIndex, hostsCount);
+            CheckAndReset(hosts, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
 
-            CheckAndReset(hosts, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: true);
+            int GetEnumerationCount(int? index, int count)
+            {
+                var result = index.HasValue
+                    ? (index.Value + 1) * 2 + (secure ? 0 : count)
+                    : count * (secure ? 2 : 3);
+
+                if (result == 0)
+                    result++;
+
+                return result;
+            }
+
+            bool TestGeneratedMessage(string message, ITestEnumerable<string> enumerable)
+                => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
         }
 
         [Theory(DisplayName = T + "Email: HasDisplayName/DoesNotHaveDisplayName")]
@@ -157,4 +180,5 @@ namespace Dawn.Tests
         }
     }
 }
+
 #endif

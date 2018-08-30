@@ -346,7 +346,7 @@
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
             => ref argument.In(collection, null, message);
 
         /// <summary>Requires the specified collection to contain the argument value.</summary>
@@ -371,7 +371,7 @@
             TCollection collection,
             IEqualityComparer<TItem> comparer,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
         {
             if (argument.HasValue() &&
                 NullChecker<TCollection>.HasValue(collection) &&
@@ -380,6 +380,34 @@
                 var m = message?.Invoke(argument.Value, collection)
                     ?? Messages.InCollection(argument, collection);
 
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>Requires the specified items to contain the argument value.</summary>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="items">
+        ///     The items that is required to contain the argument value.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="items" /> does not contain the <paramref name="argument" />
+        ///     value.
+        /// </exception>
+        public static ref readonly ArgumentInfo<TItem> In<TItem>(
+            in this ArgumentInfo<TItem> argument, params TItem[] items)
+        {
+            if (argument.HasValue() && items != null)
+            {
+                var comparer = EqualityComparer<TItem>.Default;
+                for (var i = 0; i < items.Length; i++)
+                    if (comparer.Equals(argument.Value, items[i]))
+                        return ref argument;
+
+                var m = Messages.InCollection(argument, items);
                 throw new ArgumentException(m, argument.Name);
             }
 
@@ -406,7 +434,7 @@
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
             => ref argument.NotIn(collection, null, message);
 
         /// <summary>Requires the specified collection not to contain the argument value.</summary>
@@ -431,7 +459,7 @@
             TCollection collection,
             IEqualityComparer<TItem> comparer,
             Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable<TItem>
+            where TCollection : IEnumerable
         {
             if (argument.HasValue() &&
                 NullChecker<TCollection>.HasValue(collection) &&
@@ -441,6 +469,33 @@
                     ?? Messages.NotInCollection(argument, collection);
 
                 throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>Requires the specified items not to contain the argument value.</summary>
+        /// <typeparam name="TItem">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="items">
+        ///     The items that is required not to contain the argument value.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="items" /> contains the <paramref name="argument" /> value.
+        /// </exception>
+        internal static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
+            in this ArgumentInfo<TItem> argument, params TItem[] items)
+        {
+            if (argument.HasValue() && items != null)
+            {
+                var comparer = EqualityComparer<TItem>.Default;
+                for (var i = 0; i < items.Length; i++)
+                    if (comparer.Equals(argument.Value, items[i]))
+                    {
+                        var m = Messages.NotInCollection(argument, items);
+                        throw new ArgumentException(m, argument.Name);
+                    }
             }
 
             return ref argument;
@@ -564,10 +619,12 @@
 
                 int ProxyCount(TCollection collection, int max)
                 {
+                    Func<object, int, int> func;
+
                     Collection.CachedCountFunctionsLocker.EnterUpgradeableReadLock();
                     try
                     {
-                        if (!Collection.CachedCountFunctions.TryGetValue(collection.GetType(), out var func))
+                        if (!Collection.CachedCountFunctions.TryGetValue(collection.GetType(), out func))
                         {
                             var f = Expression.Field(null, typeof(Collection<>)
                                 .MakeGenericType(collection.GetType())
@@ -589,13 +646,13 @@
                                 Collection.CachedCountFunctionsLocker.ExitWriteLock();
                             }
                         }
-
-                        return func(collection, max);
                     }
                     finally
                     {
                         Collection.CachedCountFunctionsLocker.ExitUpgradeableReadLock();
                     }
+
+                    return func(collection, max);
                 }
             }
 
@@ -672,10 +729,12 @@
 
                 bool ProxyContainsNull(TCollection collection)
                 {
+                    Func<object, bool> func;
+
                     Collection.CachedContainsNullFunctionsLocker.EnterUpgradeableReadLock();
                     try
                     {
-                        if (!Collection.CachedContainsNullFunctions.TryGetValue(collection.GetType(), out var func))
+                        if (!Collection.CachedContainsNullFunctions.TryGetValue(collection.GetType(), out var del))
                         {
                             var f = Expression.Field(null, typeof(Collection<>)
                                 .MakeGenericType(collection.GetType())
@@ -684,12 +743,12 @@
                             var o = Expression.Parameter(typeof(object), nameof(collection));
                             var i = Expression.Invoke(f, Expression.Convert(o, collection.GetType()));
                             var l = Expression.Lambda<Func<object, bool>>(i, o);
-                            func = l.Compile();
+                            del = l.Compile();
 
                             Collection.CachedContainsNullFunctionsLocker.EnterWriteLock();
                             try
                             {
-                                Collection.CachedContainsNullFunctions[collection.GetType()] = func;
+                                Collection.CachedContainsNullFunctions[collection.GetType()] = del;
                             }
                             finally
                             {
@@ -697,12 +756,14 @@
                             }
                         }
 
-                        return (func as Func<object, bool>)(collection);
+                        func = del as Func<object, bool>;
                     }
                     finally
                     {
                         Collection.CachedContainsNullFunctionsLocker.ExitUpgradeableReadLock();
                     }
+
+                    return func(collection);
                 }
             }
 
@@ -780,11 +841,13 @@
 
                     bool ProxyContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
                     {
+                        Func<object, TItem, IEqualityComparer<TItem>, bool> func;
+
                         Collection.CachedContainsFunctionsLocker.EnterUpgradeableReadLock();
                         try
                         {
                             var key = (collection.GetType(), typeof(TItem));
-                            if (!Collection.CachedContainsFunctions.TryGetValue(key, out var func))
+                            if (!Collection.CachedContainsFunctions.TryGetValue(key, out var del))
                             {
                                 var f = Expression.Field(null, typeof(Collection<>)
                                     .GetNestedType("Typed`1")
@@ -796,12 +859,12 @@
                                 var e = Expression.Parameter(typeof(IEqualityComparer<TItem>), nameof(comparer));
                                 var n = Expression.Invoke(f, Expression.Convert(o, collection.GetType()), i, e);
                                 var l = Expression.Lambda<Func<object, TItem, IEqualityComparer<TItem>, bool>>(n, o, i, e);
-                                func = l.Compile();
+                                del = l.Compile();
 
                                 Collection.CachedContainsFunctionsLocker.EnterWriteLock();
                                 try
                                 {
-                                    Collection.CachedContainsFunctions[key] = func;
+                                    Collection.CachedContainsFunctions[key] = del;
                                 }
                                 finally
                                 {
@@ -809,12 +872,14 @@
                                 }
                             }
 
-                            return (func as Func<object, TItem, IEqualityComparer<TItem>, bool>)(collection, item, comparer);
+                            func = del as Func<object, TItem, IEqualityComparer<TItem>, bool>;
                         }
                         finally
                         {
                             Collection.CachedContainsFunctionsLocker.ExitUpgradeableReadLock();
                         }
+
+                        return func(collection, item, comparer);
                     }
                 }
             }

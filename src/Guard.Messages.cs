@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 #if !NETSTANDARD1_0
@@ -25,10 +26,10 @@
                 => $"{argument.Name} cannot be {default(T)}.";
 
             public static string Equal<T>(in ArgumentInfo<T> argument, in T other)
-                => $"{argument.Name} must be {other}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must be {ToString(other)}.";
 
-            public static string NotEqual<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} cannot be {argument.Value}.";
+            public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be {ToString(other)}.";
 
             public static string Require<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} is invalid.";
@@ -118,40 +119,34 @@
                 => $"{argument.Name} must contain {minLength} to {maxLength} characters.";
 
             public static string StringStartsWith(in ArgumentInfo<string> argument, string value)
-                => $"{argument.Name} must start with '{value}'.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must start with '{value}'.";
 
             public static string StringDoesNotStartWith(in ArgumentInfo<string> argument, string value)
-                => $"{argument.Name} cannot start with '{value}'.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot start with '{value}'.";
 
             public static string StringEndsWith(in ArgumentInfo<string> argument, string value)
-                => $"{argument.Name} must end with '{value}'.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must end with '{value}'.";
 
             public static string StringDoesNotEndWith(in ArgumentInfo<string> argument, string value)
-                => $"{argument.Name} cannot end with '{value}'.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot end with '{value}'.";
 
             public static string StringMatches(in ArgumentInfo<string> argument, string pattern)
-                => $"No match in {argument.Name} could be found by the regular expression '{pattern}'.";
+                => argument.Secure ? Require(argument) : $"No match in {argument.Name} could be found by the regular expression '{pattern}'.";
 
             public static string StringMatchesTimeout(in ArgumentInfo<string> argument, string pattern, TimeSpan matchTimeout)
-                => $"No match in {argument.Name} could be found by the regular expression '{pattern}' in {matchTimeout}";
+                => argument.Secure ? Require(argument) : $"No match in {argument.Name} could be found by the regular expression '{pattern}' in {matchTimeout}";
 
             public static string StringDoesNotMatch(in ArgumentInfo<string> argument, string pattern)
-                => $"A match in {argument.Name} is found by the regular expression '{pattern}'.";
+                => argument.Secure ? Require(argument) : $"A match in {argument.Name} is found by the regular expression '{pattern}'.";
 
             public static string StringDoesNotMatchTimeout(in ArgumentInfo<string> argument, string pattern, TimeSpan matchTimeout)
-                => $"{argument.Name} could not entirely be searched by the regular expression '{pattern}' due to time-out {matchTimeout}";
+                => argument.Secure ? Require(argument) : $"{argument.Name} could not entirely be searched by the regular expression '{pattern}' due to time-out {matchTimeout}";
 
             public static string True<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be true.";
 
             public static string False<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be false.";
-
-            public static string GuidEmpty(in ArgumentInfo<Guid> argument)
-                => $"{argument.Name} must be empty (uninitialized).";
-
-            public static string GuidNotEmpty(in ArgumentInfo<Guid> argument)
-                => $"{argument.Name} cannot be empty. Use Guid.NewGuid() method to initialize a GUID.";
 
             public static string Enum<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} is not an enum value.";
@@ -166,10 +161,10 @@
                 => $"{argument.Name} must have at least one of its bits set.";
 
             public static string EnumHasFlag<T>(in ArgumentInfo<T> argument, T flag)
-                => $"{argument.Name} does not has the {flag} flag.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} does not has the {flag} flag.";
 
             public static string EnumDoesNotHaveFlag<T>(in ArgumentInfo<T> argument, T flag)
-                => $"{argument.Name} cannot have the {flag} flag.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have the {flag} flag.";
 
             public static string CollectionEmpty<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be empty.";
@@ -187,18 +182,16 @@
                 => $"{argument.Name} must contain {minCount} to {maxCount} items.";
 
             public static string CollectionContains<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
-                => $"{argument.Name} must contain {item}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must contain {ToString(item)}.";
 
             public static string CollectionDoesNotContain<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
-                => $"{argument.Name} cannot contain {item}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot contain {ToString(item)}.";
 
-            public static string InCollection<TCollection, TItem>(ArgumentInfo<TItem> argument, TCollection collection)
-                where TCollection : IEnumerable<TItem>
-                => $"{argument.Name} must be one of {Join(collection)}.";
+            public static string InCollection<T>(ArgumentInfo<T> argument, IEnumerable collection)
+                => argument.Secure ? Require(argument) : $"{argument.Name} must be one of the following: {Join(collection)}";
 
-            public static string NotInCollection<TCollection, TItem>(ArgumentInfo<TItem> argument, TCollection collection)
-                where TCollection : IEnumerable<TItem>
-                => $"{argument.Name} cannot be one of {Join(collection)}.";
+            public static string NotInCollection<T>(ArgumentInfo<T> argument, IEnumerable collection)
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be one of the following: {Join(collection)}";
 
             public static string UriAbsolute(in ArgumentInfo<Uri> argument)
                 => $"{argument.Name} must be an absolute URI.";
@@ -220,16 +213,16 @@
 
 #if !NETSTANDARD1_0
             public static string EmailHasHost(in ArgumentInfo<MailAddress> argument, string host)
-                => $"{argument.Name} must have the host '{host}'.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must have the host '{host}'.";
 
             public static string EmailDoesNotHaveHost(in ArgumentInfo<MailAddress> argument, string host)
-                => $"{argument.Name} cannot have the host '{host}'.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have the host '{host}'.";
 
             public static string EmailHostIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
-                => $"{argument.Name} must have one of the following hosts: {Join(hosts)}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} must have one of the following hosts: {Join(hosts)}.";
 
             public static string EmailHostNotIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
-                => $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}.";
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}.";
 
             public static string EmailHasDisplayName(in ArgumentInfo<MailAddress> argument)
                 => $"{argument.Name} must have a display name specified.";
@@ -238,11 +231,26 @@
                 => $"{argument.Name} cannot have a display name specified.";
 #endif
 
-            private static string Join<T>(IEnumerable<T> collection)
+            private static string ToString(object obj) => obj?.ToString() ?? "null";
+
+            private static string Join(IEnumerable collection)
             {
-                return typeof(T) == typeof(string)
-                    ? string.Join(", ", collection.Select(i => $"'{i}'"))
-                    : string.Join(", ", collection);
+                const int max = 5;
+
+                var objects = collection is IEnumerable<string> e
+                    ? e.Select(i => $"\"{i}\"") as IEnumerable<object>
+                    : collection.Cast<object>();
+
+                var list = objects.Take(max + 1).ToList();
+                var ellipsis = list.Count > max;
+                if (ellipsis)
+                    list.RemoveAt(max);
+
+                var result = string.Join(", ", list);
+                if (ellipsis)
+                    result += "...";
+
+                return result;
             }
         }
     }

@@ -30,7 +30,7 @@
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NaN(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -72,7 +72,7 @@
                 {
                     var m = message?.Invoke(value) ?? Messages.NaN(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }
@@ -104,7 +104,7 @@
             {
                 var m = message ?? Messages.NotNaN(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -138,7 +138,7 @@
                 {
                     var m = message ?? Messages.NotNaN(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }
@@ -174,7 +174,7 @@
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Infinity(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -219,7 +219,7 @@
                 {
                     var m = message?.Invoke(value) ?? Messages.Infinity(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }
@@ -255,7 +255,7 @@
             {
                 var m = message ?? Messages.NotInfinity(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -290,7 +290,7 @@
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotInfinity(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -325,7 +325,7 @@
             {
                 var m = message ?? Messages.NotInfinity(a);
                 throw !a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, a.Value, m)
+                    ? new ArgumentOutOfRangeException(a.Name, argument.Secure ? null : a.Value as object, m)
                     : new ArgumentException(m, a.Name);
             }
 
@@ -370,7 +370,7 @@
                 {
                     var m = message?.Invoke(value) ?? Messages.NotInfinity(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }
@@ -403,7 +403,7 @@
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.PositiveInfinity(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -447,7 +447,7 @@
                 {
                     var m = message?.Invoke(value) ?? Messages.PositiveInfinity(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }
@@ -479,7 +479,7 @@
             {
                 var m = message ?? Messages.NotPositiveInfinity(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -513,7 +513,7 @@
                 {
                     var m = message ?? Messages.NotPositiveInfinity(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }
@@ -546,7 +546,7 @@
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NegativeInfinity(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -590,7 +590,7 @@
                 {
                     var m = message?.Invoke(value) ?? Messages.NegativeInfinity(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }
@@ -622,7 +622,7 @@
             {
                 var m = message ?? Messages.NotNegativeInfinity(argument);
                 throw !argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Value, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name);
             }
 
@@ -656,7 +656,7 @@
                 {
                     var m = message ?? Messages.NotNegativeInfinity(argument);
                     throw !argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, value, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);
                 }
             }

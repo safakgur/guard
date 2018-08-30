@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq.Expressions;
 
     /// <content>Provides preconditions for <see cref="System.Enum" /> arguments.</content>
     public static partial class Guard
@@ -204,7 +203,7 @@
             {
                 if (EqualityComparer<T>.Default.Equals(this.Argument.Value, other))
                 {
-                    var m = message?.Invoke(this.Argument.Value) ?? Messages.NotEqual(this.Argument);
+                    var m = message?.Invoke(this.Argument.Value) ?? Messages.NotEqual(this.Argument, other);
                     throw new ArgumentException(m, this.Argument.Name);
                 }
 
@@ -513,7 +512,8 @@
                         new ArgumentInfo<T>(
                             this.Argument.Value.Value,
                             this.Argument.Name,
-                            this.Argument.Modified));
+                            this.Argument.Modified,
+                            this.Argument.Secure));
 
                     return true;
                 }

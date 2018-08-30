@@ -251,7 +251,7 @@
         {
             if (argument.HasValue() && (comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
-                var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument);
+                var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument, other);
                 throw new ArgumentException(m, argument.Name);
             }
 

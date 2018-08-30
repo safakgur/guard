@@ -34,40 +34,42 @@
         }
 
         [Theory(DisplayName = T + "Member w/ valid expression")]
-        [InlineData(null, 18, 16)]
-        [InlineData("08/19/2018 17:42:48", 18, 16)]
-        public void ValidMemberCall(string dateTimeString, int hourOrGreater, int lessThanHour)
+        [InlineData(null, 17, 18, false)]
+        [InlineData("08/19/2018 17:42:48", 17, 18, false)]
+        [InlineData("08/19/2018 17:42:48", 17, 18, true)]
+        public void ValidMemberCall(string dateTimeString, int hour, int nonHour, bool secure)
         {
             var nullableDateTime = dateTimeString is null
                 ? default(DateTime?)
                 : DateTime.Parse(dateTimeString, CultureInfo.InvariantCulture);
 
-            var nullableTimeArg = Guard.Argument(() => nullableDateTime)
-                .Member(dt => dt.TimeOfDay.Hours, h => h.Max(hourOrGreater))
-                .Member(dt => dt.TimeOfDay.Hours, h => h.Max(hourOrGreater), true);
+            var nullableTimeArg = Guard.Argument(() => nullableDateTime, secure)
+                .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour))
+                .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour), true);
 
             if (!nullableDateTime.HasValue)
             {
                 nullableTimeArg
-                    .Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour))
-                    .Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour), true);
+                    .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour))
+                    .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour), true);
 
                 return;
             }
 
             var dateTime = nullableDateTime.Value;
             var timeOfDay = dateTime.TimeOfDay;
-            var hour = timeOfDay.Hours;
 
             var innerException = null as Exception;
             var thrown = ThrowsArgumentException(
                 nullableTimeArg,
-                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour)),
-                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour), (dt, h, ex) =>
+                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour)),
+                TestGeneratedMessage,
+                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour), (dt, h, ex) =>
                 {
                     Assert.Equal(dateTime, dt);
                     Assert.Equal(hour, h);
 
+                    TestGeneratedMessage(ex.Message);
                     innerException = ex;
                     return message;
                 }));
@@ -76,28 +78,31 @@
 
             ThrowsArgumentOutOfRangeException(
                 nullableTimeArg,
-                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour), true),
-                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour), true, (dt, h, ex) =>
+                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour), true),
+                TestGeneratedMessage,
+                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour), true, (dt, h, ex) =>
                 {
                     Assert.Equal(dateTime, dt);
                     Assert.Equal(hour, h);
 
-                    innerException = ex;
+                    TestGeneratedMessage(ex.Message);
                     return message;
                 }));
 
-            var dateTimeArg = Guard.Argument(() => dateTime)
-                .Member(dt => dt.TimeOfDay.Hours, h => h.Max(hourOrGreater))
-                .Member(dt => dt.TimeOfDay.Hours, h => h.Max(hourOrGreater), true);
+            var dateTimeArg = Guard.Argument(() => dateTime, secure)
+                .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour))
+                .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour), true);
 
             thrown = ThrowsArgumentException(
                 dateTimeArg,
-                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour)),
-                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour), (dt, h, ex) =>
+                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour)),
+                TestGeneratedMessage,
+                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour), (dt, h, ex) =>
                 {
                     Assert.Equal(dateTime, dt);
                     Assert.Equal(hour, h);
 
+                    TestGeneratedMessage(ex.Message);
                     innerException = ex;
                     return message;
                 }));
@@ -106,15 +111,19 @@
 
             ThrowsArgumentOutOfRangeException(
                 dateTimeArg,
-                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour), true),
-                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Max(lessThanHour), true, (dt, h, ex) =>
+                arg => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour), true),
+                TestGeneratedMessage,
+                (arg, message) => arg.Member(dt => dt.TimeOfDay.Hours, h => h.Equal(nonHour), true, (dt, h, ex) =>
                 {
                     Assert.Equal(dateTime, dt);
                     Assert.Equal(hour, h);
 
-                    innerException = ex;
+                    TestGeneratedMessage(ex.Message);
                     return message;
                 }));
+
+            bool TestGeneratedMessage(string message)
+                => secure != message.Contains(nonHour.ToString());
         }
 
         private sealed class TestObjectWithInaccessibleMember

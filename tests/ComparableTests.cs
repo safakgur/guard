@@ -128,7 +128,6 @@
                         return message;
                     }));
             }
-
         }
 
         [Theory(DisplayName = T + "Comparable: Zero/NotZero")]
@@ -264,7 +263,7 @@
                     return message;
                 }));
 
-            var NegativeArg = Guard.Argument(negative.Value, nameof(negative));
+            var negativeArg = Guard.Argument(negative.Value, nameof(negative));
             var nonNegativeArg = Guard.Argument(nonNegative.Value, nameof(nonNegative));
             ThrowsArgumentOutOfRangeException(
                 nonNegativeArg,
@@ -276,7 +275,7 @@
                 }));
 
             ThrowsArgumentOutOfRangeException(
-                NegativeArg,
+                negativeArg,
                 arg => arg.NotNegative(),
                 (arg, message) => arg.NotNegative(i =>
                 {

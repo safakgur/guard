@@ -96,7 +96,7 @@
                 }
 
                 // Validate the member.
-                var memberArgument = Argument(memberValue, info.Name);
+                var memberArgument = Argument(memberValue, info.Name, argument.Secure);
                 try
                 {
                     validation(memberArgument);
@@ -106,7 +106,7 @@
                     var m = message?.Invoke(argument.Value, memberValue, ex) ?? ex.Message;
                     throw !validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m);
                 }
             }
 
@@ -201,7 +201,7 @@
                 }
 
                 // Validate the member.
-                var memberArgument = Argument(memberValue, info.Name);
+                var memberArgument = Argument(memberValue, info.Name, argument.Secure);
                 try
                 {
                     validation(memberArgument);
@@ -211,7 +211,7 @@
                     var m = message?.Invoke(argument.Value.Value, memberValue, ex) ?? ex.Message;
                     throw !validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Value, m);
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m);
                 }
             }
 
@@ -264,10 +264,10 @@
                     var key = (mexp.Member, i);
                     if (!Cache.TryGetValue(key, out var info))
                     {
+                        info = new ArgumentMemberInfo<T, TMember>(mexp, lexp.Compile());
                         CacheLock.EnterWriteLock();
                         try
                         {
-                            info = new ArgumentMemberInfo<T, TMember>(mexp, lexp.Compile());
                             Cache[key] = info;
                         }
                         finally
