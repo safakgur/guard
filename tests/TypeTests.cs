@@ -9,9 +9,19 @@
         [InlineData("A")]
         public void GenericReferenceType(string value)
         {
-            var valueArg = Guard.Argument(value as object, nameof(value));
-            value = valueArg.Type<string>();
-            valueArg.NotType<int>();
+            for (var i = 0; i < 2; i++)
+            {
+                var arg = new Guard.ArgumentInfo<object>(
+                    value, nameof(value), i % 2 == 0, i % 2 != 0);
+
+                var typedArg = arg.Type<string>();
+                Assert.IsType<Guard.ArgumentInfo<string>>(typedArg);
+                Assert.Equal(arg.Modified, typedArg.Modified);
+                Assert.Equal(arg.Secure, typedArg.Secure);
+            }
+
+            var valueArg = Guard.Argument(value as object, nameof(value))
+                .NotType<int>();
 
             if (value is null)
             {
@@ -91,6 +101,17 @@
         [InlineData(1)]
         public void GenericValueType(int? value)
         {
+            for (var i = 0; i < 2; i++)
+            {
+                var arg = new Guard.ArgumentInfo<object>(
+                    value, nameof(value), i % 2 == 0, i % 2 != 0);
+
+                var typedArg = arg.Type<int?>();
+                Assert.IsType<Guard.ArgumentInfo<int?>>(typedArg);
+                Assert.Equal(arg.Modified, typedArg.Modified);
+                Assert.Equal(arg.Secure, typedArg.Secure);
+            }
+
             var valueArg = Guard.Argument(value as object, nameof(value));
             value = valueArg.Type<int?>();
             valueArg.NotType<string>();
@@ -112,7 +133,7 @@
                 return;
             }
 
-            int i = valueArg.Type<int>();
+            valueArg.Type<int>();
 
             ThrowsArgumentException(
                 valueArg,

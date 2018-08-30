@@ -1,7 +1,7 @@
 param(
     [switch]$NoInstall=$false,
-    [string]$Configuration="Release",
-    [string]$Framework="netstandard2.0"
+    [ValidateSet("Debug","Release","CI")][string]$Configuration="Release",
+    [ValidateSet("netstandard1.0","netstandard2.0")][string]$Framework="netstandard2.0"
 )
 
 IF ($NoInstall -eq $false)
@@ -22,3 +22,5 @@ IF (-not (Test-Path $SdkPath))
 
 & $SdkPath restore $PSScriptRoot/../src --verbosity m
 & $SdkPath build $PSScriptRoot/../src -c $Configuration -o ../artifacts/build/$Framework/ -f $Framework
+
+exit $lastexitcode

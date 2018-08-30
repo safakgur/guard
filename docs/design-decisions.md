@@ -44,20 +44,6 @@ A compile-time symbol to toggle byref arguments/returns may be added in the futu
 that doesn't take advantage of the new features can be compiled with copy-by-value semantics and
 live as a separate package.
 
-## Experimenting with `ref struct`s
-
-C# 7.2 also introduced the concept of `ref struct`s. Value types declared as `ref struct` must be
-stack allocated, so they can never be created on the heap as a member of another class. They can't
-implement interfaces, be boxed, or be declared as local variables inside state machines
-(iterators/async methods). They are also not allowed as delegate parameters.
-
-Although these restrictions are introduced mainly for structures that interop with unmanaged memory,
-I thought they could also work for us, preventing many ways of misusing the guarded arguments.
-
-But unfortunately, these limitations make the library very hard to test for so little benefits.
-I may look into writing some Roslyn analyzers to check for correct usage at some point but I think
-that too wouldn't worth the effort, considering the use of this library being pretty straightforward.
-
 ## Initializing a Guarded Argument
 
 Guard needs to know the argument's value to test it against preconditions and its name to include in
@@ -155,6 +141,37 @@ In the second example, we see that the `NotNull` validation accepts the error me
 instead of a factory. This is because it only throws an exception if the argument value is null.
 Therefore the only possible value that can be passed to a factory would be null.
 
+## Secure Arguments
+
+Exceptions thrown for failed Guard validations contain very descriptive messages.
+
+```c#
+// Throws with message: "token must be a2C-p."
+Guard.Argument("abc", "token").Equal("a2C-p");
+
+// Throws with message: "number must be one of the following: 1, 2, 3"
+Guard.Argument(0, "number").In(1, 2, 3);
+```
+
+There may be cases where you don't want to expose that additional data to the caller. For these
+scenarios, you can specify the optional "secure" flag when you initialize the argument.
+
+```c#
+// Throws with message: "token is invalid."
+Guard.Argument("abc", "token", true).Equal("a2C-p");
+
+// Throws with message: "number is invalid."
+Guard.Argument(0, "number", true).In(1, 2, 3);
+```
+
+Things to note:
+
+* Parameter names are never secured.
+* Min/Max values of range checks are never secured.
+* Type names are never secured.
+* Exceptions that are not directly thrown by the library are never secured.
+* When in doubt, see [the source][1] that provides the default messages.
+
 ## Automatic Nullable Value Conversions
 
 Using the `NotNull` validation on a nullable value type would convert the `ArgumentInfo<T?>` to an
@@ -248,3 +265,5 @@ BuyCar(buyer, car);
 
 The above code throws an `ArgumentException` with the parameter name "buyer" and message
 "Address.City cannot be null.".
+
+[1]: ../src/Guard.Messages.cs

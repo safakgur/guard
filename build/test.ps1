@@ -1,8 +1,8 @@
 param(
     [switch]$NoInstall=$false,
-    [string]$Configuration="Release",
+    [ValidateSet("Debug","Release","CI")][string]$Configuration="Release",
     [switch]$Coverage=$false,
-    [string]$CoverageFormat="opencover",
+    [ValidateSet("json","lcov","opencover","cobertura")][string]$CoverageFormat="opencover",
     [string]$CoverageOutput="../artifacts/coverage.xml"
 )
 
@@ -29,3 +29,5 @@ IF (-not (Test-Path $SdkPath))
     /p:CollectCoverage=$Coverage `
     /p:CoverletOutputFormat=$CoverageFormat `
     /p:CoverletOutput="$CoverageOutput"
+
+exit $lastexitcode
