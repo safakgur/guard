@@ -1,9 +1,11 @@
 ﻿#if !NETSTANDARD1_0
+
 namespace Dawn
 {
     using System;
     using System.Collections.Generic;
     using System.Net.Mail;
+    using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="MailAddress" /> arguments.</content>
     public static partial class Guard
@@ -19,6 +21,7 @@ namespace Dawn
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value's host is not <paramref name="host" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<MailAddress> HasHost(
             in this ArgumentInfo<MailAddress> argument,
             string host,
@@ -45,6 +48,7 @@ namespace Dawn
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value's host is <paramref name="host" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveHost(
             in this ArgumentInfo<MailAddress> argument,
             string host,
@@ -63,18 +67,16 @@ namespace Dawn
         /// <summary>Requires the argument value to have one of the specified hosts.</summary>
         /// <typeparam name="TCollection">The type of the hosts collection.</typeparam>
         /// <param name="argument">The email address argument.</param>
-        /// <param name="hosts">
-        ///     The hosts that the argument value is required to have one of.
-        /// </param>
+        /// <param name="hosts">The hosts that the argument value is required to have one of.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value's host is not specified in
-        ///     <paramref name="hosts" />.
+        ///     <paramref name="argument" /> value's host is not specified in <paramref name="hosts" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<MailAddress> HostIn<TCollection>(
             in this ArgumentInfo<MailAddress> argument,
             TCollection hosts,
@@ -94,9 +96,7 @@ namespace Dawn
         /// <summary>Requires the argument value to have none of the specified hosts.</summary>
         /// <typeparam name="TCollection">The type of the hosts collection.</typeparam>
         /// <param name="argument">The email address argument.</param>
-        /// <param name="hosts">
-        ///     The hosts that the argument value is required not to have any.
-        /// </param>
+        /// <param name="hosts">The hosts that the argument value is required not to have any.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
@@ -105,6 +105,7 @@ namespace Dawn
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value's host is specified in <paramref name="hosts" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<MailAddress> HostNotIn<TCollection>(
             in this ArgumentInfo<MailAddress> argument,
             TCollection hosts,
@@ -131,6 +132,7 @@ namespace Dawn
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value does not have a display name specified.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<MailAddress> HasDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {
@@ -153,6 +155,7 @@ namespace Dawn
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value has a display name specified.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {
@@ -166,4 +169,5 @@ namespace Dawn
         }
     }
 }
+
 #endif

@@ -120,11 +120,54 @@
                     : i == 7 ? new Guard.ArgumentInfo<T>(value, null, false, true)
                              : new Guard.ArgumentInfo<T>(value, null, true, true);
 
-
                 Assert.Equal(value, arg.Value);
                 Assert.Contains(typeof(T).ToString(), arg.Name);
                 Assert.Equal(i == 2 || i == 5 || i == 8, arg.Modified);
                 Assert.Equal(i == 6 || i == 7 || i == 8, arg.Secure);
+            }
+        }
+
+        [Theory(DisplayName = T + "Argument: ToString")]
+        [InlineData(null)]
+        [InlineData(1)]
+        [InlineData("S")]
+        public void ConvertToString<T>(T value)
+        {
+            var valueArg = Guard.Argument(() => value);
+            if (valueArg.HasValue())
+                Assert.Equal(value.ToString(), valueArg.ToString());
+            else
+                Assert.Same(string.Empty, valueArg.ToString());
+        }
+
+        [Theory(DisplayName = T + "Argument: DebuggerDisplay")]
+        [InlineData(null)]
+        [InlineData(1)]
+        [InlineData("S")]
+        public void DebuggerDisplay<T>(T value)
+        {
+            const StringComparison ignoreCase = StringComparison.OrdinalIgnoreCase;
+            for (var i = 0; i < 3; i++)
+            {
+                var hasName = i <= 1;
+                var isSecure = i >= 1;
+                var valueArg = Guard.Argument(value, hasName ? nameof(value) : null, isSecure);
+
+                var display = valueArg.DebuggerDisplay;
+                if (hasName)
+                    Assert.Contains(nameof(value), display);
+                else
+                    Assert.DoesNotContain(nameof(value), display);
+
+                if (isSecure)
+                    Assert.Contains("SECURE", display, ignoreCase);
+                else
+                    Assert.DoesNotContain("SECURE", display, ignoreCase);
+
+                if (valueArg.HasValue())
+                    Assert.Contains(value.ToString(), display);
+                else
+                    Assert.Contains("NULL", display, ignoreCase);
             }
         }
     }

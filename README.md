@@ -1,13 +1,14 @@
 # Guard
 
-[![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
-[![Build](https://ci.appveyor.com/api/projects/status/add0vx8i2yacvprf/branch/dev?svg=true)](https://ci.appveyor.com/project/safak/guard/branch/dev)
-[![Tests](https://img.shields.io/appveyor/tests/safak/guard/dev.svg)](https://ci.appveyor.com/project/safak/guard/branch/dev)
-[![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)
-
 ![Logo](media/guard-64.png)
 
 Guard is a fluent argument validation library that is intuitive, fast and extensible.
+
+[![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
+[![Windows/Linux](https://ci.appveyor.com/api/projects/status/add0vx8i2yacvprf/branch/dev?svg=true)](https://ci.appveyor.com/project/safak/guard/branch/dev)
+[![macOS](https://travis-ci.org/safakgur/guard.svg?branch=dev)](https://travis-ci.org/safakgur/guard)
+[![Tests](https://img.shields.io/appveyor/tests/safak/guard/dev.svg)](https://ci.appveyor.com/project/safak/guard/branch/dev)
+[![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)
 
 * [Introduction](#introduction)
 * [What's Wrong with Vanilla?](#whats-wrong-with-vanilla)
@@ -57,7 +58,7 @@ public Person(string firstName, string lastName)
 
 If this looks like too much allocations to you, fear not. The arguments are read-only structs that
 are passed by reference, and there are ways other than member expressions to initialize them.
-See the [design decisions][1] for details.
+See the [design decisions](#design-decisions) for details.
 
 ## What's Wrong with Vanilla?
 

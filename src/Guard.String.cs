@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using System.Text.RegularExpressions;
+    using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="string" /> arguments.</content>
     public static partial class Guard
@@ -16,9 +17,9 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c> and contains one or
-        ///     more characters.
+        ///     <paramref name="argument" /> value is not <c>null</c> and contains one or more characters.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> Empty(
             in this ArgumentInfo<string> argument, Func<string, string> message)
         {
@@ -39,9 +40,9 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c> and does not contain
-        ///     any characters.
+        ///     <paramref name="argument" /> value is not <c>null</c> and does not contain any characters.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> NotEmpty(
             in this ArgumentInfo<string> argument, string message = null)
         {
@@ -55,8 +56,7 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a string value that consists only of
-        ///     white-space characters.
+        ///     Requires the argument to have a string value that consists only of white-space characters.
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="message">
@@ -68,6 +68,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and contains one or more
         ///     characters that are not white-space.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> WhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
@@ -91,9 +92,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c>
-        ///     and contains only of white-space characters.
+        ///     <paramref name="argument" /> value is not <c>null</c> and contains only of
+        ///     white-space characters.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> NotWhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
@@ -123,6 +125,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and contains less than the
         ///     specified number of characters.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> MinLength(
             in this ArgumentInfo<string> argument,
             int minLength,
@@ -139,8 +142,8 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a string value that contains no more than the
-        ///     specified number of characters.
+        ///     Requires the argument to have a string value that contains no more than the specified
+        ///     number of characters.
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="maxLength">
@@ -155,6 +158,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and contains more than the
         ///     specified number of characters.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> MaxLength(
             in this ArgumentInfo<string> argument,
             int maxLength,
@@ -187,9 +191,9 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not <c>null</c> and contains either less than
-        ///     <paramref name="minLength" /> or more than <paramref name="maxLength" /> number
-        ///     of characters.
+        ///     <paramref name="minLength" /> or more than <paramref name="maxLength" /> number of characters.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> LengthInRange(
             in this ArgumentInfo<string> argument,
             int minLength,
@@ -214,9 +218,7 @@
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="other">The string to compare the argument value to.</param>
-        /// <param name="comparison">
-        ///     The rules that specify how the strings will be compared.
-        /// </param>
+        /// <param name="comparison">The rules that specify how the strings will be compared.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
@@ -226,6 +228,7 @@
         ///     <paramref name="argument" /> value is not equal to <paramref name="other" /> by the
         ///     comparison rules specified in <paramref name="comparison" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> Equal(
             in this ArgumentInfo<string> argument,
             string other,
@@ -247,9 +250,7 @@
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="other">The string to compare the argument value to.</param>
-        /// <param name="comparison">
-        ///     The rules that specify how the strings will be compared.
-        /// </param>
+        /// <param name="comparison">The rules that specify how the strings will be compared.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
@@ -259,6 +260,7 @@
         ///     <paramref name="argument" /> value is equal to <paramref name="other" /> by the
         ///     comparison rules specified in <paramref name="comparison" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> NotEqual(
             in this ArgumentInfo<string> argument,
             string other,
@@ -285,9 +287,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value does not start with <paramref name="value" />
-        ///     when a case-sensitive and culture-sensitive comparison is performed.
+        ///     <paramref name="argument" /> value does not start with <paramref name="value" /> when
+        ///     a case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> StartsWith(
             in this ArgumentInfo<string> argument,
@@ -296,23 +299,22 @@
             => ref argument.StartsWith(value, StringComparison.CurrentCulture, message);
 
         /// <summary>
-        ///     Requires the beginning of the string argument to match with the specified string
-        ///     when compared by the specified rules.
+        ///     Requires the beginning of the string argument to match with the specified string when
+        ///     compared by the specified rules.
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="value">The string to search in the beginning of the argument.</param>
-        /// <param name="comparison">
-        ///     The rules that specify how the strings will be compared.
-        /// </param>
+        /// <param name="comparison">The rules that specify how the strings will be compared.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value does not start with <paramref name="value" />
-        ///     when compared by the comparison rules specified in <paramref name="comparison" />.
+        ///     <paramref name="argument" /> value does not start with <paramref name="value" /> when
+        ///     compared by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> StartsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -329,8 +331,7 @@
         }
 
         /// <summary>
-        ///     Requires the beginning of the string argument to be different than the
-        ///     specified string.
+        ///     Requires the beginning of the string argument to be different than the specified string.
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="value">The string to search in the beginning of the argument.</param>
@@ -343,6 +344,7 @@
         ///     <paramref name="argument" /> value starts with <paramref name="value" /> when a
         ///     case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> DoesNotStartWith(
             in this ArgumentInfo<string> argument,
@@ -356,9 +358,7 @@
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="value">The string to search in the beginning of the argument.</param>
-        /// <param name="comparison">
-        ///     The rules that specify how the strings will be compared.
-        /// </param>
+        /// <param name="comparison">The rules that specify how the strings will be compared.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
@@ -368,6 +368,7 @@
         ///     <paramref name="argument" /> value starts with <paramref name="value" /> when
         ///     compared by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> DoesNotStartWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -394,9 +395,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value does not end with <paramref name="value" /> when
-        ///     a case-sensitive and culture-sensitive comparison is performed.
+        ///     <paramref name="argument" /> value does not end with <paramref name="value" /> when a
+        ///     case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> EndsWith(
             in this ArgumentInfo<string> argument,
@@ -410,9 +412,7 @@
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="value">The string to search in the end of the argument.</param>
-        /// <param name="comparison">
-        ///     The rules that specify how the strings will be compared.
-        /// </param>
+        /// <param name="comparison">The rules that specify how the strings will be compared.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
@@ -422,6 +422,7 @@
         ///     <paramref name="argument" /> value does not end with <paramref name="value" /> when
         ///     compared by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> EndsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -451,6 +452,7 @@
         ///     <paramref name="argument" /> value ends with <paramref name="value" /> when a
         ///     case-sensitive and culture-sensitive comparison is performed.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<string> DoesNotEndWith(
             in this ArgumentInfo<string> argument,
@@ -464,9 +466,7 @@
         /// </summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="value">The string to search in the end of the argument.</param>
-        /// <param name="comparison">
-        ///     The rules that specify how the strings will be compared.
-        /// </param>
+        /// <param name="comparison">The rules that specify how the strings will be compared.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
@@ -476,6 +476,7 @@
         ///     <paramref name="argument" /> value ends with <paramref name="value" /> when compared
         ///     by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> DoesNotEndWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -506,9 +507,10 @@
         ///     <paramref name="pattern" /> cannot be parsed as a regular expression, or the
         ///     resulting expression could not find a match in <paramref name="argument" />'s value.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
-            string pattern,
+            [RegexPattern] string pattern,
             Func<string, bool, string> message = null)
         {
             if (argument.HasValue() && pattern != null)
@@ -553,16 +555,15 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="pattern" /> cannot be parsed as a regular expression, the resulting
-        ///     expression timed out, or it could not find a match in <paramref name="argument" />'s
-        ///     value.
+        ///     expression timed out, or it could not find a match in <paramref name="argument" />'s value.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="matchTimeout" /> is negative, zero, or greater than approximately
-        ///     24 days.
+        ///     <paramref name="matchTimeout" /> is negative, zero, or greater than approximately 24 days.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
-            string pattern,
+            [RegexPattern] string pattern,
             TimeSpan matchTimeout,
             Func<string, bool, string> message = null)
         {
@@ -613,6 +614,7 @@
         ///     <paramref name="regex" /> could not find a match in <paramref name="argument" />'s
         ///     value or it timed out before the evaluation is completed.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
             Regex regex,
@@ -661,9 +663,10 @@
         ///     <paramref name="pattern" /> cannot be parsed as a regular expression, or the
         ///     resulting expression found a match in <paramref name="argument" />'s value.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
-            string pattern,
+            [RegexPattern] string pattern,
             Func<string, bool, string> message = null)
         {
             if (argument.HasValue() && pattern != null)
@@ -712,12 +715,12 @@
         ///     expression timed out, or it found a match in <paramref name="argument" />'s value.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="matchTimeout" /> is negative, zero, or greater than approximately
-        ///     24 days.
+        ///     <paramref name="matchTimeout" /> is negative, zero, or greater than approximately 24 days.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
-            string pattern,
+            [RegexPattern] string pattern,
             TimeSpan matchTimeout,
             Func<string, bool, string> message = null)
         {
@@ -766,9 +769,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="regex" /> found a match in <paramref name="argument" />'s value or
-        ///     it timed out before the evaluation is completed.
+        ///     <paramref name="regex" /> found a match in <paramref name="argument" />'s value or it
+        ///     timed out before the evaluation is completed.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
             Regex regex,
@@ -802,8 +806,7 @@
         }
 
         /// <summary>
-        ///     Returns the string comparer that is most
-        ///     relevant to the specified enumeration value.
+        ///     Returns the string comparer that is most relevant to the specified enumeration value.
         /// </summary>
         /// <param name="comparison">
         ///     An enumeration value that specifies how to compare two strings.

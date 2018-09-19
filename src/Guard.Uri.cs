@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.CompilerServices;
+    using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="Uri" /> arguments.</content>
     public static partial class Guard
@@ -22,6 +23,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor an absolute URI.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<Uri> Absolute(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
@@ -44,6 +46,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor a relative URI.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<Uri> Relative(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
@@ -70,6 +73,7 @@
         ///     <paramref name="argument" /> value is neither <c>null</c> nor an absolute URI with
         ///     the scheme specified by <paramref name="scheme" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<Uri> Scheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
@@ -95,9 +99,9 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is an absolute URI with the scheme specified by
-        ///     <paramref name="scheme" />.
+        ///     <paramref name="argument" /> value is an absolute URI with the scheme specified by <paramref name="scheme" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<Uri> NotScheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
@@ -125,6 +129,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and its scheme is neither HTTP
         ///     nor HTTPS.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
@@ -147,6 +152,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and does not have one of the
         ///     required schemes.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, bool allowHttps, Func<Uri, string> message = null)
         {
@@ -166,9 +172,7 @@
             throw new ArgumentException(m, argument.Name);
         }
 
-        /// <summary>
-        ///     Requires the argument value to be an absolute URI with the HTTPS scheme.
-        /// </summary>
+        /// <summary>Requires the argument value to be an absolute URI with the HTTPS scheme.</summary>
         /// <param name="argument">The URI argument.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
@@ -176,9 +180,9 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c> and does not have the
-        ///     HTTPS scheme.
+        ///     <paramref name="argument" /> value is not <c>null</c> and does not have the HTTPS scheme.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<Uri> Https(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {

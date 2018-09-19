@@ -3,13 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="System.Enum" /> arguments.</content>
     public static partial class Guard
     {
         /// <summary>
-        ///     Requires the enum argument to have a value that is a defined member of the enum type
-        ///     <typeparamref name="T" />.
+        ///     Requires the enum argument to have a value that is a defined member of the enum type <typeparamref name="T" />.
         /// </summary>
         /// <param name="argument">The enum argument.</param>
         /// <param name="message">
@@ -18,9 +18,9 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not a defined member of the enum type
-        ///     <typeparamref name="T" />.
+        ///     <paramref name="argument" /> value is not a defined member of the enum type <typeparamref name="T" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> Defined<T>(
             this in ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, System.Enum
@@ -45,9 +45,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is neither <c>null</c> nor a defined member of
-        ///     the enum type <typeparamref name="T" />.
+        ///     <paramref name="argument" /> value is neither <c>null</c> nor a defined member of the
+        ///     enum type <typeparamref name="T" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> Defined<T>(
             this in ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, System.Enum
@@ -79,6 +80,7 @@
         ///     <paramref name="argument" /> value does not have the bits specified in
         ///     <paramref name="flag" /> set.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> HasFlag<T>(
             this in ArgumentInfo<T> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -107,6 +109,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and does not have the bits
         ///     specified in <paramref name="flag" /> set.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> HasFlag<T>(
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -138,6 +141,7 @@
         ///     <paramref name="argument" /> value has one or more of the bits specified in
         ///     <paramref name="flag" /> set.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> DoesNotHaveFlag<T>(
             this in ArgumentInfo<T> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -163,9 +167,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c> and has one or more of the
-        ///     bits specified in <paramref name="flag" /> set.
+        ///     <paramref name="argument" /> value is not <c>null</c> and has one or more of the bits
+        ///     specified in <paramref name="flag" /> set.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> DoesNotHaveFlag<T>(
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -184,8 +189,7 @@
         }
 
         /// <summary>
-        ///     Provides a compiled flag comparer and cached values of the enum type
-        ///     <typeparamref name="T" />.
+        ///     Provides a compiled flag comparer and cached values of the enum type <typeparamref name="T" />.
         /// </summary>
         /// <typeparam name="T">The type of the enum.</typeparam>
         private static class EnumInfo<T>
@@ -200,8 +204,7 @@
 
             /// <summary>Initializes <see cref="HasFlag" />.</summary>
             /// <returns>
-            ///     A function that checks whether an enum
-            ///     value has the specified flag bits set.
+            ///     A function that checks whether an enum value has the specified flag bits set.
             /// </returns>
             private static Func<T, T, bool> InitHasFlag()
             {
