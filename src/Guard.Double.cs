@@ -1,13 +1,14 @@
 ﻿namespace Dawn
 {
     using System;
+    using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="double" /> arguments.</content>
     public static partial class Guard
     {
         /// <summary>
-        ///     Requires the double-precision floating-point argument to have a value that is
-        ///     "not a number" (<see cref="double.NaN" />).
+        ///     Requires the double-precision floating-point argument to have a value that is "not a
+        ///     number" ( <see cref="double.NaN" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -16,13 +17,14 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not <see cref="double.NaN" />, and the
-        ///     argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is not <see cref="double.NaN" />, and the argument
+        ///     is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <see cref="double.NaN" />, and the
-        ///     argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is not <see cref="double.NaN" />, and the argument
+        ///     is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> NaN(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -39,7 +41,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is either
-        ///     <c>null</c> or "not a number" (<see cref="double.NaN" />).
+        ///     <c>null</c> or "not a number" ( <see cref="double.NaN" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -56,12 +58,12 @@
         ///     <see cref="double.NaN" />, and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> NaN(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -82,7 +84,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is not
-        ///     "not a number" (<see cref="double.NaN" />).
+        ///     "not a number" ( <see cref="double.NaN" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -97,6 +99,7 @@
         ///     <paramref name="argument" /> value is <see cref="double.NaN" />, and the argument is
         ///     modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> NotNaN(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -113,7 +116,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is not
-        ///     "not a number" (<see cref="double.NaN" />).
+        ///     "not a number" ( <see cref="double.NaN" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -128,6 +131,7 @@
         ///     <paramref name="argument" /> value is <see cref="double.NaN" />, and the argument is
         ///     modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> NotNaN(
             in this ArgumentInfo<double?> argument, string message = null)
         {
@@ -148,8 +152,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is either
-        ///     positive infinity (<see cref="double.PositiveInfinity" />) or negative infinity
-        ///     (<see cref="double.NegativeInfinity" />).
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />) or negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -159,14 +162,14 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <see cref="double.PositiveInfinity" />
-        ///     nor <see cref="double.NegativeInfinity" />, and the argument is not modified since
-        ///     it is initialized.
+        ///     nor <see cref="double.NegativeInfinity" />, and the argument is not modified since it
+        ///     is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is neither <see cref="double.PositiveInfinity" />
-        ///     nor <see cref="double.NegativeInfinity" />, and the argument is modified after its
-        ///     initialization.
+        ///     nor <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> Infinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -183,8 +186,8 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is
-        ///     <c>null</c>, positive infinity (<see cref="double.PositiveInfinity" />) or negative
-        ///     infinity (<see cref="double.NegativeInfinity" />).
+        ///     <c>null</c>, positive infinity ( <see cref="double.PositiveInfinity" />) or negative
+        ///     infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -194,21 +197,21 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is not <c>null</c>, not
-        ///     <see cref="double.PositiveInfinity" /> and not <see cref="double.NegativeInfinity" />,
-        ///     and the argument is not modified since it is initialized.
+        ///     <see cref="double.PositiveInfinity" /> and not
+        ///     <see cref="double.NegativeInfinity" />, and the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is not <c>null</c>, not
-        ///     <see cref="double.PositiveInfinity" /> and not <see cref="double.NegativeInfinity" />,
-        ///     and the argument is modified after its initialization.
+        ///     <see cref="double.PositiveInfinity" /> and not
+        ///     <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> Infinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -228,9 +231,8 @@
         }
 
         /// <summary>
-        ///     Requires the double-precision floating-point argument to have a value that is
-        ///     neither positive infinity (<see cref="double.PositiveInfinity" />) nor negative
-        ///     infinity (<see cref="double.NegativeInfinity" />).
+        ///     Requires the double-precision floating-point argument to have a value that is neither
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />) nor negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -244,9 +246,9 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
-        ///     initialization.
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double, string>`.")]
         public static ref readonly ArgumentInfo<double> NotInfinity(
             in this ArgumentInfo<double> argument, string message)
@@ -263,9 +265,8 @@
         }
 
         /// <summary>
-        ///     Requires the double-precision floating-point argument to have a value that is
-        ///     neither positive infinity (<see cref="double.PositiveInfinity" />) nor negative
-        ///     infinity (<see cref="double.NegativeInfinity" />).
+        ///     Requires the double-precision floating-point argument to have a value that is neither
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />) nor negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -280,9 +281,9 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
-        ///     initialization.
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> NotInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -298,9 +299,8 @@
         }
 
         /// <summary>
-        ///     Requires the double-precision floating-point argument to have a value that is
-        ///     neither positive infinity (<see cref="double.PositiveInfinity" />) nor negative
-        ///     infinity (<see cref="double.NegativeInfinity" />).
+        ///     Requires the double-precision floating-point argument to have a value that is neither
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />) nor negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -314,9 +314,9 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
-        ///     initialization.
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double?, string>`.")]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
             in this ArgumentInfo<double?> argument, string message)
@@ -333,9 +333,8 @@
         }
 
         /// <summary>
-        ///     Requires the double-precision floating-point argument to have a value that is
-        ///     neither positive infinity (<see cref="double.PositiveInfinity" />) nor negative
-        ///     infinity (<see cref="double.NegativeInfinity" />).
+        ///     Requires the double-precision floating-point argument to have a value that is neither
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />) nor negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -350,16 +349,15 @@
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its
-        ///     initialization.
+        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -380,7 +378,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is
-        ///     positive infinity (<see cref="double.PositiveInfinity" />).
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -389,13 +387,14 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not <see cref="double.PositiveInfinity" />,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is not <see cref="double.PositiveInfinity" />, and
+        ///     the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <see cref="double.PositiveInfinity" />,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is not <see cref="double.PositiveInfinity" />, and
+        ///     the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> PositiveInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -412,7 +411,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is either
-        ///     <c>null</c> or positive infinity (<see cref="double.PositiveInfinity" />).
+        ///     <c>null</c> or positive infinity ( <see cref="double.PositiveInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -422,21 +421,19 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
-        ///     <see cref="double.PositiveInfinity" />, and the argument is not modified
-        ///     since it is initialized.
+        ///     <see cref="double.PositiveInfinity" />, and the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
-        ///     <see cref="double.PositiveInfinity" />, and the argument is modified
-        ///     after its initialization.
+        ///     <see cref="double.PositiveInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> PositiveInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -457,7 +454,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is not
-        ///     positive infinity (<see cref="double.PositiveInfinity" />).
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -465,13 +462,14 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and the
+        ///     argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and the
+        ///     argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> NotPositiveInfinity(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -488,7 +486,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is not
-        ///     positive infinity (<see cref="double.PositiveInfinity" />).
+        ///     positive infinity ( <see cref="double.PositiveInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -496,13 +494,14 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and the
+        ///     argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is <see cref="double.PositiveInfinity" />, and the
+        ///     argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> NotPositiveInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {
@@ -523,7 +522,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is
-        ///     negative infinity (<see cref="double.NegativeInfinity" />).
+        ///     negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -532,13 +531,14 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not <see cref="double.NegativeInfinity" />,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is not <see cref="double.NegativeInfinity" />, and
+        ///     the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <see cref="double.NegativeInfinity" />,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is not <see cref="double.NegativeInfinity" />, and
+        ///     the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> NegativeInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -555,7 +555,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is either
-        ///     <c>null</c> or negative infinity (<see cref="double.NegativeInfinity" />).
+        ///     <c>null</c> or negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -565,21 +565,19 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
-        ///     <see cref="double.NegativeInfinity" />, and the argument is not
-        ///     modified since it is initialized.
+        ///     <see cref="double.NegativeInfinity" />, and the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is neither <c>null</c> nor
-        ///     <see cref="double.NegativeInfinity" />, and the argument is
-        ///     modified after its initialization.
+        ///     <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> NegativeInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -600,7 +598,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is not
-        ///     negative infinity (<see cref="double.NegativeInfinity" />).
+        ///     negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -608,13 +606,14 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and the
+        ///     argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and the
+        ///     argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double> NotNegativeInfinity(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -631,7 +630,7 @@
 
         /// <summary>
         ///     Requires the double-precision floating-point argument to have a value that is not
-        ///     negative infinity (<see cref="double.NegativeInfinity" />).
+        ///     negative infinity ( <see cref="double.NegativeInfinity" />).
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -639,13 +638,14 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and the
+        ///     argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is <see cref="double.NegativeInfinity" />, and the
+        ///     argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<double?> NotNegativeInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {

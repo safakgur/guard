@@ -57,7 +57,6 @@
             }
 
             var dateTime = nullableDateTime.Value;
-            var timeOfDay = dateTime.TimeOfDay;
 
             var innerException = null as Exception;
             var thrown = ThrowsArgumentException(

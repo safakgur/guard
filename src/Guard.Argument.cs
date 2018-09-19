@@ -5,14 +5,14 @@
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
+    using JetBrains.Annotations;
 
     /// <summary>Validates argument preconditions.</summary>
     /// <content>Contains the argument initialization methods.</content>
     public static partial class Guard
     {
         /// <summary>
-        ///     Returns an object that can be used to assert preconditions for the specified
-        ///     method argument.
+        ///     Returns an object that can be used to assert preconditions for the specified method argument.
         /// </summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
         /// <param name="e">An expression that specifies a method argument.</param>
@@ -21,12 +21,9 @@
         ///     messages of failed validations.
         /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="e" /> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="e" /> is not a <see cref="MemberExpression" />.
-        /// </exception>
+        /// <exception cref="ArgumentNullException"><paramref name="e" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="e" /> is not a <see cref="MemberExpression" />.</exception>
+        [ContractAnnotation("e:null => halt")]
         [DebuggerStepThrough]
         public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e, bool secure = false)
         {
@@ -46,7 +43,7 @@
         /// <param name="value">The value of the method argument.</param>
         /// <param name="name">
         ///     <para>
-        ///         The name of the method argument. Use the <c>nameof</c> operator (<c>Nameof</c>
+        ///         The name of the method argument. Use the <c>nameof</c> operator ( <c>Nameof</c>
         ///         in Visual Basic) where possible.
         ///     </para>
         ///     <para>
@@ -60,7 +57,8 @@
         /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
         [DebuggerStepThrough]
-        public static ArgumentInfo<T> Argument<T>(T value, string name = null, bool secure = false)
+        public static ArgumentInfo<T> Argument<T>(
+            T value, [InvokerParameterName] string name = null, bool secure = false)
             => new ArgumentInfo<T>(value, name, secure: secure);
 
         /// <summary>Represents a method argument.</summary>
@@ -69,16 +67,14 @@
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArgumentInfo<T>
         {
-            /// <summary>
-            ///     The default name for the arguments of type <typeparamref name="T" />.
-            /// </summary>
+            /// <summary>The default name for the arguments of type <typeparamref name="T" />.</summary>
             private static readonly string defaultName = $"The {typeof(T)} argument";
 
             /// <summary>The argument name.</summary>
             private readonly string name;
 
             /// <summary>
-            ///     Initializes a new instance of the <see cref="ArgumentInfo{T} "/> struct.
+            ///     Initializes a new instance of the <see cref="ArgumentInfo{T} " /> struct.
             /// </summary>
             /// <param name="value">The value of the method argument.</param>
             /// <param name="name">The name of the method argument.</param>
@@ -91,7 +87,11 @@
             ///     messages of failed validations.
             /// </param>
             [DebuggerStepThrough]
-            public ArgumentInfo(T value, string name, bool modified = false, bool secure = false)
+            public ArgumentInfo(
+                T value,
+                [InvokerParameterName] string name,
+                bool modified = false,
+                bool secure = false)
             {
                 this.Value = value;
                 this.name = name;
@@ -112,17 +112,15 @@
             public bool Modified { get; }
 
             /// <summary>
-            ///     Gets a value indicating whether sensitive information may be used to validate
-            ///     the argument. If <c>true</c>, exception messages provide less information about
-            ///     the validation parameters.
+            ///     Gets a value indicating whether sensitive information may be used to validate the
+            ///     argument. If <c>true</c>, exception messages provide less information about the
+            ///     validation parameters.
             /// </summary>
             public bool Secure { get; }
 
-            /// <summary>
-            ///     Gets how the layout is displayed in the debugger variable windows.
-            /// </summary>
+            /// <summary>Gets how the layout is displayed in the debugger variable windows.</summary>
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-            private string DebuggerDisplay
+            internal string DebuggerDisplay
             {
                 get
                 {
@@ -140,8 +138,7 @@
 
             /// <summary>Determines whether the argument value is not <c>null</c>.</summary>
             /// <returns>
-            ///     <c>true</c>, if <see cref="Value" /> is not <c>null</c>; otherwise,
-            ///     <c>false</c>.
+            ///     <c>true</c>, if <see cref="Value" /> is not <c>null</c>; otherwise, <c>false</c>.
             /// </returns>
             [DebuggerStepThrough]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

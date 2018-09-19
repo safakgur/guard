@@ -6,6 +6,7 @@
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Threading;
+    using JetBrains.Annotations;
 
     /// <content>Provides routed member preconditions.</content>
     public static partial class Guard
@@ -14,9 +15,7 @@
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <typeparam name="TMember">The type of the argument member to validate.</typeparam>
         /// <param name="argument">The argument.</param>
-        /// <param name="member">
-        ///     An expression that specifies the argument member to validate.
-        /// </param>
+        /// <param name="member">An expression that specifies the argument member to validate.</param>
         /// <param name="validation">The function to test the argument member against.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
@@ -24,10 +23,11 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" />s,
+        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" /> s,
         ///     member value cannot be retrieved using the compiled member expression, or
         ///     <paramref name="validation" /> has thrown an exception.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<T> Member<T, TMember>(
             in this ArgumentInfo<T> argument,
@@ -40,13 +40,11 @@
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <typeparam name="TMember">The type of the argument member to validate.</typeparam>
         /// <param name="argument">The argument.</param>
-        /// <param name="member">
-        ///     An expression that specifies the argument member to validate.
-        /// </param>
+        /// <param name="member">An expression that specifies the argument member to validate.</param>
         /// <param name="validation">The function to test the argument member against.</param>
         /// <param name="validatesRange">
-        ///     Pass <c>true</c> to throw an <see cref="ArgumentOutOfRangeException" /> instead of
-        ///     an <see cref="ArgumentException" /> if the precondition is not satisfied.
+        ///     Pass <c>true</c> to throw an <see cref="ArgumentOutOfRangeException" /> instead of an
+        ///     <see cref="ArgumentException" /> if the precondition is not satisfied.
         /// </param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
@@ -54,7 +52,7 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" />s,
+        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" /> s,
         ///     member value cannot be retrieved using the compiled member expression, or
         ///     <paramref name="validation" /> has thrown an exception when
         ///     <paramref name="validatesRange" /> passed <c>false</c>.
@@ -63,6 +61,7 @@
         ///     <paramref name="validation" /> has thrown an exception when
         ///     <paramref name="validatesRange" /> passed <c>true</c>.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> Member<T, TMember>(
             in this ArgumentInfo<T> argument,
             Expression<Func<T, TMember>> member,
@@ -117,9 +116,7 @@
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <typeparam name="TMember">The type of the argument member to validate.</typeparam>
         /// <param name="argument">The argument.</param>
-        /// <param name="member">
-        ///     An expression that specifies the argument member to validate.
-        /// </param>
+        /// <param name="member">An expression that specifies the argument member to validate.</param>
         /// <param name="validation">The function to test the argument member against.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
@@ -127,10 +124,11 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" />s,
+        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" /> s,
         ///     member value cannot be retrieved using the compiled member expression, or
         ///     <paramref name="validation" /> has thrown an exception.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<T?> Member<T, TMember>(
             in this ArgumentInfo<T?> argument,
@@ -144,13 +142,11 @@
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <typeparam name="TMember">The type of the argument member to validate.</typeparam>
         /// <param name="argument">The argument.</param>
-        /// <param name="member">
-        ///     An expression that specifies the argument member to validate.
-        /// </param>
+        /// <param name="member">An expression that specifies the argument member to validate.</param>
         /// <param name="validation">The function to test the argument member against.</param>
         /// <param name="validatesRange">
-        ///     Pass <c>true</c> to throw an <see cref="ArgumentOutOfRangeException" /> instead of
-        ///     an <see cref="ArgumentException" /> if the precondition is not satisfied.
+        ///     Pass <c>true</c> to throw an <see cref="ArgumentOutOfRangeException" /> instead of an
+        ///     <see cref="ArgumentException" /> if the precondition is not satisfied.
         /// </param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
@@ -158,7 +154,7 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" />s,
+        ///     <paramref name="member" /> is not composed of <see cref="MemberExpression" /> s,
         ///     member value cannot be retrieved using the compiled member expression, or
         ///     <paramref name="validation" /> has thrown an exception when
         ///     <paramref name="validatesRange" /> passed <c>false</c>.
@@ -167,6 +163,7 @@
         ///     <paramref name="validation" /> has thrown an exception when
         ///     <paramref name="validatesRange" /> passed <c>true</c>.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> Member<T, TMember>(
             in this ArgumentInfo<T?> argument,
             Expression<Func<T, TMember>> member,
@@ -229,9 +226,7 @@
             private static readonly ReaderWriterLockSlim CacheLock
                 = new ReaderWriterLockSlim();
 
-            /// <summary>
-            ///     Returns the cached argument member for the specified lambda expression.
-            /// </summary>
+            /// <summary>Returns the cached argument member for the specified lambda expression.</summary>
             /// <typeparam name="T">The type of the argument.</typeparam>
             /// <typeparam name="TMember">The type of the argument member.</typeparam>
             /// <param name="lexp">
@@ -291,8 +286,7 @@
         private sealed class ArgumentMemberInfo<T, TMember> : ArgumentMemberInfo
         {
             /// <summary>
-            ///     Initializes a new instance of the <see cref="ArgumentMemberInfo{T, TMember}" />
-            ///     class.
+            ///     Initializes a new instance of the <see cref="ArgumentMemberInfo{T, TMember}" /> class.
             /// </summary>
             /// <param name="mexp">The member expression.</param>
             /// <param name="getValue">
