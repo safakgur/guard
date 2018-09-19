@@ -8,6 +8,7 @@
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Threading;
+    using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="IEnumerable" /> arguments.</content>
     public static partial class Guard
@@ -16,13 +17,14 @@
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> has one or more items.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> Empty<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -36,19 +38,18 @@
             return ref argument;
         }
 
-        /// <summary>
-        ///     Requires the argument to have a collection value that is not empty.
-        /// </summary>
+        /// <summary>Requires the argument to have a collection value that is not empty.</summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> is not <c>null</c> and has no items.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> NotEmpty<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -63,8 +64,8 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value that contains at least the
-        ///     specified number of items.
+        ///     Requires the argument to have a collection value that contains at least the specified
+        ///     number of items.
         /// </summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
@@ -79,6 +80,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> contains less than the specified number of items.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> MinCount<TCollection>(
             in this ArgumentInfo<TCollection> argument, int minCount, Func<TCollection, int, string> message = null)
             where TCollection : IEnumerable
@@ -109,6 +111,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> contains more than the specified number of items.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> MaxCount<TCollection>(
             in this ArgumentInfo<TCollection> argument, int maxCount, Func<TCollection, int, string> message = null)
             where TCollection : IEnumerable
@@ -123,8 +126,8 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value whose number of items is between
-        ///     the specified minimum and maximum values.
+        ///     Requires the argument to have a collection value whose number of items is between the
+        ///     specified minimum and maximum values.
         /// </summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
@@ -143,6 +146,7 @@
         ///     The number of items that the <paramref name="argument" /> value contains is either
         ///     less than <paramref name="minCount" /> or greater than <paramref name="maxCount" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> CountInRange<TCollection>(
             in this ArgumentInfo<TCollection> argument, int minCount, int maxCount, Func<TCollection, int, int, string> message = null)
             where TCollection : IEnumerable
@@ -177,6 +181,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> does not contain <paramref name="item" />.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
@@ -200,6 +205,7 @@
         ///     <paramref name="argument" /> does not contain <paramref name="item" /> by the
         ///     comparison made by <paramref name="comparer" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
@@ -217,8 +223,7 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value that does not contain the
-        ///     specified item.
+        ///     Requires the argument to have a collection value that does not contain the specified item.
         /// </summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <typeparam name="TItem">The type of the collection items.</typeparam>
@@ -229,9 +234,8 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> contains <paramref name="item" />.
-        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="argument" /> contains <paramref name="item" />.</exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
@@ -239,8 +243,7 @@
             => ref argument.DoesNotContain(item, null, message);
 
         /// <summary>
-        ///     Requires the argument to have a collection value that does not contain the
-        ///     specified item.
+        ///     Requires the argument to have a collection value that does not contain the specified item.
         /// </summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <typeparam name="TItem">The type of the collection items.</typeparam>
@@ -253,9 +256,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> contains <paramref name="item" /> by the comparison
-        ///     made by <paramref name="comparer" />.
+        ///     <paramref name="argument" /> contains <paramref name="item" /> by the comparison made
+        ///     by <paramref name="comparer" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
@@ -285,6 +289,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> does not contain <c>null</c>.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> ContainsNull<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -299,8 +304,7 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a collection value that does not contain a
-        ///     <c>null</c> element.
+        ///     Requires the argument to have a collection value that does not contain a <c>null</c> element.
         /// </summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         /// <param name="argument">The collection argument.</param>
@@ -309,9 +313,8 @@
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> contains <c>null</c>.
-        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="argument" /> contains <c>null</c>.</exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContainNull<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -338,9 +341,9 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="collection" /> does not contain the <paramref name="argument" />
-        ///     value.
+        ///     <paramref name="collection" /> does not contain the <paramref name="argument" /> value.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
@@ -366,6 +369,7 @@
         ///     <paramref name="collection" /> does not contain the <paramref name="argument" />
         ///     value by the comparison made by <paramref name="comparer" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -389,14 +393,12 @@
         /// <summary>Requires the specified items to contain the argument value.</summary>
         /// <typeparam name="TItem">The type of the argument.</typeparam>
         /// <param name="argument">The argument.</param>
-        /// <param name="items">
-        ///     The items that is required to contain the argument value.
-        /// </param>
+        /// <param name="items">The items that is required to contain the argument value.</param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="items" /> does not contain the <paramref name="argument" />
-        ///     value.
+        ///     <paramref name="items" /> does not contain the <paramref name="argument" /> value.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TItem> In<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {
@@ -429,6 +431,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="collection" /> contains the <paramref name="argument" /> value.
         /// </exception>
+        [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
@@ -451,9 +454,10 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="collection" /> contains the <paramref name="argument" /> value by
-        ///     the comparison made by <paramref name="comparer" />.
+        ///     <paramref name="collection" /> contains the <paramref name="argument" /> value by the
+        ///     comparison made by <paramref name="comparer" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -477,13 +481,12 @@
         /// <summary>Requires the specified items not to contain the argument value.</summary>
         /// <typeparam name="TItem">The type of the argument.</typeparam>
         /// <param name="argument">The argument.</param>
-        /// <param name="items">
-        ///     The items that is required not to contain the argument value.
-        /// </param>
+        /// <param name="items">The items that is required not to contain the argument value.</param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
         ///     <paramref name="items" /> contains the <paramref name="argument" /> value.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {
@@ -511,47 +514,38 @@
             public static readonly IDictionary<Type, Func<object, int, int>> CachedCountFunctions
                 = new Dictionary<Type, Func<object, int, int>>();
 
-            /// <summary>
-            ///     The locker that synchronizes access to <see cref="CachedCountFunctions" />.
-            /// </summary>
+            /// <summary>The locker that synchronizes access to <see cref="CachedCountFunctions" />.</summary>
             public static readonly ReaderWriterLockSlim CachedCountFunctionsLocker = new ReaderWriterLockSlim();
 
             /// <summary>
-            ///     The <see cref="Collection{TCollection}.ContainsNull" /> delegates cached by
-            ///     their collection types.
+            ///     The <see cref="Collection{TCollection}.ContainsNull" /> delegates cached by their
+            ///     collection types.
             /// </summary>
             public static readonly IDictionary<Type, Func<object, bool>> CachedContainsNullFunctions
                 = new Dictionary<Type, Func<object, bool>>();
 
-            /// <summary>
-            ///     The locker that synchronizes access to <see cref="CachedContainsNullFunctions" />.
-            /// </summary>
+            /// <summary>The locker that synchronizes access to <see cref="CachedContainsNullFunctions" />.</summary>
             public static readonly ReaderWriterLockSlim CachedContainsNullFunctionsLocker = new ReaderWriterLockSlim();
 
             /// <summary>
-            ///     The <see cref="Collection{TCollection}.Typed{TItem}.Contains" /> delegates
-            ///     cached by their collection and item types.
+            ///     The <see cref="Collection{TCollection}.Typed{TItem}.Contains" /> delegates cached
+            ///     by their collection and item types.
             /// </summary>
             public static readonly IDictionary<(Type, Type), Delegate> CachedContainsFunctions
                 = new Dictionary<(Type, Type), Delegate>();
 
-            /// <summary>
-            ///     The locker that synchronizes access to <see cref="CachedContainsFunctions" />.
-            /// </summary>
+            /// <summary>The locker that synchronizes access to <see cref="CachedContainsFunctions" />.</summary>
             public static readonly ReaderWriterLockSlim CachedContainsFunctionsLocker = new ReaderWriterLockSlim();
         }
 
-        /// <summary>
-        ///     Provides cached collection utilities for the type
-        ///     <typeparamref name="TCollection" />.
-        /// </summary>
+        /// <summary>Provides cached collection utilities for the type <typeparamref name="TCollection" />.</summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         private static class Collection<TCollection>
             where TCollection : IEnumerable
         {
             /// <summary>
-            ///     A function that returns the number of elements in the specified collection.
-            ///     It enumerates the collection and counts the elements if the collection does not
+            ///     A function that returns the number of elements in the specified collection. It
+            ///     enumerates the collection and counts the elements if the collection does not
             ///     provide a Count/Length property. The integer parameter specifies the maximum
             ///     number of iterations.
             /// </summary>
@@ -605,9 +599,8 @@
                     var enumerator = collection.GetEnumerator();
                     try
                     {
-                        for (; i < max && enumerator.MoveNext(); i++)
-                        {
-                        }
+                        while (i < max && enumerator.MoveNext())
+                            i++;
                     }
                     finally
                     {
@@ -756,7 +749,7 @@
                             }
                         }
 
-                        func = del as Func<object, bool>;
+                        func = del;
                     }
                     finally
                     {
@@ -768,8 +761,7 @@
             }
 
             /// <summary>
-            ///     Provides cached collection utilities for collections that contain instances of
-            ///     <typeparamref name="TItem" />.
+            ///     Provides cached collection utilities for collections that contain instances of <typeparamref name="TItem" />.
             /// </summary>
             /// <typeparam name="TItem">The type of the collection items.</typeparam>
             public static class Typed<TItem>
