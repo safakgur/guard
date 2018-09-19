@@ -5,6 +5,7 @@
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
+    using JetBrains.Annotations;
 
     /// <summary>Validates argument preconditions.</summary>
     /// <content>Contains the argument initialization methods.</content>
@@ -21,9 +22,8 @@
         /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="e" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="e" /> is not a <see cref="MemberExpression" />.
-        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="e" /> is not a <see cref="MemberExpression" />.</exception>
+        [ContractAnnotation("e:null => halt")]
         [DebuggerStepThrough]
         public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e, bool secure = false)
         {
@@ -57,7 +57,8 @@
         /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
         [DebuggerStepThrough]
-        public static ArgumentInfo<T> Argument<T>(T value, string name = null, bool secure = false)
+        public static ArgumentInfo<T> Argument<T>(
+            T value, [InvokerParameterName] string name = null, bool secure = false)
             => new ArgumentInfo<T>(value, name, secure: secure);
 
         /// <summary>Represents a method argument.</summary>
@@ -66,9 +67,7 @@
         [StructLayout(LayoutKind.Auto)]
         public readonly partial struct ArgumentInfo<T>
         {
-            /// <summary>
-            ///     The default name for the arguments of type <typeparamref name="T" />.
-            /// </summary>
+            /// <summary>The default name for the arguments of type <typeparamref name="T" />.</summary>
             private static readonly string defaultName = $"The {typeof(T)} argument";
 
             /// <summary>The argument name.</summary>
@@ -88,7 +87,11 @@
             ///     messages of failed validations.
             /// </param>
             [DebuggerStepThrough]
-            public ArgumentInfo(T value, string name, bool modified = false, bool secure = false)
+            public ArgumentInfo(
+                T value,
+                [InvokerParameterName] string name,
+                bool modified = false,
+                bool secure = false)
             {
                 this.Value = value;
                 this.name = name;

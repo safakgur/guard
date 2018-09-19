@@ -2,24 +2,26 @@
 {
     using System;
     using System.Linq.Expressions;
+    using JetBrains.Annotations;
 
     /// <content>Provides generic preconditions.</content>
     public static partial class Guard
     {
-        /// <content>Contains the preconditions with generic type arguments that cannot be inferred.</content>
+        /// <content>
+        ///     Contains the preconditions with generic type arguments that cannot be inferred.
+        /// </content>
         public readonly partial struct ArgumentInfo<T>
         {
-
             /// <summary>Requires the argument to satisfy a condition.</summary>
             /// <param name="condition">Whether the precondition is satisfied.</param>
             /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if
-            ///     the precondition is not satisfied.
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
             /// </param>
             /// <returns>The current argument.</returns>
-            /// <exception cref="ArgumentException">
-            ///     <paramref name="condition" /> is <c>false</c>.
-            /// </exception>
+            /// <exception cref="ArgumentException"><paramref name="condition" /> is <c>false</c>.</exception>
+            [AssertionMethod]
+            [ContractAnnotation("condition:false => halt")]
             public ArgumentInfo<T> Require(bool condition, Func<T, string> message = null)
                 => this.Require<ArgumentException>(condition, message);
 
@@ -28,19 +30,20 @@
             ///     exception if the condition is not met.
             /// </summary>
             /// <typeparam name="TException">
-            ///     The type of the exception to throw if the argument does not satisfy the
-            ///     specified condition.
+            ///     The type of the exception to throw if the argument does not satisfy the specified condition.
             /// </typeparam>
             /// <param name="condition">Whether the precondition is satisfied.</param>
             /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if
-            ///     the precondition is not satisfied.
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
             /// </param>
             /// <returns>The current argument.</returns>
             /// <exception cref="Exception">
             ///     <paramref name="condition" /> is <c>false</c>. The exception thrown is an
             ///     instance of type <typeparamref name="TException" />.
             /// </exception>
+            [AssertionMethod]
+            [ContractAnnotation("condition:false => halt")]
             public ArgumentInfo<T> Require<TException>(
                 bool condition, Func<T, string> message = null)
                 where TException : Exception
@@ -57,14 +60,14 @@
             /// <summary>Requires the argument to satisfy a condition.</summary>
             /// <param name="predicate">The function to test the argument value.</param>
             /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if
-            ///     the precondition is not satisfied.
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
             /// </param>
             /// <returns>The current argument.</returns>
             /// <exception cref="ArgumentException">
-            ///     <paramref name="predicate" /> returned <c>false</c> when supplied the
-            ///     <see cref="Value" />.
+            ///     <paramref name="predicate" /> returned <c>false</c> when supplied the <see cref="Value" />.
             /// </exception>
+            [AssertionMethod]
             public ArgumentInfo<T> Require(Func<T, bool> predicate, Func<T, string> message = null)
                 => this.Require<ArgumentException>(predicate, message);
 
@@ -73,20 +76,19 @@
             ///     exception if the condition is not met.
             /// </summary>
             /// <typeparam name="TException">
-            ///     The type of the exception to throw if the argument does not satisfy the
-            ///     specified condition.
+            ///     The type of the exception to throw if the argument does not satisfy the specified condition.
             /// </typeparam>
             /// <param name="predicate">The function to test the argument value.</param>
             /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if
-            ///     the precondition is not satisfied.
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
             /// </param>
             /// <returns>The current argument.</returns>
             /// <exception cref="Exception">
             ///     <paramref name="predicate" /> returned <c>false</c> when supplied the
-            ///     <see cref="Value" />. The exception thrown is an instance of type
-            ///     <typeparamref name="TException" />.
+            ///     <see cref="Value" />. The exception thrown is an instance of type <typeparamref name="TException" />.
             /// </exception>
+            [AssertionMethod]
             public ArgumentInfo<T> Require<TException>(
                 Func<T, bool> predicate, Func<T, string> message = null)
                 where TException : Exception
@@ -108,13 +110,14 @@
             ///     The type that the argument's value should be assignable to.
             /// </typeparam>
             /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if
-            ///     the precondition is not satisfied.
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
             /// </param>
             /// <returns>The current argument.</returns>
             /// <exception cref="ArgumentException">
             ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
             /// </exception>
+            [AssertionMethod]
             public ArgumentInfo<T> Compatible<TTarget>(Func<T, string> message = null)
             {
                 if (!this.HasValue() || this.Value is TTarget value)
@@ -132,13 +135,14 @@
             ///     The type that the argument's value should not be assignable to.
             /// </typeparam>
             /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if
-            ///     the precondition is not satisfied.
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
             /// </param>
             /// <returns>The current argument.</returns>
             /// <exception cref="ArgumentException">
             ///     <see cref="Value" /> can be assigned to type <typeparamref name="TTarget" />.
             /// </exception>
+            [AssertionMethod]
             public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string> message = null)
             {
                 if (this.HasValue() && this.Value is TTarget value)
@@ -155,21 +159,20 @@
             ///         Requires the argument to have a value that can be assigned to an instance of
             ///         the specified type.
             ///     </para>
-            ///     <para>
-            ///         The return value will be a new argument of type <typeparamref name="TTarget" />.
-            ///     </para>
+            ///     <para>The return value will be a new argument of type <typeparamref name="TTarget" />.</para>
             /// </summary>
             /// <typeparam name="TTarget">
             ///     The type that the argument's value should be assignable to.
             /// </typeparam>
             /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if
-            ///     the precondition is not satisfied.
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
             /// </param>
             /// <returns>A new <see cref="ArgumentInfo{TTarget}" />.</returns>
             /// <exception cref="ArgumentException">
             ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
             /// </exception>
+            [AssertionMethod]
             public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
             {
                 if (this.Value is TTarget value)

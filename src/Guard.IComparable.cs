@@ -2,34 +2,31 @@
 {
     using System;
     using System.Collections.Generic;
+    using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="IComparable" /> arguments.</content>
     public static partial class Guard
     {
         /// <summary>
-        ///     Requires the argument to have a value that is
-        ///     equal to or greater than a specified value.
+        ///     Requires the argument to have a value that is equal to or greater than a specified value.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
-        /// <param name="minValue">
-        ///     The minimum value that the argument is allowed to have.
-        /// </param>
+        /// <param name="minValue">The minimum value that the argument is allowed to have.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is less than
-        ///     <paramref name="minValue" /> and the argument is
-        ///     not modified since it is initialized.
+        ///     <paramref name="argument" /> value is less than <paramref name="minValue" /> and the
+        ///     argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is less than
-        ///     <paramref name="minValue" /> and the argument
-        ///     is modified after its initialization.
+        ///     <paramref name="argument" /> value is less than <paramref name="minValue" /> and the
+        ///     argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> Min<T>(
             in this ArgumentInfo<T> argument, in T minValue, Func<T, T, string> message = null)
             where T : IComparable<T>
@@ -46,30 +43,26 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have a value that is
-        ///     <c>null</c>, equal to the specified value, or greater
-        ///     than the specified value.
+        ///     Requires the nullable argument to have a value that is <c>null</c>, equal to the
+        ///     specified value, or greater than the specified value.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
-        /// <param name="minValue">
-        ///     The minimum value that the argument is allowed to have.
-        /// </param>
+        /// <param name="minValue">The minimum value that the argument is allowed to have.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is less than
-        ///     <paramref name="minValue" /> and the argument is
-        ///     not modified since it is initialized.
+        ///     <paramref name="argument" /> value is less than <paramref name="minValue" /> and the
+        ///     argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is less than
-        ///     <paramref name="minValue" /> and the argument
-        ///     is modified after its initialization.
+        ///     <paramref name="argument" /> value is less than <paramref name="minValue" /> and the
+        ///     argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> Min<T>(
             in this ArgumentInfo<T?> argument, in T minValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -90,29 +83,25 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a value that is
-        ///     equal to or lower than a specified value.
+        ///     Requires the argument to have a value that is equal to or lower than a specified value.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
-        /// <param name="maxValue">
-        ///     The maximum value that the argument is allowed to have.
-        /// </param>
+        /// <param name="maxValue">The maximum value that the argument is allowed to have.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is greater than
-        ///     <paramref name="maxValue" /> and the argument is
-        ///     not modified since it is initialized.
+        ///     <paramref name="argument" /> value is greater than <paramref name="maxValue" /> and
+        ///     the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is greater than
-        ///     <paramref name="maxValue" /> and the argument
-        ///     is modified after its initialization.
+        ///     <paramref name="argument" /> value is greater than <paramref name="maxValue" /> and
+        ///     the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> Max<T>(
             in this ArgumentInfo<T> argument, in T maxValue, Func<T, T, string> message = null)
             where T : IComparable<T>
@@ -129,30 +118,26 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have a value that is
-        ///     <c>null</c>, equal to the specified value, or lower
-        ///     than the specified value.
+        ///     Requires the nullable argument to have a value that is <c>null</c>, equal to the
+        ///     specified value, or lower than the specified value.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
-        /// <param name="maxValue">
-        ///     The maximum value that the argument is allowed to have.
-        /// </param>
+        /// <param name="maxValue">The maximum value that the argument is allowed to have.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is greater than
-        ///     <paramref name="maxValue" /> and the argument is
-        ///     not modified since it is initialized.
+        ///     <paramref name="argument" /> value is greater than <paramref name="maxValue" /> and
+        ///     the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is greater than
-        ///     <paramref name="maxValue" /> and the argument
-        ///     is modified after its initialization.
+        ///     <paramref name="argument" /> value is greater than <paramref name="maxValue" /> and
+        ///     the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> Max<T>(
             in this ArgumentInfo<T?> argument, in T maxValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -173,32 +158,27 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a value that is between
-        ///     the specified minimum and maximum values.
+        ///     Requires the argument to have a value that is between the specified minimum and
+        ///     maximum values.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
-        /// <param name="minValue">
-        ///     The minimum value that the argument is allowed to have.
-        /// </param>
-        /// <param name="maxValue">
-        ///     The maximum value that the argument is allowed to have.
-        /// </param>
+        /// <param name="minValue">The minimum value that the argument is allowed to have.</param>
+        /// <param name="maxValue">The maximum value that the argument is allowed to have.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not between
-        ///     <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is not between <paramref name="minValue" /> and
+        ///     <paramref name="maxValue" />. And the argument is not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not between
-        ///     <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is not between <paramref name="minValue" /> and
+        ///     <paramref name="maxValue" />. And the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> InRange<T>(
             in this ArgumentInfo<T> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
             where T : IComparable<T>
@@ -220,32 +200,29 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have a value that is either
-        ///     between the specified minimum and maximum values or <c>null</c>.
+        ///     Requires the nullable argument to have a value that is either between the specified
+        ///     minimum and maximum values or <c>null</c>.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
-        /// <param name="minValue">
-        ///     The minimum value that the argument is allowed to have.
-        /// </param>
-        /// <param name="maxValue">
-        ///     The maximum value that the argument is allowed to have.
-        /// </param>
+        /// <param name="minValue">The minimum value that the argument is allowed to have.</param>
+        /// <param name="maxValue">The maximum value that the argument is allowed to have.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not <c>null</c> and is not
-        ///     between <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is not <c>null</c> and is not between
+        ///     <paramref name="minValue" /> and <paramref name="maxValue" />. And the argument is
+        ///     not modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not <c>null</c> and is not
-        ///     between <paramref name="minValue"/> and <paramref name="maxValue"/>.
-        ///     And the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is not <c>null</c> and is not between
+        ///     <paramref name="minValue" /> and <paramref name="maxValue" />. And the argument is
+        ///     modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> InRange<T>(
             in this ArgumentInfo<T?> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -274,18 +251,18 @@
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not zero and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is not zero and the argument is not modified since
+        ///     it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not zero and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is not zero and the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> Zero<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -302,31 +279,29 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have a
-        ///     value that is either zero or <c>null</c>.
+        ///     Requires the nullable argument to have a value that is either zero or <c>null</c>.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is not zero and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is not zero and the argument is not modified since
+        ///     it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not zero and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is not zero and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> Zero<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -350,18 +325,18 @@
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero and the argument is not modified since it
+        ///     is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero and the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         [Obsolete("Use the NotZero overload that accepts the message as a string.")]
         public static ref readonly ArgumentInfo<T> NotZero<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message)
@@ -382,18 +357,17 @@
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The message of the exception that will be thrown
-        ///     if the precondition is not satisfied.
+        ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero and the argument is not modified since it
+        ///     is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero and the argument is modified after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> NotZero<T>(
             in this ArgumentInfo<T> argument, string message = null)
             where T : struct, IComparable<T>
@@ -410,31 +384,29 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have a value
-        ///     that either is not zero or is <c>null</c>.
+        ///     Requires the nullable argument to have a value that either is not zero or is <c>null</c>.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero and the argument is not modified since it
+        ///     is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         [Obsolete("Use the NotZero overload that accepts the message as a string.")]
         public static ref readonly ArgumentInfo<T?> NotZero<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message)
@@ -452,31 +424,28 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have a value
-        ///     that either is not zero or is <c>null</c>.
+        ///     Requires the nullable argument to have a value that either is not zero or is <c>null</c>.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The message of the exception that will be thrown
-        ///     if the precondition is not satisfied.
+        ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero and the argument is not modified since it
+        ///     is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero and the
-        ///     argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero and the argument is modified after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> NotZero<T>(
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct, IComparable<T>
@@ -496,24 +465,23 @@
             return ref argument;
         }
 
-        /// <summary>
-        ///     Requires the argument to have a value that is greater than zero.
-        /// </summary>
+        /// <summary>Requires the argument to have a value that is greater than zero.</summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero or less, and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero or less, and the argument is not modified
+        ///     since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero or less, and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero or less, and the argument is modified
+        ///     after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> Positive<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -530,31 +498,30 @@
         }
 
         /// <summary>
-        ///     Requires the argument to have a value that
-        ///     is either greater than zero or <c>null</c>.
+        ///     Requires the argument to have a value that is either greater than zero or <c>null</c>.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero or less, and
-        ///     the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero or less, and the argument is not modified
+        ///     since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero or less, and
-        ///     the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero or less, and the argument is modified
+        ///     after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> Positive<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -574,24 +541,23 @@
             return ref argument;
         }
 
-        /// <summary>
-        ///     Requires the argument to have a value that is not greater than zero.
-        /// </summary>
+        /// <summary>Requires the argument to have a value that is not greater than zero.</summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is greater than zero,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is greater than zero, and the argument is not
+        ///     modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is greater than zero,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is greater than zero, and the argument is modified
+        ///     after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> NotPositive<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -608,31 +574,30 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have
-        ///     a value that is not greater than zero.
+        ///     Requires the nullable argument to have a value that is not greater than zero.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is greater than zero,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is greater than zero, and the argument is not
+        ///     modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is greater than zero,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is greater than zero, and the argument is modified
+        ///     after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> NotPositive<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -652,24 +617,23 @@
             return ref argument;
         }
 
-        /// <summary>
-        ///     Requires the argument to have a value that is less than zero.
-        /// </summary>
+        /// <summary>Requires the argument to have a value that is less than zero.</summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero or greater,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero or greater, and the argument is not
+        ///     modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero or greater,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero or greater, and the argument is modified
+        ///     after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> Negative<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -686,31 +650,30 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have a value
-        ///     that is either less than zero or <c>null</c>.
+        ///     Requires the nullable argument to have a value that is either less than zero or <c>null</c>.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is zero or greater,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is zero or greater, and the argument is not
+        ///     modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is zero or greater,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is zero or greater, and the argument is modified
+        ///     after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> Negative<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -730,24 +693,23 @@
             return ref argument;
         }
 
-        /// <summary>
-        ///     Requires the argument to have a value that is not less than zero.
-        /// </summary>
+        /// <summary>Requires the argument to have a value that is not less than zero.</summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is less than zero,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is less than zero, and the argument is not
+        ///     modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is less than zero,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is less than zero, and the argument is modified
+        ///     after its initialization.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T> NotNegative<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -764,31 +726,30 @@
         }
 
         /// <summary>
-        ///     Requires the nullable argument to have
-        ///     a value that is not less than zero.
+        ///     Requires the nullable argument to have a value that is not less than zero.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
         /// <param name="argument">The comparable argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that
-        ///     will be thrown if the precondition is not satisfied.
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is less than zero,
-        ///     and the argument is not modified since it is initialized.
+        ///     <paramref name="argument" /> value is less than zero, and the argument is not
+        ///     modified since it is initialized.
         /// </exception>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is less than zero,
-        ///     and the argument is modified after its initialization.
+        ///     <paramref name="argument" /> value is less than zero, and the argument is modified
+        ///     after its initialization.
         /// </exception>
         /// <remarks>
-        ///     The argument value that is passed to <paramref name="message" />
-        ///     cannot be <c>null</c>, but it is defined as nullable anyway.
-        ///     This is because passing a lambda would cause the calls
-        ///     to be ambiguous between this method and its overload
-        ///     when the message delegate accepts a non-nullable argument.
+        ///     The argument value that is passed to <paramref name="message" /> cannot be
+        ///     <c>null</c>, but it is defined as nullable anyway. This is because passing a lambda
+        ///     would cause the calls to be ambiguous between this method and its overload when the
+        ///     message delegate accepts a non-nullable argument.
         /// </remarks>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<T?> NotNegative<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>

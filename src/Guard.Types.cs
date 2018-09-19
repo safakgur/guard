@@ -4,13 +4,13 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Threading;
+    using JetBrains.Annotations;
 
     /// <content>Provides type preconditions.</content>
     public static partial class Guard
     {
         /// <summary>
-        ///     Requires the argument to have a value that is an instance of the specified
-        ///     generic type.
+        ///     Requires the argument to have a value that is an instance of the specified generic type.
         /// </summary>
         /// <typeparam name="T">
         ///     The type that the argument's value should be an instance of.
@@ -22,9 +22,9 @@
         /// </param>
         /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not an instance of type
-        ///     <typeparamref name="T" />.
+        ///     <paramref name="argument" /> value is not an instance of type <typeparamref name="T" />.
         /// </exception>
+        [AssertionMethod]
         public static ArgumentInfo<T> Type<T>(
             in this ArgumentInfo<object> argument, Func<object, string> message = null)
         {
@@ -54,6 +54,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value is an instance of type <typeparamref name="T" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<object> NotType<T>(
             in this ArgumentInfo<object> argument, Func<T, string> message = null)
         {
@@ -70,18 +71,16 @@
         ///     Requires the argument to have a value that is an instance of the specified type.
         /// </summary>
         /// <param name="argument">The object argument.</param>
-        /// <param name="type">
-        ///     The type that the argument's value should be an instance of.
-        /// </param>
+        /// <param name="type">The type that the argument's value should be an instance of.</param>
         /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is not an instance of the type represented by
-        ///     <paramref name="type" />.
+        ///     <paramref name="argument" /> value is not an instance of the type represented by <paramref name="type" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<object> Type(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
@@ -107,9 +106,9 @@
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is an instance of the type represented by
-        ///     <paramref name="type" />.
+        ///     <paramref name="argument" /> value is an instance of the type represented by <paramref name="type" />.
         /// </exception>
+        [AssertionMethod]
         public static ref readonly ArgumentInfo<object> NotType(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
@@ -127,15 +126,13 @@
         private static class TypeInfo<T>
         {
             /// <summary>
-            ///     A function that determines whether the specified object can be converted to type
-            ///     <typeparamref name="T" />.
+            ///     A function that determines whether the specified object can be converted to type <typeparamref name="T" />.
             /// </summary>
             public static readonly Func<object, bool> CanBeInitializedFrom = InitCanBeInitializedFrom();
 
             /// <summary>Initializes <see cref="CanBeInitializedFrom" />.</summary>
             /// <returns>
-            ///     A function that determines whether the specified object can be converted to type
-            ///     <typeparamref name="T" />.
+            ///     A function that determines whether the specified object can be converted to type <typeparamref name="T" />.
             /// </returns>
             private static Func<object, bool> InitCanBeInitializedFrom()
             {
@@ -162,9 +159,7 @@
         /// <summary>Provides non-generic, cached utilities for specified types.</summary>
         private static class TypeInfo
         {
-            /// <summary>
-            ///     The locker that synchronizes access to <see cref="canBeConvertedTo" />.
-            /// </summary>
+            /// <summary>The locker that synchronizes access to <see cref="canBeConvertedTo" />.</summary>
             private static readonly ReaderWriterLockSlim locker
                 = new ReaderWriterLockSlim();
 
@@ -176,18 +171,14 @@
                 = new Dictionary<Type, Func<object, bool>>();
 
             /// <summary>
-            ///     Determines whether an object can be converted to an instance of the
-            ///     specified type.
+            ///     Determines whether an object can be converted to an instance of the specified type.
             /// </summary>
             /// <param name="obj">The object to check.</param>
             /// <param name="targetType">The type to check.</param>
             /// <returns>
-            ///     <c>true</c>, if <paramref name="obj" /> can be converted to an instance of
-            ///     <paramref name="targetType" />.
+            ///     <c>true</c>, if <paramref name="obj" /> can be converted to an instance of <paramref name="targetType" />.
             /// </returns>
-            /// <remarks>
-            ///     Calls <see cref="TypeInfo{T}.CanBeInitializedFrom" />.
-            /// </remarks>
+            /// <remarks>Calls <see cref="TypeInfo{T}.CanBeInitializedFrom" />.</remarks>
             public static bool CanBeConvertedTo(object obj, Type targetType)
             {
                 Func<object, bool> func;
