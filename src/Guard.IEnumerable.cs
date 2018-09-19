@@ -484,7 +484,7 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="items" /> contains the <paramref name="argument" /> value.
         /// </exception>
-        internal static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
+        public static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {
             if (argument.HasValue() && items != null)
