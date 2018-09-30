@@ -166,7 +166,7 @@ namespace Dawn
             ///     A function that determines whether a specified instance of type
             ///     <typeparamref name="T" /> is not <c>null</c>.
             /// </summary>
-            private static readonly IsNotNull hasValue = InitHasValue();
+            private static readonly IsNotNull HasValueImpl = InitHasValue();
 
             /// <summary>A delegate that checks whether an object is not <c>null</c>.</summary>
             /// <param name="value">The value to check against <c>null</c>.</param>
@@ -184,7 +184,7 @@ namespace Dawn
             /// </returns>
             [ContractAnnotation("value:notnull => true; value:null => false")]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static bool HasValue(in T value) => hasValue(value);
+            public static bool HasValue(in T value) => HasValueImpl(value);
 
             /// <summary>Initializes <see cref="HasValue" />.</summary>
             /// <returns>
