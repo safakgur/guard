@@ -4,8 +4,11 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
 #if !NETSTANDARD1_0
+
     using System.Net.Mail;
+
 #endif
 
     /// <content>Provides error messages for the common preconditions.</content>
@@ -13,6 +16,14 @@
     {
         private static class Messages
         {
+            public static string State(string caller)
+                => caller != null
+                    ? $"{caller} call is not valid due to the current state of the object."
+                    : "Operation is not valid due to the current state of the object.";
+
+            public static string Support(string caller)
+                => caller != null ? $"{caller} is not supported" : "Specified method is not supported.";
+
             public static string Null<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be null.";
 
@@ -212,6 +223,7 @@
                 => $"{argument.Name} must be an absolute URI with the HTTPS scheme.";
 
 #if !NETSTANDARD1_0
+
             public static string EmailHasHost(in ArgumentInfo<MailAddress> argument, string host)
                 => argument.Secure ? Require(argument) : $"{argument.Name} must have the host '{host}'.";
 
@@ -229,6 +241,7 @@
 
             public static string EmailDoesNotHaveDisplayName(in ArgumentInfo<MailAddress> argument)
                 => $"{argument.Name} cannot have a display name specified.";
+
 #endif
 
             private static string ToString(object obj) => obj?.ToString() ?? "null";
