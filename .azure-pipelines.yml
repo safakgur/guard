@@ -1,0 +1,39 @@
+jobs:
+- template: .azure-pipelines-build.yml
+  parameters:
+    name: Windows
+    pool:
+      vmImage: vs2017-win2016
+    artifacts: true
+
+- template: .azure-pipelines-build.yml
+  parameters:
+    name: macOS
+    pool:
+      vmImage: macOS-10.13
+
+- template: .azure-pipelines-build.yml
+  parameters:
+    name: Linux
+    pool:
+      vmImage: Ubuntu-16.04
+
+- job: Deploy
+  pool:
+    vmImage: macOS-10.13
+  dependsOn:
+  - Windows
+  - macOS
+  - Linux
+  steps:
+  - script: git checkout $(Build.SourceBranchName)
+    displayName: Checkout Branch
+
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      artifactName: all
+
+  - script: bash <(curl -s https://codecov.io/bash) -f $(System.ArtifactsDirectory)/all/coverage.xml
+    displayName: Upload Coverage
+    env:
+      CODECOV_TOKEN: $(codecov.token)
