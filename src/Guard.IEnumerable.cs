@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -25,6 +26,7 @@
         ///     <paramref name="argument" /> has one or more items.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> Empty<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -50,6 +52,7 @@
         ///     <paramref name="argument" /> is not <c>null</c> and has no items.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> NotEmpty<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -81,6 +84,7 @@
         ///     <paramref name="argument" /> contains less than the specified number of items.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> MinCount<TCollection>(
             in this ArgumentInfo<TCollection> argument, int minCount, Func<TCollection, int, string> message = null)
             where TCollection : IEnumerable
@@ -112,6 +116,7 @@
         ///     <paramref name="argument" /> contains more than the specified number of items.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> MaxCount<TCollection>(
             in this ArgumentInfo<TCollection> argument, int maxCount, Func<TCollection, int, string> message = null)
             where TCollection : IEnumerable
@@ -147,6 +152,7 @@
         ///     less than <paramref name="minCount" /> or greater than <paramref name="maxCount" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> CountInRange<TCollection>(
             in this ArgumentInfo<TCollection> argument, int minCount, int maxCount, Func<TCollection, int, int, string> message = null)
             where TCollection : IEnumerable
@@ -183,6 +189,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
@@ -206,6 +213,7 @@
         ///     comparison made by <paramref name="comparer" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
@@ -237,6 +245,7 @@
         /// <exception cref="ArgumentException"><paramref name="argument" /> contains <paramref name="item" />.</exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
@@ -260,6 +269,7 @@
         ///     by <paramref name="comparer" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
@@ -290,6 +300,7 @@
         ///     <paramref name="argument" /> does not contain <c>null</c>.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> ContainsNull<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -315,6 +326,7 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException"><paramref name="argument" /> contains <c>null</c>.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContainNull<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -345,6 +357,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -370,6 +383,7 @@
         ///     value by the comparison made by <paramref name="comparer" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -399,6 +413,7 @@
         ///     <paramref name="items" /> does not contain the <paramref name="argument" /> value.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TItem> In<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {
@@ -433,6 +448,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -458,6 +474,7 @@
         ///     comparison made by <paramref name="comparer" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -487,6 +504,7 @@
         ///     <paramref name="items" /> contains the <paramref name="argument" /> value.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {

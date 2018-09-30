@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Runtime.CompilerServices;
@@ -29,6 +30,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Member<T, TMember>(
             in this ArgumentInfo<T> argument,
             Expression<Func<T, TMember>> member,
@@ -62,6 +64,7 @@
         ///     <paramref name="validatesRange" /> passed <c>true</c>.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Member<T, TMember>(
             in this ArgumentInfo<T> argument,
             Expression<Func<T, TMember>> member,
@@ -130,6 +133,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Member<T, TMember>(
             in this ArgumentInfo<T?> argument,
             Expression<Func<T, TMember>> member,
@@ -164,6 +168,7 @@
         ///     <paramref name="validatesRange" /> passed <c>true</c>.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Member<T, TMember>(
             in this ArgumentInfo<T?> argument,
             Expression<Func<T, TMember>> member,

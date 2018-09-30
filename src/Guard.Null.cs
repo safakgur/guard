@@ -1,8 +1,7 @@
-﻿using System.Diagnostics;
-
-namespace Dawn
+﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
     using JetBrains.Annotations;
@@ -20,6 +19,7 @@ namespace Dawn
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException"><paramref name="argument" /> is not <c>null</c>.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Null<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : class
@@ -49,6 +49,7 @@ namespace Dawn
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Null<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct
@@ -80,6 +81,7 @@ namespace Dawn
         ///     its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotNull<T>(
             in this ArgumentInfo<T> argument, string message = null)
             where T : class
@@ -112,6 +114,7 @@ namespace Dawn
         ///     its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ArgumentInfo<T> NotNull<T>(
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct
@@ -141,6 +144,7 @@ namespace Dawn
         ///     <c>true</c>, if the <paramref name="argument" /> is not <c>null</c>; otherwise, <c>false</c>.
         /// </returns>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the HasValue method to check against null.")]
         public static bool NotNull<T>(
             in this ArgumentInfo<T?> argument, out ArgumentInfo<T> result)
