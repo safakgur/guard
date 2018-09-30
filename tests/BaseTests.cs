@@ -237,7 +237,7 @@
 
         protected static class RandomUtils
         {
-            private static readonly Random seeder = new Random();
+            private static readonly Random Seeder = new Random();
 
             [ThreadStatic]
             private static Random current;
@@ -249,8 +249,8 @@
                     if (current == null)
                     {
                         int seed;
-                        lock (seeder)
-                            seed = seeder.Next();
+                        lock (Seeder)
+                            seed = Seeder.Next();
 
                         current = new Random(seed);
                     }

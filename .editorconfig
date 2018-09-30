@@ -97,4 +97,60 @@ dotnet_style_require_accessibility_modifiers = always : error
 csharp_preferred_modifier_order = public,protected,internal,private,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async : error
 
 # Use parentheses for clarity
-dotnet_style_parentheses_in_other_binary_operators = always_for_clarity
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity : error
+
+# Define naming symbols
+dotnet_naming_symbols.namespace_symbols.applicable_kinds = namespace
+dotnet_naming_symbols.type_symbols.applicable_kinds = class,struct,enum,delegate
+dotnet_naming_symbols.interface_symbols.applicable_kinds = interface
+dotnet_naming_symbols.type_parameter_symbols.applicable_kinds = type_parameter
+dotnet_naming_symbols.function_symbols.applicable_kinds = property,event,method,local_function
+dotnet_naming_symbols.visible_field_symbols.applicable_kinds = field
+dotnet_naming_symbols.visible_field_symbols.applicable_accessibilities = public,protected
+dotnet_naming_symbols.private_field_symbols.applicable_kinds = field
+dotnet_naming_symbols.private_field_symbols.applicable_accessibilities = private,internal,protected_internal
+dotnet_naming_symbols.constant_symbols.applicable_kinds = field,local
+dotnet_naming_symbols.constant_symbols.required_modifiers = const
+dotnet_naming_symbols.static_readonly_symbols.applicable_kinds = field
+dotnet_naming_symbols.static_readonly_symbols.required_modifiers = static,readonly
+dotnet_naming_symbols.local_symbols.applicable_kinds = parameter,local
+
+# Define naming styles
+dotnet_naming_style.pascal_style.capitalization = pascal_case
+dotnet_naming_style.i_pascal_style.capitalization = pascal_case
+dotnet_naming_style.i_pascal_style.required_prefix = I
+dotnet_naming_style.t_pascal_style.capitalization = pascal_case
+dotnet_naming_style.t_pascal_style.required_prefix = T
+dotnet_naming_style.camel_style.capitalization = camel_case
+
+# Define naming rules
+dotnet_naming_rule.namespace_names_must_be_in_pascal_style.symbols = namespace_symbols
+dotnet_naming_rule.namespace_names_must_be_in_pascal_style.style = pascal_style
+dotnet_naming_rule.namespace_names_must_be_in_pascal_style.severity = error
+dotnet_naming_rule.type_names_must_be_in_pascal_style.symbols = type_symbols
+dotnet_naming_rule.type_names_must_be_in_pascal_style.style = pascal_style
+dotnet_naming_rule.type_names_must_be_in_pascal_style.severity = error
+dotnet_naming_rule.interface_names_must_have_prefix.symbols = interface_symbols
+dotnet_naming_rule.interface_names_must_have_prefix.style = i_pascal_style
+dotnet_naming_rule.interface_names_must_have_prefix.severity = error
+dotnet_naming_rule.type_parameter_names_must_have_prefix.symbols = type_parameter_symbols
+dotnet_naming_rule.type_parameter_names_must_have_prefix.style = t_pascal_style
+dotnet_naming_rule.type_parameter_names_must_have_prefix.severity = error
+dotnet_naming_rule.function_names_must_be_in_pascal_style.symbols = function_symbols
+dotnet_naming_rule.function_names_must_be_in_pascal_style.style = pascal_style
+dotnet_naming_rule.function_names_must_be_in_pascal_style.severity = error
+dotnet_naming_rule.visible_field_names_must_be_in_pascal_style.symbols = visible_field_symbols
+dotnet_naming_rule.visible_field_names_must_be_in_pascal_style.style = pascal_style
+dotnet_naming_rule.visible_field_names_must_be_in_pascal_style.severity = error
+dotnet_naming_rule.constant_names_must_be_in_pascal_style.symbols = constant_symbols
+dotnet_naming_rule.constant_names_must_be_in_pascal_style.style = pascal_style
+dotnet_naming_rule.constant_names_must_be_in_pascal_style.severity = error
+dotnet_naming_rule.static_readonly_field_names_must_be_in_pascal_style.symbols = static_readonly_symbols
+dotnet_naming_rule.static_readonly_field_names_must_be_in_pascal_style.style = pascal_style
+dotnet_naming_rule.static_readonly_field_names_must_be_in_pascal_style.severity = error
+dotnet_naming_rule.local_names_must_be_in_camel_style.symbols = local_symbols
+dotnet_naming_rule.local_names_must_be_in_camel_style.style = camel_style
+dotnet_naming_rule.local_names_must_be_in_camel_style.severity = error
+dotnet_naming_rule.private_field_names_must_be_in_camel_style.symbols = private_field_symbols
+dotnet_naming_rule.private_field_names_must_be_in_camel_style.style = camel_style
+dotnet_naming_rule.private_field_names_must_be_in_camel_style.severity = error

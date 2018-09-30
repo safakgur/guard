@@ -235,16 +235,16 @@
 
             private static string Join(IEnumerable collection)
             {
-                const int max = 5;
+                const int Max = 5;
 
                 var objects = collection is IEnumerable<string> e
                     ? e.Select(i => $"\"{i}\"") as IEnumerable<object>
                     : collection.Cast<object>();
 
-                var list = objects.Take(max + 1).ToList();
-                var ellipsis = list.Count > max;
+                var list = objects.Take(Max + 1).ToList();
+                var ellipsis = list.Count > Max;
                 if (ellipsis)
-                    list.RemoveAt(max);
+                    list.RemoveAt(Max);
 
                 var result = string.Join(", ", list);
                 if (ellipsis)

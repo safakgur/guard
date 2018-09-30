@@ -656,14 +656,14 @@
             /// </returns>
             private static Func<TCollection, bool> InitContainsNull()
             {
-                const string name = "Contains";
+                const string Name = "Contains";
                 var collectionType = typeof(TCollection);
 
                 IEnumerable<MethodInfo> search;
 #if NETSTANDARD1_0
-                search = collectionType.GetTypeInfo().GetDeclaredMethods(name).Where(m => m.IsPublic && !m.IsStatic);
+                search = collectionType.GetTypeInfo().GetDeclaredMethods(Name).Where(m => m.IsPublic && !m.IsStatic);
 #else
-                search = collectionType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(m => m.Name == name);
+                search = collectionType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(m => m.Name == Name);
 #endif
 
                 var methods = search.Where(m => m.ReturnType == typeof(bool)).ToList();
