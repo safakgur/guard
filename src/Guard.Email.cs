@@ -4,6 +4,7 @@ namespace Dawn
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net.Mail;
     using JetBrains.Annotations;
 
@@ -22,6 +23,7 @@ namespace Dawn
         ///     <paramref name="argument" /> value's host is not <paramref name="host" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<MailAddress> HasHost(
             in this ArgumentInfo<MailAddress> argument,
             string host,
@@ -49,6 +51,7 @@ namespace Dawn
         ///     <paramref name="argument" /> value's host is <paramref name="host" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveHost(
             in this ArgumentInfo<MailAddress> argument,
             string host,
@@ -77,6 +80,7 @@ namespace Dawn
         ///     <paramref name="argument" /> value's host is not specified in <paramref name="hosts" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<MailAddress> HostIn<TCollection>(
             in this ArgumentInfo<MailAddress> argument,
             TCollection hosts,
@@ -106,6 +110,7 @@ namespace Dawn
         ///     <paramref name="argument" /> value's host is specified in <paramref name="hosts" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<MailAddress> HostNotIn<TCollection>(
             in this ArgumentInfo<MailAddress> argument,
             TCollection hosts,
@@ -133,6 +138,7 @@ namespace Dawn
         ///     <paramref name="argument" /> value does not have a display name specified.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<MailAddress> HasDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {
@@ -156,6 +162,7 @@ namespace Dawn
         ///     <paramref name="argument" /> value has a display name specified.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {

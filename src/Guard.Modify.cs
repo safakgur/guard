@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using JetBrains.Annotations;
 
     /// <content>Provides safe modification functions to normalize arguments.</content>
@@ -11,6 +12,7 @@
         /// <param name="argument">The existing argument.</param>
         /// <param name="value">The new argument value.</param>
         /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
+        [DebuggerStepThrough]
         public static ArgumentInfo<T> Modify<T>(in this ArgumentInfo<T> argument, T value)
             => new ArgumentInfo<T>(value, argument.Name, true, argument.Secure);
 
@@ -28,6 +30,7 @@
         /// <returns>A new <see cref="ArgumentInfo{TTarget}" />.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="convert" /> is <c>null</c>.</exception>
         [ContractAnnotation("convert:null => halt")]
+        [DebuggerStepThrough]
         public static ArgumentInfo<TTarget> Modify<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument, Func<TSource, TTarget> convert)
         {
@@ -60,6 +63,7 @@
         /// <exception cref="ArgumentNullException"><paramref name="convert" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="convert" /> threw an exception.</exception>
         [ContractAnnotation("convert:null => halt")]
+        [DebuggerStepThrough]
         public static ArgumentInfo<TTarget> Wrap<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument,
             Func<TSource, TTarget> convert,

@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using System.Linq.Expressions;
     using JetBrains.Annotations;
 
@@ -22,6 +23,7 @@
             /// <exception cref="ArgumentException"><paramref name="condition" /> is <c>false</c>.</exception>
             [AssertionMethod]
             [ContractAnnotation("condition:false => halt")]
+            [DebuggerStepThrough]
             public ArgumentInfo<T> Require(bool condition, Func<T, string> message = null)
                 => this.Require<ArgumentException>(condition, message);
 
@@ -44,6 +46,7 @@
             /// </exception>
             [AssertionMethod]
             [ContractAnnotation("condition:false => halt")]
+            [DebuggerStepThrough]
             public ArgumentInfo<T> Require<TException>(
                 bool condition, Func<T, string> message = null)
                 where TException : Exception
@@ -68,6 +71,7 @@
             ///     <paramref name="predicate" /> returned <c>false</c> when supplied the <see cref="Value" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public ArgumentInfo<T> Require(Func<T, bool> predicate, Func<T, string> message = null)
                 => this.Require<ArgumentException>(predicate, message);
 
@@ -89,6 +93,7 @@
             ///     <see cref="Value" />. The exception thrown is an instance of type <typeparamref name="TException" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public ArgumentInfo<T> Require<TException>(
                 Func<T, bool> predicate, Func<T, string> message = null)
                 where TException : Exception
@@ -118,6 +123,7 @@
             ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public ArgumentInfo<T> Compatible<TTarget>(Func<T, string> message = null)
             {
                 if (!this.HasValue() || this.Value is TTarget value)
@@ -143,6 +149,7 @@
             ///     <see cref="Value" /> can be assigned to type <typeparamref name="TTarget" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string> message = null)
             {
                 if (this.HasValue() && this.Value is TTarget value)
@@ -173,6 +180,7 @@
             ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
             {
                 if (this.Value is TTarget value)

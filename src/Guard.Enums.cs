@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq.Expressions;
     using JetBrains.Annotations;
 
@@ -21,6 +22,7 @@
         ///     <paramref name="argument" /> value is not a defined member of the enum type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Defined<T>(
             this in ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, System.Enum
@@ -49,6 +51,7 @@
         ///     enum type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Defined<T>(
             this in ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, System.Enum
@@ -81,6 +84,7 @@
         ///     <paramref name="flag" /> set.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> HasFlag<T>(
             this in ArgumentInfo<T> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -110,6 +114,7 @@
         ///     specified in <paramref name="flag" /> set.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> HasFlag<T>(
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -142,6 +147,7 @@
         ///     <paramref name="flag" /> set.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> DoesNotHaveFlag<T>(
             this in ArgumentInfo<T> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -171,6 +177,7 @@
         ///     specified in <paramref name="flag" /> set.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> DoesNotHaveFlag<T>(
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum

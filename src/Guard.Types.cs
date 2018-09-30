@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq.Expressions;
     using System.Threading;
     using JetBrains.Annotations;
@@ -25,6 +26,7 @@
         ///     <paramref name="argument" /> value is not an instance of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ArgumentInfo<T> Type<T>(
             in this ArgumentInfo<object> argument, Func<object, string> message = null)
         {
@@ -55,6 +57,7 @@
         ///     <paramref name="argument" /> value is an instance of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<object> NotType<T>(
             in this ArgumentInfo<object> argument, Func<T, string> message = null)
         {
@@ -81,6 +84,7 @@
         ///     <paramref name="argument" /> value is not an instance of the type represented by <paramref name="type" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<object> Type(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
@@ -109,6 +113,7 @@
         ///     <paramref name="argument" /> value is an instance of the type represented by <paramref name="type" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<object> NotType(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {

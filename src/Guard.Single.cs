@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="float" /> arguments.</content>
@@ -25,6 +26,7 @@
         ///     is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> NaN(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -64,6 +66,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> NaN(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -100,6 +103,7 @@
         ///     modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> NotNaN(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -132,6 +136,7 @@
         ///     modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> NotNaN(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -170,6 +175,7 @@
         ///     nor <see cref="float.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> Infinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -212,6 +218,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> Infinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -248,6 +255,7 @@
         ///     <see cref="float.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<float, string>`.")]
         public static ref readonly ArgumentInfo<float> NotInfinity(
             in this ArgumentInfo<float> argument, string message)
@@ -282,6 +290,7 @@
         ///     <see cref="float.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> NotInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -314,6 +323,7 @@
         ///     <see cref="float.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<float?, string>`.")]
         public static ref readonly ArgumentInfo<float?> NotInfinity(
             in this ArgumentInfo<float?> argument, string message)
@@ -354,6 +364,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> NotInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -391,6 +402,7 @@
         ///     the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> PositiveInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -430,6 +442,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> PositiveInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -466,6 +479,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> NotPositiveInfinity(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -498,6 +512,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> NotPositiveInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -535,6 +550,7 @@
         ///     the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> NegativeInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -574,6 +590,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> NegativeInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -610,6 +627,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float> NotNegativeInfinity(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -642,6 +660,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<float?> NotNegativeInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
         {

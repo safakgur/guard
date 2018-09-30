@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="double" /> arguments.</content>
@@ -25,6 +26,7 @@
         ///     is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> NaN(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -64,6 +66,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> NaN(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -100,6 +103,7 @@
         ///     modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> NotNaN(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -132,6 +136,7 @@
         ///     modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> NotNaN(
             in this ArgumentInfo<double?> argument, string message = null)
         {
@@ -170,6 +175,7 @@
         ///     nor <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> Infinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -212,6 +218,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> Infinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -249,6 +256,7 @@
         ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double, string>`.")]
         public static ref readonly ArgumentInfo<double> NotInfinity(
             in this ArgumentInfo<double> argument, string message)
@@ -284,6 +292,7 @@
         ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> NotInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -317,6 +326,7 @@
         ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double?, string>`.")]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
             in this ArgumentInfo<double?> argument, string message)
@@ -358,6 +368,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -395,6 +406,7 @@
         ///     the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> PositiveInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -434,6 +446,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> PositiveInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -470,6 +483,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> NotPositiveInfinity(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -502,6 +516,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> NotPositiveInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {
@@ -539,6 +554,7 @@
         ///     the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> NegativeInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -578,6 +594,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> NegativeInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -614,6 +631,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double> NotNegativeInfinity(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -646,6 +664,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<double?> NotNegativeInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {
