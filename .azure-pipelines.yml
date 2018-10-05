@@ -2,29 +2,28 @@ jobs:
 - template: .azure-pipelines-build.yml
   parameters:
     name: Windows
-    pool:
-      vmImage: vs2017-win2016
+    image: vs2017-win2016
     artifacts: true
 
 - template: .azure-pipelines-build.yml
   parameters:
     name: macOS
-    pool:
-      vmImage: macOS-10.13
+    image: macOS-10.13
 
 - template: .azure-pipelines-build.yml
   parameters:
     name: Linux
-    pool:
-      vmImage: Ubuntu-16.04
+    image: Ubuntu-16.04
 
 - job: Deploy
   pool:
     vmImage: macOS-10.13
+
   dependsOn:
   - Windows
   - macOS
   - Linux
+
   steps:
   - script: git checkout $(Build.SourceBranchName)
     displayName: Checkout Branch
