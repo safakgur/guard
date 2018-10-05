@@ -1,11 +1,13 @@
 parameters:
   name: ''
-  pool: ''
+  image: ''
   artifacts: false
 
 jobs:
 - job: ${{ parameters.name }}
-  pool: ${{ parameters.pool }}
+  pool:
+    vmImage: ${{ parameters.image }}
+
   steps:
   - script: dotnet build -c CI
     displayName: Build the Solution
