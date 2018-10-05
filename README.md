@@ -5,7 +5,7 @@
 Guard is a fluent argument validation library that is intuitive, fast and extensible.
 
 [![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
-[![Build](https://dev.azure.com/safakgur/Guard/_apis/build/status/Guard-CI)](https://dev.azure.com/safakgur/Guard/_build/latest?definitionId=1)
+[![Build](https://dev.azure.com/safakgur/Guard/_apis/build/status/Guard-CI?label=build)](https://dev.azure.com/safakgur/Guard/_build/latest?definitionId=1)
 [![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)
 
 * [Introduction](#introduction)
@@ -21,50 +21,43 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 Here is a sample constructor that validates its arguments without Guard:
 
 ```c#
-public Person(string firstName, string lastName)
+public Person(string name, int age)
 {
-    if (firstName == null)
-        throw new ArgumentNullException(
-            nameof(firstName), "The first name cannot be null.");
+    if (name == null)
+        throw new ArgumentNullException(nameof(name), "Name cannot be null.");
 
-    if (firstName.Length == 0)
-        throw new ArgumentException(
-            "The first name cannot be empty.", nameof(firstName));
+    if (name.Length == 0)
+        throw new ArgumentException("Name cannot be empty.", nameof(name));
 
-    if (lastName == null)
-        throw new ArgumentNullException(
-            nameof(lastName), "The last name cannot be null.");
+    if (age < 0)
+        throw new ArgumentOutOfRangeException(nameof(age), age, "Age cannot be negative.");
 
-    if (lastName.Length == 0)
-        throw new ArgumentException(
-            "The last name cannot be empty.", nameof(lastName));
-
-    this.firstName = firstName;
-    this.lastName = lastName;
+    Name = name;
+    Age = age;
 }
 ```
 
 And this is how we write the same constructor with Guard:
 
 ```c#
-public Person(string firstName, string lastName)
+public Person(string name)
 {
-    this.firstName = Guard.Argument(() => firstName).NotNull().NotEmpty();
-    this.lastName = Guard.Argument(() => lastName).NotNull().NotEmpty();
+    Name = Guard.Argument(name, nameof(name)).NotNull().NotEmpty();
+    Age = Guard.Argument(age, nameof(age)).NotNegative();
 }
 ```
 
 If this looks like too much allocations to you, fear not. The arguments are read-only structs that
-are passed by reference, and there are ways other than member expressions to initialize them.
-See the [design decisions](#design-decisions) for details.
+are passed by reference, see the [design decisions](#design-decisions) for details.
 
 ## What's Wrong with Vanilla?
 
 There is nothing wrong with writing your own checks but when you have lots of types you need to
 validate, the task gets very tedious, very quickly.
 
-Let's analyze the example above.
-* We have an argument (firstName) that we need to be a non-null, non-empty string.
+Let's analyze the string validation in the example without Guard:
+
+* We have an argument (name) that we need to be a non-null, non-empty string.
 * We check if it's null and throw an `ArgumentNullException` if it is.
 * We then check if it's empty and throw an `ArgumentException` if it is.
 * We specify the same parameter name for each validation.
@@ -122,7 +115,6 @@ targeting .NET Core 1.0 and 2.0.
 
 Right now the following are on the horizon:
 
-* Tests on more platforms
 * More validations
 * Online documentation
 * Performance benchmarks
