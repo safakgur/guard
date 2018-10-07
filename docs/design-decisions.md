@@ -64,9 +64,9 @@ Guard.Argument(() => arg);
 * The second sample does not specify the argument name. This is allowed but not recommended since
 the argument name proves a valuable piece of information when you try to identify the error cause
 from logs or crash dumps.
-* The third sample initializes a `MemberExpression` that provides both the argument's value and name.
-  Although compiling an expression tree is an expensive operation, it is a convenient alternative
-  that can be used in applications that are not performance-critical.
+* The third sample initializes a `MemberExpression` that provides both the argument's value and
+  name. Although compiling an expression tree is an expensive operation, it is a convenient
+  alternative that can be used in applications that are not performance-critical.
 
 ## Implicit Conversion to Value's Type
 
@@ -97,8 +97,8 @@ Guard.Argument(() => arg).NotEmpty());
 
 Each validation in Guard has a specific exception type it throws when its precondition is not
 satisfied. `NotNull` throws an `ArgumentNullException`. The validations on `IComparable<T>`
-arguments like `MinValue` and `NotZero` throw `ArgumentOutOfRangeException`s. Most others throw
-`ArgumentException`s. (See [Modifying Arguments](#modifying-arguments) for exceptional cases.)
+arguments like `MinValue` and `NotZero` throw `ArgumentOutOfRangeException`s. Most others
+throw `ArgumentException`s. (See [Modifying Arguments](#modifying-arguments) for exceptional cases.)
 
 Throwing custom exceptions from standard validations seems counter-intuitive and right now, the only
 way to do so is to use the generic `Require<TException>` validation.
@@ -124,11 +124,11 @@ Guard.Argument(() => arg).NotNull("The argument cannot be null.");
 ```
 
 In the first example above, we specify a factory that will create the error message if the
-validation fails. `arg` is passed to the factory as `a` so it can be used in the error message.
-We could of course use `arg` directly but that would cause it to be captured by the lambda
-expression, thus prevent the expression from being cached. We could make the `Null` validation
-accept a `string` parameter instead of a `Func<T, string>`, but that would require the error message
-to be initialized even when the precondition is satisfied, i.e. when the argument is null.
+validation fails. `arg` is passed to the factory as `a` so it can be used in the error message. We
+could of course use `arg` directly but that would cause it to be captured by the lambda expression,
+thus prevent the expression from being cached. We could make the `Null` validation accept a
+`string` parameter instead of a `Func<T, string>`, but that would require the error message to
+be initialized even when the precondition is satisfied, i.e. when the argument is null.
 
 In the second example, we see that the `NotNull` validation accepts the error message as a string
 instead of a factory. This is because it only throws an exception if the argument value is null.
@@ -167,8 +167,8 @@ Things to note:
 
 ## Automatic Nullable Value Conversions
 
-Using the `NotNull` validation on a nullable value type would convert the `ArgumentInfo<T?>` to an
-`ArgumentInfo<T>` since the validation being successful means that the argument is not null.
+Using the `NotNull` validation on a nullable value type would convert the `ArgumentInfo<T?>` to
+an `ArgumentInfo<T>` since the validation being successful means that the argument is not null.
 
 ```c#
 public class SomeService
@@ -200,8 +200,8 @@ public Person(string name)
 }
 ```
 
-Since the arguments can be modified to have any value, including null, `NotNull` validations applied
-to modified arguments shouldn't throw `ArgumentNullException`s.
+Since the arguments can be modified to have any value, including null, `NotNull` validations
+applied to modified arguments shouldn't throw `ArgumentNullException`s.
 
 ```c#
 public Person GetOwner(Car car)
@@ -213,14 +213,15 @@ public Person GetOwner(Car car)
 }
 ```
 
-The first call to `NotNull` in the above example throws an `ArgumentNullException` if `car` is null
-but the second call to `NotNull` should throw an `ArgumentException`. This is because throwing an
-`ArgumentNullException` there would indicate that `car` is null when in fact its `Owner` is null.
+The first call to `NotNull` in the above example throws an `ArgumentNullException` if `car` is
+null but the second call to `NotNull` should throw an `ArgumentException`. This is because
+throwing an `ArgumentNullException` there would indicate that `car` is null when in fact its
+`Owner` is null.
 
 The same goes for `ArgumentOutOfRangeException`s. If the original argument is modified, an
 `ArgumentException` is thrown instead of a more specialized exception. For validations to detect
-whether the argument is modified, `ArgumentInfo<T>` contains a boolean `Modified` flag along with
-the argument's name and value.
+whether the argument is modified, `ArgumentInfo<T>` contains a boolean `Modified` flag along
+with the argument's name and value.
 
 ## Validating Argument Members
 
@@ -257,5 +258,9 @@ BuyCar(buyer, car);
 
 The above code throws an `ArgumentException` with the parameter name "buyer" and message
 "Address.City cannot be null.".
+
+Keep in mind that member validations require building `MemberExpression`s. Even though the
+compiled delegates get cached and reused, creating expression trees may still be expensive for your
+particular application.
 
 [1]: ../src/Guard.Messages.cs
