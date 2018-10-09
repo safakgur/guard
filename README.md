@@ -5,7 +5,7 @@
 Guard is a fluent argument validation library that is intuitive, fast and extensible.
 
 [![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
-[![Build](https://dev.azure.com/safakgur/Guard/_apis/build/status/Guard-CI?label=build)](https://dev.azure.com/safakgur/Guard/_build/latest?definitionId=1)
+[![Build](https://dev.azure.com/safakgur/Guard/_apis/build/status/Guard-CI?label=builds)](https://dev.azure.com/safakgur/Guard/_build/latest?definitionId=1)
 [![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)
 
 * [Introduction](#introduction)
