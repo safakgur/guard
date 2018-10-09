@@ -263,4 +263,71 @@ Keep in mind that member validations require building `MemberExpression`s. Even 
 compiled delegates get cached and reused, creating expression trees may still be expensive for your
 particular application.
 
+## State Guards
+
+Along with its arguments, a method may also need to validate the state of the instance it belongs
+to. Guard currently provides three validations to handle these cases:
+
+### Operation
+
+* Throws an `InvalidOperationException` when the first parameter (`valid`) is passed false.
+* A custom message can be specified using the second parameter (`message`).
+* A third parameter marked with [`[CallerMemberName]`][2] exists to retrieve the invoked method's name.
+
+```c#
+public void TestOperation()
+{
+    // Throws an InvalidOperationException with the message:
+    // "TestOperation call is not valid due to the current state of the object."
+    Guard.Operation(false);
+
+    // Throws an InvalidOperationException with the message:
+    // "Custom message."
+    Guard.Operation(false, "Custom message.");
+}
+```
+
+### Support
+
+* Throws a `NotSupportedException` when the first parameter (`supported`) is passed false.
+* A custom message can be specified using the second parameter (`message`).
+* A third parameter marked with [`[CallerMemberName]`][2] exists to retrieve the invoked method's name.
+
+```c#
+public void TestSupport()
+{
+    // Throws a NotSupportedException with the message:
+    // "TestSupport is not supported"
+    Guard.Support(false);
+
+    // Throws a NotSupportedException with the message:
+    // "Custom message."
+    Guard.Support(false, "Custom message.");
+}
+```
+
+### Disposal
+
+* Throws an `ObjectDisposedException` when the first parameter (`disposed`) is passed true.
+* The object name can be specified using the second parameter (`objectName`).
+* A custom message can be specified using the third parameter (`message`).
+
+```c#
+public void TestDisposal()
+{
+    // Throws an ObjectDisposedException with the message:
+    // "Cannot access a disposed object."
+    Guard.Disposal(true);
+
+    // Throws an ObjectDisposedException with the message:
+    // "Cannot access a disposed object.\r\nObject name: 'TestClass'."
+    Guard.Disposal(true, nameof(TestClass));
+
+    // Throws an ObjectDisposedException with the message:
+    // "Custom message."
+    Guard.Disposal(true, nameof(TestClass), "Custom message.");
+}
+```
+
 [1]: ../src/Guard.Messages.cs
+[2]: https://docs.microsoft.com/dotnet/api/system.runtime.compilerservices.callermembernameattribute "CallerMemberNameAttribute Class | Microsoft Docs"
