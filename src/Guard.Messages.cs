@@ -24,6 +24,9 @@
             public static string Support(string caller)
                 => caller != null ? $"{caller} is not supported" : "Specified method is not supported.";
 
+            public static string Disposal()
+                => "Cannot access a disposed object.";
+
             public static string Null<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be null.";
 

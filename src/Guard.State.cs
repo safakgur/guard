@@ -60,7 +60,7 @@
         public static void Disposal(bool disposed, string objectName = null, string message = null)
         {
             if (disposed)
-                throw new ObjectDisposedException(objectName, message);
+                throw new ObjectDisposedException(objectName, message ?? Messages.Disposal());
         }
     }
 }
