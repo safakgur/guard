@@ -5,7 +5,7 @@
 
     public sealed class StateTests : BaseTests
     {
-        [Fact(DisplayName = T + "Operation")]
+        [Fact(DisplayName = T + "State: Operation")]
         public void TestOperation()
         {
             Guard.Operation(true);
