@@ -13,6 +13,10 @@ For `ArgumentInfo<T> where T : class` and `ArgumentInfo<T?> where T : struct`
 * `Null()`
 * `NotNull()` - When called for an argument of `T?`, returns an argument of `T`.
 
+Static without type constraints:
+* `NotAllNull(ArgumentInfo<T1>, ArgumentInfo<T2>)`
+* `NotAllNull(ArgumentInfo<T1>, ArgumentInfo<T2>, ArgumentInfo<T3>)`
+
 ### Equality Guards
 
 For `ArgumentInfo<T>`
@@ -170,7 +174,7 @@ For `ArgumentInfo<T>`
 
 ### State Guards
 
-These guards are for validating instance states instead of method arguments.
+For validating instance states instead of method arguments:
 * `Operation(bool)` - Throws `InvalidOperationException` for `false`
 * `Support(bool)` - Throws `NotSupportedException` for `false`
 * `Disposal(bool, string)` - Throws `ObjectDisposedException` for `true`
