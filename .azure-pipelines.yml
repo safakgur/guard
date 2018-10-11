@@ -36,3 +36,7 @@ jobs:
     displayName: Upload Coverage
     env:
       CODECOV_TOKEN: $(codecov.token)
+
+  - script: dotnet nuget push $(System.ArtifactsDirectory)/all/Dawn.Guard.*.nupkg -s $(nuget.server) -k $(nuget.token)
+    condition: eq(variables['Build.SourceBranchName'], 'master')
+    displayName: Publish NuGet Package
