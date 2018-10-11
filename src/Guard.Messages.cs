@@ -33,6 +33,12 @@
             public static string NotNull<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} cannot be null.";
 
+            public static string NotAllNull(string name1, string name2)
+                => $"{name1} and {name2} cannot both be null.";
+
+            public static string NotAllNull(string name1, string name2, string name3)
+                => $"{name1}, {name2} and {name3} cannot all be null.";
+
             public static string Default<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be {default(T)}.";
 

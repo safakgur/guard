@@ -64,7 +64,7 @@
             return ref argument;
         }
 
-        /// <summary>Requires the argument to not be <c>null</c>.</summary>
+        /// <summary>Requires the argument not to be <c>null</c>.</summary>
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -97,7 +97,7 @@
             return ref argument;
         }
 
-        /// <summary>Requires the nullable argument to not be <c>null</c>.</summary>
+        /// <summary>Requires the nullable argument not to be <c>null</c>.</summary>
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
@@ -160,6 +160,59 @@
 
             result = default;
             return false;
+        }
+
+        /// <summary>Requires at least one of the specified arguments not to be <c>null</c>.</summary>
+        /// <typeparam name="T1">The type of the first argument.</typeparam>
+        /// <typeparam name="T2">The type of the second argument.</typeparam>
+        /// <param name="argument1">The first argument.</param>
+        /// <param name="argument2">The second argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     None of the specified arguments have value.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        public static void NotAllNull<T1, T2>(
+                    in ArgumentInfo<T1> argument1, in ArgumentInfo<T2> argument2, string message = null)
+        {
+            if (!argument1.HasValue() && !argument2.HasValue())
+            {
+                var m = message ?? Messages.NotAllNull(argument1.Name, argument2.Name);
+                throw new ArgumentNullException($"{argument1.Name}, {argument2.Name}", m);
+            }
+        }
+
+        /// <summary>Requires at least one of the specified arguments not to be <c>null</c>.</summary>
+        /// <typeparam name="T1">The type of the first argument.</typeparam>
+        /// <typeparam name="T2">The type of the second argument.</typeparam>
+        /// <typeparam name="T3">The type of the third argument.</typeparam>
+        /// <param name="argument1">The first argument.</param>
+        /// <param name="argument2">The second argument.</param>
+        /// <param name="argument3">The third argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     None of the specified arguments have value.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        public static void NotAllNull<T1, T2, T3>(
+            in ArgumentInfo<T1> argument1,
+            in ArgumentInfo<T2> argument2,
+            in ArgumentInfo<T3> argument3,
+            string message = null)
+        {
+            if (!argument1.HasValue() && !argument2.HasValue() && !argument3.HasValue())
+            {
+                var m = message ?? Messages.NotAllNull(argument1.Name, argument2.Name, argument3.Name);
+                throw new ArgumentNullException($"{argument1.Name}, {argument2.Name}, {argument3.Name}", m);
+            }
         }
 
         /// <summary>Provides a <c>null</c> checking helper.</summary>
