@@ -40,7 +40,7 @@ public Person(string name, int age)
 And this is how we write the same constructor with Guard:
 
 ```c#
-public Person(string name)
+public Person(string name, int age)
 {
     Name = Guard.Argument(name, nameof(name)).NotNull().NotEmpty();
     Age = Guard.Argument(age, nameof(age)).NotNegative();
