@@ -272,6 +272,8 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value has a different reference than different than <paramref name="other" />.
         /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Same<T>(
             in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
             where T : class
@@ -299,6 +301,8 @@
         /// <exception cref="ArgumentException">
         ///     <paramref name="argument" /> value has the same reference as <paramref name="other" />.
         /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotSame<T>(
             in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
             where T : class
