@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Runtime.CompilerServices;
     using JetBrains.Annotations;
 
@@ -20,6 +21,7 @@
         ///     <paramref name="argument" /> does not have the default value of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Default<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct
@@ -49,6 +51,7 @@
         ///     <typeparamref name="T" /> nor <c>null</c>.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Default<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct
@@ -80,6 +83,7 @@
         ///     <paramref name="argument" /> have the default value of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the NotDefault overload that accepts the message as a string.")]
         public static ref readonly ArgumentInfo<T> NotDefault<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message)
@@ -107,6 +111,7 @@
         ///     <paramref name="argument" /> have the default value of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotDefault<T>(
             in this ArgumentInfo<T> argument, string message = null)
             where T : struct
@@ -133,6 +138,7 @@
         ///     <paramref name="argument" /> have the default value of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> NotDefault<T>(
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct
@@ -164,6 +170,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Equal<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, T, string> message = null)
             => ref argument.Equal(other, null, message);
@@ -183,6 +190,7 @@
         ///     comparison made by <paramref name="comparer" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Equal<T>(
             in this ArgumentInfo<T> argument,
             in T other,
@@ -214,6 +222,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, string> message = null)
             => ref argument.NotEqual(other, null, message);
@@ -235,6 +244,7 @@
         ///     comparison made by <paramref name="comparer" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
             in this ArgumentInfo<T> argument,
             in T other,
@@ -244,6 +254,62 @@
             if (argument.HasValue() && (comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument, other);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>Requires the argument to have the same reference as the specified object.</summary>
+        /// <typeparam name="T">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The object to compare the argument's reference to.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value has a different reference than different than <paramref name="other" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        public static ref readonly ArgumentInfo<T> Same<T>(
+            in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
+            where T : class
+        {
+            if (argument.HasValue() && !ReferenceEquals(argument.Value, other))
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.Same(argument, other);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a different reference than the specified object.
+        /// </summary>
+        /// <typeparam name="T">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The object to compare the argument's reference to.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value has the same reference as <paramref name="other" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        public static ref readonly ArgumentInfo<T> NotSame<T>(
+            in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
+            where T : class
+        {
+            if (argument.HasValue() && ReferenceEquals(argument.Value, other))
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.NotSame(argument, other);
                 throw new ArgumentException(m, argument.Name);
             }
 

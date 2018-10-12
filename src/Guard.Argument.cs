@@ -68,7 +68,7 @@
         public readonly partial struct ArgumentInfo<T>
         {
             /// <summary>The default name for the arguments of type <typeparamref name="T" />.</summary>
-            private static readonly string defaultName = $"The {typeof(T)} argument";
+            private static readonly string DefaultName = $"The {typeof(T)} argument";
 
             /// <summary>The argument name.</summary>
             private readonly string name;
@@ -103,7 +103,7 @@
             public T Value { get; }
 
             /// <summary>Gets the argument name.</summary>
-            public string Name => this.name ?? defaultName;
+            public string Name => this.name ?? DefaultName;
 
             /// <summary>
             ///     Gets a value indicating whether the original method argument is modified before

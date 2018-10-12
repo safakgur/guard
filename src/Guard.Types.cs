@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq.Expressions;
     using System.Threading;
     using JetBrains.Annotations;
@@ -25,6 +26,7 @@
         ///     <paramref name="argument" /> value is not an instance of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ArgumentInfo<T> Type<T>(
             in this ArgumentInfo<object> argument, Func<object, string> message = null)
         {
@@ -55,6 +57,7 @@
         ///     <paramref name="argument" /> value is an instance of type <typeparamref name="T" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<object> NotType<T>(
             in this ArgumentInfo<object> argument, Func<T, string> message = null)
         {
@@ -81,6 +84,7 @@
         ///     <paramref name="argument" /> value is not an instance of the type represented by <paramref name="type" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<object> Type(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
@@ -109,6 +113,7 @@
         ///     <paramref name="argument" /> value is an instance of the type represented by <paramref name="type" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<object> NotType(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
@@ -159,15 +164,15 @@
         /// <summary>Provides non-generic, cached utilities for specified types.</summary>
         private static class TypeInfo
         {
-            /// <summary>The locker that synchronizes access to <see cref="canBeConvertedTo" />.</summary>
-            private static readonly ReaderWriterLockSlim locker
+            /// <summary>The locker that synchronizes access to <see cref="CanBeConvertedToDict" />.</summary>
+            private static readonly ReaderWriterLockSlim Locker
                 = new ReaderWriterLockSlim();
 
             /// <summary>
             ///     The functions that determine whether a specified object can be converted to the
             ///     type that the function is mapped to.
             /// </summary>
-            private static readonly Dictionary<Type, Func<object, bool>> canBeConvertedTo
+            private static readonly Dictionary<Type, Func<object, bool>> CanBeConvertedToDict
                 = new Dictionary<Type, Func<object, bool>>();
 
             /// <summary>
@@ -183,10 +188,10 @@
             {
                 Func<object, bool> func;
 
-                locker.EnterUpgradeableReadLock();
+                Locker.EnterUpgradeableReadLock();
                 try
                 {
-                    if (!canBeConvertedTo.TryGetValue(targetType, out func))
+                    if (!CanBeConvertedToDict.TryGetValue(targetType, out func))
                     {
                         var t = typeof(TypeInfo<>).MakeGenericType(targetType);
                         var f = Expression.Field(null, t.GetField(nameof(TypeInfo<object>.CanBeInitializedFrom)));
@@ -195,20 +200,20 @@
                         var l = Expression.Lambda<Func<object, bool>>(c, o);
                         func = l.Compile();
 
-                        locker.EnterWriteLock();
+                        Locker.EnterWriteLock();
                         try
                         {
-                            canBeConvertedTo[targetType] = func;
+                            CanBeConvertedToDict[targetType] = func;
                         }
                         finally
                         {
-                            locker.ExitWriteLock();
+                            Locker.ExitWriteLock();
                         }
                     }
                 }
                 finally
                 {
-                    locker.ExitUpgradeableReadLock();
+                    Locker.ExitUpgradeableReadLock();
                 }
 
                 return func(obj);

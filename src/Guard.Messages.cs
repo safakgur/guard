@@ -4,8 +4,11 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
 #if !NETSTANDARD1_0
+
     using System.Net.Mail;
+
 #endif
 
     /// <content>Provides error messages for the common preconditions.</content>
@@ -13,11 +16,28 @@
     {
         private static class Messages
         {
+            public static string State(string caller)
+                => caller != null
+                    ? $"{caller} call is not valid due to the current state of the object."
+                    : "Operation is not valid due to the current state of the object.";
+
+            public static string Support(string caller)
+                => caller != null ? $"{caller} is not supported" : "Specified method is not supported.";
+
+            public static string Disposal()
+                => "Cannot access a disposed object.";
+
             public static string Null<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be null.";
 
             public static string NotNull<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} cannot be null.";
+
+            public static string NotAllNull(string name1, string name2)
+                => $"{name1} and {name2} cannot both be null.";
+
+            public static string NotAllNull(string name1, string name2, string name3)
+                => $"{name1}, {name2} and {name3} cannot all be null.";
 
             public static string Default<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be {default(T)}.";
@@ -30,6 +50,12 @@
 
             public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
                 => argument.Secure ? Require(argument) : $"{argument.Name} cannot be {ToString(other)}.";
+
+            public static string Same<T>(in ArgumentInfo<T> argument, object other)
+                => argument.Secure ? Require(argument) : $"{argument.Name} must have the same reference as {ToString(other)}.";
+
+            public static string NotSame<T>(in ArgumentInfo<T> argument, object other)
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have the same reference as {ToString(other)}.";
 
             public static string Require<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} is invalid.";
@@ -212,6 +238,7 @@
                 => $"{argument.Name} must be an absolute URI with the HTTPS scheme.";
 
 #if !NETSTANDARD1_0
+
             public static string EmailHasHost(in ArgumentInfo<MailAddress> argument, string host)
                 => argument.Secure ? Require(argument) : $"{argument.Name} must have the host '{host}'.";
 
@@ -229,22 +256,23 @@
 
             public static string EmailDoesNotHaveDisplayName(in ArgumentInfo<MailAddress> argument)
                 => $"{argument.Name} cannot have a display name specified.";
+
 #endif
 
             private static string ToString(object obj) => obj?.ToString() ?? "null";
 
             private static string Join(IEnumerable collection)
             {
-                const int max = 5;
+                const int Max = 5;
 
                 var objects = collection is IEnumerable<string> e
                     ? e.Select(i => $"\"{i}\"") as IEnumerable<object>
                     : collection.Cast<object>();
 
-                var list = objects.Take(max + 1).ToList();
-                var ellipsis = list.Count > max;
+                var list = objects.Take(Max + 1).ToList();
+                var ellipsis = list.Count > Max;
                 if (ellipsis)
-                    list.RemoveAt(max);
+                    list.RemoveAt(Max);
 
                 var result = string.Join(", ", list);
                 if (ellipsis)

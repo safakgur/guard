@@ -1,5 +1,6 @@
 ﻿namespace Dawn.Tests
 {
+    using System;
     using Xunit;
 
     public sealed class NullTests : BaseTests
@@ -62,6 +63,53 @@
                 Assert.Equal(nullableOneArg.Value, oneArg.Value);
                 Assert.Equal(nullableOneArg.Secure, oneArg.Secure);
             }
+        }
+
+        [Theory(DisplayName = T + "Null: NotAllNull`2")]
+        [InlineData(1, "A", true)]
+        [InlineData(null, "A", true)]
+        [InlineData(1, null, true)]
+        [InlineData(null, null, false)]
+        public void NotAllNull2<T1, T2>(T1 val1, T2 val2, bool valid)
+        {
+            if (!valid)
+            {
+                var paramName = $"{nameof(val1)}, {nameof(val2)}";
+                Assert.Throws<ArgumentNullException>(paramName, () => Test());
+                return;
+            }
+
+            Test();
+
+            void Test() => Guard.NotAllNull(
+                Guard.Argument(() => val1),
+                Guard.Argument(() => val2));
+        }
+
+        [Theory(DisplayName = T + "Null: NotAllNull`3")]
+        [InlineData(1, "A", 1.0, true)]
+        [InlineData(null, "A", 1.0, true)]
+        [InlineData(1, null, 1.0, true)]
+        [InlineData(1, "A", null, true)]
+        [InlineData(null, null, 1.0, true)]
+        [InlineData(1, null, null, true)]
+        [InlineData(null, "A", null, true)]
+        [InlineData(null, null, null, false)]
+        public void NotAllNull3<T1, T2, T3>(T1 val1, T2 val2, T3 val3, bool valid)
+        {
+            if (!valid)
+            {
+                var paramName = $"{nameof(val1)}, {nameof(val2)}, {nameof(val3)}";
+                Assert.Throws<ArgumentNullException>(paramName, () => Test());
+                return;
+            }
+
+            Test();
+
+            void Test() => Guard.NotAllNull(
+                Guard.Argument(() => val1),
+                Guard.Argument(() => val2),
+                Guard.Argument(() => val3));
         }
     }
 }

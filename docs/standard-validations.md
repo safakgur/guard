@@ -1,16 +1,21 @@
 # Standard Validations
 
-Below is a complete list of validations that are included with the library.
+Below is a complete list of validations that are included with the library. Optional parameters that
+allow you to specify custom exception messages are omitted for brevity.
 
-All validations are documented using the XML documentation comments, so IntelliSense works but I
-haven't yet decided which tool to use for converting the XML output to HTML. Therefore there is no
-online documentation yet.
+All validations are documented using the XML documentation comments, so IntelliSense works but I haven't
+yet decided which tool to use for converting the XML output to HTML. Therefore there is no online
+documentation yet.
 
 ### Null Guards
 
 For `ArgumentInfo<T> where T : class` and `ArgumentInfo<T?> where T : struct`
 * `Null()`
 * `NotNull()` - When called for an argument of `T?`, returns an argument of `T`.
+
+Static without type constraints:
+* `NotAllNull(ArgumentInfo<T1>, ArgumentInfo<T2>)`
+* `NotAllNull(ArgumentInfo<T1>, ArgumentInfo<T2>, ArgumentInfo<T3>)`
 
 ### Equality Guards
 
@@ -166,3 +171,10 @@ For `ArgumentInfo<T>`
 * `Require<TException>(bool)`
 * `Require(Func<T, bool>)`
 * `Require<TException>(Func<T, bool>)`
+
+### State Guards
+
+For validating instance states instead of method arguments:
+* `Operation(bool)` - Throws `InvalidOperationException` for `false`
+* `Support(bool)` - Throws `NotSupportedException` for `false`
+* `Disposal(bool, string)` - Throws `ObjectDisposedException` for `true`

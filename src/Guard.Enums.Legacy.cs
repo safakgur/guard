@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="System.Enum" /> arguments.</content>
@@ -17,6 +18,7 @@
         /// <returns>A new <see cref="EnumArgumentInfo{T}" />.</returns>
         /// <exception cref="ArgumentException"><typeparamref name="T" /> is not an enum.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the enum preconditions directly, e.g. `arg.Defined()` instead of `arg.Enum().Defined()`.")]
         public static EnumArgumentInfo<T> Enum<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
@@ -41,6 +43,7 @@
         /// <returns>A new <see cref="NullableEnumArgumentInfo{T}" />.</returns>
         /// <exception cref="ArgumentException"><typeparamref name="T" /> is not an enum.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the enum preconditions directly, e.g. `arg.Defined()` instead of `arg.Enum().Defined()`.")]
         public static NullableEnumArgumentInfo<T> Enum<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
@@ -57,6 +60,7 @@
 
         /// <summary>Represents a method argument with an enumeration value.</summary>
         /// <typeparam name="T">The type of the enum.</typeparam>
+        [DebuggerStepThrough]
         [Obsolete("Use the enum preconditions directly, e.g. `arg.Defined()` instead of `arg.Enum().Defined()`.")]
         public readonly struct EnumArgumentInfo<T>
             where T : struct, IComparable, IFormattable
@@ -89,6 +93,7 @@
             /// </exception>
             /// <returns>The current instance.</returns>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public EnumArgumentInfo<T> Defined(Func<T, string> message = null)
             {
                 if (!EnumInfo<T>.Values.Contains(this.Argument.Value))
@@ -110,6 +115,7 @@
             ///     <see cref="Argument" /> value has one or more of its bits set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public EnumArgumentInfo<T> None(Func<T, string> message = null)
             {
                 if (!EqualityComparer<T>.Default.Equals(this.Argument.Value, default))
@@ -131,6 +137,7 @@
             ///     <see cref="Argument" /> value has none of its bits set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public EnumArgumentInfo<T> NotNone(Func<T, string> message = null)
             {
                 if (EqualityComparer<T>.Default.Equals(this.Argument.Value, default))
@@ -153,6 +160,7 @@
             ///     <see cref="Argument" /> value is different than <paramref name="other" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public EnumArgumentInfo<T> Equal(T other, Func<T, T, string> message = null)
             {
                 if (!EqualityComparer<T>.Default.Equals(this.Argument.Value, other))
@@ -177,6 +185,7 @@
             ///     <see cref="Argument" /> value is equal to <paramref name="other" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public EnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
                 if (EqualityComparer<T>.Default.Equals(this.Argument.Value, other))
@@ -200,6 +209,7 @@
             ///     <paramref name="flag" /> set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public EnumArgumentInfo<T> HasFlag(T flag, Func<T, T, string> message = null)
             {
                 if (!EnumInfo<T>.HasFlag(this.Argument.Value, flag))
@@ -222,6 +232,7 @@
             ///     <see cref="Argument" /> have the bits specified in <paramref name="flag" /> set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public EnumArgumentInfo<T> DoesNotHaveFlag(T flag, Func<T, T, string> message = null)
             {
                 if (EnumInfo<T>.HasFlag(this.Argument.Value, flag))
@@ -309,6 +320,7 @@
             /// </exception>
             /// <returns>The current instance.</returns>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> Defined(Func<T, string> message = null)
             {
                 if (this.NotNull(out var a))
@@ -329,6 +341,7 @@
             ///     <see cref="Argument" /> value is not <c>null</c> and has one or more of its bits set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> None(Func<T, string> message = null)
             {
                 if (this.NotNull(out var a))
@@ -347,6 +360,7 @@
             ///     <see cref="Argument" /> value is not <c>null</c> and has none of its bits set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> NotNone(Func<T, string> message = null)
             {
                 if (this.NotNull(out var a))
@@ -368,6 +382,7 @@
             ///     <see cref="Argument" /> value is not <c>null</c> and is different than <paramref name="other" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> Equal(T other, Func<T, T, string> message = null)
             {
                 if (this.NotNull(out var a))
@@ -390,6 +405,7 @@
             ///     <see cref="Argument" /> value is not <c>null</c> and is equal to <paramref name="other" />.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
                 if (this.NotNull(out var a))
@@ -413,6 +429,7 @@
             ///     in <paramref name="flag" /> set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> HasFlag(T flag, Func<T, T, string> message = null)
             {
                 if (this.NotNull(out var a))
@@ -436,6 +453,7 @@
             ///     <paramref name="flag" /> set.
             /// </exception>
             [AssertionMethod]
+            [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> DoesNotHaveFlag(T flag, Func<T, T, string> message = null)
             {
                 if (this.NotNull(out var a))

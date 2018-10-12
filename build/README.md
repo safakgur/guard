@@ -36,6 +36,8 @@ Options
 
 `-Configuration`: "Debug" or "Release". The default is "Release".
 
+`-Logger`: Specifies a logger for test results.
+
 `-Coverage`: If set, produces test coverage.
 
 `-CoverageFormat`: Output format of the coverage results. The default is "opencover".
@@ -47,11 +49,5 @@ Options
 The build and test scripts assume that `dotnet` is in PATH when `-NoInstall` is set and the SDKs
 are not found in the "artifacts/dotnet".
 
-**Apveyor Script**
-
-[appveyor.ps1][3] is executed on AppVeyor builds. It builds and tests the library, then uploads the
-coverage results to CodeCov.
-
 [1]: https://docs.microsoft.com/powershell/scripting/setup/installing-powershell-core-on-linux
 [2]: https://github.com/tonerdo/coverlet
-[3]: appveyor.ps1
