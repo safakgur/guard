@@ -65,12 +65,12 @@
             }
         }
 
-        [Theory(DisplayName = T + "NotAllNone`2")]
+        [Theory(DisplayName = T + "Null: NotAllNull`2")]
         [InlineData(1, "A", true)]
         [InlineData(null, "A", true)]
         [InlineData(1, null, true)]
         [InlineData(null, null, false)]
-        public void NotAllNone2<T1, T2>(T1 val1, T2 val2, bool valid)
+        public void NotAllNull2<T1, T2>(T1 val1, T2 val2, bool valid)
         {
             if (!valid)
             {
@@ -86,7 +86,7 @@
                 Guard.Argument(() => val2));
         }
 
-        [Theory(DisplayName = T + "NotAllNone`3")]
+        [Theory(DisplayName = T + "Null: NotAllNull`3")]
         [InlineData(1, "A", 1.0, true)]
         [InlineData(null, "A", 1.0, true)]
         [InlineData(1, null, 1.0, true)]
@@ -95,7 +95,7 @@
         [InlineData(1, null, null, true)]
         [InlineData(null, "A", null, true)]
         [InlineData(null, null, null, false)]
-        public void NotAllNone3<T1, T2, T3>(T1 val1, T2 val2, T3 val3, bool valid)
+        public void NotAllNull3<T1, T2, T3>(T1 val1, T2 val2, T3 val3, bool valid)
         {
             if (!valid)
             {
