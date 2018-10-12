@@ -177,7 +177,7 @@
         [AssertionMethod]
         [DebuggerStepThrough]
         public static void NotAllNull<T1, T2>(
-                    in ArgumentInfo<T1> argument1, in ArgumentInfo<T2> argument2, string message = null)
+            in ArgumentInfo<T1> argument1, in ArgumentInfo<T2> argument2, string message = null)
         {
             if (!argument1.HasValue() && !argument2.HasValue())
             {
