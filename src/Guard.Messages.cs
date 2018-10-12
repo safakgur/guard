@@ -51,6 +51,12 @@
             public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
                 => argument.Secure ? Require(argument) : $"{argument.Name} cannot be {ToString(other)}.";
 
+            public static string Same<T>(in ArgumentInfo<T> argument, object other)
+                => argument.Secure ? Require(argument) : $"{argument.Name} must have the same reference as {ToString(other)}.";
+
+            public static string NotSame<T>(in ArgumentInfo<T> argument, object other)
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have the same reference as {ToString(other)}.";
+
             public static string Require<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} is invalid.";
 
