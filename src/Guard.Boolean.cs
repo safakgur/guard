@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="bool" /> arguments.</content>
@@ -14,6 +15,7 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>false</c>.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<bool> True(
             in this ArgumentInfo<bool> argument, string message = null)
         {
@@ -34,6 +36,7 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>false</c>.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<bool?> True(
             in this ArgumentInfo<bool?> argument, string message = null)
         {
@@ -54,6 +57,7 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>true</c>.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<bool> False(
             in this ArgumentInfo<bool> argument, string message = null)
         {
@@ -74,6 +78,7 @@
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>true</c>.</exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<bool?> False(
             in this ArgumentInfo<bool?> argument, string message = null)
         {

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using JetBrains.Annotations;
 
     /// <content>Provides preconditions for <see cref="IComparable" /> arguments.</content>
@@ -27,6 +28,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Min<T>(
             in this ArgumentInfo<T> argument, in T minValue, Func<T, T, string> message = null)
             where T : IComparable<T>
@@ -63,6 +65,7 @@
         ///     argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Min<T>(
             in this ArgumentInfo<T?> argument, in T minValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -102,6 +105,7 @@
         ///     the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Max<T>(
             in this ArgumentInfo<T> argument, in T maxValue, Func<T, T, string> message = null)
             where T : IComparable<T>
@@ -138,6 +142,7 @@
         ///     the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Max<T>(
             in this ArgumentInfo<T?> argument, in T maxValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -179,6 +184,7 @@
         ///     <paramref name="maxValue" />. And the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> InRange<T>(
             in this ArgumentInfo<T> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
             where T : IComparable<T>
@@ -223,6 +229,7 @@
         ///     modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> InRange<T>(
             in this ArgumentInfo<T?> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -263,6 +270,7 @@
         ///     <paramref name="argument" /> value is not zero and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Zero<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -302,6 +310,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Zero<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -337,6 +346,7 @@
         ///     <paramref name="argument" /> value is zero and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the NotZero overload that accepts the message as a string.")]
         public static ref readonly ArgumentInfo<T> NotZero<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message)
@@ -368,6 +378,7 @@
         ///     <paramref name="argument" /> value is zero and the argument is modified after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotZero<T>(
             in this ArgumentInfo<T> argument, string message = null)
             where T : struct, IComparable<T>
@@ -407,6 +418,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         [Obsolete("Use the NotZero overload that accepts the message as a string.")]
         public static ref readonly ArgumentInfo<T?> NotZero<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message)
@@ -446,6 +458,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> NotZero<T>(
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct, IComparable<T>
@@ -482,6 +495,7 @@
         ///     after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Positive<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -522,6 +536,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Positive<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -558,6 +573,7 @@
         ///     after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotPositive<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -598,6 +614,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> NotPositive<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -634,6 +651,7 @@
         ///     after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> Negative<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -674,6 +692,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> Negative<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -710,6 +729,7 @@
         ///     after its initialization.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T> NotNegative<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -750,6 +770,7 @@
         ///     message delegate accepts a non-nullable argument.
         /// </remarks>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<T?> NotNegative<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>

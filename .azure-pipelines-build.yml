@@ -1,0 +1,27 @@
+parameters:
+  name: ''
+  image: ''
+  artifacts: false
+
+jobs:
+- job: ${{ parameters.name }}
+  pool:
+    vmImage: ${{ parameters.image }}
+
+  steps:
+  - script: dotnet build -c CI
+    displayName: Build the Solution
+
+  - powershell: build/test.ps1 -NoInstall -Configuration CI -Logger trx -Coverage
+    displayName: Run Tests
+  
+  - task: PublishTestResults@2
+    inputs:
+      testRunner: VSTest
+      testResultsFiles: '**/*.trx'
+
+  - ${{ if eq(parameters.artifacts, 'true') }}:
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: artifacts
+        artifactName: all

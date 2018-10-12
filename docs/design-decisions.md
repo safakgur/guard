@@ -64,10 +64,9 @@ Guard.Argument(() => arg);
 * The second sample does not specify the argument name. This is allowed but not recommended since
 the argument name proves a valuable piece of information when you try to identify the error cause
 from logs or crash dumps.
-* The third sample initializes a `MemberExpression` that provides both the argument's value and name.
-Although I see the importance to provide an option for initializing guarded arguments without any
-heap allocations, I expect the performance implications to be negligible for most projects.
-So I recommend this to be used unless it is actually measured to be slowing things down.
+* The third sample initializes a `MemberExpression` that provides both the argument's value and
+  name. Although compiling an expression tree is an expensive operation, it is a convenient
+  alternative that can be used in applications that are not performance-critical.
 
 ## Implicit Conversion to Value's Type
 
@@ -76,11 +75,8 @@ their corresponding fields/properties. So it seems convenient to allow the guard
 assigned directly as argument values like this:
 
 ```c#
-public Person(string firstName, string lastName)
-{
-    this.firstName = Guard.Argument(() => firstName).NotNull().NotEmpty();
-    this.lastName = Guard.Argument(() => lastName).NotNull().NotEmpty();
-} 
+public Person(string name)
+    => Name = Guard.Argument(() => name).NotNull().NotEmpty();
 ```
 
 ## Optional Preconditions
@@ -101,15 +97,14 @@ Guard.Argument(() => arg).NotEmpty());
 
 Each validation in Guard has a specific exception type it throws when its precondition is not
 satisfied. `NotNull` throws an `ArgumentNullException`. The validations on `IComparable<T>`
-arguments like `MinValue` and `NotZero` throw `ArgumentOutOfRangeException`s. Most others throw
-`ArgumentException`s. (See [Modifying Arguments](#modifying-arguments) for exceptional cases.)
+arguments like `MinValue` and `NotZero` throw `ArgumentOutOfRangeException`s. Most others
+throw `ArgumentException`s. (See [Modifying Arguments](#modifying-arguments) for exceptional cases.)
 
 Throwing custom exceptions from standard validations seems counter-intuitive and right now, the only
 way to do so is to use the generic `Require<TException>` validation.
 
 ```c#
-Guard.Argument(() => arg)
-    .Require<KeyNotFoundException>(a => a != 0);
+Guard.Argument(() => arg).Require<KeyNotFoundException>(a => a != 0);
 ```
 
 The above code throws a `KeyNotFoundException` if the `arg` is passed `0`.
@@ -122,20 +117,18 @@ Guard accepts an optional parameter letting the user specify a custom error mess
 
 ```c#
 // Throws an ArgumentException if the arg is not null.
-Guard.Argument(() => arg)
-    .Null(a => "The argument must be null but it is: " + a);
+Guard.Argument(() => arg).Null(a => "The argument must be null but it is: " + a);
 
 // Throws an ArgumentNullException if the arg is null.
-Guard.Argument(() => arg)
-    .NotNull("The argument cannot be null.");
+Guard.Argument(() => arg).NotNull("The argument cannot be null.");
 ```
 
 In the first example above, we specify a factory that will create the error message if the
-validation fails. `arg` is passed to the factory as `a` so it can be used in the error message.
-We could of course use `arg` directly but that would cause it to be captured by the lambda
-expression, thus prevent the expression from being cached. We could make the `Null` validation
-accept a `string` parameter instead of a `Func<T, string>`, but that would require the error message
-to be initialized even when the precondition is satisfied, i.e. when the argument is null.
+validation fails. `arg` is passed to the factory as `a` so it can be used in the error message. We
+could of course use `arg` directly but that would cause it to be captured by the lambda expression,
+thus prevent the expression from being cached. We could make the `Null` validation accept a
+`string` parameter instead of a `Func<T, string>`, but that would require the error message to
+be initialized even when the precondition is satisfied, i.e. when the argument is null.
 
 In the second example, we see that the `NotNull` validation accepts the error message as a string
 instead of a factory. This is because it only throws an exception if the argument value is null.
@@ -174,18 +167,17 @@ Things to note:
 
 ## Automatic Nullable Value Conversions
 
-Using the `NotNull` validation on a nullable value type would convert the `ArgumentInfo<T?>` to an
-`ArgumentInfo<T>` since the validation being successful means that the argument is not null.
+Using the `NotNull` validation on a nullable value type would convert the `ArgumentInfo<T?>` to
+an `ArgumentInfo<T>` since the validation being successful means that the argument is not null.
 
 ```c#
 public class SomeService
 {
     public SomeService(int? timeout)
     {
-        // Guard.Argument creates an ArgumentInfo<int?>
-        this.Timeout = Guard.Argument(() => timeout)
-            // NotNull converts it to an ArgumentInfo<int>
-            .NotNull();
+        // Guard.Argument creates an ArgumentInfo<int?> but NotNull converts it to an
+        // ArgumentInfo<int>, so it can be assigned to a non-nullable Int32.
+        Timeout = Guard.Argument(() => timeout).NotNull();
     }
 
     public int Timeout { get; }
@@ -195,21 +187,21 @@ public class SomeService
 ## Modifying Arguments
 
 A method that validates its arguments can also apply some normalization routines before using them.
-Trimming a string before assigning it to a field is a good example for that. Guard provides the
-`Modify` overloads that can be used for normalizing argument values.
+Trimming a string before assigning it to a field/property is a good example for that. Guard provides
+the `Modify` overloads that can be used for normalizing argument values.
 
 ```c#
 public Person(string name)
 {
-    this.name = Guard.Argument(() => name)
+    Name = Guard.Argument(() => name)
         .NotNull()
         .Modify(s => s.Trim())
         .MinLength(3); // Validates the trimmed version.
 }
 ```
 
-Since the arguments can be modified to have any value, including null, `NotNull` validations applied
-to modified arguments shouldn't throw `ArgumentNullException`s.
+Since the arguments can be modified to have any value, including null, `NotNull` validations
+applied to modified arguments shouldn't throw `ArgumentNullException`s.
 
 ```c#
 public Person GetOwner(Car car)
@@ -221,14 +213,15 @@ public Person GetOwner(Car car)
 }
 ```
 
-The first call to `NotNull` in the above example throws an `ArgumentNullException` if `car` is null
-but the second call to `NotNull` should throw an `ArgumentException`. This is because throwing an
-`ArgumentNullException` there would indicate that `car` is null when in fact its `Owner` is null.
+The first call to `NotNull` in the above example throws an `ArgumentNullException` if `car` is
+null but the second call to `NotNull` should throw an `ArgumentException`. This is because
+throwing an `ArgumentNullException` there would indicate that `car` is null when in fact its
+`Owner` is null.
 
 The same goes for `ArgumentOutOfRangeException`s. If the original argument is modified, an
 `ArgumentException` is thrown instead of a more specialized exception. For validations to detect
-whether the argument is modified, `ArgumentInfo<T>` contains a boolean `Modified` flag along with
-the argument's name and value.
+whether the argument is modified, `ArgumentInfo<T>` contains a boolean `Modified` flag along
+with the argument's name and value.
 
 ## Validating Argument Members
 
@@ -266,4 +259,75 @@ BuyCar(buyer, car);
 The above code throws an `ArgumentException` with the parameter name "buyer" and message
 "Address.City cannot be null.".
 
+Keep in mind that member validations require building `MemberExpression`s. Even though the
+compiled delegates get cached and reused, creating expression trees may still be expensive for your
+particular application.
+
+## State Guards
+
+Along with its arguments, a method may also need to validate the state of the instance it belongs
+to. Guard currently provides three validations to handle these cases:
+
+### Operation
+
+* Throws an `InvalidOperationException` when the first parameter (`valid`) is passed false.
+* A custom message can be specified using the second parameter (`message`).
+* A third parameter marked with [`[CallerMemberName]`][2] exists to retrieve the invoked method's name.
+
+```c#
+public void TestOperation()
+{
+    // Throws an InvalidOperationException with the message:
+    // "TestOperation call is not valid due to the current state of the object."
+    Guard.Operation(false);
+
+    // Throws an InvalidOperationException with the message:
+    // "Custom message."
+    Guard.Operation(false, "Custom message.");
+}
+```
+
+### Support
+
+* Throws a `NotSupportedException` when the first parameter (`supported`) is passed false.
+* A custom message can be specified using the second parameter (`message`).
+* A third parameter marked with [`[CallerMemberName]`][2] exists to retrieve the invoked method's name.
+
+```c#
+public void TestSupport()
+{
+    // Throws a NotSupportedException with the message:
+    // "TestSupport is not supported"
+    Guard.Support(false);
+
+    // Throws a NotSupportedException with the message:
+    // "Custom message."
+    Guard.Support(false, "Custom message.");
+}
+```
+
+### Disposal
+
+* Throws an `ObjectDisposedException` when the first parameter (`disposed`) is passed true.
+* The object name can be specified using the second parameter (`objectName`).
+* A custom message can be specified using the third parameter (`message`).
+
+```c#
+public void TestDisposal()
+{
+    // Throws an ObjectDisposedException with the message:
+    // "Cannot access a disposed object."
+    Guard.Disposal(true);
+
+    // Throws an ObjectDisposedException with the message:
+    // "Cannot access a disposed object.\r\nObject name: 'TestClass'."
+    Guard.Disposal(true, nameof(TestClass));
+
+    // Throws an ObjectDisposedException with the message:
+    // "Custom message."
+    Guard.Disposal(true, nameof(TestClass), "Custom message.");
+}
+```
+
 [1]: ../src/Guard.Messages.cs
+[2]: https://docs.microsoft.com/dotnet/api/system.runtime.compilerservices.callermembernameattribute "CallerMemberNameAttribute Class | Microsoft Docs"

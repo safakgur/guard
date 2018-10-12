@@ -1,0 +1,42 @@
+jobs:
+- template: .azure-pipelines-build.yml
+  parameters:
+    name: Windows
+    image: vs2017-win2016
+    artifacts: true
+
+- template: .azure-pipelines-build.yml
+  parameters:
+    name: macOS
+    image: macOS-10.13
+
+- template: .azure-pipelines-build.yml
+  parameters:
+    name: Linux
+    image: Ubuntu-16.04
+
+- job: Deploy
+  pool:
+    vmImage: macOS-10.13
+
+  dependsOn:
+  - Windows
+  - macOS
+  - Linux
+
+  steps:
+  - script: git checkout $(Build.SourceBranchName)
+    displayName: Checkout Branch
+
+  - task: DownloadBuildArtifacts@0
+    inputs:
+      artifactName: all
+
+  - script: bash <(curl -s https://codecov.io/bash) -f $(System.ArtifactsDirectory)/all/coverage.xml
+    displayName: Upload Coverage
+    env:
+      CODECOV_TOKEN: $(codecov.token)
+
+  - script: dotnet nuget push $(System.ArtifactsDirectory)/all/Dawn.Guard.*.nupkg -s $(nuget.server) -k $(nuget.token)
+    condition: eq(variables['Build.SourceBranchName'], 'master')
+    displayName: Publish NuGet Package

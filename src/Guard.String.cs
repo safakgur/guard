@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Runtime.CompilerServices;
     using System.Text.RegularExpressions;
     using JetBrains.Annotations;
@@ -20,6 +21,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and contains one or more characters.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> Empty(
             in this ArgumentInfo<string> argument, Func<string, string> message)
         {
@@ -43,6 +45,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and does not contain any characters.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> NotEmpty(
             in this ArgumentInfo<string> argument, string message = null)
         {
@@ -69,6 +72,7 @@
         ///     characters that are not white-space.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> WhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
@@ -96,6 +100,7 @@
         ///     white-space characters.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> NotWhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
@@ -126,6 +131,7 @@
         ///     specified number of characters.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> MinLength(
             in this ArgumentInfo<string> argument,
             int minLength,
@@ -159,6 +165,7 @@
         ///     specified number of characters.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> MaxLength(
             in this ArgumentInfo<string> argument,
             int maxLength,
@@ -194,6 +201,7 @@
         ///     <paramref name="minLength" /> or more than <paramref name="maxLength" /> number of characters.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> LengthInRange(
             in this ArgumentInfo<string> argument,
             int minLength,
@@ -229,6 +237,7 @@
         ///     comparison rules specified in <paramref name="comparison" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> Equal(
             in this ArgumentInfo<string> argument,
             string other,
@@ -261,6 +270,7 @@
         ///     comparison rules specified in <paramref name="comparison" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> NotEqual(
             in this ArgumentInfo<string> argument,
             string other,
@@ -292,6 +302,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> StartsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -315,6 +326,7 @@
         ///     compared by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> StartsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -346,6 +358,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> DoesNotStartWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -369,6 +382,7 @@
         ///     compared by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> DoesNotStartWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -400,6 +414,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> EndsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -423,6 +438,7 @@
         ///     compared by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> EndsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -454,6 +470,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> DoesNotEndWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -477,6 +494,7 @@
         ///     by the comparison rules specified in <paramref name="comparison" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> DoesNotEndWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -508,6 +526,7 @@
         ///     resulting expression could not find a match in <paramref name="argument" />'s value.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -561,6 +580,7 @@
         ///     <paramref name="matchTimeout" /> is negative, zero, or greater than approximately 24 days.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -615,6 +635,7 @@
         ///     value or it timed out before the evaluation is completed.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
             Regex regex,
@@ -664,6 +685,7 @@
         ///     resulting expression found a match in <paramref name="argument" />'s value.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -718,6 +740,7 @@
         ///     <paramref name="matchTimeout" /> is negative, zero, or greater than approximately 24 days.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -773,6 +796,7 @@
         ///     timed out before the evaluation is completed.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
             Regex regex,

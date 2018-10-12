@@ -1,6 +1,7 @@
 param(
     [switch]$NoInstall=$false,
     [ValidateSet("Debug","Release","CI")][string]$Configuration="Release",
+    [string]$Logger,
     [switch]$Coverage=$false,
     [ValidateSet("json","lcov","opencover","cobertura")][string]$CoverageFormat="opencover",
     [string]$CoverageOutput="../artifacts/coverage.xml"
@@ -23,11 +24,24 @@ IF (-not (Test-Path $SdkPath))
 }
 
 & $SdkPath restore $PSScriptRoot/../tests --verbosity m
-& $SdkPath test $PSScriptRoot/../tests/ `
-    -c $Configuration `
-    /p:DebugType=full `
-    /p:CollectCoverage=$Coverage `
-    /p:CoverletOutputFormat=$CoverageFormat `
-    /p:CoverletOutput="$CoverageOutput"
+IF ($Logger)
+{
+    & $SdkPath test $PSScriptRoot/../tests/ `
+        -c $Configuration `
+        -l $Logger `
+        /p:DebugType=full `
+        /p:CollectCoverage=$Coverage `
+        /p:CoverletOutputFormat=$CoverageFormat `
+        /p:CoverletOutput="$CoverageOutput"
+}
+ELSE
+{
+    & $SdkPath test $PSScriptRoot/../tests/ `
+        -c $Configuration `
+        /p:DebugType=full `
+        /p:CollectCoverage=$Coverage `
+        /p:CoverletOutputFormat=$CoverageFormat `
+        /p:CoverletOutput="$CoverageOutput"
+}
 
 exit $lastexitcode

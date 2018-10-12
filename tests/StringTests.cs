@@ -7,7 +7,7 @@
 
     public sealed class StringTests : BaseTests
     {
-        private static readonly TimeSpan matchTimeout = TimeSpan.FromMilliseconds(10);
+        private static readonly TimeSpan MatchTimeout = TimeSpan.FromMilliseconds(10);
 
         [Theory(DisplayName = T + "String: Empty/NotEmpty")]
         [InlineData(null, null)]
@@ -401,18 +401,18 @@
             bool secure)
         {
             var validRegexWithoutTimeout = validPattern is null ? null : new Regex(validPattern);
-            var validRegexWithTimeout = validPattern is null ? null : new Regex(validPattern, RegexOptions.None, matchTimeout);
-            var timeoutRegex = timeoutPattern is null ? null : new Regex(timeoutPattern, RegexOptions.None, matchTimeout);
+            var validRegexWithTimeout = validPattern is null ? null : new Regex(validPattern, RegexOptions.None, MatchTimeout);
+            var timeoutRegex = timeoutPattern is null ? null : new Regex(timeoutPattern, RegexOptions.None, MatchTimeout);
 
             var withMatchArg = Guard.Argument(() => withMatch, secure)
                 .Matches(validPattern)
-                .Matches(validPattern, matchTimeout)
+                .Matches(validPattern, MatchTimeout)
                 .Matches(validRegexWithoutTimeout)
                 .Matches(validRegexWithTimeout);
 
             var withoutMatchArg = Guard.Argument(() => withoutMatch, secure)
                 .DoesNotMatch(validPattern)
-                .DoesNotMatch(validPattern, matchTimeout)
+                .DoesNotMatch(validPattern, MatchTimeout)
                 .DoesNotMatch(validRegexWithoutTimeout)
                 .DoesNotMatch(validRegexWithTimeout);
 
@@ -420,15 +420,15 @@
             {
                 withMatchArg
                     .Matches(invalidPattern)
-                    .Matches(invalidPattern, matchTimeout)
+                    .Matches(invalidPattern, MatchTimeout)
                     .Matches(timeoutPattern)
-                    .Matches(timeoutPattern, matchTimeout)
+                    .Matches(timeoutPattern, MatchTimeout)
                     .DoesNotMatch(invalidPattern)
-                    .DoesNotMatch(invalidPattern, matchTimeout)
+                    .DoesNotMatch(invalidPattern, MatchTimeout)
                     .DoesNotMatch(timeoutPattern)
-                    .DoesNotMatch(timeoutPattern, matchTimeout)
+                    .DoesNotMatch(timeoutPattern, MatchTimeout)
                     .DoesNotMatch(validPattern)
-                    .DoesNotMatch(validPattern, matchTimeout)
+                    .DoesNotMatch(validPattern, MatchTimeout)
                     .DoesNotMatch(validRegexWithoutTimeout)
                     .DoesNotMatch(validRegexWithTimeout)
                     .Matches(timeoutRegex)
@@ -436,15 +436,15 @@
 
                 withoutMatchArg
                     .Matches(invalidPattern)
-                    .Matches(invalidPattern, matchTimeout)
+                    .Matches(invalidPattern, MatchTimeout)
                     .Matches(timeoutPattern)
-                    .Matches(timeoutPattern, matchTimeout)
+                    .Matches(timeoutPattern, MatchTimeout)
                     .DoesNotMatch(invalidPattern)
-                    .DoesNotMatch(invalidPattern, matchTimeout)
+                    .DoesNotMatch(invalidPattern, MatchTimeout)
                     .DoesNotMatch(timeoutPattern)
-                    .DoesNotMatch(timeoutPattern, matchTimeout)
+                    .DoesNotMatch(timeoutPattern, MatchTimeout)
                     .Matches(validPattern)
-                    .Matches(validPattern, matchTimeout)
+                    .Matches(validPattern, MatchTimeout)
                     .Matches(validRegexWithoutTimeout)
                     .Matches(validRegexWithTimeout)
                     .Matches(timeoutRegex)
@@ -460,9 +460,9 @@
                 {
                     ThrowsArgumentException(
                         withMatchArg,
-                        arg => arg.Matches(timeoutPattern, matchTimeout),
+                        arg => arg.Matches(timeoutPattern, MatchTimeout),
                         m => secure != m.Contains(timeoutPattern),
-                        (arg, message) => arg.Matches(timeoutPattern, matchTimeout, (s, t) =>
+                        (arg, message) => arg.Matches(timeoutPattern, MatchTimeout, (s, t) =>
                         {
                             Assert.Same(withMatch, s);
                             Assert.True(t);
@@ -492,9 +492,9 @@
                 {
                     ThrowsArgumentException(
                         withMatchArg,
-                        arg => arg.DoesNotMatch(timeoutPattern, matchTimeout),
+                        arg => arg.DoesNotMatch(timeoutPattern, MatchTimeout),
                         m => secure != m.Contains(timeoutPattern),
-                        (arg, message) => arg.DoesNotMatch(timeoutPattern, matchTimeout, (s, t) =>
+                        (arg, message) => arg.DoesNotMatch(timeoutPattern, MatchTimeout, (s, t) =>
                         {
                             Assert.Same(withMatch, s);
                             Assert.True(t);
@@ -547,9 +547,9 @@
             // Matches - valid pattern w/ timeout
             ThrowsArgumentException(
                 withoutMatchArg,
-                arg => arg.Matches(validPattern, matchTimeout),
+                arg => arg.Matches(validPattern, MatchTimeout),
                 m => secure != m.Contains(validPattern),
-                (arg, message) => arg.Matches(validPattern, matchTimeout, (s, t) =>
+                (arg, message) => arg.Matches(validPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withoutMatch, s);
                     Assert.False(t);
@@ -607,9 +607,9 @@
             // Does not match - valid pattern w/ timeout
             ThrowsArgumentException(
                 withMatchArg,
-                arg => arg.DoesNotMatch(validPattern, matchTimeout),
+                arg => arg.DoesNotMatch(validPattern, MatchTimeout),
                 m => secure != m.Contains(validPattern),
-                (arg, message) => arg.DoesNotMatch(validPattern, matchTimeout, (s, t) =>
+                (arg, message) => arg.DoesNotMatch(validPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withMatch, s);
                     Assert.False(t);

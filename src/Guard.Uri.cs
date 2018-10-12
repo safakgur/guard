@@ -1,6 +1,7 @@
 ﻿namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using System.Runtime.CompilerServices;
     using JetBrains.Annotations;
 
@@ -24,6 +25,7 @@
         ///     <paramref name="argument" /> value is neither <c>null</c> nor an absolute URI.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<Uri> Absolute(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
@@ -47,6 +49,7 @@
         ///     <paramref name="argument" /> value is neither <c>null</c> nor a relative URI.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<Uri> Relative(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
@@ -74,6 +77,7 @@
         ///     the scheme specified by <paramref name="scheme" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<Uri> Scheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
@@ -102,6 +106,7 @@
         ///     <paramref name="argument" /> value is an absolute URI with the scheme specified by <paramref name="scheme" />.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<Uri> NotScheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
@@ -131,6 +136,7 @@
         /// </exception>
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
             => ref argument.Http(true, message);
@@ -153,6 +159,7 @@
         ///     required schemes.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, bool allowHttps, Func<Uri, string> message = null)
         {
@@ -183,6 +190,7 @@
         ///     <paramref name="argument" /> value is not <c>null</c> and does not have the HTTPS scheme.
         /// </exception>
         [AssertionMethod]
+        [DebuggerStepThrough]
         public static ref readonly ArgumentInfo<Uri> Https(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
