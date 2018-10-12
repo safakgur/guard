@@ -3,9 +3,9 @@
     using System;
     using Xunit;
 
-    public sealed class EquatableTests : BaseTests
+    public sealed class EqualityTests : BaseTests
     {
-        [Theory(DisplayName = T + "Equatable: Default/NotDefault")]
+        [Theory(DisplayName = T + "Equality: Default/NotDefault")]
         [InlineData(null, null)]
         [InlineData(0, 1)]
         public void Default(int? @default, int? nonDefault)
@@ -50,7 +50,7 @@
                 (arg, message) => arg.NotDefault(message));
         }
 
-        [Theory(DisplayName = T + "Equatable: Equal/NotEqual w/o comparer")]
+        [Theory(DisplayName = T + "Equality: Equal/NotEqual w/o comparer")]
         [InlineData(null, null, null, false)]
         [InlineData("AB", "AB", "BC", false)]
         [InlineData("AB", "AB", "BC", true)]
@@ -85,7 +85,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Equatable: Equal/NotEqual w/ comparer")]
+        [Theory(DisplayName = T + "Equality: Equal/NotEqual w/ comparer")]
         [InlineData(null, null, null, StringComparison.Ordinal, false)]
         [InlineData("AB", "AB", "ab", StringComparison.Ordinal, false)]
         [InlineData("AB", "AB", "ab", StringComparison.Ordinal, true)]
@@ -128,6 +128,58 @@
                     Assert.Same(value, v);
                     return message;
                 }));
+        }
+
+        [Fact(DisplayName = T + "Equality: Same/NotSame")]
+        public void Same()
+        {
+            Test(null, null, null, false);
+            Test("1", "1", 1.ToString(), false);
+            Test("1", "1", 1.ToString(), true);
+
+            void Test(string value, string same, string notSame, bool secure)
+            {
+                same = same?.ToString();
+                notSame = notSame?.ToString();
+
+                var valueArg = Guard.Argument(() => value, secure);
+                valueArg
+                    .Equal(same)
+                    .Equal(notSame)
+                    .Same(same)
+                    .NotSame(notSame);
+
+                if (value is null)
+                {
+                    valueArg
+                        .Same(notSame)
+                        .NotSame(same);
+
+                    return;
+                }
+
+                ThrowsArgumentException(
+                    valueArg,
+                    arg => arg.Same(notSame),
+                    m => secure != m.Contains(notSame),
+                    (arg, message) => arg.Same(notSame, (v, other) =>
+                    {
+                        Assert.Same(value, v);
+                        Assert.Same(notSame, other);
+                        return message;
+                    }));
+
+                ThrowsArgumentException(
+                    valueArg,
+                    arg => arg.NotSame(same),
+                    m => secure != m.Contains(same),
+                    (arg, message) => arg.NotSame(same, (v, other) =>
+                    {
+                        Assert.Same(value, v);
+                        Assert.Same(same, other);
+                        return message;
+                    }));
+            }
         }
     }
 }

@@ -259,5 +259,57 @@
 
             return ref argument;
         }
+
+        /// <summary>Requires the argument to have the same reference as the specified object.</summary>
+        /// <typeparam name="T">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The object to compare the argument's reference to.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value has a different reference than different than <paramref name="other" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<T> Same<T>(
+            in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
+            where T : class
+        {
+            if (argument.HasValue() && !ReferenceEquals(argument.Value, other))
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.Same(argument, other);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a different reference than the specified object.
+        /// </summary>
+        /// <typeparam name="T">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The object to compare the argument's reference to.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value has the same reference as <paramref name="other" />.
+        /// </exception>
+        public static ref readonly ArgumentInfo<T> NotSame<T>(
+            in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
+            where T : class
+        {
+            if (argument.HasValue() && ReferenceEquals(argument.Value, other))
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.NotSame(argument, other);
+                throw new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
     }
 }
