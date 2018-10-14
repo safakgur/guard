@@ -103,6 +103,8 @@ For `ArgumentInfo<float|float?|double|double?>`
 * `NotPositiveInfinity()`
 * `NegativeInfinity()`
 * `NotNegativeInfinity()`
+* `Equal(T, T)` - Approx. equality.
+* `NotEqual(T, T)` - Approx. unequality.
 
 ### Boolean Guards
 
