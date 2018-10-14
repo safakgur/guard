@@ -99,6 +99,10 @@ targeting .NET Core 1.0 and 2.0.
 
 ## More
 
+The default branch (dev) is the development branch, so it may contain changes/features that are not
+published to NuGet yet. See the [master](https://github.com/safakgur/guard/tree/master) branch for
+the latest published version.
+
 ### Standard Validations
 
 [Click here][3] for a list of the validations that are included in the library.
@@ -116,6 +120,7 @@ targeting .NET Core 1.0 and 2.0.
 Right now the following are on the horizon:
 
 * More validations
+* Roslyn analyzers & code fixes
 * Online documentation
 * Performance benchmarks
 
