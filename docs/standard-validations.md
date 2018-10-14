@@ -25,6 +25,10 @@ For `ArgumentInfo<T>`
 * `NotEqual(T)`
 * `NotEqual(T, IEqualityComparer<T>)`
 
+For `ArgumentInfo<T> where T : class`
+* `Same(T)`
+* `NotSame(T)`
+
 For `ArgumentInfo<T|T?> where T : struct`
 * `Default()`
 * `NotDefault()`
