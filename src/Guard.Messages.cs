@@ -51,6 +51,12 @@
             public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
                 => argument.Secure ? Require(argument) : $"{argument.Name} cannot be {ToString(other)}.";
 
+            public static string Equal<T>(in ArgumentInfo<T> argument, in T other, T delta)
+                => argument.Secure ? Require(argument) : $"{argument.Name} must be within {delta} accuracy of {other}.";
+
+            public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other, T delta)
+                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be within {delta} accuracy of {other}.";
+
             public static string Same<T>(in ArgumentInfo<T> argument, object other)
                 => argument.Secure ? Require(argument) : $"{argument.Name} must have the same reference as {ToString(other)}.";
 
