@@ -8,13 +8,15 @@
     public static partial class Guard
     {
         /// <summary>Returns a new argument with the same name and the specified value.</summary>
-        /// <typeparam name="T">The type of the argument.</typeparam>
+        /// <typeparam name="TSource">The type of the existing argument.</typeparam>
+        /// <typeparam name="TTarget">The type of the new argument.</typeparam>
         /// <param name="argument">The existing argument.</param>
         /// <param name="value">The new argument value.</param>
         /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
         [DebuggerStepThrough]
-        public static ArgumentInfo<T> Modify<T>(in this ArgumentInfo<T> argument, T value)
-            => new ArgumentInfo<T>(value, argument.Name, true, argument.Secure);
+        public static ArgumentInfo<TTarget> Modify<TSource, TTarget>(
+            in this ArgumentInfo<TSource> argument, TTarget value)
+            => new ArgumentInfo<TTarget>(value, argument.Name, true, argument.Secure);
 
         /// <summary>
         ///     Returns a new argument with the same name and a value that is created using the
