@@ -163,7 +163,7 @@ For `ArgumentInfo<T>`
 ### Normalization Guards
 
 For `ArgumentInfo<T>`
-* `Modify(T value)`
+* `Modify<TTarget>(TTarget value)` - Returns an argument of `TTarget`
 * `Modify<TTarget>(Func<T, TTarget>)` - Returns an argument of `TTarget`
 * `Wrap<TTarget>(Func<T, TTarget>)` - Returns an argument of `TTarget`
 
