@@ -26,6 +26,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Uri", "gabs")]
         public static ref readonly ArgumentInfo<Uri> Absolute(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
@@ -50,6 +51,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Uri", "grel")]
         public static ref readonly ArgumentInfo<Uri> Relative(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
@@ -78,6 +80,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Uri", "gsch")]
         public static ref readonly ArgumentInfo<Uri> Scheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
@@ -107,6 +110,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Uri", "gnsch")]
         public static ref readonly ArgumentInfo<Uri> NotScheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
@@ -137,6 +141,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Uri", "ghttp")]
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
             => ref argument.Http(true, message);
@@ -160,6 +165,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Uri")]
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, bool allowHttps, Func<Uri, string> message = null)
         {
@@ -191,6 +197,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Uri", "ghttps")]
         public static ref readonly ArgumentInfo<Uri> Https(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {

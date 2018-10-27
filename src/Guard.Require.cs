@@ -8,9 +8,7 @@
     /// <content>Provides generic preconditions.</content>
     public static partial class Guard
     {
-        /// <content>
-        ///     Contains the preconditions with generic type arguments that cannot be inferred.
-        /// </content>
+        /// <content>Contains the predicate preconditions.</content>
         public readonly partial struct ArgumentInfo<T>
         {
             /// <summary>Requires the argument to satisfy a condition.</summary>
@@ -24,6 +22,7 @@
             [AssertionMethod]
             [ContractAnnotation("condition:false => halt")]
             [DebuggerStepThrough]
+            [GuardFunction("Predicate", "greq")]
             public ArgumentInfo<T> Require(bool condition, Func<T, string> message = null)
                 => this.Require<ArgumentException>(condition, message);
 
@@ -47,6 +46,7 @@
             [AssertionMethod]
             [ContractAnnotation("condition:false => halt")]
             [DebuggerStepThrough]
+            [GuardFunction("Predicate", "greqe")]
             public ArgumentInfo<T> Require<TException>(
                 bool condition, Func<T, string> message = null)
                 where TException : Exception
@@ -72,6 +72,7 @@
             /// </exception>
             [AssertionMethod]
             [DebuggerStepThrough]
+            [GuardFunction("Predicate", "greq")]
             public ArgumentInfo<T> Require(Func<T, bool> predicate, Func<T, string> message = null)
                 => this.Require<ArgumentException>(predicate, message);
 
@@ -94,6 +95,7 @@
             /// </exception>
             [AssertionMethod]
             [DebuggerStepThrough]
+            [GuardFunction("Predicate", "greqe")]
             public ArgumentInfo<T> Require<TException>(
                 Func<T, bool> predicate, Func<T, string> message = null)
                 where TException : Exception
@@ -105,89 +107,6 @@
                 }
 
                 return this;
-            }
-
-            /// <summary>
-            ///     Requires the argument to have a value that can be assigned to an instance of the
-            ///     specified type.
-            /// </summary>
-            /// <typeparam name="TTarget">
-            ///     The type that the argument's value should be assignable to.
-            /// </typeparam>
-            /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if the
-            ///     precondition is not satisfied.
-            /// </param>
-            /// <returns>The current argument.</returns>
-            /// <exception cref="ArgumentException">
-            ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
-            /// </exception>
-            [AssertionMethod]
-            [DebuggerStepThrough]
-            public ArgumentInfo<T> Compatible<TTarget>(Func<T, string> message = null)
-            {
-                if (!this.HasValue() || this.Value is TTarget value)
-                    return this;
-
-                var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
-                throw new ArgumentException(m, this.Name);
-            }
-
-            /// <summary>
-            ///     Requires the argument to have a value that cannot be assigned to an instance of
-            ///     the specified type.
-            /// </summary>
-            /// <typeparam name="TTarget">
-            ///     The type that the argument's value should not be assignable to.
-            /// </typeparam>
-            /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if the
-            ///     precondition is not satisfied.
-            /// </param>
-            /// <returns>The current argument.</returns>
-            /// <exception cref="ArgumentException">
-            ///     <see cref="Value" /> can be assigned to type <typeparamref name="TTarget" />.
-            /// </exception>
-            [AssertionMethod]
-            [DebuggerStepThrough]
-            public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string> message = null)
-            {
-                if (this.HasValue() && this.Value is TTarget value)
-                {
-                    var m = message?.Invoke(value) ?? Messages.NotCompatible<T, TTarget>(this);
-                    throw new ArgumentException(m, this.Name);
-                }
-
-                return this;
-            }
-
-            /// <summary>
-            ///     <para>
-            ///         Requires the argument to have a value that can be assigned to an instance of
-            ///         the specified type.
-            ///     </para>
-            ///     <para>The return value will be a new argument of type <typeparamref name="TTarget" />.</para>
-            /// </summary>
-            /// <typeparam name="TTarget">
-            ///     The type that the argument's value should be assignable to.
-            /// </typeparam>
-            /// <param name="message">
-            ///     The factory to initialize the message of the exception that will be thrown if the
-            ///     precondition is not satisfied.
-            /// </param>
-            /// <returns>A new <see cref="ArgumentInfo{TTarget}" />.</returns>
-            /// <exception cref="ArgumentException">
-            ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
-            /// </exception>
-            [AssertionMethod]
-            [DebuggerStepThrough]
-            public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
-            {
-                if (this.Value is TTarget value)
-                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
-
-                var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
-                throw new ArgumentException(m, this.Name);
             }
         }
 

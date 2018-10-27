@@ -31,6 +31,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Member", "gmem")]
         public static ref readonly ArgumentInfo<T> Member<T, TMember>(
             in this ArgumentInfo<T> argument,
             Expression<Func<T, TMember>> member,
@@ -65,6 +66,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Member", "gmemr")]
         public static ref readonly ArgumentInfo<T> Member<T, TMember>(
             in this ArgumentInfo<T> argument,
             Expression<Func<T, TMember>> member,
@@ -134,6 +136,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Member", "gmem")]
         public static ref readonly ArgumentInfo<T?> Member<T, TMember>(
             in this ArgumentInfo<T?> argument,
             Expression<Func<T, TMember>> member,
@@ -169,6 +172,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Member", "gmemr")]
         public static ref readonly ArgumentInfo<T?> Member<T, TMember>(
             in this ArgumentInfo<T?> argument,
             Expression<Func<T, TMember>> member,

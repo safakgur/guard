@@ -23,6 +23,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Enum", "gdef")]
         public static ref readonly ArgumentInfo<T> Defined<T>(
             this in ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, System.Enum
@@ -52,6 +53,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Enum", "gdef")]
         public static ref readonly ArgumentInfo<T?> Defined<T>(
             this in ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, System.Enum
@@ -85,6 +87,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Enum", "ghf")]
         public static ref readonly ArgumentInfo<T> HasFlag<T>(
             this in ArgumentInfo<T> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -115,6 +118,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Enum", "ghf")]
         public static ref readonly ArgumentInfo<T?> HasFlag<T>(
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -148,6 +152,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Enum", "gnhf")]
         public static ref readonly ArgumentInfo<T> DoesNotHaveFlag<T>(
             this in ArgumentInfo<T> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum
@@ -178,6 +183,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Enum", "gnhf")]
         public static ref readonly ArgumentInfo<T?> DoesNotHaveFlag<T>(
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string> message = null)
             where T : struct, System.Enum

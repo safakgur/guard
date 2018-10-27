@@ -27,6 +27,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnan")]
         public static ref readonly ArgumentInfo<float> NaN(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -67,6 +68,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnan")]
         public static ref readonly ArgumentInfo<float?> NaN(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -104,6 +106,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnnan")]
         public static ref readonly ArgumentInfo<float> NotNaN(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -137,6 +140,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnnan")]
         public static ref readonly ArgumentInfo<float?> NotNaN(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -176,6 +180,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "ginf")]
         public static ref readonly ArgumentInfo<float> Infinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -219,6 +224,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "ginf")]
         public static ref readonly ArgumentInfo<float?> Infinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -291,6 +297,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gninf")]
         public static ref readonly ArgumentInfo<float> NotInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -365,6 +372,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gninf")]
         public static ref readonly ArgumentInfo<float?> NotInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -403,6 +411,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gposinf")]
         public static ref readonly ArgumentInfo<float> PositiveInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -443,6 +452,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gposinf")]
         public static ref readonly ArgumentInfo<float?> PositiveInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -480,6 +490,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnposinf")]
         public static ref readonly ArgumentInfo<float> NotPositiveInfinity(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -513,6 +524,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnposinf")]
         public static ref readonly ArgumentInfo<float?> NotPositiveInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -551,6 +563,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gneginf")]
         public static ref readonly ArgumentInfo<float> NegativeInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -591,6 +604,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gneginf")]
         public static ref readonly ArgumentInfo<float?> NegativeInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -628,6 +642,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnneginf")]
         public static ref readonly ArgumentInfo<float> NotNegativeInfinity(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -661,6 +676,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnneginf")]
         public static ref readonly ArgumentInfo<float?> NotNegativeInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -670,6 +686,162 @@
                 if (float.IsNegativeInfinity(value))
                 {
                     var m = message ?? Messages.NotNegativeInfinity(argument);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        : new ArgumentException(m, argument.Name);
+                }
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the single-precision floating-point argument to have a value that is within
+        ///     the specified accuracy of the specified value.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The value to compare the argument value to.</param>
+        /// <param name="delta">The required accuracy.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is different from <paramref name="other" /> by
+        ///     more than <paramref name="delta" />
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Single", "geqd")]
+        public static ref readonly ArgumentInfo<float> Equal(
+            in this ArgumentInfo<float> argument,
+            float other,
+            float delta,
+            Func<float, float, string> message = null)
+        {
+            var diff = Math.Abs(argument.Value - other);
+            if (diff > delta)
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other, delta);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    : new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the single-precision floating-point argument to have a value that is either
+        ///     <c>null</c>, or within the specified accuracy of the specified value.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The value to compare the argument value to.</param>
+        /// <param name="delta">The required accuracy.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is different from <paramref name="other" /> by
+        ///     more than <paramref name="delta" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Single", "geqd")]
+        public static ref readonly ArgumentInfo<float?> Equal(
+            in this ArgumentInfo<float?> argument,
+            float other,
+            float delta,
+            Func<float, float, string> message = null)
+        {
+            if (argument.HasValue())
+            {
+                var value = argument.Value.Value;
+                var diff = Math.Abs(value - other);
+                if (diff > delta)
+                {
+                    var m = message?.Invoke(value, other) ?? Messages.Equal(argument, other, delta);
+                    throw !argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        : new ArgumentException(m, argument.Name);
+                }
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the single-precision floating-point argument to have a value that is not
+        ///     within the specified accuracy of the specified value.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The value to compare the argument value to.</param>
+        /// <param name="delta">The required inaccuracy.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is equal to <paramref name="other" /> or different
+        ///     from it by less than <paramref name="delta" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Single", "gneqd")]
+        public static ref readonly ArgumentInfo<float> NotEqual(
+            in this ArgumentInfo<float> argument,
+            float other,
+            float delta,
+            Func<float, float, string> message = null)
+        {
+            var diff = Math.Abs(argument.Value - other);
+            if (diff <= delta)
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.NotEqual(argument, other, delta);
+                throw !argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    : new ArgumentException(m, argument.Name);
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the single-precision floating-point argument to have a value that either is
+        ///     <c>null</c> or is not within the specified accuracy of the specified value.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="other">The value to compare the argument value to.</param>
+        /// <param name="delta">The required inaccuracy.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is equal to <paramref name="other" /> or different
+        ///     from it by less than <paramref name="delta" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Single", "gneqd")]
+        public static ref readonly ArgumentInfo<float?> NotEqual(
+            in this ArgumentInfo<float?> argument,
+            float other,
+            float delta,
+            Func<float, float, string> message = null)
+        {
+            if (argument.HasValue())
+            {
+                var value = argument.Value.Value;
+                var diff = Math.Abs(value - other);
+                if (diff <= delta)
+                {
+                    var m = message?.Invoke(value, other) ?? Messages.NotEqual(argument, other, delta);
                     throw !argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                         : new ArgumentException(m, argument.Name);

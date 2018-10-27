@@ -50,6 +50,38 @@
             bool ContainsCalled { get; }
         }
 
+        protected static void Test<T>(
+            T? value,
+            string name,
+            Action<Guard.ArgumentInfo<T?>> nullableBody,
+            Action<Guard.ArgumentInfo<T>> nonNullableBody,
+            bool testModified = true,
+            bool testSecure = true)
+            where T : struct
+        {
+            Test(value, name, nullableBody, testModified, testSecure);
+            if (value.HasValue)
+                Test(value.Value, name, nonNullableBody, testModified, testSecure);
+        }
+
+        protected static void Test<T>(
+            T value,
+            string name,
+            Action<Guard.ArgumentInfo<T>> body,
+            bool testModified = true,
+            bool testSecure = true)
+        {
+            body(new Guard.ArgumentInfo<T>(value, name, false, false));
+            if (testModified)
+                body(new Guard.ArgumentInfo<T>(value, name, true, false));
+
+            if (testSecure)
+                body(new Guard.ArgumentInfo<T>(value, name, false, true));
+
+            if (testModified && testSecure)
+                body(new Guard.ArgumentInfo<T>(value, name, true, true));
+        }
+
         protected static ArgumentNullException[] ThrowsArgumentNullException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
@@ -63,28 +95,8 @@
             Func<string, bool> testGeneratedMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
             bool allowMessageMismatch = false)
-        {
-            var exWithoutMessage = Assert.Throws<ArgumentNullException>(
-                argument.Name,
-                () => testWithoutMessage(argument));
-
-            if (testGeneratedMessage != null)
-                Assert.True(testGeneratedMessage(exWithoutMessage.Message));
-
-            var message = RandomMessage;
-            var exWithMessage = Assert.Throws<ArgumentNullException>(
-                argument.Name,
-                () => testWithMessage(argument, message));
-
-            if (!allowMessageMismatch)
-                Assert.StartsWith(message, exWithMessage.Message);
-
-            var modified = argument.Modify(argument.Value);
-            ThrowsArgumentException(
-                modified, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
-
-            return new[] { exWithoutMessage, exWithMessage };
-        }
+            => ThrowsArgumentException<T, ArgumentNullException>(
+                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
 
         protected static ArgumentOutOfRangeException[] ThrowsArgumentOutOfRangeException<T>(
             Guard.ArgumentInfo<T> argument,
@@ -99,32 +111,8 @@
             Func<string, bool> testGeneratedMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
             bool allowMessageMismatch = false)
-        {
-            var exWithoutMessage = Assert.Throws<ArgumentOutOfRangeException>(
-                argument.Name,
-                () => testWithoutMessage(argument));
-
-            Assert.Equal(argument.Secure, exWithoutMessage.ActualValue == null);
-
-            if (testGeneratedMessage != null)
-                Assert.True(testGeneratedMessage(exWithoutMessage.Message));
-
-            var message = RandomMessage;
-            var exWithMessage = Assert.Throws<ArgumentOutOfRangeException>(
-                argument.Name,
-                () => testWithMessage(argument, message));
-
-            Assert.Equal(argument.Secure, exWithMessage.ActualValue == null);
-
-            if (!allowMessageMismatch)
-                Assert.StartsWith(message, exWithMessage.Message);
-
-            var modified = argument.Modify(argument.Value);
-            ThrowsArgumentException(
-                modified, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
-
-            return new[] { exWithoutMessage, exWithMessage };
-        }
+            => ThrowsArgumentException<T, ArgumentOutOfRangeException>(
+                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
 
         protected static ArgumentException[] ThrowsArgumentException<T>(
             Guard.ArgumentInfo<T> argument,
@@ -139,21 +127,53 @@
             Func<string, bool> testGeneratedMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
             bool allowMessageMismatch = false)
+            => ThrowsArgumentException<T, ArgumentException>(
+                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+
+        protected static TException[] ThrowsArgumentException<TArgument, TException>(
+            Guard.ArgumentInfo<TArgument> argument,
+            Action<Guard.ArgumentInfo<TArgument>> testWithoutMessage,
+            Func<string, bool> testGeneratedMessage,
+            Action<Guard.ArgumentInfo<TArgument>, string> testWithMessage,
+            bool allowMessageMismatch = false)
+            where TException : ArgumentException
         {
-            var exWithoutMessage = Assert.Throws<ArgumentException>(
+            var isBase = typeof(TException) == typeof(ArgumentException);
+            if (!isBase && argument.Modified)
+            {
+                var result = ThrowsArgumentException<TArgument, ArgumentException>(
+                    argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+
+                return new[] { result[0] as TException, result[1] as TException };
+            }
+
+            var exWithoutMessage = Assert.Throws<TException>(
                 argument.Name,
                 () => testWithoutMessage(argument));
+
+            if (exWithoutMessage is ArgumentOutOfRangeException rangeExWithoutMessage)
+                Assert.Equal(argument.Secure, rangeExWithoutMessage.ActualValue == null);
 
             if (testGeneratedMessage != null)
                 Assert.True(testGeneratedMessage(exWithoutMessage.Message));
 
             var message = RandomMessage;
-            var exWithMessage = Assert.Throws<ArgumentException>(
+            var exWithMessage = Assert.Throws<TException>(
                 argument.Name,
                 () => testWithMessage(argument, message));
 
+            if (exWithMessage is ArgumentOutOfRangeException rangeExWithMessage)
+                Assert.Equal(argument.Secure, rangeExWithMessage.ActualValue == null);
+
             if (!allowMessageMismatch)
                 Assert.StartsWith(message, exWithMessage.Message);
+
+            if (!isBase)
+            {
+                var modified = argument.Modify(argument.Value);
+                ThrowsArgumentException(
+                    modified, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+            }
 
             return new[] { exWithoutMessage, exWithMessage };
         }

@@ -25,6 +25,10 @@ For `ArgumentInfo<T>`
 * `NotEqual(T)`
 * `NotEqual(T, IEqualityComparer<T>)`
 
+For `ArgumentInfo<T> where T : class`
+* `Same(T)`
+* `NotSame(T)`
+
 For `ArgumentInfo<T|T?> where T : struct`
 * `Default()`
 * `NotDefault()`
@@ -103,6 +107,8 @@ For `ArgumentInfo<float|float?|double|double?>`
 * `NotPositiveInfinity()`
 * `NegativeInfinity()`
 * `NotNegativeInfinity()`
+* `Equal(T, T)` - Approx. equality.
+* `NotEqual(T, T)` - Approx. unequality.
 
 ### Boolean Guards
 
@@ -157,7 +163,7 @@ For `ArgumentInfo<T>`
 ### Normalization Guards
 
 For `ArgumentInfo<T>`
-* `Modify(T value)`
+* `Modify<TTarget>(TTarget value)` - Returns an argument of `TTarget`
 * `Modify<TTarget>(Func<T, TTarget>)` - Returns an argument of `TTarget`
 * `Wrap<TTarget>(Func<T, TTarget>)` - Returns an argument of `TTarget`
 

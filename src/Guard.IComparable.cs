@@ -29,6 +29,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gmin")]
         public static ref readonly ArgumentInfo<T> Min<T>(
             in this ArgumentInfo<T> argument, in T minValue, Func<T, T, string> message = null)
             where T : IComparable<T>
@@ -66,6 +67,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gmin")]
         public static ref readonly ArgumentInfo<T?> Min<T>(
             in this ArgumentInfo<T?> argument, in T minValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -106,6 +108,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gmax")]
         public static ref readonly ArgumentInfo<T> Max<T>(
             in this ArgumentInfo<T> argument, in T maxValue, Func<T, T, string> message = null)
             where T : IComparable<T>
@@ -143,6 +146,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gmax")]
         public static ref readonly ArgumentInfo<T?> Max<T>(
             in this ArgumentInfo<T?> argument, in T maxValue, Func<T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -185,6 +189,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gr")]
         public static ref readonly ArgumentInfo<T> InRange<T>(
             in this ArgumentInfo<T> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
             where T : IComparable<T>
@@ -230,6 +235,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gr")]
         public static ref readonly ArgumentInfo<T?> InRange<T>(
             in this ArgumentInfo<T?> argument, in T minValue, in T maxValue, Func<T, T, T, string> message = null)
             where T : struct, IComparable<T>
@@ -271,6 +277,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gz")]
         public static ref readonly ArgumentInfo<T> Zero<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -311,6 +318,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gz")]
         public static ref readonly ArgumentInfo<T?> Zero<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -379,6 +387,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gnz")]
         public static ref readonly ArgumentInfo<T> NotZero<T>(
             in this ArgumentInfo<T> argument, string message = null)
             where T : struct, IComparable<T>
@@ -459,6 +468,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gnz")]
         public static ref readonly ArgumentInfo<T?> NotZero<T>(
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct, IComparable<T>
@@ -496,6 +506,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gpos")]
         public static ref readonly ArgumentInfo<T> Positive<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -537,6 +548,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gpos")]
         public static ref readonly ArgumentInfo<T?> Positive<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -574,6 +586,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gnpos")]
         public static ref readonly ArgumentInfo<T> NotPositive<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -615,6 +628,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gnpos")]
         public static ref readonly ArgumentInfo<T?> NotPositive<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -652,6 +666,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gneg")]
         public static ref readonly ArgumentInfo<T> Negative<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -693,6 +708,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gneg")]
         public static ref readonly ArgumentInfo<T?> Negative<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
@@ -730,6 +746,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gnneg")]
         public static ref readonly ArgumentInfo<T> NotNegative<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct, IComparable<T>
@@ -771,6 +788,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Comparison", "gnneg")]
         public static ref readonly ArgumentInfo<T?> NotNegative<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct, IComparable<T>
