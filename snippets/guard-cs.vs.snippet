@@ -82,6 +82,54 @@
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">
     <Header>
+      <Title>Guard.Contains(item)</Title>
+      <Shortcut>gcon</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>item</ID>
+          <Default>item</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).Contains($item$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().Contains(item)</Title>
+      <Shortcut>gxcon</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>item</ID>
+          <Default>item</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().Contains($item$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
       <Title>Guard.Contains(item, comparer)</Title>
       <Shortcut>gconc</Shortcut>
     </Header>
@@ -134,54 +182,6 @@
         </Literal>
       </Declarations>
       <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().Contains($item$, $comparer$)$end$;]]></Code>
-    </Snippet>
-  </CodeSnippet>
-  <CodeSnippet Format="1.0.0">
-    <Header>
-      <Title>Guard.Contains(item)</Title>
-      <Shortcut>gcon</Shortcut>
-    </Header>
-    <Snippet>
-      <Imports>
-        <Import>
-          <Namespace>Dawn</Namespace>
-        </Import>
-      </Imports>
-      <Declarations>
-        <Literal>
-          <ID>arg</ID>
-          <Default>arg</Default>
-        </Literal>
-        <Literal>
-          <ID>item</ID>
-          <Default>item</Default>
-        </Literal>
-      </Declarations>
-      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).Contains($item$)$end$;]]></Code>
-    </Snippet>
-  </CodeSnippet>
-  <CodeSnippet Format="1.0.0">
-    <Header>
-      <Title>Guard.NotNull().Contains(item)</Title>
-      <Shortcut>gxcon</Shortcut>
-    </Header>
-    <Snippet>
-      <Imports>
-        <Import>
-          <Namespace>Dawn</Namespace>
-        </Import>
-      </Imports>
-      <Declarations>
-        <Literal>
-          <ID>arg</ID>
-          <Default>arg</Default>
-        </Literal>
-        <Literal>
-          <ID>item</ID>
-          <Default>item</Default>
-        </Literal>
-      </Declarations>
-      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().Contains($item$)$end$;]]></Code>
     </Snippet>
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">

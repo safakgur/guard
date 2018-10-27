@@ -36,15 +36,15 @@
                 .GroupBy(p => p.Value.Shortcut)
                 .ToList();
 
-            return SaveVisualStudioSnippets();
+            return SaveVisualStudioSnippets("guard-cs.vs.snippet");
 
-            async Task SaveVisualStudioSnippets()
+            async Task SaveVisualStudioSnippets(string name)
             {
                 var snippets = groups.SelectMany(g =>
                     g.SelectMany(p => VisualStudioSnippet.CreateSnippets(p.Key, p.Value)));
 
                 var document = VisualStudioSnippet.CreateDocument(snippets);
-                using (var file = File.Create(Path.Combine(directory, "visual-studio.snippet")))
+                using (var file = File.Create(Path.Combine(directory, name)))
                 using (var writer = new StreamWriter(file, Encoding))
                 {
                     await document.SaveAsync(writer, SaveOptions.None, ct).ConfigureAwait(false);
