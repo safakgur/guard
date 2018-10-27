@@ -146,7 +146,7 @@
         [InlineData("S")]
         public void DebuggerDisplay<T>(T value)
         {
-            const StringComparison ignoreCase = StringComparison.OrdinalIgnoreCase;
+            const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
             for (var i = 0; i < 3; i++)
             {
                 var hasName = i <= 1;
@@ -160,14 +160,14 @@
                     Assert.DoesNotContain(nameof(value), display);
 
                 if (isSecure)
-                    Assert.Contains("SECURE", display, ignoreCase);
+                    Assert.Contains("SECURE", display, IgnoreCase);
                 else
-                    Assert.DoesNotContain("SECURE", display, ignoreCase);
+                    Assert.DoesNotContain("SECURE", display, IgnoreCase);
 
                 if (valueArg.HasValue())
                     Assert.Contains(value.ToString(), display);
                 else
-                    Assert.Contains("NULL", display, ignoreCase);
+                    Assert.Contains("NULL", display, IgnoreCase);
             }
         }
     }
