@@ -137,22 +137,22 @@
             Test("1", "1", 1.ToString(), false);
             Test("1", "1", 1.ToString(), true);
 
-            void Test(string value, string same, string notSame, bool secure)
+            void Test(string value, string same, string nonSame, bool secure)
             {
                 same = same?.ToString();
-                notSame = notSame?.ToString();
+                nonSame = nonSame?.ToString();
 
                 var valueArg = Guard.Argument(() => value, secure);
                 valueArg
                     .Equal(same)
-                    .Equal(notSame)
+                    .Equal(nonSame)
                     .Same(same)
-                    .NotSame(notSame);
+                    .NotSame(nonSame);
 
                 if (value is null)
                 {
                     valueArg
-                        .Same(notSame)
+                        .Same(nonSame)
                         .NotSame(same);
 
                     return;
@@ -160,12 +160,12 @@
 
                 ThrowsArgumentException(
                     valueArg,
-                    arg => arg.Same(notSame),
-                    m => secure != m.Contains(notSame),
-                    (arg, message) => arg.Same(notSame, (v, other) =>
+                    arg => arg.Same(nonSame),
+                    m => secure != m.Contains(nonSame),
+                    (arg, message) => arg.Same(nonSame, (v, other) =>
                     {
                         Assert.Same(value, v);
-                        Assert.Same(notSame, other);
+                        Assert.Same(nonSame, other);
                         return message;
                     }));
 

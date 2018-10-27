@@ -10,15 +10,15 @@
         {
             for (var i = 0; i < 2; i++)
             {
-                var untrimmed = " 1 ";
-                var untrimmedArg = Guard.Argument(() => untrimmed, i == 1);
-                Assert.False(untrimmedArg.Modified);
+                var stringValue = 1.ToString();
+                var stringArg = Guard.Argument(() => stringValue, i == 1);
+                Assert.False(stringArg.Modified);
 
-                var trimmed = untrimmed.Trim();
-                var trimmedArg = untrimmedArg.Modify(trimmed);
-                Assert.Equal(untrimmedArg.Name, trimmedArg.Name);
-                Assert.Equal(trimmed, trimmedArg.Value);
-                Assert.Equal(untrimmedArg.Secure, trimmedArg.Secure);
+                var integerValue = int.Parse(stringValue);
+                var integerArg = stringArg.Modify(integerValue);
+                Assert.Equal(stringArg.Name, integerArg.Name);
+                Assert.Equal(integerValue, integerArg.Value);
+                Assert.Equal(stringArg.Secure, integerArg.Secure);
             }
         }
 

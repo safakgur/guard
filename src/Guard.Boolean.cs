@@ -16,6 +16,7 @@
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>false</c>.</exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Boolean", "gtrue")]
         public static ref readonly ArgumentInfo<bool> True(
             in this ArgumentInfo<bool> argument, string message = null)
         {
@@ -37,6 +38,7 @@
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>false</c>.</exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Boolean", "gtrue")]
         public static ref readonly ArgumentInfo<bool?> True(
             in this ArgumentInfo<bool?> argument, string message = null)
         {
@@ -58,6 +60,7 @@
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>true</c>.</exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Boolean", "gfalse")]
         public static ref readonly ArgumentInfo<bool> False(
             in this ArgumentInfo<bool> argument, string message = null)
         {
@@ -79,6 +82,7 @@
         /// <exception cref="ArgumentException"><paramref name="argument" /> value is <c>true</c>.</exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Boolean", "gfalse")]
         public static ref readonly ArgumentInfo<bool?> False(
             in this ArgumentInfo<bool?> argument, string message = null)
         {

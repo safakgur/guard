@@ -14,6 +14,7 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 * [Standard Validations](#standard-validations)
 * [Design Decisions](#design-decisions)
 * [Extensibility](#extensibility)
+* [Code Snippets](#code-snippets)
 * [What's Next](#whats-next)
 
 ## Introduction
@@ -40,7 +41,7 @@ public Person(string name, int age)
 And this is how we write the same constructor with Guard:
 
 ```c#
-public Person(string name)
+public Person(string name, int age)
 {
     Name = Guard.Argument(name, nameof(name)).NotNull().NotEmpty();
     Age = Guard.Argument(age, nameof(age)).NotNegative();
@@ -99,6 +100,10 @@ targeting .NET Core 1.0 and 2.0.
 
 ## More
 
+The default branch (dev) is the development branch, so it may contain changes/features that are not
+published to NuGet yet. See the [master](https://github.com/safakgur/guard/tree/master) branch for
+the latest published version.
+
 ### Standard Validations
 
 [Click here][3] for a list of the validations that are included in the library.
@@ -111,11 +116,17 @@ targeting .NET Core 1.0 and 2.0.
 
 [Click here][4] to see how to add custom validations to Guard by writing simple extension methods.
 
+### Code Snippets
+
+Code snippets can be found in the [snippets][5] folder. Currently, only the Visual Studio is
+supported.
+
 ### What's Next
 
 Right now the following are on the horizon:
 
 * More validations
+* Roslyn analyzers & code fixes
 * Online documentation
 * Performance benchmarks
 
@@ -123,5 +134,4 @@ Right now the following are on the horizon:
 [2]: https://docs.microsoft.com/dotnet/standard/net-standard
 [3]: docs/standard-validations.md
 [4]: docs/extensibility.md
-[5]: https://github.com/safakgur/guard/tree/dev
-[6]: https://github.com/safakgur/guard/tree/master
+[5]: snippets

@@ -20,6 +20,7 @@
         [AssertionMethod]
         [ContractAnnotation("valid:false => halt")]
         [DebuggerStepThrough]
+        [GuardFunction("State", "gop")]
         public static void Operation(
             bool valid, string message = null, [CallerMemberName]string caller = null)
         {
@@ -37,6 +38,7 @@
         [AssertionMethod]
         [ContractAnnotation("supported:false => halt")]
         [DebuggerStepThrough]
+        [GuardFunction("State", "gsup")]
         public static void Support(
             bool supported, string message = null, [CallerMemberName]string caller = null)
         {
@@ -57,6 +59,7 @@
         [AssertionMethod]
         [ContractAnnotation("disposed:true => halt")]
         [DebuggerStepThrough]
+        [GuardFunction("State", "gdis")]
         public static void Disposal(bool disposed, string objectName = null, string message = null)
         {
             if (disposed)
