@@ -27,6 +27,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Type")]
         public static ArgumentInfo<T> Type<T>(
             in this ArgumentInfo<object> argument, Func<object, string> message = null)
         {
@@ -58,6 +59,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Type")]
         public static ref readonly ArgumentInfo<object> NotType<T>(
             in this ArgumentInfo<object> argument, Func<T, string> message = null)
         {
@@ -85,6 +87,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Type")]
         public static ref readonly ArgumentInfo<object> Type(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
@@ -114,6 +117,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Type")]
         public static ref readonly ArgumentInfo<object> NotType(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
         {
@@ -124,6 +128,96 @@
             }
 
             return ref argument;
+        }
+
+        /// <content>Contains the compatibility preconditions.</content>
+        public partial struct ArgumentInfo<T>
+        {
+            /// <summary>
+            ///     Requires the argument to have a value that can be assigned to an instance of the
+            ///     specified type.
+            /// </summary>
+            /// <typeparam name="TTarget">
+            ///     The type that the argument's value should be assignable to.
+            /// </typeparam>
+            /// <param name="message">
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
+            /// </param>
+            /// <returns>The current argument.</returns>
+            /// <exception cref="ArgumentException">
+            ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
+            /// </exception>
+            [AssertionMethod]
+            [DebuggerStepThrough]
+            [GuardFunction("Type", "gcomp")]
+            public ArgumentInfo<T> Compatible<TTarget>(Func<T, string> message = null)
+            {
+                if (!this.HasValue() || this.Value is TTarget value)
+                    return this;
+
+                var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
+                throw new ArgumentException(m, this.Name);
+            }
+
+            /// <summary>
+            ///     Requires the argument to have a value that cannot be assigned to an instance of
+            ///     the specified type.
+            /// </summary>
+            /// <typeparam name="TTarget">
+            ///     The type that the argument's value should not be assignable to.
+            /// </typeparam>
+            /// <param name="message">
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
+            /// </param>
+            /// <returns>The current argument.</returns>
+            /// <exception cref="ArgumentException">
+            ///     <see cref="Value" /> can be assigned to type <typeparamref name="TTarget" />.
+            /// </exception>
+            [AssertionMethod]
+            [DebuggerStepThrough]
+            [GuardFunction("Type", "gncomp")]
+            public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string> message = null)
+            {
+                if (this.HasValue() && this.Value is TTarget value)
+                {
+                    var m = message?.Invoke(value) ?? Messages.NotCompatible<T, TTarget>(this);
+                    throw new ArgumentException(m, this.Name);
+                }
+
+                return this;
+            }
+
+            /// <summary>
+            ///     <para>
+            ///         Requires the argument to have a value that can be assigned to an instance of
+            ///         the specified type.
+            ///     </para>
+            ///     <para>The return value will be a new argument of type <typeparamref name="TTarget" />.</para>
+            /// </summary>
+            /// <typeparam name="TTarget">
+            ///     The type that the argument's value should be assignable to.
+            /// </typeparam>
+            /// <param name="message">
+            ///     The factory to initialize the message of the exception that will be thrown if the
+            ///     precondition is not satisfied.
+            /// </param>
+            /// <returns>A new <see cref="ArgumentInfo{TTarget}" />.</returns>
+            /// <exception cref="ArgumentException">
+            ///     <see cref="Value" /> cannot be assigned to type <typeparamref name="TTarget" />.
+            /// </exception>
+            [AssertionMethod]
+            [DebuggerStepThrough]
+            [GuardFunction("Type", "gcast")]
+            public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
+            {
+                if (this.Value is TTarget value)
+                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
+
+                var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
+                throw new ArgumentException(m, this.Name);
+            }
         }
 
         /// <summary>Provides cached utilities for <typeparamref name="T" />.</summary>

@@ -24,6 +24,7 @@ namespace Dawn
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Email")]
         public static ref readonly ArgumentInfo<MailAddress> HasHost(
             in this ArgumentInfo<MailAddress> argument,
             string host,
@@ -52,6 +53,7 @@ namespace Dawn
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Email")]
         public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveHost(
             in this ArgumentInfo<MailAddress> argument,
             string host,
@@ -81,6 +83,7 @@ namespace Dawn
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Email")]
         public static ref readonly ArgumentInfo<MailAddress> HostIn<TCollection>(
             in this ArgumentInfo<MailAddress> argument,
             TCollection hosts,
@@ -111,6 +114,7 @@ namespace Dawn
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Email")]
         public static ref readonly ArgumentInfo<MailAddress> HostNotIn<TCollection>(
             in this ArgumentInfo<MailAddress> argument,
             TCollection hosts,
@@ -139,6 +143,7 @@ namespace Dawn
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Email")]
         public static ref readonly ArgumentInfo<MailAddress> HasDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {
@@ -163,6 +168,7 @@ namespace Dawn
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Email")]
         public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {

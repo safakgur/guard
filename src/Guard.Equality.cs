@@ -22,6 +22,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gd")]
         public static ref readonly ArgumentInfo<T> Default<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : struct
@@ -52,6 +53,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gd")]
         public static ref readonly ArgumentInfo<T?> Default<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct
@@ -112,6 +114,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gnd")]
         public static ref readonly ArgumentInfo<T> NotDefault<T>(
             in this ArgumentInfo<T> argument, string message = null)
             where T : struct
@@ -139,6 +142,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gnd")]
         public static ref readonly ArgumentInfo<T?> NotDefault<T>(
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct
@@ -171,6 +175,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "geq")]
         public static ref readonly ArgumentInfo<T> Equal<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, T, string> message = null)
             => ref argument.Equal(other, null, message);
@@ -191,6 +196,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "geqc")]
         public static ref readonly ArgumentInfo<T> Equal<T>(
             in this ArgumentInfo<T> argument,
             in T other,
@@ -223,6 +229,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gneq")]
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
             in this ArgumentInfo<T> argument, in T other, Func<T, string> message = null)
             => ref argument.NotEqual(other, null, message);
@@ -245,6 +252,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gneqc")]
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
             in this ArgumentInfo<T> argument,
             in T other,
@@ -274,6 +282,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gs")]
         public static ref readonly ArgumentInfo<T> Same<T>(
             in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
             where T : class
@@ -303,6 +312,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Equality", "gns")]
         public static ref readonly ArgumentInfo<T> NotSame<T>(
             in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
             where T : class

@@ -22,6 +22,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gem")]
         public static ref readonly ArgumentInfo<string> Empty(
             in this ArgumentInfo<string> argument, Func<string, string> message)
         {
@@ -46,6 +47,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnem")]
         public static ref readonly ArgumentInfo<string> NotEmpty(
             in this ArgumentInfo<string> argument, string message = null)
         {
@@ -73,6 +75,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gw")]
         public static ref readonly ArgumentInfo<string> WhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
@@ -101,6 +104,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnw")]
         public static ref readonly ArgumentInfo<string> NotWhiteSpace(
             in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
@@ -132,6 +136,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gminl")]
         public static ref readonly ArgumentInfo<string> MinLength(
             in this ArgumentInfo<string> argument,
             int minLength,
@@ -166,6 +171,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gmaxl")]
         public static ref readonly ArgumentInfo<string> MaxLength(
             in this ArgumentInfo<string> argument,
             int maxLength,
@@ -202,6 +208,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "glr")]
         public static ref readonly ArgumentInfo<string> LengthInRange(
             in this ArgumentInfo<string> argument,
             int minLength,
@@ -238,6 +245,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "geqs")]
         public static ref readonly ArgumentInfo<string> Equal(
             in this ArgumentInfo<string> argument,
             string other,
@@ -271,6 +279,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gneqs")]
         public static ref readonly ArgumentInfo<string> NotEqual(
             in this ArgumentInfo<string> argument,
             string other,
@@ -303,6 +312,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gstart")]
         public static ref readonly ArgumentInfo<string> StartsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -327,6 +337,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gstarts")]
         public static ref readonly ArgumentInfo<string> StartsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -359,6 +370,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnstart")]
         public static ref readonly ArgumentInfo<string> DoesNotStartWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -383,6 +395,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnstarts")]
         public static ref readonly ArgumentInfo<string> DoesNotStartWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -415,6 +428,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gend")]
         public static ref readonly ArgumentInfo<string> EndsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -439,6 +453,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gends")]
         public static ref readonly ArgumentInfo<string> EndsWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -471,6 +486,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnend")]
         public static ref readonly ArgumentInfo<string> DoesNotEndWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -495,6 +511,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnends")]
         public static ref readonly ArgumentInfo<string> DoesNotEndWith(
             in this ArgumentInfo<string> argument,
             string value,
@@ -527,6 +544,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gm")]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -581,6 +599,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gmt")]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -636,6 +655,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gm")]
         public static ref readonly ArgumentInfo<string> Matches(
             in this ArgumentInfo<string> argument,
             Regex regex,
@@ -686,6 +706,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnm")]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -741,6 +762,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnmt")]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
             [RegexPattern] string pattern,
@@ -797,6 +819,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("String", "gnm")]
         public static ref readonly ArgumentInfo<string> DoesNotMatch(
             in this ArgumentInfo<string> argument,
             Regex regex,
