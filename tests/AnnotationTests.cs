@@ -43,35 +43,6 @@ namespace Dawn.Tests
             Assert.Equal(1, attr.Order);
         }
 
-        [Fact(DisplayName = T + "Annotations: Exported methods are marked")]
-        public void ExportedMethodsAreMarked()
-        {
-            var assembly = Assembly.GetAssembly(typeof(Guard));
-            var exportedMethods =
-                from t in assembly.ExportedTypes
-                where t.GetCustomAttribute<ObsoleteAttribute>() is null
-                select t.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance) into methods
-                from m in methods
-                where m.DeclaringType.Assembly == assembly && !m.IsVirtual && !m.IsSpecialName
-                where m.GetCustomAttribute<ObsoleteAttribute>() is null
-                select m;
-
-            var markedMethods = GetMarkedMethods().Select(p => p.Key).ToList();
-            foreach (var e in exportedMethods)
-            {
-                var ep = e.GetParameters().Select(p => p.ParameterType);
-                var equals =
-                    from m in markedMethods
-                    where m.DeclaringType == e.DeclaringType
-                       && m.Name == e.Name
-                    let mp = m.GetParameters().Select(p => p.ParameterType)
-                    where mp.SequenceEqual(ep)
-                    select m;
-
-                Assert.NotEmpty(equals);
-            }
-        }
-
         [Fact(DisplayName = T + "Annotations: Shortcuts are unique")]
         public void ShortcutsAreUnique()
         {
