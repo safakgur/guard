@@ -2,14 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
 
     /// <summary>Marks a target as a function of <see cref="Guard" />.</summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    [Conditional("DEBUG")]
-    [Conditional("GUARD_UTILS")]
     internal sealed class GuardFunctionAttribute : Attribute
     {
         /// <summary>
