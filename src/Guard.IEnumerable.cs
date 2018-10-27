@@ -27,6 +27,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gem")]
         public static ref readonly ArgumentInfo<TCollection> Empty<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -53,6 +54,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gnem")]
         public static ref readonly ArgumentInfo<TCollection> NotEmpty<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -85,6 +87,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gminc")]
         public static ref readonly ArgumentInfo<TCollection> MinCount<TCollection>(
             in this ArgumentInfo<TCollection> argument, int minCount, Func<TCollection, int, string> message = null)
             where TCollection : IEnumerable
@@ -117,6 +120,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gmaxc")]
         public static ref readonly ArgumentInfo<TCollection> MaxCount<TCollection>(
             in this ArgumentInfo<TCollection> argument, int maxCount, Func<TCollection, int, string> message = null)
             where TCollection : IEnumerable
@@ -153,6 +157,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gcr")]
         public static ref readonly ArgumentInfo<TCollection> CountInRange<TCollection>(
             in this ArgumentInfo<TCollection> argument, int minCount, int maxCount, Func<TCollection, int, int, string> message = null)
             where TCollection : IEnumerable
@@ -190,6 +195,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gcon")]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
@@ -214,6 +220,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gconc")]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
@@ -246,6 +253,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gncon")]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
             where TCollection : IEnumerable
@@ -270,6 +278,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gnconc")]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
@@ -301,6 +310,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gconn")]
         public static ref readonly ArgumentInfo<TCollection> ContainsNull<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -327,6 +337,7 @@
         /// <exception cref="ArgumentException"><paramref name="argument" /> contains <c>null</c>.</exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gnconn")]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContainNull<TCollection>(
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
             where TCollection : IEnumerable
@@ -358,6 +369,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gin")]
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -384,6 +396,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "ginc")]
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -414,6 +427,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gin")]
         public static ref readonly ArgumentInfo<TItem> In<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {
@@ -449,6 +463,7 @@
         [AssertionMethod]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gnin")]
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -475,6 +490,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gninc")]
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
@@ -505,6 +521,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Collection", "gnin")]
         public static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {

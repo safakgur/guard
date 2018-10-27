@@ -14,6 +14,7 @@
         /// <param name="value">The new argument value.</param>
         /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
         [DebuggerStepThrough]
+        [GuardFunction("Normalization", "gmod")]
         public static ArgumentInfo<TTarget> Modify<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument, TTarget value)
             => new ArgumentInfo<TTarget>(value, argument.Name, true, argument.Secure);
@@ -33,6 +34,7 @@
         /// <exception cref="ArgumentNullException"><paramref name="convert" /> is <c>null</c>.</exception>
         [ContractAnnotation("convert:null => halt")]
         [DebuggerStepThrough]
+        [GuardFunction("Normalization", "gmod")]
         public static ArgumentInfo<TTarget> Modify<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument, Func<TSource, TTarget> convert)
         {
@@ -66,6 +68,7 @@
         /// <exception cref="ArgumentException"><paramref name="convert" /> threw an exception.</exception>
         [ContractAnnotation("convert:null => halt")]
         [DebuggerStepThrough]
+        [GuardFunction("Normalization", "gwrap")]
         public static ArgumentInfo<TTarget> Wrap<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument,
             Func<TSource, TTarget> convert,
@@ -92,6 +95,8 @@
         /// <typeparam name="T">The type of the cloneable argument.</typeparam>
         /// <param name="argument">The cloneable argument.</param>
         /// <returns>A new <see cref="ArgumentInfo{T}" />.</returns>
+        [DebuggerStepThrough]
+        [GuardFunction("Normalization", "gclone")]
         public static ArgumentInfo<T> Clone<T>(in this ArgumentInfo<T> argument)
             where T : class, ICloneable
         {

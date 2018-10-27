@@ -1,5 +1,6 @@
 ﻿namespace Dawn.Tests
 {
+    using System.IO;
     using Xunit;
 
     public sealed class TypeTests : BaseTests
@@ -220,6 +221,110 @@
                     Assert.Same(intType, t);
                     return message;
                 }));
+        }
+
+        [Fact(DisplayName = T + "Type: Compatible/NotCompatible")]
+        public void Compatible()
+        {
+            using (var memory = new MemoryStream() as Stream)
+            {
+                var @null = null as Stream;
+                var nullArg = Guard.Argument(() => @null)
+                    .Compatible<object>()
+                    .Compatible<MemoryStream>()
+                    .Compatible<string>();
+
+                var memoryArg = Guard.Argument(() => memory)
+                    .Compatible<object>()
+                    .Compatible<MemoryStream>();
+
+                ThrowsArgumentException(
+                    memoryArg,
+                    arg => arg.Compatible<string>(),
+                    (arg, message) => arg.Compatible<string>(s =>
+                    {
+                        Assert.Same(memory, s);
+                        return message;
+                    }));
+
+                nullArg
+                    .NotCompatible<object>()
+                    .NotCompatible<MemoryStream>()
+                    .NotCompatible<string>();
+
+                memoryArg.NotCompatible<string>();
+
+                ThrowsArgumentException(
+                    memoryArg,
+                    arg => arg.NotCompatible<object>(),
+                    (arg, message) => arg.NotCompatible<object>(o =>
+                    {
+                        Assert.Same(memory, o);
+                        return message;
+                    }));
+
+                ThrowsArgumentException(
+                    memoryArg,
+                    arg => arg.NotCompatible<MemoryStream>(),
+                    (arg, message) => arg.NotCompatible<MemoryStream>(s =>
+                    {
+                        Assert.Same(memory, s);
+                        return message;
+                    }));
+            }
+        }
+
+        [Fact(DisplayName = T + "Type: Cast")]
+        public void Cast()
+        {
+            using (var stream = new MemoryStream() as Stream)
+            {
+                var @null = null as Stream;
+                var nullArg = Guard.Argument(() => @null);
+
+                ThrowsArgumentException(
+                    nullArg,
+                    arg => arg.Cast<object>(),
+                    (arg, message) => arg.Cast<object>(s =>
+                    {
+                        Assert.Null(s);
+                        return message;
+                    }));
+
+                ThrowsArgumentException(
+                    nullArg,
+                    arg => arg.Cast<MemoryStream>(),
+                    (arg, message) => arg.Cast<MemoryStream>(s =>
+                    {
+                        Assert.Null(s);
+                        return message;
+                    }));
+
+                for (var i = 0; i < 2; i++)
+                {
+                    var streamArg = Guard.Argument(() => stream, i == 1);
+
+                    var objectCastedArg = streamArg.Cast<object>();
+                    Assert.Same(streamArg.Name, objectCastedArg.Name);
+                    Assert.Equal(streamArg.Modified, objectCastedArg.Modified);
+                    Assert.Equal(streamArg.Secure, objectCastedArg.Secure);
+                    Assert.Same(stream, objectCastedArg.Value);
+
+                    var msCastedArg = streamArg.Cast<MemoryStream>();
+                    Assert.Equal(streamArg.Modified, msCastedArg.Modified);
+                    Assert.Equal(streamArg.Secure, msCastedArg.Secure);
+                    Assert.Same(stream, msCastedArg.Value);
+
+                    ThrowsArgumentException(
+                        streamArg,
+                        arg => arg.Cast<string>(),
+                        (arg, message) => arg.Cast<string>(s =>
+                        {
+                            Assert.Same(stream, s);
+                            return message;
+                        }));
+                }
+            }
         }
     }
 }

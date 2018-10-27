@@ -27,6 +27,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnan")]
         public static ref readonly ArgumentInfo<double> NaN(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -67,6 +68,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnan")]
         public static ref readonly ArgumentInfo<double?> NaN(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -104,6 +106,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnnan")]
         public static ref readonly ArgumentInfo<double> NotNaN(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -137,6 +140,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnnan")]
         public static ref readonly ArgumentInfo<double?> NotNaN(
             in this ArgumentInfo<double?> argument, string message = null)
         {
@@ -176,6 +180,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "ginf")]
         public static ref readonly ArgumentInfo<double> Infinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -219,6 +224,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "ginf")]
         public static ref readonly ArgumentInfo<double?> Infinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -293,6 +299,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gninf")]
         public static ref readonly ArgumentInfo<double> NotInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -369,6 +376,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gninf")]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -407,6 +415,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gposinf")]
         public static ref readonly ArgumentInfo<double> PositiveInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -447,6 +456,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gposinf")]
         public static ref readonly ArgumentInfo<double?> PositiveInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -484,6 +494,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnposinf")]
         public static ref readonly ArgumentInfo<double> NotPositiveInfinity(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -517,6 +528,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnposinf")]
         public static ref readonly ArgumentInfo<double?> NotPositiveInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {
@@ -555,6 +567,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gneginf")]
         public static ref readonly ArgumentInfo<double> NegativeInfinity(
             in this ArgumentInfo<double> argument, Func<double, string> message = null)
         {
@@ -595,6 +608,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gneginf")]
         public static ref readonly ArgumentInfo<double?> NegativeInfinity(
             in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
         {
@@ -632,6 +646,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnneginf")]
         public static ref readonly ArgumentInfo<double> NotNegativeInfinity(
             in this ArgumentInfo<double> argument, string message = null)
         {
@@ -665,6 +680,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gnneginf")]
         public static ref readonly ArgumentInfo<double?> NotNegativeInfinity(
             in this ArgumentInfo<double?> argument, string message = null)
         {
@@ -701,6 +717,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "geqd")]
         public static ref readonly ArgumentInfo<double> Equal(
             in this ArgumentInfo<double> argument,
             double other,
@@ -737,6 +754,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "geqd")]
         public static ref readonly ArgumentInfo<double?> Equal(
             in this ArgumentInfo<double?> argument,
             double other,
@@ -777,6 +795,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gneqd")]
         public static ref readonly ArgumentInfo<double> NotEqual(
             in this ArgumentInfo<double> argument,
             double other,
@@ -813,6 +832,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Double", "gneqd")]
         public static ref readonly ArgumentInfo<double?> NotEqual(
             in this ArgumentInfo<double?> argument,
             double other,

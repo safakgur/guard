@@ -27,6 +27,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnan")]
         public static ref readonly ArgumentInfo<float> NaN(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -67,6 +68,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnan")]
         public static ref readonly ArgumentInfo<float?> NaN(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -104,6 +106,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnnan")]
         public static ref readonly ArgumentInfo<float> NotNaN(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -137,6 +140,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnnan")]
         public static ref readonly ArgumentInfo<float?> NotNaN(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -176,6 +180,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "ginf")]
         public static ref readonly ArgumentInfo<float> Infinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -219,6 +224,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "ginf")]
         public static ref readonly ArgumentInfo<float?> Infinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -291,6 +297,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gninf")]
         public static ref readonly ArgumentInfo<float> NotInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -365,6 +372,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gninf")]
         public static ref readonly ArgumentInfo<float?> NotInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -403,6 +411,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gposinf")]
         public static ref readonly ArgumentInfo<float> PositiveInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -443,6 +452,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gposinf")]
         public static ref readonly ArgumentInfo<float?> PositiveInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -480,6 +490,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnposinf")]
         public static ref readonly ArgumentInfo<float> NotPositiveInfinity(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -513,6 +524,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnposinf")]
         public static ref readonly ArgumentInfo<float?> NotPositiveInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -551,6 +563,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gneginf")]
         public static ref readonly ArgumentInfo<float> NegativeInfinity(
             in this ArgumentInfo<float> argument, Func<float, string> message = null)
         {
@@ -591,6 +604,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gneginf")]
         public static ref readonly ArgumentInfo<float?> NegativeInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string> message = null)
         {
@@ -628,6 +642,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnneginf")]
         public static ref readonly ArgumentInfo<float> NotNegativeInfinity(
             in this ArgumentInfo<float> argument, string message = null)
         {
@@ -661,6 +676,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gnneginf")]
         public static ref readonly ArgumentInfo<float?> NotNegativeInfinity(
             in this ArgumentInfo<float?> argument, string message = null)
         {
@@ -697,6 +713,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "geqd")]
         public static ref readonly ArgumentInfo<float> Equal(
             in this ArgumentInfo<float> argument,
             float other,
@@ -733,6 +750,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "geqd")]
         public static ref readonly ArgumentInfo<float?> Equal(
             in this ArgumentInfo<float?> argument,
             float other,
@@ -773,6 +791,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gneqd")]
         public static ref readonly ArgumentInfo<float> NotEqual(
             in this ArgumentInfo<float> argument,
             float other,
@@ -809,6 +828,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Single", "gneqd")]
         public static ref readonly ArgumentInfo<float?> NotEqual(
             in this ArgumentInfo<float?> argument,
             float other,

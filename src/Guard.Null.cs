@@ -20,6 +20,7 @@
         /// <exception cref="ArgumentException"><paramref name="argument" /> is not <c>null</c>.</exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Null", "gn")]
         public static ref readonly ArgumentInfo<T> Null<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message = null)
             where T : class
@@ -50,6 +51,7 @@
         /// </remarks>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Null", "gn")]
         public static ref readonly ArgumentInfo<T?> Null<T>(
             in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
             where T : struct
@@ -82,6 +84,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Null", "gnn")]
         public static ref readonly ArgumentInfo<T> NotNull<T>(
             in this ArgumentInfo<T> argument, string message = null)
             where T : class
@@ -115,6 +118,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Null", "gnn")]
         public static ArgumentInfo<T> NotNull<T>(
             in this ArgumentInfo<T?> argument, string message = null)
             where T : struct
@@ -176,6 +180,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Null")]
         public static void NotAllNull<T1, T2>(
             in ArgumentInfo<T1> argument1, in ArgumentInfo<T2> argument2, string message = null)
         {
@@ -202,6 +207,7 @@
         /// </exception>
         [AssertionMethod]
         [DebuggerStepThrough]
+        [GuardFunction("Null")]
         public static void NotAllNull<T1, T2, T3>(
             in ArgumentInfo<T1> argument1,
             in ArgumentInfo<T2> argument2,
