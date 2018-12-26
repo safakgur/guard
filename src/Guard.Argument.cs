@@ -31,12 +31,13 @@
         ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
         ///     messages of failed validations.
         /// </param>
+        /// <param name="exceptionInterceptor">Optional interceptor that can process the exception just before it's thrown</param>
         /// <returns>An object used for asserting preconditions.</returns>
         [DebuggerStepThrough]
         [GuardFunction("Initialization", "ga", order: 1)]
         public static ArgumentInfo<T> Argument<T>(
-            T value, [InvokerParameterName] string name = null, bool secure = false)
-            => new ArgumentInfo<T>(value, name, secure: secure);
+            T value, [InvokerParameterName] string name = null, bool secure = false, Action<Exception> exceptionInterceptor = null)
+            => new ArgumentInfo<T>(value, name, secure: secure, exceptionInterceptor: exceptionInterceptor);
 
         /// <summary>
         ///     Returns an object that can be used to assert preconditions for the specified method argument.
@@ -47,19 +48,20 @@
         ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
         ///     messages of failed validations.
         /// </param>
+        /// <param name="exceptionInterceptor">Optional interceptor that can process the exception just before it's thrown</param>
         /// <returns>An object used for asserting preconditions.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="e" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="e" /> is not a <see cref="MemberExpression" />.</exception>
         [ContractAnnotation("e:null => halt")]
         [DebuggerStepThrough]
         [GuardFunction("Initialization", order: 2)]
-        public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e, bool secure = false)
+        public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e, bool secure = false, Action<Exception> exceptionInterceptor = null)
         {
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
 
             return e.Body is MemberExpression m
-                ? Argument(e.Compile()(), m.Member.Name, secure)
+                ? Argument(e.Compile()(), m.Member.Name, secure, exceptionInterceptor)
                 : throw new ArgumentException("A member expression is expected.", nameof(e));
         }
 
@@ -88,17 +90,20 @@
             ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
             ///     messages of failed validations.
             /// </param>
+            /// <param name="exceptionInterceptor">Optional interceptor that can process the exception just before it's thrown</param>
             [DebuggerStepThrough]
             public ArgumentInfo(
                 T value,
                 [InvokerParameterName] string name,
                 bool modified = false,
-                bool secure = false)
+                bool secure = false,
+                Action<Exception> exceptionInterceptor = null)
             {
                 this.Value = value;
                 this.name = name;
                 this.Modified = modified;
                 this.Secure = secure;
+                this.ExceptionInterceptor = exceptionInterceptor;
             }
 
             /// <summary>Gets the argument value.</summary>
@@ -119,6 +124,26 @@
             ///     validation parameters.
             /// </summary>
             public bool Secure { get; }
+
+            /// <summary>
+            ///  Gets an exception handler used just before the exception is thrown
+            /// </summary>
+            public Action<Exception> ExceptionInterceptor { get; }
+
+            /// <summary>
+            /// Processes the exception before it's thrown - <see cref="ExceptionInterceptor"/> is invoked when available.
+            /// </summary>
+            /// <param name="exception"></param>
+            /// <returns></returns>
+            public Exception Exception(Exception exception)
+            {
+                if (exception == null)
+                    throw new ArgumentNullException(nameof(exception));
+
+                this.ExceptionInterceptor?.Invoke(exception);
+
+                return exception;
+            }
 
             /// <summary>Gets how the layout is displayed in the debugger variable windows.</summary>
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]

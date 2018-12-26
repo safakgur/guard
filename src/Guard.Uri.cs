@@ -33,7 +33,7 @@
             if (argument.HasValue() && !argument.Value.IsAbsoluteUri)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.UriAbsolute(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -58,7 +58,7 @@
             if (argument.HasValue() && argument.Value.IsAbsoluteUri)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.UriRelative(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -90,7 +90,7 @@
                     !argument.Value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase))
                 {
                     var m = message?.Invoke(argument.Value, scheme) ?? Messages.UriScheme(argument, scheme);
-                    throw new ArgumentException(m, argument.Name);
+                    throw argument.Exception(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -119,7 +119,7 @@
                 argument.Value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase))
             {
                 var m = message?.Invoke(argument.Value, scheme) ?? Messages.UriNotScheme(argument, scheme);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -182,7 +182,7 @@
             }
 
             var m = message?.Invoke(argument.Value) ?? Messages.UriHttp(argument);
-            throw new ArgumentException(m, argument.Name);
+            throw argument.Exception(new ArgumentException(m, argument.Name));
         }
 
         /// <summary>Requires the argument value to be an absolute URI with the HTTPS scheme.</summary>
@@ -205,7 +205,7 @@
                 if (!argument.Value.IsAbsoluteUri || argument.Value.Scheme != HttpsUriScheme)
                 {
                     var m = message?.Invoke(argument.Value) ?? Messages.UriHttps(argument);
-                    throw new ArgumentException(m, argument.Name);
+                    throw argument.Exception(new ArgumentException(m, argument.Name));
                 }
 
             return ref argument;

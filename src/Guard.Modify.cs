@@ -17,7 +17,7 @@
         [GuardFunction("Normalization", "gmod")]
         public static ArgumentInfo<TTarget> Modify<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument, TTarget value)
-            => new ArgumentInfo<TTarget>(value, argument.Name, true, argument.Secure);
+            => new ArgumentInfo<TTarget>(value, argument.Name, true, argument.Secure, argument.ExceptionInterceptor);
 
         /// <summary>
         ///     Returns a new argument with the same name and a value that is created using the
@@ -40,7 +40,7 @@
         {
             Argument(convert, nameof(convert)).NotNull();
             return new ArgumentInfo<TTarget>(
-                convert(argument.Value), argument.Name, true, argument.Secure);
+                convert(argument.Value), argument.Name, true, argument.Secure, argument.ExceptionInterceptor);
         }
 
         /// <summary>
@@ -78,12 +78,12 @@
             try
             {
                 return new ArgumentInfo<TTarget>(
-                    convert(argument.Value), argument.Name, true, argument.Secure);
+                    convert(argument.Value), argument.Name, true, argument.Secure,argument.ExceptionInterceptor);
             }
             catch (Exception x)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Require(argument);
-                throw new ArgumentException(m, argument.Name, x);
+                throw argument.Exception(new ArgumentException(m, argument.Name, x));
             }
         }
 
@@ -104,7 +104,7 @@
                 return argument;
 
             return new ArgumentInfo<T>(
-                argument.Value.Clone() as T, argument.Name, argument.Modified, argument.Secure);
+                argument.Value.Clone() as T, argument.Name, argument.Modified, argument.Secure,argument.ExceptionInterceptor);
         }
 
 #endif

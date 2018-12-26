@@ -34,11 +34,11 @@
             if (!TypeInfo<T>.CanBeInitializedFrom(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Type(argument, typeof(T));
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return new ArgumentInfo<T>(
-                (T)argument.Value, argument.Name, argument.Modified, argument.Secure);
+                (T)argument.Value, argument.Name, argument.Modified, argument.Secure,argument.ExceptionInterceptor);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@
             if (argument.HasValue() && TypeInfo<T>.CanBeInitializedFrom(argument.Value))
             {
                 var m = message?.Invoke((T)argument.Value) ?? Messages.NotType(argument, typeof(T));
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -94,7 +94,7 @@
             if (argument.HasValue() && !TypeInfo.CanBeConvertedTo(argument.Value, type))
             {
                 var m = message?.Invoke(argument.Value, type) ?? Messages.Type(argument, type);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -124,7 +124,7 @@
             if (argument.HasValue() && TypeInfo.CanBeConvertedTo(argument.Value, type))
             {
                 var m = message?.Invoke(argument.Value, type) ?? Messages.NotType(argument, type);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -157,7 +157,7 @@
                     return this;
 
                 var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
-                throw new ArgumentException(m, this.Name);
+                throw this.Exception(new ArgumentException(m, this.Name));
             }
 
             /// <summary>
@@ -183,7 +183,7 @@
                 if (this.HasValue() && this.Value is TTarget value)
                 {
                     var m = message?.Invoke(value) ?? Messages.NotCompatible<T, TTarget>(this);
-                    throw new ArgumentException(m, this.Name);
+                    throw this.Exception(new ArgumentException(m, this.Name));
                 }
 
                 return this;
@@ -213,10 +213,10 @@
             public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
             {
                 if (this.Value is TTarget value)
-                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
+                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure,this.ExceptionInterceptor);
 
                 var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
-                throw new ArgumentException(m, this.Name);
+                throw this.Exception(new ArgumentException(m, this.Name));
             }
         }
 

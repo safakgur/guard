@@ -34,7 +34,7 @@ namespace Dawn
                 !argument.Value.Host.Equals(host, StringComparison.OrdinalIgnoreCase))
             {
                 var m = message?.Invoke(argument.Value, host) ?? Messages.EmailHasHost(argument, host);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -63,7 +63,7 @@ namespace Dawn
                 argument.Value.Host.Equals(host, StringComparison.OrdinalIgnoreCase))
             {
                 var m = message?.Invoke(argument.Value, host) ?? Messages.EmailDoesNotHaveHost(argument, host);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -94,7 +94,7 @@ namespace Dawn
                 !Collection<TCollection>.Typed<string>.Contains(hosts, argument.Value.Host, null))
             {
                 var m = message?.Invoke(argument.Value, hosts) ?? Messages.EmailHostIn(argument, hosts);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -125,7 +125,7 @@ namespace Dawn
                 Collection<TCollection>.Typed<string>.Contains(hosts, argument.Value.Host, null))
             {
                 var m = message?.Invoke(argument.Value, hosts) ?? Messages.EmailHostNotIn(argument, hosts);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -150,7 +150,7 @@ namespace Dawn
             if (argument.HasValue() && argument.Value.DisplayName.Length == 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.EmailHasDisplayName(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -175,7 +175,7 @@ namespace Dawn
             if (argument.HasValue() && argument.Value.DisplayName.Length > 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.EmailDoesNotHaveDisplayName(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;

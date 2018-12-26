@@ -35,7 +35,7 @@
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, 1) != 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionEmpty(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -62,7 +62,7 @@
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, 1) == 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionNotEmpty(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -95,7 +95,7 @@
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, minCount) < minCount)
             {
                 var m = message?.Invoke(argument.Value, minCount) ?? Messages.CollectionMinCount(argument, minCount);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -128,7 +128,7 @@
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, maxCount + 1) > maxCount)
             {
                 var m = message?.Invoke(argument.Value, maxCount) ?? Messages.CollectionMaxCount(argument, maxCount);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -170,7 +170,7 @@
                     var m = message?.Invoke(argument.Value, minCount, maxCount)
                         ?? Messages.CollectionCountInRange(argument, minCount, maxCount);
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw argument.Exception(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -231,7 +231,7 @@
             if (argument.HasValue() && !Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionContains(argument, item);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -289,7 +289,7 @@
             if (argument.HasValue() && Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionDoesNotContain(argument, item);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -318,7 +318,7 @@
             if (argument.HasValue() && !Collection<TCollection>.ContainsNull(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionContains(argument, "null");
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -345,7 +345,7 @@
             if (argument.HasValue() && Collection<TCollection>.ContainsNull(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionDoesNotContain(argument, "null");
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -411,7 +411,7 @@
                 var m = message?.Invoke(argument.Value, collection)
                     ?? Messages.InCollection(argument, collection);
 
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -439,7 +439,7 @@
                         return ref argument;
 
                 var m = Messages.InCollection(argument, items);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -505,7 +505,7 @@
                 var m = message?.Invoke(argument.Value, collection)
                     ?? Messages.NotInCollection(argument, collection);
 
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -532,7 +532,7 @@
                     if (comparer.Equals(argument.Value, items[i]))
                     {
                         var m = Messages.NotInCollection(argument, items);
-                        throw new ArgumentException(m, argument.Name);
+                        throw argument.Exception(new ArgumentException(m, argument.Name));
                     }
             }
 

@@ -482,7 +482,8 @@
                             this.Argument.Value.Value,
                             this.Argument.Name,
                             this.Argument.Modified,
-                            this.Argument.Secure));
+                            this.Argument.Secure,
+                            this.Argument.ExceptionInterceptor));
 
                     return true;
                 }

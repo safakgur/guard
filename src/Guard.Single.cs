@@ -34,9 +34,9 @@
             if (!float.IsNaN(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NaN(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -78,9 +78,9 @@
                 if (!float.IsNaN(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.NaN(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -113,9 +113,9 @@
             if (float.IsNaN(argument.Value))
             {
                 var m = message ?? Messages.NotNaN(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -150,9 +150,9 @@
                 if (float.IsNaN(value))
                 {
                     var m = message ?? Messages.NotNaN(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -187,9 +187,9 @@
             if (!float.IsInfinity(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Infinity(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -234,9 +234,9 @@
                 if (!float.IsInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.Infinity(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -269,9 +269,9 @@
             if (float.IsInfinity(argument.Value))
             {
                 var m = message ?? Messages.NotInfinity(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -304,9 +304,9 @@
             if (float.IsInfinity(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotInfinity(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -338,9 +338,9 @@
             if (argument.NotNull(out var a) && float.IsInfinity(a.Value))
             {
                 var m = message ?? Messages.NotInfinity(a);
-                throw !a.Modified
+                throw argument.Exception(!a.Modified
                     ? new ArgumentOutOfRangeException(a.Name, argument.Secure ? null : a.Value as object, m)
-                    : new ArgumentException(m, a.Name);
+                    : new ArgumentException(m, a.Name));
             }
 
             return ref argument;
@@ -382,9 +382,9 @@
                 if (float.IsInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.NotInfinity(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -418,9 +418,9 @@
             if (!float.IsPositiveInfinity(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.PositiveInfinity(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -462,9 +462,9 @@
                 if (!float.IsPositiveInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.PositiveInfinity(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -497,9 +497,9 @@
             if (float.IsPositiveInfinity(argument.Value))
             {
                 var m = message ?? Messages.NotPositiveInfinity(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -534,9 +534,9 @@
                 if (float.IsPositiveInfinity(value))
                 {
                     var m = message ?? Messages.NotPositiveInfinity(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -570,9 +570,9 @@
             if (!float.IsNegativeInfinity(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NegativeInfinity(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -614,9 +614,9 @@
                 if (!float.IsNegativeInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.NegativeInfinity(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -649,9 +649,9 @@
             if (float.IsNegativeInfinity(argument.Value))
             {
                 var m = message ?? Messages.NotNegativeInfinity(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -686,9 +686,9 @@
                 if (float.IsNegativeInfinity(value))
                 {
                     var m = message ?? Messages.NotNegativeInfinity(argument);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -724,9 +724,9 @@
             if (diff > delta)
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other, delta);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -764,9 +764,9 @@
                 if (diff > delta)
                 {
                     var m = message?.Invoke(value, other) ?? Messages.Equal(argument, other, delta);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -802,9 +802,9 @@
             if (diff <= delta)
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.NotEqual(argument, other, delta);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -842,9 +842,9 @@
                 if (diff <= delta)
                 {
                     var m = message?.Invoke(value, other) ?? Messages.NotEqual(argument, other, delta);
-                    throw !argument.Modified
+                    throw argument.Exception(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 

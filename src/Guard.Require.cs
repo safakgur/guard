@@ -31,7 +31,7 @@
             ///     exception if the condition is not met.
             /// </summary>
             /// <typeparam name="TException">
-            ///     The type of the exception to throw if the argument does not satisfy the specified condition.
+            ///     The type of the exception to throw argument.Exception(if the argument does not satisfy the specified condition.
             /// </typeparam>
             /// <param name="condition">Whether the precondition is satisfied.</param>
             /// <param name="message">
@@ -54,7 +54,7 @@
                 if (this.HasValue() && !condition)
                 {
                     var m = message?.Invoke(this.Value) ?? Messages.Require(this);
-                    throw Exception<TException>.Factory(this.Name, m);
+                    throw this.Exception(Exception<TException>.Factory(this.Name, m));
                 }
 
                 return this;
@@ -81,7 +81,7 @@
             ///     exception if the condition is not met.
             /// </summary>
             /// <typeparam name="TException">
-            ///     The type of the exception to throw if the argument does not satisfy the specified condition.
+            ///     The type of the exception to throw argument.Exception(if the argument does not satisfy the specified condition.
             /// </typeparam>
             /// <param name="predicate">The function to test the argument value.</param>
             /// <param name="message">
@@ -103,7 +103,7 @@
                 if (this.HasValue() && predicate?.Invoke(this.Value) == false)
                 {
                     var m = message?.Invoke(this.Value) ?? Messages.Require(this);
-                    throw Exception<TException>.Factory(this.Name, m);
+                    throw this.Exception(Exception<TException>.Factory(this.Name, m));
                 }
 
                 return this;

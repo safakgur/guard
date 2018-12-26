@@ -28,7 +28,7 @@
             if (argument.HasValue())
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Null(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -60,7 +60,7 @@
             {
                 Debug.Assert(argument.Value.HasValue, "argument.HasValue");
                 var m = message?.Invoke(argument.Value.Value) ?? Messages.Null(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw argument.Exception(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -92,9 +92,9 @@
             if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentNullException(argument.Name, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -126,13 +126,13 @@
             if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
-                throw !argument.Modified
+                throw argument.Exception(!argument.Modified
                     ? new ArgumentNullException(argument.Name, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return new ArgumentInfo<T>(
-                argument.Value.Value, argument.Name, argument.Modified, argument.Secure);
+                argument.Value.Value, argument.Name, argument.Modified, argument.Secure,argument.ExceptionInterceptor);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@
             if (argument.HasValue())
             {
                 result = new ArgumentInfo<T>(
-                    argument.Value.Value, argument.Name, argument.Modified, argument.Secure);
+                    argument.Value.Value, argument.Name, argument.Modified, argument.Secure,argument.ExceptionInterceptor);
 
                 return true;
             }

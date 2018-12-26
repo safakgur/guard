@@ -46,7 +46,7 @@
         /// <param name="member">An expression that specifies the argument member to validate.</param>
         /// <param name="validation">The function to test the argument member against.</param>
         /// <param name="validatesRange">
-        ///     Pass <c>true</c> to throw an <see cref="ArgumentOutOfRangeException" /> instead of an
+        ///     Pass <c>true</c> to throw argument.Exception(an <see cref="ArgumentOutOfRangeException" /> instead of an
         ///     <see cref="ArgumentException" /> if the precondition is not satisfied.
         /// </param>
         /// <param name="message">
@@ -84,7 +84,7 @@
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new ArgumentException(ex.Message, nameof(member), ex);
+                    throw argument.Exception(new ArgumentException(ex.Message, nameof(member), ex));
                 }
 
                 // Get member value.
@@ -96,7 +96,7 @@
                 catch (Exception ex)
                 {
                     var m = $"{argument.Name}.{member.Name} cannot be retrieved.";
-                    throw new ArgumentException(m, nameof(member), ex);
+                    throw argument.Exception(new ArgumentException(m, nameof(member), ex));
                 }
 
                 // Validate the member.
@@ -108,9 +108,9 @@
                 catch (Exception ex)
                 {
                     var m = message?.Invoke(argument.Value, memberValue, ex) ?? ex.Message;
-                    throw !validatesRange || argument.Modified
+                    throw argument.Exception(!validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m);
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m));
                 }
             }
 
@@ -152,7 +152,7 @@
         /// <param name="member">An expression that specifies the argument member to validate.</param>
         /// <param name="validation">The function to test the argument member against.</param>
         /// <param name="validatesRange">
-        ///     Pass <c>true</c> to throw an <see cref="ArgumentOutOfRangeException" /> instead of an
+        ///     Pass <c>true</c> to throw argument.Exception(an <see cref="ArgumentOutOfRangeException" /> instead of an
         ///     <see cref="ArgumentException" /> if the precondition is not satisfied.
         /// </param>
         /// <param name="message">
@@ -191,7 +191,7 @@
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new ArgumentException(ex.Message, nameof(member), ex);
+                    throw argument.Exception(new ArgumentException(ex.Message, nameof(member), ex));
                 }
 
                 // Get member value.
@@ -203,7 +203,7 @@
                 catch (Exception ex)
                 {
                     var m = $"{argument.Name}.{member.Name} cannot be retrieved.";
-                    throw new ArgumentException(m, nameof(member), ex);
+                    throw argument.Exception(new ArgumentException(m, nameof(member), ex));
                 }
 
                 // Validate the member.
@@ -215,9 +215,9 @@
                 catch (Exception ex)
                 {
                     var m = message?.Invoke(argument.Value.Value, memberValue, ex) ?? ex.Message;
-                    throw !validatesRange || argument.Modified
+                    throw argument.Exception(!validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m);
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m));
                 }
             }
 
