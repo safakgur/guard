@@ -63,6 +63,17 @@
                 : throw new ArgumentException("A member expression is expected.", nameof(e));
         }
 
+        /// <summary>Invokes the current scope's exception interceptor.</summary>
+        /// <param name="exception">The exception to intercept.</param>
+        /// <returns><paramref name="exception" />.</returns>
+        private static Exception Fail(Exception exception)
+        {
+#if !NETSTANDARD1_0
+            Scope.Current?.ExceptionInterceptor?.Invoke(exception);
+#endif
+            return exception;
+        }
+
         /// <summary>Represents a method argument.</summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
         [DebuggerDisplay("{DebuggerDisplay,nq}")]
