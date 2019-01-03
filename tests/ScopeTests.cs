@@ -11,8 +11,9 @@ namespace Dawn.Tests
         [Fact(DisplayName = T + "Scope")]
         public void GuardSupportsScopes()
         {
-            Task.Run(Async());
-            Task.Run(Async());
+            Task.WaitAll(
+                Task.Run(Async()),
+                Task.Run(Async()));
 
             Func<Task> Async() => async () =>
             {
@@ -24,7 +25,7 @@ namespace Dawn.Tests
                     outerIntercepted = ex;
                 });
 
-                for (var i = 0; i < 100; i++)
+                for (var i = 0; i < 10; i++)
                 {
                     // Outer
                     Test(ref outerIntercepted);
@@ -76,7 +77,7 @@ namespace Dawn.Tests
                 }
             }
 
-            Task Delay() => Task.Delay(RandomUtils.Current.Next(90, 100));
+            Task Delay() => Task.Delay(RandomUtils.Current.Next(20, 30));
         }
     }
 }
