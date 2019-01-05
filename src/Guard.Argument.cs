@@ -65,13 +65,20 @@
 
         /// <summary>Invokes the current scope's exception interceptor.</summary>
         /// <param name="exception">The exception to intercept.</param>
-        /// <returns><paramref name="exception" />.</returns>
-        private static Exception Fail(Exception exception)
+        /// <exception cref="Exception"><paramref name="exception" />.</exception>
+        private static void Fail(Exception exception)
         {
+            try
+            {
+                throw exception; // Set the stack trace before interception.
+            }
+            catch (Exception)
+            {
 #if !NETSTANDARD1_0
-            Scope.Current?.ExceptionInterceptor?.Invoke(exception);
+                Scope.Current?.ExceptionInterceptor?.Invoke(exception);
 #endif
-            return exception;
+                throw;
+            }
         }
 
         /// <summary>Represents a method argument.</summary>
