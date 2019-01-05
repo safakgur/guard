@@ -2,7 +2,7 @@
 
 To use the code snippets on Visual Studio, copy the `guard-cs.vs.snippet` file into a folder that is
 recognized by the Visual Studio Code Snippets Manager. You can go to `Tools` > `Code Snippets Manager`
-(CTRL+K, CTRL+B) in Visual Studio to list these folders or add a new one.
+(<kbd>CTRL+K</kbd>, <kbd>CTRL+B</kbd>) in Visual Studio to list these folders or to add a new one.
 
 The following folder should be recognized by default (don't forget to replace 2017 with your own
 Visual Studio version):
@@ -22,12 +22,12 @@ All shortcuts start with "g".
 * gnw -> `Guard.Argument(arg, nameof(arg)).NotWhiteSpace()`
 * g**x**nw -> `Guard.Argument(arg, nameof(arg)).NotNull().NotWhiteSpace()`
 
-Mostly, the first letters of method names are used for shortcuts:
-* `gm` for "**G**uard.**M**atches"
-* `gz` for "**G**uard.**Z**ero"
-* `gr` for "**G**uard.In**R**ange"
+Most words are represented by single letters:
+* `gm` for "Guard.**M**atches"
+* `gz` for "Guard.**Z**ero"
+* `gr` for "Guard.In**R**ange"
 
-But some words are represented with multiple letters:
+But some are represented by multiple letters:
 * abs = "Absolute"
 * cast = "Cast"
 * clone = "Clone"
@@ -59,17 +59,18 @@ But some words are represented with multiple letters:
 
 ### Require the argument to be a non-null, FTP URI.
 
-We start with "g"; we want to prefix the validation with `NotNull`, so we add "x"; and we want to
-specify a URI scheme and "sch" represents "Scheme". No we have `gxsch`:
+We always start with "g"; we want to prefix the validation with `NotNull`, so we add "x"; and we
+want to specify a URI scheme and "sch" represents "Scheme". Now we have `gxsch`:
 
 ![gxsch](gifs/gxsch.gif)
 
-After typing the snippet shortcut, Visual Studio allows us to insert it by hitting Tab twice. Once
-inserted, we can again use Tab to move the cursor between tabstops ("arg" and "scheme" parts). So we
-move to "scheme" with one tab and type "ftp" as our scheme. We then hit Enter to complete.
+After typing its shortcut, Visual Studio allows us to insert the snippet by hitting <kbd>Tab</kbd>
+twice. Once inserted, we can again use <kbd>Tab</kbd> to move the cursor between tabstops ("arg" and
+"scheme" parts). So we move to "scheme" with one tab and type "ftp" as our scheme. We then hit
+<kbd>Enter</kbd> to complete.
 
 After completion, the cursor is positioned before the semicolon (";"). This is for easier chaining
-of additional validations. You can use Shift+Enter instead of Enter here, to start a newline without
+of additional validations. You can use <kbd>Shift+Enter</kbd> instead to start a newline without
 taking the semicolon to the next line.
 
 ### Require a number to be in range.
@@ -78,5 +79,5 @@ We start with "g"; we want to validate range, so we add "r", for "range". Now we
 
 ![gr](gifs/gr.gif)
 
-Like the above example, we hit Tab twice to insert the snippet and again with Tab, navigate through
-the tabstops ("arg", "minValue" and "maxValue").
+Like the above example, we hit <kbd>Tab</kbd> twice to insert the snippet and again with
+<kbd>Tab</kbd>, navigate through the tabstops ("arg", "minValue" and "maxValue").
