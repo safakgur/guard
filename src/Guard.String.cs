@@ -24,7 +24,7 @@
         [DebuggerStepThrough]
         [GuardFunction("String", "gem")]
         public static ref readonly ArgumentInfo<string> Empty(
-            in this ArgumentInfo<string> argument, Func<string, string> message)
+            in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
             if (argument.Value?.Length > 0)
             {
