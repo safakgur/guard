@@ -37,9 +37,9 @@
             if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, minValue) < 0)
             {
                 var m = message?.Invoke(argument.Value, minValue) ?? Messages.Min(argument, minValue);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -78,9 +78,9 @@
                 if (argument.HasValue() && Comparer<T>.Default.Compare(value, minValue) < 0)
                 {
                     var m = message?.Invoke(value, minValue) ?? Messages.Min(argument, minValue);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -116,9 +116,9 @@
             if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, maxValue) > 0)
             {
                 var m = message?.Invoke(argument.Value, maxValue) ?? Messages.Max(argument, maxValue);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -157,9 +157,9 @@
                 if (argument.HasValue() && Comparer<T>.Default.Compare(value, maxValue) > 0)
                 {
                     var m = message?.Invoke(value, maxValue) ?? Messages.Max(argument, maxValue);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -201,9 +201,9 @@
                     comparer.Compare(argument.Value, maxValue) > 0)
                 {
                     var m = message?.Invoke(argument.Value, minValue, maxValue) ?? Messages.InRange(argument, minValue, maxValue);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                        : new ArgumentException(m, argument.Name);
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -250,9 +250,9 @@
                         comparer.Compare(value, maxValue) > 0)
                     {
                         var m = message?.Invoke(value, minValue, maxValue) ?? Messages.InRange(argument, minValue, maxValue);
-                        throw !argument.Modified
+                        throw Fail(!argument.Modified
                             ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                            : new ArgumentException(m, argument.Name);
+                            : new ArgumentException(m, argument.Name));
                     }
                 }
             }
@@ -285,9 +285,9 @@
             if (Comparer<T>.Default.Compare(argument.Value, default) != 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Zero(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -329,9 +329,9 @@
                 if (Comparer<T>.Default.Compare(value, default) != 0)
                 {
                     var m = message?.Invoke(value) ?? Messages.Zero(argument);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -363,9 +363,9 @@
             if (Comparer<T>.Default.Compare(argument.Value, default) == 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotZero(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -395,9 +395,9 @@
             if (Comparer<T>.Default.Compare(argument.Value, default) == 0)
             {
                 var m = message ?? Messages.NotZero(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -436,9 +436,9 @@
             if (argument.NotNull(out var a) && Comparer<T>.Default.Compare(a.Value, default) == 0)
             {
                 var m = message?.Invoke(a.Value) ?? Messages.NotZero(a);
-                throw !a.Modified
+                throw Fail(!a.Modified
                      ? new ArgumentOutOfRangeException(a.Name, argument.Secure ? null : a.Value as object, m)
-                     : new ArgumentException(m, a.Name);
+                     : new ArgumentException(m, a.Name));
             }
 
             return ref argument;
@@ -479,9 +479,9 @@
                 if (Comparer<T>.Default.Compare(value, default) == 0)
                 {
                     var m = message ?? Messages.NotZero(argument);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -514,9 +514,9 @@
             if (Comparer<T>.Default.Compare(argument.Value, default) <= 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Positive(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -559,9 +559,9 @@
                 if (Comparer<T>.Default.Compare(value, default) <= 0)
                 {
                     var m = message?.Invoke(value) ?? Messages.Positive(argument);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -594,9 +594,9 @@
             if (Comparer<T>.Default.Compare(argument.Value, default) > 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotPositive(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -639,9 +639,9 @@
                 if (Comparer<T>.Default.Compare(value, default) > 0)
                 {
                     var m = message?.Invoke(value) ?? Messages.NotPositive(argument);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -674,9 +674,9 @@
             if (Comparer<T>.Default.Compare(argument.Value, default) >= 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Negative(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -719,9 +719,9 @@
                 if (Comparer<T>.Default.Compare(value, default) >= 0)
                 {
                     var m = message?.Invoke(value) ?? Messages.Negative(argument);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -754,9 +754,9 @@
             if (Comparer<T>.Default.Compare(argument.Value, default) < 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotNegative(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                      ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                     : new ArgumentException(m, argument.Name);
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -799,9 +799,9 @@
                 if (Comparer<T>.Default.Compare(value, default) < 0)
                 {
                     var m = message?.Invoke(value) ?? Messages.NotNegative(argument);
-                    throw !argument.Modified
+                    throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name);
+                         : new ArgumentException(m, argument.Name));
                 }
             }
 

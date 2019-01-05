@@ -28,7 +28,7 @@
             if (argument.HasValue())
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Null(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -60,7 +60,7 @@
             {
                 Debug.Assert(argument.Value.HasValue, "argument.HasValue");
                 var m = message?.Invoke(argument.Value.Value) ?? Messages.Null(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -126,9 +126,9 @@
             if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
-                throw !argument.Modified
+                throw Fail(!argument.Modified
                     ? new ArgumentNullException(argument.Name, m)
-                    : new ArgumentException(m, argument.Name);
+                    : new ArgumentException(m, argument.Name));
             }
 
             return new ArgumentInfo<T>(
@@ -187,7 +187,7 @@
             if (!argument1.HasValue() && !argument2.HasValue())
             {
                 var m = message ?? Messages.NotAllNull(argument1.Name, argument2.Name);
-                throw new ArgumentNullException($"{argument1.Name}, {argument2.Name}", m);
+                throw Fail(new ArgumentNullException($"{argument1.Name}, {argument2.Name}", m));
             }
         }
 
@@ -217,7 +217,7 @@
             if (!argument1.HasValue() && !argument2.HasValue() && !argument3.HasValue())
             {
                 var m = message ?? Messages.NotAllNull(argument1.Name, argument2.Name, argument3.Name);
-                throw new ArgumentNullException($"{argument1.Name}, {argument2.Name}, {argument3.Name}", m);
+                throw Fail(new ArgumentNullException($"{argument1.Name}, {argument2.Name}, {argument3.Name}", m));
             }
         }
 

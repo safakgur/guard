@@ -31,7 +31,7 @@
             if (!EnumInfo<T>.Values.Contains(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.EnumDefined(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -64,7 +64,7 @@
                 if (!EnumInfo<T>.Values.Contains(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.EnumDefined(argument);
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -95,7 +95,7 @@
             if (!EnumInfo<T>.HasFlag(argument.Value, flag))
             {
                 var m = message?.Invoke(argument.Value, flag) ?? Messages.EnumHasFlag(argument, flag);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -129,7 +129,7 @@
                 if (!EnumInfo<T>.HasFlag(value, flag))
                 {
                     var m = message?.Invoke(value, flag) ?? Messages.EnumHasFlag(argument, flag);
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -160,7 +160,7 @@
             if (EnumInfo<T>.HasFlag(argument.Value, flag))
             {
                 var m = message?.Invoke(argument.Value, flag) ?? Messages.EnumDoesNotHaveFlag(argument, flag);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -194,7 +194,7 @@
                 if (EnumInfo<T>.HasFlag(value, flag))
                 {
                     var m = message?.Invoke(value, flag) ?? Messages.EnumDoesNotHaveFlag(argument, flag);
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 

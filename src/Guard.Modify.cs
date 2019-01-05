@@ -83,7 +83,7 @@
             catch (Exception x)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Require(argument);
-                throw new ArgumentException(m, argument.Name, x);
+                throw Fail(new ArgumentException(m, argument.Name, x));
             }
         }
 
