@@ -75,8 +75,10 @@
             catch (Exception)
             {
 #if !NETSTANDARD1_0
-                Scope.Current?.ExceptionInterceptor?.Invoke(exception);
+                for (var scope = Scope.Current; scope != null; scope = scope.Parent)
+                    scope.ExceptionInterceptor?.Invoke(exception);
 #endif
+
                 throw;
             }
         }
