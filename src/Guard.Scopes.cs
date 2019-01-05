@@ -12,9 +12,17 @@ namespace Dawn
         /// <param name="exceptionInterceptor">
         ///     A delegate to intercept the exceptions caused by failed validations.
         /// </param>
+        /// <param name="propagates">
+        ///     Pass <c>true</c> for the exceptions to bubble up to parent interceptors; pass
+        ///     <c>false</c> to disable propagation.
+        /// </param>
         /// <returns>An object that when disposed, will end the guarding scope.</returns>
-        public static IDisposable BeginScope(Action<Exception> exceptionInterceptor)
-            => exceptionInterceptor is null ? Disposable.Empty : new Scope(exceptionInterceptor);
+        public static IDisposable BeginScope(Action<Exception> exceptionInterceptor, bool propagates = true)
+        {
+            return exceptionInterceptor != null || !propagates
+                ? new Scope(exceptionInterceptor, propagates)
+                : Disposable.Empty;
+        }
 
         /// <summary>Represents a guarding scope.</summary>
         private sealed class Scope : IDisposable
@@ -33,12 +41,16 @@ namespace Dawn
             /// <param name="exceptionInterceptor">
             ///     A delegate to intercept the exceptions caused by failed validations.
             /// </param>
-            public Scope(Action<Exception> exceptionInterceptor)
+            /// <param name="propagates">
+            ///     A value indicating whether the scope should bubble up to parent scopes.
+            /// </param>
+            public Scope(Action<Exception> exceptionInterceptor, bool propagates)
             {
                 this.Parent = Current;
                 Current = this;
 
                 this.ExceptionInterceptor = exceptionInterceptor;
+                this.Propagates = propagates;
             }
 
             /// <summary>Gets the previous scope to restore when the current one is disposed.</summary>
@@ -53,6 +65,11 @@ namespace Dawn
 
             /// <summary>Gets a delegate to intercept the exceptions caused by failed validations.</summary>
             public Action<Exception> ExceptionInterceptor { get; }
+
+            /// <summary>
+            ///     Gets a value indicating whether the scope should bubble up to parent scopes.
+            /// </summary>
+            public bool Propagates { get; }
 
             /// <summary>Ends the guarding scope.</summary>
             public void Dispose()

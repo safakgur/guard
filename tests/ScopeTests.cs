@@ -28,7 +28,7 @@ namespace Dawn.Tests
                 });
 
                 var lastId = id;
-                for (var i = 0; i < 10; i++)
+                for (var i = 0; i < 5; i++)
                 {
 
                     Test(ref outerIntercepted);
@@ -48,11 +48,14 @@ namespace Dawn.Tests
                     id--;
                 }
 
-                // Inner
+                // Inner with propagation
                 id = 0;
                 lastId = id;
-                for (var i = 0; i < 10; i++)
+                for (var i = 0; i < 5; i++)
                 {
+                    if (i == 3)
+                        Guard.BeginScope(null); // Should have no effect.
+
                     Exception innerIntercepted = null;
                     using (Guard.BeginScope(ex =>
                     {
@@ -78,6 +81,40 @@ namespace Dawn.Tests
                         id -= 2;
                     }
                 }
+
+                // Inner without propagation
+                id = 0;
+                lastId = id;
+                for (var i = 0; i < 5; i++)
+                {
+                    if (i == 3)
+                        Guard.BeginScope(null, false); // Should stop propagation.
+
+                    Exception innerIntercepted = null;
+                    using (Guard.BeginScope(ex =>
+                    {
+                        Assert.NotNull(ex.StackTrace);
+                        id += 3;
+                        innerIntercepted = ex;
+                    }, i >= 3))
+                    {
+                        Test(ref innerIntercepted);
+                        Assert.Equal(lastId + 3, id);
+                        id -= 3;
+
+                        await Delay();
+
+                        Test(ref innerIntercepted);
+                        Assert.Equal(lastId + 3, id);
+                        id -= 3;
+
+                        await Delay().ConfigureAwait(false);
+
+                        Test(ref innerIntercepted);
+                        Assert.Equal(lastId + 3, id);
+                        id -= 3;
+                    }
+                }
             };
 
             void Test(ref Exception intercepted)
@@ -93,7 +130,7 @@ namespace Dawn.Tests
             }
 
             Task Delay()
-                => Task.Delay(RandomUtils.Current.Next(20, 30));
+                => Task.Delay(RandomUtils.Current.Next(10, 20));
         }
     }
 }
