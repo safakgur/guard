@@ -8,8 +8,8 @@ namespace Dawn.Tests
 
     public sealed class ScopeTests : BaseTests
     {
-        [Fact(DisplayName = T + "Scope")]
-        public void GuardSupportsScopes()
+        [Fact(DisplayName = T + "BeginScope")]
+        public void BeginScope()
         {
             Task.WaitAll(
                 Task.Run(Async()),
@@ -17,50 +17,65 @@ namespace Dawn.Tests
 
             Func<Task> Async() => async () =>
             {
-                var id = -1;
+                // Outer
+                var id = 0;
                 Exception outerIntercepted = null;
                 Guard.BeginScope(ex =>
                 {
-                    id = 0;
+                    Assert.NotNull(ex.StackTrace);
+                    id++;
                     outerIntercepted = ex;
                 });
 
+                var lastId = id;
                 for (var i = 0; i < 10; i++)
                 {
-                    // Outer
+
                     Test(ref outerIntercepted);
-                    Assert.Equal(0, id);
+                    Assert.Equal(lastId + 1, id);
+                    id--;
 
                     await Delay();
 
                     Test(ref outerIntercepted);
-                    Assert.Equal(0, id);
+                    Assert.Equal(lastId + 1, id);
+                    id--;
 
                     await Delay().ConfigureAwait(false);
 
                     Test(ref outerIntercepted);
-                    Assert.Equal(0, id);
+                    Assert.Equal(lastId + 1, id);
+                    id--;
+                }
 
-                    // Inner
+                // Inner
+                id = 0;
+                lastId = id;
+                for (var i = 0; i < 10; i++)
+                {
                     Exception innerIntercepted = null;
                     using (Guard.BeginScope(ex =>
                     {
-                        id = 1;
+                        Assert.NotNull(ex.StackTrace);
+                        id++;
                         innerIntercepted = ex;
                     }))
                     {
                         Test(ref innerIntercepted);
-                        Assert.Equal(1, id);
+                        Assert.Equal(lastId + 2, id);
+                        id -= 2;
 
                         await Delay();
 
                         Test(ref innerIntercepted);
-                        Assert.Equal(1, id);
+                        Assert.Equal(lastId + 2, id);
+                        id -= 2;
 
                         await Delay().ConfigureAwait(false);
 
                         Test(ref innerIntercepted);
-                        Assert.Equal(1, id);
+                        Assert.Equal(lastId + 2, id);
+                        id -= 2;
                     }
                 }
             };
@@ -77,7 +92,8 @@ namespace Dawn.Tests
                 }
             }
 
-            Task Delay() => Task.Delay(RandomUtils.Current.Next(20, 30));
+            Task Delay()
+                => Task.Delay(RandomUtils.Current.Next(20, 30));
         }
     }
 }
