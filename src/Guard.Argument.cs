@@ -65,27 +65,20 @@
 
         /// <summary>Invokes the current scope's exception interceptor.</summary>
         /// <param name="exception">The exception to intercept.</param>
-        /// <exception cref="Exception"><paramref name="exception" />.</exception>
+        /// <returns><paramref name="exception" />.</returns>
         [ContractAnnotation("=> halt")]
-        private static void Fail(Exception exception)
+        private static Exception Fail(Exception exception)
         {
-            try
-            {
-                throw exception; // Set the stack trace before interception.
-            }
-            catch (Exception)
-            {
 #if !NETSTANDARD1_0
-                for (var scope = Scope.Current; scope != null; scope = scope.Parent)
-                {
-                    scope.ExceptionInterceptor?.Invoke(exception);
-                    if (!scope.Propagates)
-                        break;
-                }
+            for (var scope = Scope.Current; scope != null; scope = scope.Parent)
+            {
+                scope.ExceptionInterceptor?.Invoke(exception, Environment.StackTrace);
+                if (!scope.Propagates)
+                    break;
+            }
 #endif
 
-                throw;
-            }
+            return exception;
         }
 
         /// <summary>Represents a method argument.</summary>

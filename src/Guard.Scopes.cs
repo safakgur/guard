@@ -10,14 +10,15 @@ namespace Dawn
     {
         /// <summary>Starts a guarding scope using the specified exception interceptor.</summary>
         /// <param name="exceptionInterceptor">
-        ///     A delegate to intercept the exceptions caused by failed validations.
+        ///     A delegate to intercept the exceptions caused by failed validations along with their
+        ///     full stack trace.
         /// </param>
         /// <param name="propagates">
         ///     Pass <c>true</c> for the exceptions to bubble up to parent interceptors; pass
         ///     <c>false</c> to disable propagation.
         /// </param>
         /// <returns>An object that when disposed, will end the guarding scope.</returns>
-        public static IDisposable BeginScope(Action<Exception> exceptionInterceptor, bool propagates = true)
+        public static IDisposable BeginScope(Action<Exception, string> exceptionInterceptor, bool propagates = true)
         {
             return exceptionInterceptor != null || !propagates
                 ? new Scope(exceptionInterceptor, propagates)
@@ -39,12 +40,13 @@ namespace Dawn
 
             /// <summary>Initializes a new instance of the <see cref="Scope" /> class.</summary>
             /// <param name="exceptionInterceptor">
-            ///     A delegate to intercept the exceptions caused by failed validations.
+            ///     A delegate to intercept the exceptions caused by failed validations along with
+            ///     their full stack trace.
             /// </param>
             /// <param name="propagates">
             ///     A value indicating whether the scope should bubble up to parent scopes.
             /// </param>
-            public Scope(Action<Exception> exceptionInterceptor, bool propagates)
+            public Scope(Action<Exception, string> exceptionInterceptor, bool propagates)
             {
                 this.Parent = Current;
                 Current = this;
@@ -63,8 +65,11 @@ namespace Dawn
                 private set => Local.Value = value;
             }
 
-            /// <summary>Gets a delegate to intercept the exceptions caused by failed validations.</summary>
-            public Action<Exception> ExceptionInterceptor { get; }
+            /// <summary>
+            ///     Gets a delegate to intercept the exceptions caused by failed validations along
+            ///     with their full stack trace.
+            /// </summary>
+            public Action<Exception, string> ExceptionInterceptor { get; }
 
             /// <summary>
             ///     Gets a value indicating whether the scope should bubble up to parent scopes.
