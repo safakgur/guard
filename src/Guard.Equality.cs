@@ -30,7 +30,7 @@
             if (!EqualityComparer<T>.Default.Equals(argument.Value, default))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Default(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -64,7 +64,7 @@
                 if (!EqualityComparer<T>.Default.Equals(value, default))
                 {
                     var m = message?.Invoke(value) ?? Messages.Default(argument);
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -94,7 +94,7 @@
             if (EqualityComparer<T>.Default.Equals(argument.Value, default))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotDefault(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -122,7 +122,7 @@
             if (EqualityComparer<T>.Default.Equals(argument.Value, default))
             {
                 var m = message ?? Messages.NotDefault(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -153,7 +153,7 @@
                 if (EqualityComparer<T>.Default.Equals(value, default))
                 {
                     var m = message ?? Messages.NotDefault(argument);
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -206,7 +206,7 @@
             if (argument.HasValue() && !(comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -262,7 +262,7 @@
             if (argument.HasValue() && (comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument, other);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -290,7 +290,7 @@
             if (argument.HasValue() && !ReferenceEquals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.Same(argument, other);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -320,7 +320,7 @@
             if (argument.HasValue() && ReferenceEquals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.NotSame(argument, other);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
