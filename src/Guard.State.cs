@@ -25,7 +25,7 @@
             bool valid, string message = null, [CallerMemberName]string caller = null)
         {
             if (!valid)
-                throw new InvalidOperationException(message ?? Messages.State(caller));
+                throw Fail(new InvalidOperationException(message ?? Messages.State(caller)));
         }
 
         /// <summary>Requires a method to be supported by the instance it belongs to.</summary>
@@ -43,7 +43,7 @@
             bool supported, string message = null, [CallerMemberName]string caller = null)
         {
             if (!supported)
-                throw new NotSupportedException(message ?? Messages.Support(caller));
+                throw Fail(new NotSupportedException(message ?? Messages.Support(caller)));
         }
 
         /// <summary>Requires an instance not to be disposed.</summary>
@@ -63,7 +63,7 @@
         public static void Disposal(bool disposed, string objectName = null, string message = null)
         {
             if (disposed)
-                throw new ObjectDisposedException(objectName, message ?? Messages.Disposal());
+                throw Fail(new ObjectDisposedException(objectName, message ?? Messages.Disposal()));
         }
     }
 }
