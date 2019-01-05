@@ -20,9 +20,9 @@ namespace Dawn.Tests
                 // Outer
                 var id = 0;
                 Exception outerIntercepted = null;
-                Guard.BeginScope(ex =>
+                Guard.BeginScope((ex, stackTrace) =>
                 {
-                    Assert.NotNull(ex.StackTrace);
+                    Assert.Contains("NotNull", stackTrace);
                     id++;
                     outerIntercepted = ex;
                 });
@@ -57,9 +57,9 @@ namespace Dawn.Tests
                         Guard.BeginScope(null); // Should have no effect.
 
                     Exception innerIntercepted = null;
-                    using (Guard.BeginScope(ex =>
+                    using (Guard.BeginScope((ex, stackTrace) =>
                     {
-                        Assert.NotNull(ex.StackTrace);
+                        Assert.Contains("NotNull", stackTrace);
                         id++;
                         innerIntercepted = ex;
                     }))
@@ -91,9 +91,9 @@ namespace Dawn.Tests
                         Guard.BeginScope(null, false); // Should stop propagation.
 
                     Exception innerIntercepted = null;
-                    using (Guard.BeginScope(ex =>
+                    using (Guard.BeginScope((ex, stackTrace) =>
                     {
-                        Assert.NotNull(ex.StackTrace);
+                        Assert.Contains("NotNull", stackTrace);
                         id += 3;
                         innerIntercepted = ex;
                     }, i >= 3))

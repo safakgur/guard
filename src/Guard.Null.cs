@@ -92,7 +92,7 @@
             if (!argument.HasValue())
             {
                 var m = message ?? Messages.NotNull(argument);
-                Fail(!argument.Modified
+                throw Fail(!argument.Modified
                     ? new ArgumentNullException(argument.Name, m)
                     : new ArgumentException(m, argument.Name));
             }
