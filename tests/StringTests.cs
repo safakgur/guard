@@ -516,6 +516,7 @@
                             Assert.True(t);
                             return message;
                         }),
+                        true,
                         true);
                 })
             };
@@ -530,6 +531,7 @@
                     Assert.False(t);
                     return message;
                 }),
+                true,
                 true);
 
             // Matches - valid pattern w/o timeout
@@ -590,6 +592,7 @@
                     Assert.False(t);
                     return message;
                 }),
+                true,
                 true);
 
             // Does not match - valid pattern w/o timeout
