@@ -300,7 +300,9 @@
         {
             private readonly IDisposable scope;
 
+#pragma warning disable IDE0044
             private Exception lastException;
+#pragma warning restore IDE0044
 
             public Scope(bool doNotTestScoping = false)
             {
