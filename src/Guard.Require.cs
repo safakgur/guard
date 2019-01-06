@@ -54,7 +54,7 @@
                 if (this.HasValue() && !condition)
                 {
                     var m = message?.Invoke(this.Value) ?? Messages.Require(this);
-                    throw Exception<TException>.Factory(this.Name, m);
+                    throw Fail(Exception<TException>.Factory(this.Name, m));
                 }
 
                 return this;
@@ -103,7 +103,7 @@
                 if (this.HasValue() && predicate?.Invoke(this.Value) == false)
                 {
                     var m = message?.Invoke(this.Value) ?? Messages.Require(this);
-                    throw Exception<TException>.Factory(this.Name, m);
+                    throw Fail(Exception<TException>.Factory(this.Name, m));
                 }
 
                 return this;
