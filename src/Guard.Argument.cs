@@ -69,9 +69,13 @@
         public static Exception Fail(Exception exception)
         {
 #if !NETSTANDARD1_0
+            StackTrace stackTrace = null;
             for (var scope = Scope.Current; scope != null; scope = scope.Parent)
             {
-                scope.ExceptionInterceptor?.Invoke(exception, new StackTrace(1, true).ToString());
+                scope.ExceptionInterceptor?.Invoke(
+                    exception,
+                    stackTrace ?? (stackTrace = new StackTrace(1, true)));
+
                 if (!scope.Propagates)
                     break;
             }

@@ -3,6 +3,8 @@
 namespace Dawn.Tests
 {
     using System;
+    using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Xunit;
 
@@ -11,6 +13,15 @@ namespace Dawn.Tests
         [Fact(DisplayName = T + "BeginScope")]
         public void BeginScope()
         {
+            var validation =
+                (from m in typeof(Guard).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                 where m.Name == nameof(Guard.NotNull)
+                 let g = m.GetGenericArguments()
+                 where g.Length == 1 && g[0].GetGenericParameterConstraints().Length == 0
+                 let p = m.GetParameters()
+                 where p.Length == 2 && p[1].ParameterType == typeof(string)
+                 select m).Single();
+
             Task.WaitAll(
                 Task.Run(Async()),
                 Task.Run(Async()));
@@ -22,7 +33,7 @@ namespace Dawn.Tests
                 Exception outerIntercepted = null;
                 Guard.BeginScope((ex, stackTrace) =>
                 {
-                    Assert.Contains("NotNull", stackTrace);
+                    Assert.Same(stackTrace.GetFrame(0).GetMethod(), validation);
                     id++;
                     outerIntercepted = ex;
                 });
@@ -59,7 +70,7 @@ namespace Dawn.Tests
                     Exception innerIntercepted = null;
                     using (Guard.BeginScope((ex, stackTrace) =>
                     {
-                        Assert.Contains("NotNull", stackTrace);
+                        Assert.Same(stackTrace.GetFrame(0).GetMethod(), validation);
                         id++;
                         innerIntercepted = ex;
                     }))
@@ -93,7 +104,7 @@ namespace Dawn.Tests
                     Exception innerIntercepted = null;
                     using (Guard.BeginScope((ex, stackTrace) =>
                     {
-                        Assert.Contains("NotNull", stackTrace);
+                        Assert.Same(stackTrace.GetFrame(0).GetMethod(), validation);
                         id += 3;
                         innerIntercepted = ex;
                     }, i >= 3))
