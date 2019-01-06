@@ -63,11 +63,10 @@
                 : throw new ArgumentException("A member expression is expected.", nameof(e));
         }
 
-        /// <summary>Invokes the current scope's exception interceptor.</summary>
+        /// <summary>Invokes the current scope's exception interceptor on precondition failures.</summary>
         /// <param name="exception">The exception to intercept.</param>
         /// <returns><paramref name="exception" />.</returns>
-        [ContractAnnotation("=> halt")]
-        private static Exception Fail(Exception exception)
+        public static Exception Fail(Exception exception)
         {
 #if !NETSTANDARD1_0
             for (var scope = Scope.Current; scope != null; scope = scope.Parent)
