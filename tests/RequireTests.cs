@@ -248,7 +248,8 @@
                         Assert.Contains(typeof(TestExceptionNoCtor).ToString(), ex.Message);
                         throw ex.InnerException;
                     }
-                });
+                },
+                doNotTestScoping: true);
 
             ThrowsArgumentException(
                 valueArg,
@@ -281,7 +282,8 @@
                         Assert.Contains(typeof(TestExceptionNoCtor).ToString(), ex.Message);
                         throw ex.InnerException;
                     }
-                });
+                },
+                doNotTestScoping: true);
         }
 
         private static bool Success<T>(T v)

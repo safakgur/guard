@@ -63,6 +63,27 @@
                 : throw new ArgumentException("A member expression is expected.", nameof(e));
         }
 
+        /// <summary>Invokes the current scope's exception interceptor on precondition failures.</summary>
+        /// <param name="exception">The exception to intercept.</param>
+        /// <returns><paramref name="exception" />.</returns>
+        public static Exception Fail(Exception exception)
+        {
+#if !NETSTANDARD1_0
+            StackTrace stackTrace = null;
+            for (var scope = Scope.Current; scope != null; scope = scope.Parent)
+            {
+                scope.ExceptionInterceptor?.Invoke(
+                    exception,
+                    stackTrace ?? (stackTrace = new StackTrace(1, true)));
+
+                if (!scope.Propagates)
+                    break;
+            }
+#endif
+
+            return exception;
+        }
+
         /// <summary>Represents a method argument.</summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
         [DebuggerDisplay("{DebuggerDisplay,nq}")]
