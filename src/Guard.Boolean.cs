@@ -23,7 +23,7 @@
             if (!argument.Value)
             {
                 var m = message ?? Messages.True(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -45,7 +45,7 @@
             if (argument.HasValue() && !argument.Value.Value)
             {
                 var m = message ?? Messages.True(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -67,7 +67,7 @@
             if (argument.Value)
             {
                 var m = message ?? Messages.False(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -89,7 +89,7 @@
             if (argument.HasValue() && argument.Value.Value)
             {
                 var m = message ?? Messages.False(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;

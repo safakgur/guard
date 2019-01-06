@@ -6,7 +6,7 @@ This document describes how to add custom validations to Guard by writing simple
 
 Here is a basic extension that throws an `ArgumentException` if a GUID argument is passed
 uninitialized. It is not included among the standard validations because the `NotDefault` method
-defined for `IEquatable<T>` structs covers its functionality.
+defined for structs covers its functionality.
 
 ```c#
 public static class GuardExtensions
@@ -16,10 +16,10 @@ public static class GuardExtensions
     {
         if (argument.Value == default) // Check whether the GUID is empty.
         {
-            throw new ArgumentException(
+            throw Guard.Fail(new ArgumentException(
                 $"{argument.Name} is not initialized. " +
                 "Consider using the static Guid.NewGuid method.",
-                argument.Name);
+                argument.Name));
         }
 
         return ref argument;
@@ -41,6 +41,7 @@ What Did We Do?
 * We accepted the argument as a [readonly reference](#accepting-and-returning-the-argument-by-reference)
   and returned the same reference.
 * We passed the argument name to the `ArgumentException`, also mentioning it in the exception message.
+* We passed the exception to `Guard.Fail` before throwing it to support [scopes][1].
 
 What if the argument was nullable?
 
@@ -60,7 +61,7 @@ public class Program
 ```
 
 But forcing the argument to be non-null contradicts the convention followed by the standard
-validations where null arguments are ignored. See the [relevant section in the design decisions][1]
+validations where null arguments are ignored. See the [relevant section in the design decisions][2]
 for the rationale.
 
 Let's add an overload to our extension, this time specifically for nullable GUIDs.
@@ -74,10 +75,10 @@ public static class GuardExtensions
         if (argument.HasValue() && // Ignore if the GUID is null.
             argument.Value.Value == default) // Check whether the GUID is empty.
         {
-            throw new ArgumentException(
+            throw Guard.Fail(new ArgumentException(
                 $"{argument.Name} is not initialized. " +
                 "Consider using the static Guid.NewGuid method.",
-                argument.Name);
+                argument.Name));
         }
 
         return ref argument;
@@ -114,9 +115,9 @@ heavier than four bytes and the benefits start to overweight this overhead as th
 An `ArgumentInfo<T>` instance contains three fields:
 * The value of the argument of type `T`.
 * A string that contains the argument name.
-* A boolean that is used to determine whether the argument is [modified][2].
+* A boolean that is used to determine whether the argument is [modified][3].
 * A boolean that is used to determine whether the exception messages should not contain [sensitive
-  information][3].
+  information][4].
 
 So an `ArgumentInfo<int>` instance on a 32-bit system is _at least_ 10 bytes and an
 `ArgumentInfo<long>` instance on a 64-bit system is _at least_ 18 bytes. Even more if we use heavier
@@ -152,8 +153,8 @@ public static class GuardExtensions
         if (argument.HasValue() && !argument.Value.CanQuack)
         {
             // Throw is it is a non-null duck who sadly cannot quack.
-            throw new ArgumentException(
-                $"{argument.Name} must be able to quack.", argument.Name);
+            throw Guard.Fail(new ArgumentException(
+                $"{argument.Name} must be able to quack.", argument.Name));
         }
 
         return ref argument;
@@ -181,6 +182,7 @@ public class Program
 }
 ```
 
-[1]: design-decisions.md#optional-preconditions
-[2]: design-decisions.md#modifying-arguments
-[3]: design-decisions.md#secure-arguments
+[1]: design-decisions.md#guarding-scopes
+[2]: design-decisions.md#optional-preconditions
+[3]: design-decisions.md#modifying-arguments
+[4]: design-decisions.md#secure-arguments
