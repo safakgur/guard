@@ -275,16 +275,13 @@ to. Guard currently provides three validations to handle these cases:
 * A third parameter marked with [`[CallerMemberName]`][2] exists to retrieve the invoked method's name.
 
 ```c#
-public void TestOperation()
-{
-    // Throws an InvalidOperationException with the message:
-    // "TestOperation call is not valid due to the current state of the object."
-    Guard.Operation(false);
+// Throws an InvalidOperationException with the message:
+// "TestOperation call is not valid due to the current state of the object."
+Guard.Operation(false);
 
-    // Throws an InvalidOperationException with the message:
-    // "Custom message."
-    Guard.Operation(false, "Custom message.");
-}
+// Throws an InvalidOperationException with the message:
+// "Custom message."
+Guard.Operation(false, "Custom message.");
 ```
 
 ### Support
@@ -294,16 +291,13 @@ public void TestOperation()
 * A third parameter marked with [`[CallerMemberName]`][2] exists to retrieve the invoked method's name.
 
 ```c#
-public void TestSupport()
-{
-    // Throws a NotSupportedException with the message:
-    // "TestSupport is not supported"
-    Guard.Support(false);
+// Throws a NotSupportedException with the message:
+// "TestSupport is not supported"
+Guard.Support(false);
 
-    // Throws a NotSupportedException with the message:
-    // "Custom message."
-    Guard.Support(false, "Custom message.");
-}
+// Throws a NotSupportedException with the message:
+// "Custom message."
+Guard.Support(false, "Custom message.");
 ```
 
 ### Disposal
@@ -313,21 +307,63 @@ public void TestSupport()
 * A custom message can be specified using the third parameter (`message`).
 
 ```c#
-public void TestDisposal()
+// Throws an ObjectDisposedException with the message:
+// "Cannot access a disposed object."
+Guard.Disposal(true);
+
+// Throws an ObjectDisposedException with the message:
+// "Cannot access a disposed object.\r\nObject name: 'TestClass'."
+Guard.Disposal(true, nameof(TestClass));
+
+// Throws an ObjectDisposedException with the message:
+// "Custom message."
+Guard.Disposal(true, nameof(TestClass), "Custom message.");
+```
+
+## Guarding Scopes
+
+Scopes can be created to intercept exceptions that are caused by failed validations.
+
+```c#
+void Foo()
 {
-    // Throws an ObjectDisposedException with the message:
-    // "Cannot access a disposed object."
-    Guard.Disposal(true);
+    using (Guard.BeginScope((ex, stackTrace) => _logger.Log(stackTrace)))
+    {
+        Print(null);
+    }
+}
 
-    // Throws an ObjectDisposedException with the message:
-    // "Cannot access a disposed object.\r\nObject name: 'TestClass'."
-    Guard.Disposal(true, nameof(TestClass));
-
-    // Throws an ObjectDisposedException with the message:
-    // "Custom message."
-    Guard.Disposal(true, nameof(TestClass), "Custom message.");
+void Print(string message)
+{
+    Guard.Argument(() => message).NotNull();
+    Console.WriteLine(message);
 }
 ```
 
+In the above example we create a scope with an exception interceptor that logs the stack traces of
+failed validations. When we call `Print` with a null argument, `NotNull` validation fails and an
+`ArgumentNullException` is created. This exception is passed to the interceptor right before it is
+thrown.
+
+Since the exception hasn't been thrown yet, its `StackTrace` property is null at the point of
+interception. This is why the stack trace is passed as a separate argument to the interceptor
+delegate.
+
+* Scopes are implemented using [`AsyncLocal<T>`][3], so they are bound to the execution context.
+  This makes them available to use on asynchronous code.
+* The existence of a scope is checked only when a validation fails, so this has no performance
+  overhead for successful validations.
+* Scopes can be nested and by default, the exceptions bubble-up to parent scopes. `BeginScope`
+  accepts a second, optional parameter that can be used to disable this behavior.
+* Scopes do not have to end. You can create one in `Main` and not dispose it to provide an
+  application-wide scope; or in the `BeginRequest` of an ASP.NET application to provide a
+  request-wide scope.
+
+This is the first Guard feature that is [requested][4] and implemented by the community, thanks
+[Radek Adamec][5]!
+
 [1]: ../src/Guard.Messages.cs
 [2]: https://docs.microsoft.com/dotnet/api/system.runtime.compilerservices.callermembernameattribute "CallerMemberNameAttribute Class | Microsoft Docs"
+[3]: https://docs.microsoft.com/dotnet/api/system.threading.asynclocal-1
+[4]: https://github.com/safakgur/guard/issues/21
+[5]: https://github.com/adamecr

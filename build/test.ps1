@@ -41,7 +41,8 @@ ELSE
         /p:DebugType=full `
         /p:CollectCoverage=$Coverage `
         /p:CoverletOutputFormat=$CoverageFormat `
-        /p:CoverletOutput="$CoverageOutput"
+        /p:CoverletOutput="$CoverageOutput" `
+        /p:ExcludeByAttribute=Obsolete
 }
 
 exit $lastexitcode

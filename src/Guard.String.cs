@@ -24,12 +24,12 @@
         [DebuggerStepThrough]
         [GuardFunction("String", "gem")]
         public static ref readonly ArgumentInfo<string> Empty(
-            in this ArgumentInfo<string> argument, Func<string, string> message)
+            in this ArgumentInfo<string> argument, Func<string, string> message = null)
         {
             if (argument.Value?.Length > 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.StringEmpty(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -54,7 +54,7 @@
             if (argument.Value?.Length == 0)
             {
                 var m = message ?? Messages.StringNotEmpty(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -82,7 +82,7 @@
             if (argument.Value != null && !string.IsNullOrWhiteSpace(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.StringWhiteSpace(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -111,7 +111,7 @@
             if (argument.Value != null && string.IsNullOrWhiteSpace(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.StringNotWhiteSpace(argument);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -146,7 +146,7 @@
             if (argument.Value?.Length < minLength)
             {
                 var m = message?.Invoke(argument.Value, minLength) ?? Messages.StringMinLength(argument, minLength);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -180,7 +180,7 @@
             if (argument.Value?.Length > maxLength)
             {
                 var m = message?.Invoke(argument.Value, maxLength) ?? Messages.StringMaxLength(argument, maxLength);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -221,7 +221,7 @@
                     var m = message?.Invoke(argument.Value, minLength, maxLength)
                         ?? Messages.StringLengthInRange(argument, minLength, maxLength);
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
 
             return ref argument;
@@ -255,7 +255,7 @@
             if (argument.HasValue() && !StringEqualityComparer(comparison).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -289,7 +289,7 @@
             if (argument.HasValue() && StringEqualityComparer(comparison).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument, other);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -347,7 +347,7 @@
             if (argument.HasValue() && value != null && !argument.Value.StartsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringStartsWith(argument, value);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -405,7 +405,7 @@
             if (argument.HasValue() && value != null && argument.Value.StartsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotStartWith(argument, value);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -463,7 +463,7 @@
             if (argument.HasValue() && value != null && !argument.Value.EndsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringEndsWith(argument, value);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -521,7 +521,7 @@
             if (argument.HasValue() && value != null && argument.Value.EndsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotEndWith(argument, value);
-                throw new ArgumentException(m, argument.Name);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -568,7 +568,7 @@
                     var m = message?.Invoke(argument.Value, false)
                         ?? Messages.StringMatches(argument, pattern);
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -623,7 +623,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringMatchesTimeout(argument, pattern, matchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (!matches)
@@ -631,7 +631,7 @@
                     var m = message?.Invoke(argument.Value, false)
                         ?? Messages.StringMatches(argument, pattern);
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -673,7 +673,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringMatchesTimeout(argument, regex.ToString(), ex.MatchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (!matches)
@@ -681,7 +681,7 @@
                     var m = message?.Invoke(argument.Value, false)
                         ?? Messages.StringMatches(argument, regex.ToString());
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -730,7 +730,7 @@
                     var m = message?.Invoke(argument.Value, false)
                         ?? Messages.StringDoesNotMatch(argument, pattern);
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -786,7 +786,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringDoesNotMatchTimeout(argument, pattern, matchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (matches)
@@ -794,7 +794,7 @@
                     var m = message?.Invoke(argument.Value, false)
                         ?? Messages.StringDoesNotMatch(argument, pattern);
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -837,7 +837,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringDoesNotMatchTimeout(argument, regex.ToString(), ex.MatchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (matches)
@@ -845,7 +845,7 @@
                     var m = message?.Invoke(argument.Value, false)
                         ?? Messages.StringDoesNotMatch(argument, regex.ToString());
 
-                    throw new ArgumentException(m, argument.Name);
+                    throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
 
