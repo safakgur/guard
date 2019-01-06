@@ -49,7 +49,8 @@ public Person(string name, int age)
 ```
 
 If this looks like too much allocations to you, fear not. The arguments are read-only structs that
-are passed by reference, see the [design decisions](#design-decisions) for details.
+are passed by reference. See the [design decisions](#design-decisions) for details and an
+introduction to Guard's more advanced features.
 
 ## What's Wrong with Vanilla?
 
@@ -110,7 +111,8 @@ the latest published version.
 
 ### Design Decisions
 
-[Click here][1] for the document that explains the motives behind the Guard's API design.
+[Click here][1] for the document that explains the motives behind the Guard's API design and more
+advanced features.
 
 ### Extensibility
 
