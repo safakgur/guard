@@ -71,7 +71,7 @@
 #if !NETSTANDARD1_0
             for (var scope = Scope.Current; scope != null; scope = scope.Parent)
             {
-                scope.ExceptionInterceptor?.Invoke(exception, Environment.StackTrace);
+                scope.ExceptionInterceptor?.Invoke(exception, new StackTrace(1, true).ToString());
                 if (!scope.Propagates)
                     break;
             }
