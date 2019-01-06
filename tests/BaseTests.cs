@@ -17,6 +17,8 @@
 
         protected static int RandomNumber => RandomUtils.Current.Next();
 
+        protected static bool RandomBoolean => RandomUtils.Current.NextDouble() >= .5;
+
         protected static string RandomMessage
         {
             get
@@ -86,96 +88,110 @@
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
-            bool allowMessageMismatch = false)
-            => ThrowsArgumentNullException(argument, testWithoutMessage, null, testWithMessage, allowMessageMismatch);
+            bool allowMessageMismatch = false,
+            bool doNotTestScoping = false)
+            => ThrowsArgumentNullException(argument, testWithoutMessage, null, testWithMessage, allowMessageMismatch, doNotTestScoping);
 
         protected static ArgumentNullException[] ThrowsArgumentNullException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Func<string, bool> testGeneratedMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
-            bool allowMessageMismatch = false)
+            bool allowMessageMismatch = false,
+            bool doNotTestScoping = false)
             => ThrowsArgumentException<T, ArgumentNullException>(
-                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch, doNotTestScoping);
 
         protected static ArgumentOutOfRangeException[] ThrowsArgumentOutOfRangeException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
-            bool allowMessageMismatch = false)
-            => ThrowsArgumentOutOfRangeException(argument, testWithoutMessage, null, testWithMessage, allowMessageMismatch);
+            bool allowMessageMismatch = false,
+            bool doNotTestScoping = false)
+            => ThrowsArgumentOutOfRangeException(argument, testWithoutMessage, null, testWithMessage, allowMessageMismatch, doNotTestScoping);
 
         protected static ArgumentOutOfRangeException[] ThrowsArgumentOutOfRangeException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Func<string, bool> testGeneratedMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
-            bool allowMessageMismatch = false)
+            bool allowMessageMismatch = false,
+            bool doNotTestScoping = false)
             => ThrowsArgumentException<T, ArgumentOutOfRangeException>(
-                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch, doNotTestScoping);
 
         protected static ArgumentException[] ThrowsArgumentException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
-            bool allowMessageMismatch = false)
-            => ThrowsArgumentException(argument, testWithoutMessage, null, testWithMessage, allowMessageMismatch);
+            bool allowMessageMismatch = false,
+            bool doNotTestScoping = false)
+            => ThrowsArgumentException(argument, testWithoutMessage, null, testWithMessage, allowMessageMismatch, doNotTestScoping);
 
         protected static ArgumentException[] ThrowsArgumentException<T>(
             Guard.ArgumentInfo<T> argument,
             Action<Guard.ArgumentInfo<T>> testWithoutMessage,
             Func<string, bool> testGeneratedMessage,
             Action<Guard.ArgumentInfo<T>, string> testWithMessage,
-            bool allowMessageMismatch = false)
+            bool allowMessageMismatch = false,
+            bool doNotTestScoping = false)
             => ThrowsArgumentException<T, ArgumentException>(
-                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+                argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch, doNotTestScoping);
 
         protected static TException[] ThrowsArgumentException<TArgument, TException>(
             Guard.ArgumentInfo<TArgument> argument,
             Action<Guard.ArgumentInfo<TArgument>> testWithoutMessage,
             Func<string, bool> testGeneratedMessage,
             Action<Guard.ArgumentInfo<TArgument>, string> testWithMessage,
-            bool allowMessageMismatch = false)
+            bool allowMessageMismatch = false,
+            bool doNotTestScoping = false)
             where TException : ArgumentException
         {
-            var isBase = typeof(TException) == typeof(ArgumentException);
-            if (!isBase && argument.Modified)
+            using (var scope = new Scope(doNotTestScoping))
             {
-                var result = ThrowsArgumentException<TArgument, ArgumentException>(
-                    argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+                var isBase = typeof(TException) == typeof(ArgumentException);
+                if (!isBase && argument.Modified)
+                {
+                    var result = ThrowsArgumentException<TArgument, ArgumentException>(
+                        argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
 
-                return new[] { result[0] as TException, result[1] as TException };
+                    return new[] { result[0] as TException, result[1] as TException };
+                }
+
+                var exWithoutMessage = Assert.Throws<TException>(
+                    argument.Name,
+                    () => testWithoutMessage(argument));
+
+                scope.CheckException(exWithoutMessage);
+
+                if (exWithoutMessage is ArgumentOutOfRangeException rangeExWithoutMessage)
+                    Assert.Equal(argument.Secure, rangeExWithoutMessage.ActualValue == null);
+
+                if (testGeneratedMessage != null)
+                    Assert.True(testGeneratedMessage(exWithoutMessage.Message));
+
+                var message = RandomMessage;
+                var exWithMessage = Assert.Throws<TException>(
+                    argument.Name,
+                    () => testWithMessage(argument, message));
+
+                scope.CheckException(exWithMessage);
+
+                if (exWithMessage is ArgumentOutOfRangeException rangeExWithMessage)
+                    Assert.Equal(argument.Secure, rangeExWithMessage.ActualValue == null);
+
+                if (!allowMessageMismatch)
+                    Assert.StartsWith(message, exWithMessage.Message);
+
+                if (!isBase)
+                {
+                    var modified = argument.Modify(argument.Value);
+                    ThrowsArgumentException(
+                        modified, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+                }
+
+                return new[] { exWithoutMessage, exWithMessage };
             }
-
-            var exWithoutMessage = Assert.Throws<TException>(
-                argument.Name,
-                () => testWithoutMessage(argument));
-
-            if (exWithoutMessage is ArgumentOutOfRangeException rangeExWithoutMessage)
-                Assert.Equal(argument.Secure, rangeExWithoutMessage.ActualValue == null);
-
-            if (testGeneratedMessage != null)
-                Assert.True(testGeneratedMessage(exWithoutMessage.Message));
-
-            var message = RandomMessage;
-            var exWithMessage = Assert.Throws<TException>(
-                argument.Name,
-                () => testWithMessage(argument, message));
-
-            if (exWithMessage is ArgumentOutOfRangeException rangeExWithMessage)
-                Assert.Equal(argument.Secure, rangeExWithMessage.ActualValue == null);
-
-            if (!allowMessageMismatch)
-                Assert.StartsWith(message, exWithMessage.Message);
-
-            if (!isBase)
-            {
-                var modified = argument.Modify(argument.Value);
-                ThrowsArgumentException(
-                    modified, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
-            }
-
-            return new[] { exWithoutMessage, exWithMessage };
         }
 
         protected static void ThrowsException<T, TException>(
@@ -278,6 +294,32 @@
                     return current;
                 }
             }
+        }
+
+        private sealed class Scope : IDisposable
+        {
+            private readonly IDisposable scope;
+
+            private Exception lastException;
+
+            public Scope(bool doNotTestScoping = false)
+            {
+#if !NETCOREAPP1_0
+                if (RandomBoolean && !doNotTestScoping)
+                    this.scope = Guard.BeginScope((ex, stackTrace) => this.lastException = ex);
+#else
+                this.scope = null;
+                this.lastException = null;
+#endif
+            }
+
+            public void CheckException(Exception exception)
+            {
+                if (this.scope != null && exception != null)
+                    Assert.Same(this.lastException, exception);
+            }
+
+            public void Dispose() => this.scope?.Dispose();
         }
     }
 }
