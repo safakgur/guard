@@ -3,6 +3,7 @@
 namespace Dawn
 {
     using System;
+    using System.Diagnostics;
     using System.Threading;
 
     /// <content>Provides scoping support.</content>
@@ -18,7 +19,7 @@ namespace Dawn
         ///     <c>false</c> to disable propagation.
         /// </param>
         /// <returns>An object that when disposed, will end the guarding scope.</returns>
-        public static IDisposable BeginScope(Action<Exception, string> exceptionInterceptor, bool propagates = true)
+        public static IDisposable BeginScope(Action<Exception, StackTrace> exceptionInterceptor, bool propagates = true)
         {
             return exceptionInterceptor != null || !propagates
                 ? new Scope(exceptionInterceptor, propagates)
@@ -46,7 +47,7 @@ namespace Dawn
             /// <param name="propagates">
             ///     A value indicating whether the scope should bubble up to parent scopes.
             /// </param>
-            public Scope(Action<Exception, string> exceptionInterceptor, bool propagates)
+            public Scope(Action<Exception, StackTrace> exceptionInterceptor, bool propagates)
             {
                 this.Parent = Current;
                 Current = this;
@@ -69,7 +70,7 @@ namespace Dawn
             ///     Gets a delegate to intercept the exceptions caused by failed validations along
             ///     with their full stack trace.
             /// </summary>
-            public Action<Exception, string> ExceptionInterceptor { get; }
+            public Action<Exception, StackTrace> ExceptionInterceptor { get; }
 
             /// <summary>
             ///     Gets a value indicating whether the scope should bubble up to parent scopes.
