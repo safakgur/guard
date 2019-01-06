@@ -623,7 +623,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringMatchesTimeout(argument, pattern, matchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (!matches)
@@ -673,7 +673,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringMatchesTimeout(argument, regex.ToString(), ex.MatchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (!matches)
@@ -786,7 +786,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringDoesNotMatchTimeout(argument, pattern, matchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (matches)
@@ -837,7 +837,7 @@
                     var m = message?.Invoke(argument.Value, true)
                         ?? Messages.StringDoesNotMatchTimeout(argument, regex.ToString(), ex.MatchTimeout);
 
-                    throw new ArgumentException(m, argument.Name, ex);
+                    throw Fail(new ArgumentException(m, argument.Name, ex));
                 }
 
                 if (matches)
