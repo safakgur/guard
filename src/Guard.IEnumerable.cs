@@ -69,6 +69,73 @@
         }
 
         /// <summary>
+        ///     Requires the argument to have a collection value that consists of specified number of items.
+        /// </summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <param name="argument">The collection argument.</param>
+        /// <param name="count">
+        ///     The exact number of items that the argument value is required to have.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <c>null</c> and does not have the exact
+        ///     number of items specified in <paramref name="count" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Collection", "gc")]
+        public static ref readonly ArgumentInfo<TCollection> Count<TCollection>(
+            in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string> message = null)
+            where TCollection : IEnumerable
+        {
+            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, count + 1) != count)
+            {
+                var m = message?.Invoke(argument.Value, count) ?? Messages.CollectionCount(argument, count);
+                throw Fail(new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a collection value that does not consist of specified
+        ///     number of items.
+        /// </summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <param name="argument">The collection argument.</param>
+        /// <param name="count">
+        ///     The exact number of items that the argument value is required not to have.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <c>null</c> and has the exact number of
+        ///     items specified in <paramref name="count" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Collection", "gnc")]
+        public static ref readonly ArgumentInfo<TCollection> NotCount<TCollection>(
+            in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string> message = null)
+            where TCollection : IEnumerable
+        {
+            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, count + 1) == count)
+            {
+                var m = message?.Invoke(argument.Value, count) ?? Messages.CollectionNotCount(argument, count);
+                throw Fail(new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
         ///     Requires the argument to have a collection value that contains at least the specified
         ///     number of items.
         /// </summary>

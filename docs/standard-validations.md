@@ -53,6 +53,8 @@ For `ArgumentInfo<T|T?> where T : struct, IComparable<T>`
 For `ArgumentInfo<T> where T : IEnumerable`
 * `Empty()`
 * `NotEmpty()`
+* `Count(int)`
+* `NotCount(int)`
 * `MinCount(int)`
 * `MaxCount(int)`
 * `CountInRange(int, int)`

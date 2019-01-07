@@ -226,6 +226,54 @@
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">
     <Header>
+      <Title>Guard.Count(count)</Title>
+      <Shortcut>gc</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>count</ID>
+          <Default>count</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).Count($count$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().Count(count)</Title>
+      <Shortcut>gxc</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>count</ID>
+          <Default>count</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().Count($count$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
       <Title>Guard.CountInRange(minCount, maxCount)</Title>
       <Shortcut>gcr</Shortcut>
     </Header>
@@ -662,6 +710,54 @@
         </Literal>
       </Declarations>
       <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().MinCount($minCount$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotCount(count)</Title>
+      <Shortcut>gnc</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>count</ID>
+          <Default>count</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotCount($count$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().NotCount(count)</Title>
+      <Shortcut>gxnc</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>count</ID>
+          <Default>count</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().NotCount($count$)$end$;]]></Code>
     </Snippet>
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">
