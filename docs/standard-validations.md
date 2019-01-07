@@ -76,6 +76,8 @@ For `ArgumentInfo<string>`
 * `NotEmpty()`
 * `WhiteSpace()`
 * `NotWhiteSpace()`
+* `Length(int)`
+* `NotLength(int)`
 * `MinLength(int)`
 * `MaxLength(int)`
 * `LengthInRange(int, int)`
