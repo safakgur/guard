@@ -78,6 +78,40 @@
                 }));
         }
 
+        [Theory(DisplayName = T + "String: Length/NotLength")]
+        [InlineData(null, -1, 0)]
+        [InlineData("A", 1, 2)]
+        public void Length(string value, int length, int nonLength)
+        {
+            var valueArg = Guard.Argument(() => value).Length(length).NotLength(nonLength);
+
+            if (value is null)
+            {
+                valueArg.Length(nonLength).NotLength(length);
+                return;
+            }
+
+            ThrowsArgumentException(
+                valueArg,
+                arg => arg.Length(nonLength),
+                (arg, message) => arg.Length(nonLength, (v, l) =>
+                {
+                    Assert.Same(value, v);
+                    Assert.Equal(nonLength, l);
+                    return message;
+                }));
+
+            ThrowsArgumentException(
+                valueArg,
+                arg => arg.NotLength(length),
+                (arg, message) => arg.NotLength(length, (v, l) =>
+                {
+                    Assert.Same(value, v);
+                    Assert.Equal(length, l);
+                    return message;
+                }));
+        }
+
         [Theory(DisplayName = T + "String: MinLength")]
         [InlineData(null, 3, 4)]
         [InlineData("", 0, 1)]
