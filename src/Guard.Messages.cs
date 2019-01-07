@@ -210,6 +210,12 @@
             public static string CollectionNotEmpty<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} cannot be empty.";
 
+            public static string CollectionCount<T>(in ArgumentInfo<T> argument, int count)
+                => $"{argument.Name} must consist of {count} items.";
+
+            public static string CollectionNotCount<T>(in ArgumentInfo<T> argument, int count)
+                => $"{argument.Name} cannot consist of {count} items.";
+
             public static string CollectionMinCount<T>(in ArgumentInfo<T> argument, int minCount)
                 => $"{argument.Name} must contain at least {minCount} items.";
 
