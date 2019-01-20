@@ -472,7 +472,7 @@
             where TCollection : IEnumerable
         {
             if (argument.HasValue() &&
-                NullChecker<TCollection>.HasValue(collection) &&
+                collection != null &&
                 !Collection<TCollection>.Typed<TItem>.Contains(collection, argument.Value, comparer))
             {
                 var m = message?.Invoke(argument.Value, collection)
@@ -566,7 +566,7 @@
             where TCollection : IEnumerable
         {
             if (argument.HasValue() &&
-                NullChecker<TCollection>.HasValue(collection) &&
+                collection != null &&
                 Collection<TCollection>.Typed<TItem>.Contains(collection, argument.Value, comparer))
             {
                 var m = message?.Invoke(argument.Value, collection)
