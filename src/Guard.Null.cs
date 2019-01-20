@@ -2,8 +2,6 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Linq.Expressions;
-    using System.Runtime.CompilerServices;
     using JetBrains.Annotations;
 
     /// <content>Nullability preconditions.</content>
@@ -218,58 +216,6 @@
             {
                 var m = message ?? Messages.NotAllNull(argument1.Name, argument2.Name, argument3.Name);
                 throw Fail(new ArgumentNullException($"{argument1.Name}, {argument2.Name}, {argument3.Name}", m));
-            }
-        }
-
-        /// <summary>Provides a <c>null</c> checking helper.</summary>
-        /// <typeparam name="T">The type of the instance to check against <c>null</c>.</typeparam>
-        private static class NullChecker<T>
-        {
-            /// <summary>
-            ///     A function that determines whether a specified instance of type
-            ///     <typeparamref name="T" /> is not <c>null</c>.
-            /// </summary>
-            private static readonly IsNotNull HasValueImpl = InitHasValue();
-
-            /// <summary>A delegate that checks whether an object is not <c>null</c>.</summary>
-            /// <param name="value">The value to check against <c>null</c>.</param>
-            /// <returns>
-            ///     <c>true</c>, if <paramref name="value" /> is not <c>null</c>; otherwise, <c>false</c>.
-            /// </returns>
-            private delegate bool IsNotNull(in T value);
-
-            /// <summary>
-            ///     Determines whether a specified instance of type <typeparamref name="T" /> is not <c>null</c>.
-            /// </summary>
-            /// <param name="value">The value to check against <c>null</c>.</param>
-            /// <returns>
-            ///     <c>true</c>, if <paramref name="value" /> is not <c>null</c>; otherwise, <c>false</c>.
-            /// </returns>
-            [ContractAnnotation("value:notnull => true; value:null => false")]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static bool HasValue(in T value) => HasValueImpl(value);
-
-            /// <summary>Initializes <see cref="HasValue" />.</summary>
-            /// <returns>
-            ///     A function that determines whether a specified instance of type
-            ///     <typeparamref name="T" /> is not <c>null</c>.
-            /// </returns>
-            private static IsNotNull InitHasValue()
-            {
-                var type = typeof(T);
-                if (!type.IsValueType())
-                    return (in T v) => v != null;
-
-                if (type.IsGenericType(typeof(Nullable<>)))
-                {
-                    var value = Expression.Parameter(type.MakeByRefType(), "value");
-                    var get = type.GetPropertyGetter("HasValue");
-                    var call = Expression.Call(value, get);
-                    var lambda = Expression.Lambda<IsNotNull>(call, value);
-                    return lambda.Compile();
-                }
-
-                return (in T v) => true;
             }
         }
     }

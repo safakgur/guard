@@ -166,14 +166,14 @@
             [DebuggerStepThrough]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [GuardFunction("Initialization")]
-            public bool HasValue() => NullChecker<T>.HasValue(this.Value);
+            public bool HasValue() => this.Value != null;
 
             /// <summary>Determines whether the argument value is <c>null</c>.</summary>
             /// <returns>
             ///     <c>true</c>, if <see cref="Value" /> is <c>null</c>; otherwise, <c>false</c>.
             /// </returns>
             [Obsolete("Use the HasValue method to check against null.")]
-            public bool IsNull() => !this.HasValue();
+            public bool IsNull() => this.Value == null;
 
             /// <summary>Returns the string representation of the argument value.</summary>
             /// <returns>String representation of the argument value.</returns>
