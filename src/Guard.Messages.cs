@@ -141,6 +141,12 @@
             public static string StringNotWhiteSpace(in ArgumentInfo<string> argument)
                 => $"{argument.Name} cannot be empty or consist only of white-space characters.";
 
+            public static string StringLength(in ArgumentInfo<string> argument, int length)
+                => $"{argument.Name} must consist of {length} characters.";
+
+            public static string StringNotLength(in ArgumentInfo<string> argument, int length)
+                => $"{argument.Name} cannot consist of {length} characters.";
+
             public static string StringMinLength(in ArgumentInfo<string> argument, int minLength)
                 => $"{argument.Name} cannot be shorter than {minLength} characters.";
 
@@ -203,6 +209,12 @@
 
             public static string CollectionNotEmpty<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} cannot be empty.";
+
+            public static string CollectionCount<T>(in ArgumentInfo<T> argument, int count)
+                => $"{argument.Name} must consist of {count} items.";
+
+            public static string CollectionNotCount<T>(in ArgumentInfo<T> argument, int count)
+                => $"{argument.Name} cannot consist of {count} items.";
 
             public static string CollectionMinCount<T>(in ArgumentInfo<T> argument, int minCount)
                 => $"{argument.Name} must contain at least {minCount} items.";

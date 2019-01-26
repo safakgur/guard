@@ -118,6 +118,69 @@
         }
 
         /// <summary>
+        ///     Requires the argument to have a string value that consists of specified number of characters.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="length">
+        ///     The exact number of characters that the argument value is required to have.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <c>null</c> and does not have the exact
+        ///     number of characters specified in <paramref name="length" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("String", "gl")]
+        public static ref readonly ArgumentInfo<string> Length(
+            in this ArgumentInfo<string> argument, int length, Func<string, int, string> message = null)
+        {
+            if (argument.HasValue() && argument.Value.Length != length)
+            {
+                var m = message?.Invoke(argument.Value, length) ?? Messages.StringLength(argument, length);
+                throw Fail(new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a string value that does not consist of specified
+        ///     number of characters.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="length">
+        ///     The exact number of characters that the argument value is required not to have.
+        /// </param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <c>null</c> and has the exact number of
+        ///     characters specified in <paramref name="length" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("String", "gnl")]
+        public static ref readonly ArgumentInfo<string> NotLength(
+            in this ArgumentInfo<string> argument, int length, Func<string, int, string> message = null)
+        {
+            if (argument.HasValue() && argument.Value.Length == length)
+            {
+                var m = message?.Invoke(argument.Value, length) ?? Messages.StringNotLength(argument, length);
+                throw Fail(new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
         ///     Requires the argument to have a string value that contains at least the specified
         ///     number of characters.
         /// </summary>
