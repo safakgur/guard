@@ -227,12 +227,12 @@
         /// <summary>Represents an argument member.</summary>
         private abstract class ArgumentMemberInfo
         {
-            /// <summary>Argument members cached by their distances to the root type.</summary>
-            private static readonly IDictionary<(MemberInfo, int), ArgumentMemberInfo> Cache
-                = new Dictionary<(MemberInfo, int), ArgumentMemberInfo>();
+            /// <summary>Cached root nodes of member trees.</summary>
+            private static readonly IDictionary<MemberInfo, Node> Nodes
+                = new Dictionary<MemberInfo, Node>();
 
-            /// <summary>The lock that synchronizes access to <see cref="Cache" />.</summary>
-            private static readonly ReaderWriterLockSlim CacheLock
+            /// <summary>The lock that synchronizes access to <see cref="Nodes" />.</summary>
+            private static readonly ReaderWriterLockSlim NodesLock
                 = new ReaderWriterLockSlim();
 
             /// <summary>Returns the cached argument member for the specified lambda expression.</summary>
@@ -242,50 +242,108 @@
             ///     The lambda expression that specifies the argument member to get.
             /// </param>
             /// <returns>A cached, generic argument member.</returns>
+            /// <exception cref="ArgumentException">
+            ///     <paramref name="lexp" /> is not composed of <see cref="MemberExpression" /> s.
+            /// </exception>
             public static ArgumentMemberInfo<T, TMember> GetMemberInfo<T, TMember>(Expression<Func<T, TMember>> lexp)
             {
-                var mexp = lexp.Body as MemberExpression;
-                if (mexp is null)
-                    throw new ArgumentException("A member expression is expected.", nameof(lexp));
+                Node node = null;
 
-                var rootType = typeof(T);
-
-                var i = 0;
-                try
+                var exp = lexp.Body;
+                while (exp is MemberExpression e)
                 {
-                    for (var e = mexp; rootType != e.Member.DeclaringType; i++)
-                        e = e.Expression as MemberExpression;
-                }
-                catch (NullReferenceException ex)
-                {
-                    var m = "The expression must be composed of member accesses.";
-                    throw new ArgumentException(m, nameof(lexp), ex);
-                }
-
-                CacheLock.EnterUpgradeableReadLock();
-                try
-                {
-                    var key = (mexp.Member, i);
-                    if (!Cache.TryGetValue(key, out var info))
+                    IDictionary<MemberInfo, Node> source;
+                    ReaderWriterLockSlim sourceLock;
+                    if (node is null)
                     {
-                        info = new ArgumentMemberInfo<T, TMember>(mexp, lexp.Compile());
-                        CacheLock.EnterWriteLock();
+                        source = Nodes;
+                        sourceLock = NodesLock;
+                    }
+                    else
+                    {
+                        source = node.Owners;
+                        sourceLock = node.Lock;
+                    }
+
+                    sourceLock.EnterUpgradeableReadLock();
+                    try
+                    {
+                        if (!source.TryGetValue(e.Member, out node))
+                        {
+                            sourceLock.EnterWriteLock();
+                            try
+                            {
+                                node = new Node(node, e.Member);
+                                source[e.Member] = node;
+                            }
+                            finally
+                            {
+                                sourceLock.ExitWriteLock();
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        sourceLock.ExitUpgradeableReadLock();
+                    }
+
+                    exp = e.Expression;
+                }
+
+                if (node is null || exp.NodeType != ExpressionType.Parameter)
+                {
+                    var m = "The selector must be composed of member accesses.";
+                    throw new ArgumentException(m, nameof(lexp));
+                }
+
+                node.Lock.EnterUpgradeableReadLock();
+                try
+                {
+                    var info = node.Info as ArgumentMemberInfo<T, TMember>;
+                    if (info is null)
+                    {
+                        node.Lock.EnterWriteLock();
                         try
                         {
-                            Cache[key] = info;
+                            info = new ArgumentMemberInfo<T, TMember>(lexp.Body as MemberExpression, lexp.Compile());
+                            node.Info = info;
                         }
                         finally
                         {
-                            CacheLock.ExitWriteLock();
+                            node.Lock.ExitWriteLock();
                         }
                     }
 
-                    return info as ArgumentMemberInfo<T, TMember>;
+                    return info;
                 }
                 finally
                 {
-                    CacheLock.ExitUpgradeableReadLock();
+                    node.Lock.ExitUpgradeableReadLock();
                 }
+            }
+
+            /// <summary>Represents a node in a tree of members.</summary>
+            private sealed class Node
+            {
+                /// <summary>Initializes a new instance of the <see cref="Node" /> class.</summary>
+                /// <param name="child">
+                ///     The member of which the current member is the owner of.
+                /// </param>
+                /// <param name="member">The member that this node represents.</param>
+                public Node(Node child, MemberInfo member)
+                {
+                    this.Owners = new Dictionary<MemberInfo, Node>(1);
+                    this.Lock = new ReaderWriterLockSlim();
+                }
+
+                /// <summary>Gets the owners of the member that the current node represents.</summary>
+                public IDictionary<MemberInfo, Node> Owners { get; }
+
+                /// <summary>The lock that synchronizes access to the node.</summary>
+                public ReaderWriterLockSlim Lock { get; }
+
+                /// <summary>Gets or sets the argument member that the current node represents.</summary>
+                public ArgumentMemberInfo Info { get; set; }
             }
         }
 
