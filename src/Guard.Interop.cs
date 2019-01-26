@@ -52,10 +52,10 @@
 #endif
         }
 
-        /// <summary>Returns the type from wich the specified type directly inherits.</summary>
+        /// <summary>Returns the type from which the specified type directly inherits.</summary>
         /// <param name="type">The type whose base type to return.</param>
         /// <returns>
-        ///     The type from wich the <paramref name="type" /> directly inherits, if there is one;
+        ///     The type from which the <paramref name="type" /> directly inherits, if there is one;
         ///     otherwise, <c>null</c>.
         /// </returns>
         private static Type GetBaseType(this Type type)

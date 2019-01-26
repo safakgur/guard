@@ -68,6 +68,42 @@
             CheckAndReset(empty, countCalled: true, enumerationCount: 0, enumerated: true);
         }
 
+        [Theory(DisplayName = T + "Enumerable: Count/NotCount")]
+        [InlineData(null, -1, 0)]
+        [InlineData("A", 1, 2)]
+        public void Length(string value, int count, int nonCount)
+        {
+            var valueArg = Guard.Argument(value.AsEnumerable(), nameof(value))
+                .Count(count)
+                .NotCount(nonCount);
+
+            if (value is null)
+            {
+                valueArg.Count(nonCount).NotCount(count);
+                return;
+            }
+
+            ThrowsArgumentException(
+                valueArg,
+                arg => arg.Count(nonCount),
+                (arg, message) => arg.Count(nonCount, (v, c) =>
+                {
+                    Assert.Same(value, v);
+                    Assert.Equal(nonCount, c);
+                    return message;
+                }));
+
+            ThrowsArgumentException(
+                valueArg,
+                arg => arg.NotCount(count),
+                (arg, message) => arg.NotCount(count, (v, c) =>
+                {
+                    Assert.Same(value, v);
+                    Assert.Equal(count, c);
+                    return message;
+                }));
+        }
+
         [Theory(DisplayName = T + "Enumerable: MinCount")]
         [InlineData(CollectionOptions.Null, 3, 3, 4)]
         [InlineData(CollectionOptions.Empty, 0, 0, 1)]
