@@ -66,6 +66,7 @@
         /// <summary>Invokes the current scope's exception interceptor on precondition failures.</summary>
         /// <param name="exception">The exception to intercept.</param>
         /// <returns><paramref name="exception" />.</returns>
+        [GuardFunction("Extensibility")]
         public static Exception Fail(Exception exception)
         {
 #if !NETSTANDARD1_0
