@@ -86,18 +86,19 @@ have `<LangVersion>7.2</LangVersion>` or later added in your .csproj file.
 versions as .NET Standard 1.0 compliant but keep in mind that currently, the unit tests are only
 targeting .NET Core 1.0 and 2.0.
 
-| Platform                   | Version |
-| -------------------------- | ------- |
-| .NET Core                  | `1.0`   |
-| .NET Framework             | `4.5`   |
-| Mono                       | `4.6`   |
-| Xamarin.iOS                | `10.0`  |
-| Xamarin.Mac                | `3.0`   |
-| Xamarin.Android            | `7.0`   |
-| Universal Windows Platform | `10.0`  |
-| Windows                    | `8.0`   |
-| Windows Phone              | `8.1`   |
-| Windows Phone Silverlight  | `8.0`   |
+| Platform                   | Version  |
+| -------------------------- | -------- |
+| .NET Core                  | `1.0`    |
+| .NET Framework             | `4.5`    |
+| Mono                       | `4.6`    |
+| Xamarin.iOS                | `10.0`   |
+| Xamarin.Mac                | `3.0`    |
+| Xamarin.Android            | `7.0`    |
+| Universal Windows Platform | `10.0`   |
+| Windows                    | `8.0`    |
+| Windows Phone              | `8.1`    |
+| Windows Phone Silverlight  | `8.0`    |
+| Unity                      | `2018.1` |
 
 ## More
 
