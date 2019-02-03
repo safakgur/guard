@@ -124,15 +124,6 @@ advanced features.
 Code snippets can be found in the [snippets][5] folder. Currently, only the Visual Studio is
 supported.
 
-### What's Next
-
-Right now the following are on the horizon:
-
-* More validations
-* Roslyn analyzers & code fixes
-* Online documentation
-* Performance benchmarks
-
 [1]: docs/design-decisions.md
 [2]: https://docs.microsoft.com/dotnet/standard/net-standard
 [3]: docs/standard-validations.md
