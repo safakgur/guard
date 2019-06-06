@@ -38,8 +38,7 @@
         /// <summary>Requires the argument to have a non-empty string value.</summary>
         /// <param name="argument">The string argument.</param>
         /// <param name="message">
-        ///     The factory to initialize the message of the exception that will be thrown if the
-        ///     precondition is not satisfied.
+        ///     The message of the exception that will be thrown if the precondition is not satisfied.
         /// </param>
         /// <returns><paramref name="argument" />.</returns>
         /// <exception cref="ArgumentException">
@@ -111,6 +110,34 @@
             if (argument.Value != null && string.IsNullOrWhiteSpace(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.StringNotWhiteSpace(argument);
+                throw Fail(new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a string value that does not consist only of
+        ///     white-space characters.
+        /// </summary>
+        /// <param name="argument">The string argument.</param>
+        /// <param name="message">
+        ///     The message of the exception that will be thrown if the precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is not <c>null</c> and contains only of
+        ///     white-space characters.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("String", "gnw")]
+        public static ref readonly ArgumentInfo<string> NotWhiteSpace(
+            in this ArgumentInfo<string> argument, string message)
+        {
+            if (argument.Value != null && string.IsNullOrWhiteSpace(argument.Value))
+            {
+                var m = message ?? Messages.StringNotWhiteSpace(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
