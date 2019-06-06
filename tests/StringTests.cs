@@ -46,7 +46,7 @@
         public void WhiteSpace(string ws, string nonWs)
         {
             var wsArg = Guard.Argument(() => ws).WhiteSpace();
-            var nonWsArg = Guard.Argument(() => nonWs).NotWhiteSpace();
+            var nonWsArg = Guard.Argument(() => nonWs).NotWhiteSpace().NotWhiteSpace("message");
 
             if (ws is null)
             {
@@ -556,11 +556,24 @@
                 })
             };
 
-            // Matches - invalid pattern
+            // Matches - invalid pattern w/o timeout
             ThrowsArgumentException(
                 Guard.Argument(withMatch, "pattern", secure),
                 arg => arg.Matches(invalidPattern),
                 (arg, message) => arg.Matches(invalidPattern, (s, t) =>
+                {
+                    Assert.Same(withMatch, s);
+                    Assert.False(t);
+                    return message;
+                }),
+                true,
+                true);
+
+            // Matches - invalid pattern w/ timeout
+            ThrowsArgumentException(
+                Guard.Argument(withMatch, "pattern", secure),
+                arg => arg.Matches(invalidPattern),
+                (arg, message) => arg.Matches(invalidPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withMatch, s);
                     Assert.False(t);
@@ -617,11 +630,24 @@
                     return message;
                 }));
 
-            // Does not match - invalid pattern
+            // Does not match - invalid pattern w/o timeout
             ThrowsArgumentException(
                 Guard.Argument(withoutMatch, "pattern", secure),
                 arg => arg.DoesNotMatch(invalidPattern),
                 (arg, message) => arg.DoesNotMatch(invalidPattern, (s, t) =>
+                {
+                    Assert.Same(withoutMatch, s);
+                    Assert.False(t);
+                    return message;
+                }),
+                true,
+                true);
+
+            // Does not match - invalid pattern w/ timeout
+            ThrowsArgumentException(
+                Guard.Argument(withoutMatch, "pattern", secure),
+                arg => arg.DoesNotMatch(invalidPattern),
+                (arg, message) => arg.DoesNotMatch(invalidPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withoutMatch, s);
                     Assert.False(t);
