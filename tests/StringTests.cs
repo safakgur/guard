@@ -36,11 +36,7 @@
             ThrowsArgumentException(
                 emptyArg,
                 arg => arg.NotEmpty(),
-                (arg, message) => arg.NotEmpty(v =>
-                {
-                    Assert.Same(empty, v);
-                    return message;
-                }));
+                (arg, message) => arg.NotEmpty(message));
         }
 
         [Theory(DisplayName = T + "String: WhiteSpace/NotWhiteSpace")]
@@ -76,6 +72,11 @@
                     Assert.Same(ws, v);
                     return message;
                 }));
+
+            ThrowsArgumentException(
+                wsArg,
+                arg => arg.NotWhiteSpace(),
+                (arg, message) => arg.NotWhiteSpace(message));
         }
 
         [Theory(DisplayName = T + "String: Length/NotLength")]
