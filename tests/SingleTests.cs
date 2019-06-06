@@ -4,7 +4,7 @@
 
     public sealed class SingleTests : BaseTests
     {
-        [Theory(DisplayName = T + "Single: NaN/NotNaN")]
+        [Theory(DisplayName = "Single: NaN/NotNaN")]
         [InlineData(null, null)]
         [InlineData(float.NaN, float.NegativeInfinity)]
         [InlineData(float.NaN, -1.0f)]
@@ -53,7 +53,7 @@
                 (arg, message) => arg.NotNaN(message));
         }
 
-        [Theory(DisplayName = T + "Single: Infinity/NotInfinity")]
+        [Theory(DisplayName = "Single: Infinity/NotInfinity")]
         [InlineData(null, null)]
         [InlineData(float.NegativeInfinity, float.NaN)]
         [InlineData(float.NegativeInfinity, -1.0f)]
@@ -113,7 +113,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Single: PositiveInfinity/NotPositiveInfinity")]
+        [Theory(DisplayName = "Single: PositiveInfinity/NotPositiveInfinity")]
         [InlineData(null, null)]
         [InlineData(float.PositiveInfinity, float.NaN)]
         [InlineData(float.PositiveInfinity, float.NegativeInfinity)]
@@ -162,7 +162,7 @@
                 (arg, message) => arg.NotPositiveInfinity(message));
         }
 
-        [Theory(DisplayName = T + "Single: NegativeInfinity/NotNegativeInfinity")]
+        [Theory(DisplayName = "Single: NegativeInfinity/NotNegativeInfinity")]
         [InlineData(null, null)]
         [InlineData(float.NegativeInfinity, float.NaN)]
         [InlineData(float.NegativeInfinity, -1.0f)]
@@ -211,7 +211,7 @@
                 (arg, message) => arg.NotNegativeInfinity(message));
         }
 
-        [Theory(DisplayName = T + "Single: Equal/NotEqual w/ precision")]
+        [Theory(DisplayName = "Single: Equal/NotEqual w/ precision")]
         [InlineData(null, .0, .0, .0)]
         [InlineData(.3305F, .33F, .3F, .01F)]
         [InlineData(.331F, .332F, .3F, .01F)]

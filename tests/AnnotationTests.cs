@@ -1,6 +1,4 @@
-﻿#if !NETCOREAPP1_0
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +8,7 @@ namespace Dawn.Tests
 {
     public sealed class AnnotationTests : BaseTests
     {
-        [Fact(DisplayName = T + "Annotations: [GuardFunc] initialization")]
+        [Fact(DisplayName = "Annotations: [GuardFunc] initialization")]
         public void GuardFunctionInit()
         {
             Assert.Throws<ArgumentNullException>("group", () => new GuardFunctionAttribute(null));
@@ -43,7 +41,7 @@ namespace Dawn.Tests
             Assert.Equal(1, attr.Order);
         }
 
-        [Fact(DisplayName = T + "Annotations: Exported methods are marked")]
+        [Fact(DisplayName = "Annotations: Exported methods are marked")]
         public void ExportedMethodsAreMarked()
         {
             var assembly = Assembly.GetAssembly(typeof(Guard));
@@ -76,7 +74,7 @@ namespace Dawn.Tests
             }
         }
 
-        [Fact(DisplayName = T + "Annotations: Shortcuts are unique")]
+        [Fact(DisplayName = "Annotations: Shortcuts are unique")]
         public void ShortcutsAreUnique()
         {
             var groups = GetMarkedMethods()
@@ -91,5 +89,3 @@ namespace Dawn.Tests
             => GuardFunctionAttribute.GetMethods(Assembly.GetAssembly(typeof(Guard)));
     }
 }
-
-#endif

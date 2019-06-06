@@ -5,7 +5,7 @@
 
     public sealed class TypeTests : BaseTests
     {
-        [Theory(DisplayName = T + "Type: Type/NotType (generic class)")]
+        [Theory(DisplayName = "Type: Type/NotType (generic class)")]
         [InlineData(null)]
         [InlineData("A")]
         public void GenericReferenceType(string value)
@@ -58,7 +58,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Type: Type/NotType (non-generic class)")]
+        [Theory(DisplayName = "Type: Type/NotType (non-generic class)")]
         [InlineData(null)]
         [InlineData("A")]
         public void ReferenceType(string value)
@@ -97,7 +97,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Type: Type/NotType (generic nullable struct)")]
+        [Theory(DisplayName = "Type: Type/NotType (generic nullable struct)")]
         [InlineData(null)]
         [InlineData(1)]
         public void GenericValueType(int? value)
@@ -164,7 +164,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Type: Type/NotType (non-generic nullable struct)")]
+        [Theory(DisplayName = "Type: Type/NotType (non-generic nullable struct)")]
         [InlineData(null)]
         [InlineData(1)]
         public void ValueType(int? value)
@@ -223,7 +223,7 @@
                 }));
         }
 
-        [Fact(DisplayName = T + "Type: Compatible/NotCompatible")]
+        [Fact(DisplayName = "Type: Compatible/NotCompatible")]
         public void Compatible()
         {
             using (var memory = new MemoryStream() as Stream)
@@ -274,7 +274,7 @@
             }
         }
 
-        [Fact(DisplayName = T + "Type: Cast")]
+        [Fact(DisplayName = "Type: Cast")]
         public void Cast()
         {
             using (var stream = new MemoryStream() as Stream)

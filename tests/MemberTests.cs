@@ -6,7 +6,7 @@
 
     public sealed class MemberTests : BaseTests
     {
-        [Fact(DisplayName = T + "Member w/o valid expression")]
+        [Fact(DisplayName = "Member w/o valid expression")]
         public void InvalidMemberCall()
         {
             var dateTime = DateTime.Now;
@@ -33,7 +33,7 @@
             Assert.Same(memberException.InnerException, accessException);
         }
 
-        [Theory(DisplayName = T + "Member w/ valid expression")]
+        [Theory(DisplayName = "Member w/ valid expression")]
         [InlineData(null, 17, 18, false)]
         [InlineData("08/19/2018 17:42:48", 17, 18, false)]
         [InlineData("08/19/2018 17:42:48", 17, 18, true)]

@@ -5,7 +5,7 @@
 
     public sealed class StateTests : BaseTests
     {
-        [Fact(DisplayName = T + "State: Operation")]
+        [Fact(DisplayName = "State: Operation")]
         public void TestOperation()
         {
             Guard.Operation(true);
@@ -19,7 +19,7 @@
             Assert.Contains(nameof(TestOperation), exceptions[0].Message);
         }
 
-        [Fact(DisplayName = T + "State: Support")]
+        [Fact(DisplayName = "State: Support")]
         public void TestSupport()
         {
             Guard.Support(true);
@@ -33,7 +33,7 @@
             Assert.Contains(nameof(TestSupport), exceptions[0].Message);
         }
 
-        [Fact(DisplayName = T + "State: Disposal")]
+        [Fact(DisplayName = "State: Disposal")]
         public void TestDisposal()
         {
             var objectName = RandomMessage;

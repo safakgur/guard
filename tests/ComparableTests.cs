@@ -4,7 +4,7 @@
 
     public sealed class ComparableTests : BaseTests
     {
-        [Theory(DisplayName = T + "Comparable: Min")]
+        [Theory(DisplayName = "Comparable: Min")]
         [InlineData(null, 3, 4)]
         [InlineData(3, 3, 4)]
         [InlineData(3, 2, 5)]
@@ -39,7 +39,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Comparable: Max")]
+        [Theory(DisplayName = "Comparable: Max")]
         [InlineData(null, 3, 2)]
         [InlineData(3, 3, 2)]
         [InlineData(3, 4, 1)]
@@ -74,7 +74,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Comparable: InRange")]
+        [Theory(DisplayName = "Comparable: InRange")]
         [InlineData(null, 2, 4)]
         [InlineData(3, 2, 4)]
         [InlineData(3, 1, 5)]
@@ -130,7 +130,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "Comparable: Zero/NotZero")]
+        [Theory(DisplayName = "Comparable: Zero/NotZero")]
         [InlineData(null, null)]
         [InlineData(0, -1)]
         [InlineData(0, 1)]
@@ -176,7 +176,7 @@
                 (arg, message) => arg.NotZero(message));
         }
 
-        [Theory(DisplayName = T + "Comparable: Positive/NotPositive")]
+        [Theory(DisplayName = "Comparable: Positive/NotPositive")]
         [InlineData(null, null)]
         [InlineData(1, 0)]
         [InlineData(1, -1)]
@@ -230,7 +230,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Comparable: Negative/NotNegative")]
+        [Theory(DisplayName = "Comparable: Negative/NotNegative")]
         [InlineData(null, null)]
         [InlineData(-1, 0)]
         [InlineData(-1, 1)]
