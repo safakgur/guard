@@ -209,8 +209,8 @@
                     return message;
                 }));
 
-            var positiveArg = Guard.Argument(positive.Value, nameof(positive));
-            var nonPositiveArg = Guard.Argument(nonPositive.Value, nameof(nonPositive));
+            var positiveArg = Guard.Argument(positive.Value, nameof(positive)).Positive();
+            var nonPositiveArg = Guard.Argument(nonPositive.Value, nameof(nonPositive)).NotPositive();
             ThrowsArgumentOutOfRangeException(
                 nonPositiveArg,
                 arg => arg.Positive(),
@@ -263,8 +263,8 @@
                     return message;
                 }));
 
-            var negativeArg = Guard.Argument(negative.Value, nameof(negative));
-            var nonNegativeArg = Guard.Argument(nonNegative.Value, nameof(nonNegative));
+            var negativeArg = Guard.Argument(negative.Value, nameof(negative)).Negative();
+            var nonNegativeArg = Guard.Argument(nonNegative.Value, nameof(nonNegative)).NotNegative();
             ThrowsArgumentOutOfRangeException(
                 nonNegativeArg,
                 arg => arg.Negative(),
