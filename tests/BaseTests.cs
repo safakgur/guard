@@ -7,12 +7,6 @@
 
     public abstract class BaseTests
     {
-#if NETCOREAPP1_0
-        protected const string T = "NS1 "; // Targeting .NET Standard 1.0.
-#elif NETCOREAPP2_0
-        protected const string T = "NS2 "; // Targeting .NET Standard 2.0.
-#endif
-
         private const string Alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
         protected static int RandomNumber => RandomUtils.Current.Next();
@@ -306,13 +300,8 @@
 
             public Scope(bool doNotTestScoping = false)
             {
-#if !NETCOREAPP1_0
                 if (RandomBoolean && !doNotTestScoping)
                     this.scope = Guard.BeginScope((ex, stackTrace) => this.lastException = ex);
-#else
-                this.scope = null;
-                this.lastException = null;
-#endif
             }
 
             public void CheckException(Exception exception)

@@ -5,7 +5,7 @@
 
     public sealed class InitializationTests : BaseTests
     {
-        [Fact(DisplayName = T + "Argument: Uninitialized")]
+        [Fact(DisplayName = "Argument: Uninitialized")]
         public void Uninitialized()
         {
             var int32Arg = default(Guard.ArgumentInfo<int>);
@@ -27,7 +27,7 @@
             Assert.False(stringArg.Secure);
         }
 
-        [Theory(DisplayName = T + "Argument: Member expression")]
+        [Theory(DisplayName = "Argument: Member expression")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("S")]
@@ -46,14 +46,14 @@
             }
         }
 
-        [Fact(DisplayName = T + "Argument: Validates member expression")]
+        [Fact(DisplayName = "Argument: Validates member expression")]
         public void ValidatesExpression()
         {
             Assert.Throws<ArgumentNullException>("e", () => Guard.Argument<int>(null));
             Assert.Throws<ArgumentException>("e", () => Guard.Argument(() => 1));
         }
 
-        [Theory(DisplayName = T + "Argument: Value and name")]
+        [Theory(DisplayName = "Argument: Value and name")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("S")]
@@ -90,7 +90,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "Argument: Value-only")]
+        [Theory(DisplayName = "Argument: Value-only")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("S")]
@@ -127,7 +127,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "Argument: ToString")]
+        [Theory(DisplayName = "Argument: ToString")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("S")]
@@ -140,7 +140,7 @@
                 Assert.Same(string.Empty, valueArg.ToString());
         }
 
-        [Theory(DisplayName = T + "Argument: DebuggerDisplay")]
+        [Theory(DisplayName = "Argument: DebuggerDisplay")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("S")]

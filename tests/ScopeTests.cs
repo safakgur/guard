@@ -1,6 +1,4 @@
-﻿#if !NETCOREAPP1_0
-
-namespace Dawn.Tests
+﻿namespace Dawn.Tests
 {
     using System;
     using System.Linq;
@@ -10,7 +8,7 @@ namespace Dawn.Tests
 
     public sealed class ScopeTests : BaseTests
     {
-        [Fact(DisplayName = T + "BeginScope")]
+        [Fact(DisplayName = "BeginScope")]
         public void BeginScope()
         {
             var validation =
@@ -145,5 +143,3 @@ namespace Dawn.Tests
         }
     }
 }
-
-#endif

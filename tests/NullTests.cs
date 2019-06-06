@@ -5,7 +5,7 @@
 
     public sealed class NullTests : BaseTests
     {
-        [Fact(DisplayName = T + "Nullable class: Null/NotNull")]
+        [Fact(DisplayName = "Nullable class: Null/NotNull")]
         public void NullReference()
         {
             var @null = null as string;
@@ -29,7 +29,7 @@
                 (arg, message) => arg.NotNull(message));
         }
 
-        [Fact(DisplayName = T + "Nullable struct: Null/NotNull")]
+        [Fact(DisplayName = "Nullable struct: Null/NotNull")]
         public void NullValue()
         {
             var @null = null as int?;
@@ -65,7 +65,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "Null: NotAllNull`2")]
+        [Theory(DisplayName = "Null: NotAllNull`2")]
         [InlineData(1, "A", true)]
         [InlineData(null, "A", true)]
         [InlineData(1, null, true)]
@@ -86,7 +86,7 @@
                 Guard.Argument(() => val2));
         }
 
-        [Theory(DisplayName = T + "Null: NotAllNull`3")]
+        [Theory(DisplayName = "Null: NotAllNull`3")]
         [InlineData(1, "A", 1.0, true)]
         [InlineData(null, "A", 1.0, true)]
         [InlineData(1, null, 1.0, true)]

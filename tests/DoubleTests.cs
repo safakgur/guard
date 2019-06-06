@@ -4,7 +4,7 @@
 
     public sealed class DoubleTests : BaseTests
     {
-        [Theory(DisplayName = T + "Double: NaN/NotNaN")]
+        [Theory(DisplayName = "Double: NaN/NotNaN")]
         [InlineData(null, null)]
         [InlineData(double.NaN, double.NegativeInfinity)]
         [InlineData(double.NaN, -1.0)]
@@ -53,7 +53,7 @@
                 (arg, message) => arg.NotNaN(message));
         }
 
-        [Theory(DisplayName = T + "Double: Infinity/NotInfinity")]
+        [Theory(DisplayName = "Double: Infinity/NotInfinity")]
         [InlineData(null, null)]
         [InlineData(double.NegativeInfinity, double.NaN)]
         [InlineData(double.NegativeInfinity, -1.0)]
@@ -113,7 +113,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Double: PositiveInfinity/NotPositiveInfinity")]
+        [Theory(DisplayName = "Double: PositiveInfinity/NotPositiveInfinity")]
         [InlineData(null, null)]
         [InlineData(double.PositiveInfinity, double.NaN)]
         [InlineData(double.PositiveInfinity, double.NegativeInfinity)]
@@ -162,7 +162,7 @@
                 (arg, message) => arg.NotPositiveInfinity(message));
         }
 
-        [Theory(DisplayName = T + "Double: NegativeInfinity/NotNegativeInfinity")]
+        [Theory(DisplayName = "Double: NegativeInfinity/NotNegativeInfinity")]
         [InlineData(null, null)]
         [InlineData(double.NegativeInfinity, double.NaN)]
         [InlineData(double.NegativeInfinity, -1.0)]
@@ -211,7 +211,7 @@
                 (arg, message) => arg.NotNegativeInfinity(message));
         }
 
-        [Theory(DisplayName = T + "Double: Equal/NotEqual w/ precision")]
+        [Theory(DisplayName = "Double: Equal/NotEqual w/ precision")]
         [InlineData(null, .0, .0, .0)]
         [InlineData(.3305, .33, .3, .01)]
         [InlineData(.331, .332, .3, .01)]

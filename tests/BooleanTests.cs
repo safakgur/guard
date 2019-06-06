@@ -4,7 +4,7 @@
 
     public sealed class BooleanTests : BaseTests
     {
-        [Theory(DisplayName = T + "Boolean: True/False")]
+        [Theory(DisplayName = "Boolean: True/False")]
         [InlineData(null, null)]
         [InlineData(true, false)]
         public void GuardSupportsBooleans(bool? @true, bool? @false)
