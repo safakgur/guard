@@ -4,7 +4,7 @@
 
     public sealed class SingleTests : BaseTests
     {
-        [Theory(DisplayName = T + "Single: NaN/NotNaN")]
+        [Theory(DisplayName = "Single: NaN/NotNaN")]
         [InlineData(null, null)]
         [InlineData(float.NaN, float.NegativeInfinity)]
         [InlineData(float.NaN, -1.0f)]
@@ -53,7 +53,7 @@
                 (arg, message) => arg.NotNaN(message));
         }
 
-        [Theory(DisplayName = T + "Single: Infinity/NotInfinity")]
+        [Theory(DisplayName = "Single: Infinity/NotInfinity")]
         [InlineData(null, null)]
         [InlineData(float.NegativeInfinity, float.NaN)]
         [InlineData(float.NegativeInfinity, -1.0f)]
@@ -113,7 +113,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Single: PositiveInfinity/NotPositiveInfinity")]
+        [Theory(DisplayName = "Single: PositiveInfinity/NotPositiveInfinity")]
         [InlineData(null, null)]
         [InlineData(float.PositiveInfinity, float.NaN)]
         [InlineData(float.PositiveInfinity, float.NegativeInfinity)]
@@ -162,7 +162,7 @@
                 (arg, message) => arg.NotPositiveInfinity(message));
         }
 
-        [Theory(DisplayName = T + "Single: NegativeInfinity/NotNegativeInfinity")]
+        [Theory(DisplayName = "Single: NegativeInfinity/NotNegativeInfinity")]
         [InlineData(null, null)]
         [InlineData(float.NegativeInfinity, float.NaN)]
         [InlineData(float.NegativeInfinity, -1.0f)]
@@ -211,28 +211,28 @@
                 (arg, message) => arg.NotNegativeInfinity(message));
         }
 
-        [Theory(DisplayName = T + "Single: Equal/NotEqual w/ precision")]
+        [Theory(DisplayName = "Single: Equal/NotEqual w/ delta")]
         [InlineData(null, .0, .0, .0)]
         [InlineData(.3305F, .33F, .3F, .01F)]
         [InlineData(.331F, .332F, .3F, .01F)]
-        public void Equal(float? value, float equal, float nonEqual, float precision)
+        public void Equal(float? value, float equal, float nonEqual, float delta)
         {
             Test(value, nameof(value), NullableTest, NonNullableTest);
 
             void NullableTest(Guard.ArgumentInfo<float?> nullableValueArg)
             {
-                nullableValueArg.Equal(equal, precision).NotEqual(nonEqual, precision);
+                nullableValueArg.Equal(equal, delta).NotEqual(nonEqual, delta);
                 if (!nullableValueArg.HasValue())
                 {
-                    nullableValueArg.Equal(nonEqual, precision).NotEqual(equal, precision);
+                    nullableValueArg.Equal(nonEqual, delta).NotEqual(equal, delta);
                     return;
                 }
 
                 ThrowsArgumentOutOfRangeException(
                     nullableValueArg,
-                    arg => arg.Equal(nonEqual, precision),
+                    arg => arg.Equal(nonEqual, delta),
                     m => nullableValueArg.Secure != m.Contains(nonEqual.ToString()),
-                    (arg, message) => arg.Equal(nonEqual, precision, (v, o) =>
+                    (arg, message) => arg.Equal(nonEqual, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);
                         Assert.Equal(nonEqual, o);
@@ -241,9 +241,9 @@
 
                 ThrowsArgumentOutOfRangeException(
                     nullableValueArg,
-                    arg => arg.NotEqual(equal, precision),
+                    arg => arg.NotEqual(equal, delta),
                     m => nullableValueArg.Secure != m.Contains(equal.ToString()),
-                    (arg, message) => arg.NotEqual(equal, precision, (v, o) =>
+                    (arg, message) => arg.NotEqual(equal, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);
                         Assert.Equal(equal, o);
@@ -253,11 +253,12 @@
 
             void NonNullableTest(Guard.ArgumentInfo<float> valueArg)
             {
+                valueArg.Equal(equal, delta).NotEqual(nonEqual, delta);
                 ThrowsArgumentOutOfRangeException(
                     valueArg,
-                    arg => arg.Equal(nonEqual, precision),
+                    arg => arg.Equal(nonEqual, delta),
                     m => valueArg.Secure != m.Contains(nonEqual.ToString()),
-                    (arg, message) => arg.Equal(nonEqual, precision, (v, o) =>
+                    (arg, message) => arg.Equal(nonEqual, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);
                         Assert.Equal(nonEqual, o);
@@ -266,9 +267,9 @@
 
                 ThrowsArgumentOutOfRangeException(
                     valueArg,
-                    arg => arg.NotEqual(equal, precision),
+                    arg => arg.NotEqual(equal, delta),
                     m => valueArg.Secure != m.Contains(equal.ToString()),
-                    (arg, message) => arg.NotEqual(equal, precision, (v, o) =>
+                    (arg, message) => arg.NotEqual(equal, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);
                         Assert.Equal(equal, o);

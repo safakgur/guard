@@ -8,7 +8,7 @@
         [ThreadStatic]
         private static object currentValue;
 
-        [Theory(DisplayName = T + "Require: Default exception")]
+        [Theory(DisplayName = "Require: Default exception")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("A")]
@@ -41,7 +41,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Require: Argument exception w/ message")]
+        [Theory(DisplayName = "Require: Argument exception w/ message")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("A")]
@@ -80,7 +80,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Require: Argument exception w/o message")]
+        [Theory(DisplayName = "Require: Argument exception w/o message")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("A")]
@@ -119,7 +119,7 @@
                 }), true);
         }
 
-        [Theory(DisplayName = T + "Require: Common exception w/ message")]
+        [Theory(DisplayName = "Require: Common exception w/ message")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("A")]
@@ -158,7 +158,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Require: Common exception w/o message")]
+        [Theory(DisplayName = "Require: Common exception w/o message")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("A")]
@@ -197,7 +197,7 @@
                 }), true);
         }
 
-        [Theory(DisplayName = T + "Require: Exception w/o ctor")]
+        [Theory(DisplayName = "Require: Exception w/o ctor")]
         [InlineData(null)]
         [InlineData(1)]
         [InlineData("A")]

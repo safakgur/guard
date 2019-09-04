@@ -9,7 +9,7 @@
     {
         private static readonly TimeSpan MatchTimeout = TimeSpan.FromMilliseconds(10);
 
-        [Theory(DisplayName = T + "String: Empty/NotEmpty")]
+        [Theory(DisplayName = "String: Empty/NotEmpty")]
         [InlineData(null, null)]
         [InlineData("", "A")]
         public void Empty(string empty, string nonEmpty)
@@ -36,21 +36,17 @@
             ThrowsArgumentException(
                 emptyArg,
                 arg => arg.NotEmpty(),
-                (arg, message) => arg.NotEmpty(v =>
-                {
-                    Assert.Same(empty, v);
-                    return message;
-                }));
+                (arg, message) => arg.NotEmpty(message));
         }
 
-        [Theory(DisplayName = T + "String: WhiteSpace/NotWhiteSpace")]
+        [Theory(DisplayName = "String: WhiteSpace/NotWhiteSpace")]
         [InlineData(null, null)]
         [InlineData("", "A")]
         [InlineData(" ", "A")]
         public void WhiteSpace(string ws, string nonWs)
         {
             var wsArg = Guard.Argument(() => ws).WhiteSpace();
-            var nonWsArg = Guard.Argument(() => nonWs).NotWhiteSpace();
+            var nonWsArg = Guard.Argument(() => nonWs).NotWhiteSpace().NotWhiteSpace("message");
 
             if (ws is null)
             {
@@ -76,9 +72,14 @@
                     Assert.Same(ws, v);
                     return message;
                 }));
+
+            ThrowsArgumentException(
+                wsArg,
+                arg => arg.NotWhiteSpace(),
+                (arg, message) => arg.NotWhiteSpace(message));
         }
 
-        [Theory(DisplayName = T + "String: Length/NotLength")]
+        [Theory(DisplayName = "String: Length/NotLength")]
         [InlineData(null, -1, 0)]
         [InlineData("A", 1, 2)]
         public void Length(string value, int length, int nonLength)
@@ -112,7 +113,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: MinLength")]
+        [Theory(DisplayName = "String: MinLength")]
         [InlineData(null, 3, 4)]
         [InlineData("", 0, 1)]
         [InlineData("ABC", 3, 4)]
@@ -138,7 +139,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: MaxLength")]
+        [Theory(DisplayName = "String: MaxLength")]
         [InlineData(null, 3, 2)]
         [InlineData("", 0, -1)]
         [InlineData("ABC", 3, 2)]
@@ -164,7 +165,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: LengthInRange")]
+        [Theory(DisplayName = "String: LengthInRange")]
         [InlineData(null, 2, 4)]
         [InlineData("", -1, 1)]
         [InlineData("ABC", 2, 4)]
@@ -205,7 +206,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "String: Equal/NotEqual w/ comparison")]
+        [Theory(DisplayName = "String: Equal/NotEqual w/ comparison")]
         [InlineData(null, null, null, StringComparison.Ordinal, false)]
         [InlineData("AB", "AB", "ab", StringComparison.Ordinal, false)]
         [InlineData("AB", "AB", "ab", StringComparison.Ordinal, true)]
@@ -249,7 +250,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: StartsWith/DoesNotStartWith w/o comparison")]
+        [Theory(DisplayName = "String: StartsWith/DoesNotStartWith w/o comparison")]
         [InlineData(null, null, null, false)]
         [InlineData("ABC", "AB", "B", false)]
         [InlineData("ABC", "AB", "B", true)]
@@ -292,7 +293,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: StartsWith/DoesNotStartWith w/ comparison")]
+        [Theory(DisplayName = "String: StartsWith/DoesNotStartWith w/ comparison")]
         [InlineData(null, null, null, StringComparison.Ordinal, false)]
         [InlineData("ABC", "AB", "ab", StringComparison.Ordinal, false)]
         [InlineData("ABC", "AB", "ab", StringComparison.Ordinal, true)]
@@ -337,7 +338,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: EndsWith/DoesNotEndWith w/o comparison")]
+        [Theory(DisplayName = "String: EndsWith/DoesNotEndWith w/o comparison")]
         [InlineData(null, null, null, false)]
         [InlineData("ABC", "BC", "B", false)]
         [InlineData("ABC", "BC", "B", true)]
@@ -377,7 +378,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: EndsWith/DoesNotEndWith w/ comparison")]
+        [Theory(DisplayName = "String: EndsWith/DoesNotEndWith w/ comparison")]
         [InlineData(null, null, null, StringComparison.Ordinal, false)]
         [InlineData("ABC", "BC", "bc", StringComparison.Ordinal, false)]
         [InlineData("ABC", "BC", "bc", StringComparison.Ordinal, true)]
@@ -422,7 +423,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "String: Matches/DoesNotMatch")]
+        [Theory(DisplayName = "String: Matches/DoesNotMatch")]
         [InlineData(null, null, null, null, null, false)]
         [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", "ABC", "[", "([A-Z]+)*!", false)]
         [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", "ABC", "[", "([A-Z]+)*!", true)]
@@ -555,11 +556,24 @@
                 })
             };
 
-            // Matches - invalid pattern
+            // Matches - invalid pattern w/o timeout
             ThrowsArgumentException(
                 Guard.Argument(withMatch, "pattern", secure),
                 arg => arg.Matches(invalidPattern),
                 (arg, message) => arg.Matches(invalidPattern, (s, t) =>
+                {
+                    Assert.Same(withMatch, s);
+                    Assert.False(t);
+                    return message;
+                }),
+                true,
+                true);
+
+            // Matches - invalid pattern w/ timeout
+            ThrowsArgumentException(
+                Guard.Argument(withMatch, "pattern", secure),
+                arg => arg.Matches(invalidPattern),
+                (arg, message) => arg.Matches(invalidPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withMatch, s);
                     Assert.False(t);
@@ -616,11 +630,24 @@
                     return message;
                 }));
 
-            // Does not match - invalid pattern
+            // Does not match - invalid pattern w/o timeout
             ThrowsArgumentException(
                 Guard.Argument(withoutMatch, "pattern", secure),
                 arg => arg.DoesNotMatch(invalidPattern),
                 (arg, message) => arg.DoesNotMatch(invalidPattern, (s, t) =>
+                {
+                    Assert.Same(withoutMatch, s);
+                    Assert.False(t);
+                    return message;
+                }),
+                true,
+                true);
+
+            // Does not match - invalid pattern w/ timeout
+            ThrowsArgumentException(
+                Guard.Argument(withoutMatch, "pattern", secure),
+                arg => arg.DoesNotMatch(invalidPattern),
+                (arg, message) => arg.DoesNotMatch(invalidPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withoutMatch, s);
                     Assert.False(t);

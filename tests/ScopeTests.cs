@@ -1,8 +1,7 @@
-﻿#if !NETCOREAPP1_0
-
-namespace Dawn.Tests
+﻿namespace Dawn.Tests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace Dawn.Tests
 
     public sealed class ScopeTests : BaseTests
     {
-        [Fact(DisplayName = T + "BeginScope")]
+        [Fact(DisplayName = "Scopes: BeginScope")]
         public void BeginScope()
         {
             var validation =
@@ -62,10 +61,14 @@ namespace Dawn.Tests
                 // Inner with propagation
                 id = 0;
                 lastId = id;
+                var disposers = new List<Task>();
                 for (var i = 0; i < 5; i++)
                 {
                     if (i == 3)
-                        Guard.BeginScope(null); // Should have no effect.
+                    {
+                        var nonScope = Guard.BeginScope(null); // Should have no effect.
+                        disposers.Add(Delay().ContinueWith(_ => nonScope.Dispose())); // Test empty disposable.
+                    }
 
                     Exception innerIntercepted = null;
                     using (Guard.BeginScope((ex, stackTrace) =>
@@ -126,6 +129,8 @@ namespace Dawn.Tests
                         id -= 3;
                     }
                 }
+
+                await Task.WhenAll(disposers).ConfigureAwait(false);
             };
 
             void Test(ref Exception intercepted)
@@ -145,5 +150,3 @@ namespace Dawn.Tests
         }
     }
 }
-
-#endif

@@ -5,7 +5,7 @@
 
     public sealed class EqualityTests : BaseTests
     {
-        [Theory(DisplayName = T + "Equality: Default/NotDefault")]
+        [Theory(DisplayName = "Equality: Default/NotDefault")]
         [InlineData(null, null)]
         [InlineData(0, 1)]
         public void Default(int? @default, int? nonDefault)
@@ -50,7 +50,7 @@
                 (arg, message) => arg.NotDefault(message));
         }
 
-        [Theory(DisplayName = T + "Equality: Equal/NotEqual w/o comparer")]
+        [Theory(DisplayName = "Equality: Equal/NotEqual w/o comparer")]
         [InlineData(null, null, null, false)]
         [InlineData("AB", "AB", "BC", false)]
         [InlineData("AB", "AB", "BC", true)]
@@ -85,7 +85,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Equality: Equal/NotEqual w/ comparer")]
+        [Theory(DisplayName = "Equality: Equal/NotEqual w/ comparer")]
         [InlineData(null, null, null, StringComparison.Ordinal, false)]
         [InlineData("AB", "AB", "ab", StringComparison.Ordinal, false)]
         [InlineData("AB", "AB", "ab", StringComparison.Ordinal, true)]
@@ -130,7 +130,7 @@
                 }));
         }
 
-        [Fact(DisplayName = T + "Equality: Same/NotSame")]
+        [Fact(DisplayName = "Equality: Same/NotSame")]
         public void Same()
         {
             Test(null, null, null, false);
