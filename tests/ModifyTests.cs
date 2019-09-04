@@ -5,7 +5,7 @@
 
     public sealed class ModifyTests : BaseTests
     {
-        [Fact(DisplayName = T + "Modify: Modify using value")]
+        [Fact(DisplayName = "Modify: Modify using value")]
         public void ModifyUsingValue()
         {
             for (var i = 0; i < 2; i++)
@@ -22,7 +22,7 @@
             }
         }
 
-        [Fact(DisplayName = T + "Modify: Modify using converter")]
+        [Fact(DisplayName = "Modify: Modify using converter")]
         public void ModifyUsingConverter()
         {
             for (var i = 0; i < 2; i++)
@@ -42,7 +42,7 @@
             }
         }
 
-        [Fact(DisplayName = T + "Modify: Wrap factory")]
+        [Fact(DisplayName = "Modify: Wrap factory")]
         public void Wrap()
         {
             var stringValue = 1.ToString();
@@ -68,8 +68,7 @@
             }
         }
 
-#if !NETCOREAPP1_0
-        [Fact(DisplayName = T + "Modify: Clone")]
+        [Fact(DisplayName = "Modify: Clone")]
         public void GuardSupportsCloning()
         {
             var cloneable = new TestCloneable();
@@ -110,6 +109,5 @@
 
             public object Clone() => new TestCloneable(true);
         }
-#endif
     }
 }

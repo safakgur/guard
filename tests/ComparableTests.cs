@@ -4,7 +4,7 @@
 
     public sealed class ComparableTests : BaseTests
     {
-        [Theory(DisplayName = T + "Comparable: Min")]
+        [Theory(DisplayName = "Comparable: Min")]
         [InlineData(null, 3, 4)]
         [InlineData(3, 3, 4)]
         [InlineData(3, 2, 5)]
@@ -39,7 +39,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Comparable: Max")]
+        [Theory(DisplayName = "Comparable: Max")]
         [InlineData(null, 3, 2)]
         [InlineData(3, 3, 2)]
         [InlineData(3, 4, 1)]
@@ -74,7 +74,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Comparable: InRange")]
+        [Theory(DisplayName = "Comparable: InRange")]
         [InlineData(null, 2, 4)]
         [InlineData(3, 2, 4)]
         [InlineData(3, 1, 5)]
@@ -130,7 +130,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "Comparable: Zero/NotZero")]
+        [Theory(DisplayName = "Comparable: Zero/NotZero")]
         [InlineData(null, null)]
         [InlineData(0, -1)]
         [InlineData(0, 1)]
@@ -176,7 +176,7 @@
                 (arg, message) => arg.NotZero(message));
         }
 
-        [Theory(DisplayName = T + "Comparable: Positive/NotPositive")]
+        [Theory(DisplayName = "Comparable: Positive/NotPositive")]
         [InlineData(null, null)]
         [InlineData(1, 0)]
         [InlineData(1, -1)]
@@ -209,8 +209,8 @@
                     return message;
                 }));
 
-            var positiveArg = Guard.Argument(positive.Value, nameof(positive));
-            var nonPositiveArg = Guard.Argument(nonPositive.Value, nameof(nonPositive));
+            var positiveArg = Guard.Argument(positive.Value, nameof(positive)).Positive();
+            var nonPositiveArg = Guard.Argument(nonPositive.Value, nameof(nonPositive)).NotPositive();
             ThrowsArgumentOutOfRangeException(
                 nonPositiveArg,
                 arg => arg.Positive(),
@@ -230,7 +230,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Comparable: Negative/NotNegative")]
+        [Theory(DisplayName = "Comparable: Negative/NotNegative")]
         [InlineData(null, null)]
         [InlineData(-1, 0)]
         [InlineData(-1, 1)]
@@ -263,8 +263,8 @@
                     return message;
                 }));
 
-            var negativeArg = Guard.Argument(negative.Value, nameof(negative));
-            var nonNegativeArg = Guard.Argument(nonNegative.Value, nameof(nonNegative));
+            var negativeArg = Guard.Argument(negative.Value, nameof(negative)).Negative();
+            var nonNegativeArg = Guard.Argument(nonNegative.Value, nameof(nonNegative)).NotNegative();
             ThrowsArgumentOutOfRangeException(
                 nonNegativeArg,
                 arg => arg.Negative(),

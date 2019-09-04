@@ -24,7 +24,7 @@
             HasNullElement = 16
         }
 
-        [Theory(DisplayName = T + "Enumerable: Empty/NotEmpty")]
+        [Theory(DisplayName = "Enumerable: Empty/NotEmpty")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
         [InlineData(CollectionOptions.Empty, CollectionOptions.NotEmpty)]
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, CollectionOptions.NotEmpty | CollectionOptions.HasCount)]
@@ -68,7 +68,7 @@
             CheckAndReset(empty, countCalled: true, enumerationCount: 0, enumerated: true);
         }
 
-        [Theory(DisplayName = T + "Enumerable: Count/NotCount")]
+        [Theory(DisplayName = "Enumerable: Count/NotCount")]
         [InlineData(null, -1, 0)]
         [InlineData("A", 1, 2)]
         public void Length(string value, int count, int nonCount)
@@ -104,7 +104,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Enumerable: MinCount")]
+        [Theory(DisplayName = "Enumerable: MinCount")]
         [InlineData(CollectionOptions.Null, 3, 3, 4)]
         [InlineData(CollectionOptions.Empty, 0, 0, 1)]
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, 0, 0, 1)]
@@ -135,7 +135,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Enumerable: MaxCount")]
+        [Theory(DisplayName = "Enumerable: MaxCount")]
         [InlineData(CollectionOptions.Null, 3, 3, 2)]
         [InlineData(CollectionOptions.Empty, 0, 0, -1)]
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, 0, 0, -1)]
@@ -166,7 +166,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Enumerable: CountInRange")]
+        [Theory(DisplayName = "Enumerable: CountInRange")]
         [InlineData(CollectionOptions.Null, 3, 2, 4)]
         [InlineData(CollectionOptions.Empty, 0, -1, 1)]
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, 0, -1, 1)]
@@ -221,7 +221,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "Enumerable: Contains/DoesNotContain")]
+        [Theory(DisplayName = "Enumerable: Contains/DoesNotContain")]
         [InlineData(CollectionOptions.Null, 3, 2, -1, false)]
         [InlineData(CollectionOptions.Empty, 0, null, 1, false)]
         [InlineData(CollectionOptions.Empty, 0, null, 1, true)]
@@ -370,7 +370,7 @@
             }
         }
 
-        [Theory(DisplayName = T + "Enumerable of class: ContainsNull/DoesNotContainNull")]
+        [Theory(DisplayName = "Enumerable of class: ContainsNull/DoesNotContainNull")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
         [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.Empty)]
         [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.Empty)]
@@ -422,7 +422,7 @@
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
         }
 
-        [Theory(DisplayName = T + "Enumerable of struct: ContainsNull/DoesNotContainNull")]
+        [Theory(DisplayName = "Enumerable of struct: ContainsNull/DoesNotContainNull")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
         [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.Empty)]
         [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.Empty)]
@@ -474,7 +474,7 @@
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
         }
 
-        [Theory(DisplayName = T + "Enumerable: In/NotIn collection")]
+        [Theory(DisplayName = "Enumerable: In/NotIn collection")]
         [InlineData(CollectionOptions.Null, 3, 2, -1, false)]
         [InlineData(CollectionOptions.Null, 3, null, null, false)]
         [InlineData(CollectionOptions.Null, 3, null, null, true)]
@@ -645,7 +645,7 @@
                 => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
         }
 
-        [Theory(DisplayName = T + "Enumerable: In/NotIn array")]
+        [Theory(DisplayName = "Enumerable: In/NotIn array")]
         [InlineData(null, null, null, false)]
         [InlineData(null, "AB,BC", "BC,DE", false)]
         [InlineData(null, "AB,BC", "BC,DE", true)]

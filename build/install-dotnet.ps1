@@ -22,4 +22,3 @@ function Install-Sdk {
 }
 
 Install-Sdk -Version "2.1.400"
-Install-Sdk -Version "1.1.9"

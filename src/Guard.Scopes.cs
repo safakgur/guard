@@ -19,6 +19,7 @@ namespace Dawn
         ///     <c>false</c> to disable propagation.
         /// </param>
         /// <returns>An object that when disposed, will end the guarding scope.</returns>
+        [GuardFunction("Scopes")]
         public static IDisposable BeginScope(Action<Exception, StackTrace> exceptionInterceptor, bool propagates = true)
         {
             return exceptionInterceptor != null || !propagates

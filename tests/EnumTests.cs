@@ -5,7 +5,7 @@
 
     public sealed class EnumTests : BaseTests
     {
-        [Theory(DisplayName = T + "Enum: Defined")]
+        [Theory(DisplayName = "Enum: Defined")]
         [InlineData(null, null)]
         [InlineData(Colors.Red, Colors.All + 1)]
         public void Defined(Colors? defined, Colors? undefined)
@@ -39,7 +39,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "Enum: HasFlag/DoesNotHaveFlag")]
+        [Theory(DisplayName = "Enum: HasFlag/DoesNotHaveFlag")]
         [InlineData(null, Colors.All, Colors.All, false)]
         [InlineData(Colors.Red, Colors.None, Colors.Green, false)]
         [InlineData(Colors.Red, Colors.None, Colors.Green, true)]

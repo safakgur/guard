@@ -15,7 +15,7 @@
 
         private const string RelativeUriString = "/safakgur/guard";
 
-        [Theory(DisplayName = T + "URI: Absolute/Relative")]
+        [Theory(DisplayName = "URI: Absolute/Relative")]
         [InlineData(null, null)]
         [InlineData(HttpsUriString, RelativeUriString)]
         public void Kind(string absoluteUriString, string relativeUriString)
@@ -52,7 +52,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "URI: Scheme")]
+        [Theory(DisplayName = "URI: Scheme")]
         [InlineData(null, null, null)]
         [InlineData(HttpsUriScheme, HttpsUriString, RelativeUriString)]
         [InlineData(HttpsUriScheme, HttpsUriString, HttpUriString)]
@@ -94,7 +94,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "URI: HTTP")]
+        [Theory(DisplayName = "URI: HTTP")]
         [InlineData(null, null)]
         [InlineData(HttpUriString, RelativeUriString)]
         [InlineData(HttpUriString, HttpsUriString)]
@@ -122,7 +122,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "URI: HTTP/S")]
+        [Theory(DisplayName = "URI: HTTP/S")]
         [InlineData(null, null)]
         [InlineData(HttpUriString, RelativeUriString)]
         [InlineData(HttpsUriString, RelativeUriString)]
@@ -160,7 +160,7 @@
                 }));
         }
 
-        [Theory(DisplayName = T + "URI: HTTPS")]
+        [Theory(DisplayName = "URI: HTTPS")]
         [InlineData(null, null)]
         [InlineData(HttpsUriString, RelativeUriString)]
         [InlineData(HttpsUriString, HttpUriString)]

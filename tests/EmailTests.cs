@@ -1,6 +1,4 @@
-﻿#if !NETCOREAPP1_0
-
-namespace Dawn.Tests
+﻿namespace Dawn.Tests
 {
     using System;
     using System.Collections;
@@ -11,7 +9,7 @@ namespace Dawn.Tests
 
     public sealed class EmailTests : BaseTests
     {
-        [Theory(DisplayName = T + "Email: HasHost/DoesNotHaveHost")]
+        [Theory(DisplayName = "Email: HasHost/DoesNotHaveHost")]
         [InlineData(null, "A", "B", false)]
         [InlineData("a@b.c", "b.c", "c.b", false)]
         [InlineData("a@b.c", "b.c", "c.b", true)]
@@ -51,7 +49,7 @@ namespace Dawn.Tests
                 }));
         }
 
-        [Theory(DisplayName = T + "Email: HostIn/HostNotIn")]
+        [Theory(DisplayName = "Email: HostIn/HostNotIn")]
         [InlineData(null, "A;B", "C;D", false, false)]
         [InlineData(null, "A;B", "C;D", true, false)]
         [InlineData(null, "A;B", "C;D", true, true)]
@@ -131,7 +129,7 @@ namespace Dawn.Tests
                 => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
         }
 
-        [Theory(DisplayName = T + "Email: HasDisplayName/DoesNotHaveDisplayName")]
+        [Theory(DisplayName = "Email: HasDisplayName/DoesNotHaveDisplayName")]
         [InlineData(null, null)]
         [InlineData("A <a@b.c>", "a@b.c")]
         public void HasDisplayName(string stringWithDisplayName, string stringWithoutDisplayName)
@@ -180,5 +178,3 @@ namespace Dawn.Tests
         }
     }
 }
-
-#endif

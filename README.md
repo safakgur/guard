@@ -6,7 +6,8 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 
 [![NuGet](https://img.shields.io/nuget/v/Dawn.Guard.svg?style=flat)](https://www.nuget.org/packages/Dawn.Guard/)
 [![Build](https://dev.azure.com/safakgur/Guard/_apis/build/status/Guard-CI?label=builds)](https://dev.azure.com/safakgur/Guard/_build/latest?definitionId=1)
-[![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)
+[![Coverage](https://codecov.io/gh/safakgur/guard/branch/dev/graph/badge.svg)](https://codecov.io/gh/safakgur/guard/branch/dev)  
+`$ dotnet add package Dawn.Guard` / `PM> Install-Package Dawn.Guard`
 
 * [Introduction](#introduction)
 * [What's Wrong with Vanilla?](#whats-wrong-with-vanilla)
@@ -86,18 +87,19 @@ have `<LangVersion>7.2</LangVersion>` or later added in your .csproj file.
 versions as .NET Standard 1.0 compliant but keep in mind that currently, the unit tests are only
 targeting .NET Core 1.0 and 2.0.
 
-| Platform                   | Version |
-| -------------------------- | ------- |
-| .NET Core                  | `1.0`   |
-| .NET Framework             | `4.5`   |
-| Mono                       | `4.6`   |
-| Xamarin.iOS                | `10.0`  |
-| Xamarin.Mac                | `3.0`   |
-| Xamarin.Android            | `7.0`   |
-| Universal Windows Platform | `10.0`  |
-| Windows                    | `8.0`   |
-| Windows Phone              | `8.1`   |
-| Windows Phone Silverlight  | `8.0`   |
+| Platform                   | Version  |
+| -------------------------- | -------- |
+| .NET Core                  | `1.0`    |
+| .NET Framework             | `4.5`    |
+| Mono                       | `4.6`    |
+| Xamarin.iOS                | `10.0`   |
+| Xamarin.Mac                | `3.0`    |
+| Xamarin.Android            | `7.0`    |
+| Universal Windows Platform | `10.0`   |
+| Windows                    | `8.0`    |
+| Windows Phone              | `8.1`    |
+| Windows Phone Silverlight  | `8.0`    |
+| Unity                      | `2018.1` |
 
 ## More
 
@@ -122,15 +124,6 @@ advanced features.
 
 Code snippets can be found in the [snippets][5] folder. Currently, only the Visual Studio is
 supported.
-
-### What's Next
-
-Right now the following are on the horizon:
-
-* More validations
-* Roslyn analyzers & code fixes
-* Online documentation
-* Performance benchmarks
 
 [1]: docs/design-decisions.md
 [2]: https://docs.microsoft.com/dotnet/standard/net-standard
