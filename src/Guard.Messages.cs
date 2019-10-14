@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Collections;
@@ -16,12 +18,12 @@
     {
         private static class Messages
         {
-            public static string State(string caller)
+            public static string State(string? caller)
                 => caller != null
                     ? $"{caller} call is not valid due to the current state of the object."
                     : "Operation is not valid due to the current state of the object.";
 
-            public static string Support(string caller)
+            public static string Support(string? caller)
                 => caller != null ? $"{caller} is not supported" : "Specified method is not supported.";
 
             public static string Disposal()
@@ -40,10 +42,10 @@
                 => $"{name1}, {name2} and {name3} cannot all be null.";
 
             public static string Default<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} must be {default(T)}.";
+                => $"{argument.Name} must be {default(T)!}.";
 
             public static string NotDefault<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} cannot be {default(T)}.";
+                => $"{argument.Name} cannot be {default(T)!}.";
 
             public static string Equal<T>(in ArgumentInfo<T> argument, in T other)
                 => argument.Secure ? Require(argument) : $"{argument.Name} must be {ToString(other)}.";
@@ -277,7 +279,7 @@
 
 #endif
 
-            private static string ToString(object obj) => obj?.ToString() ?? "null";
+            private static string ToString(object? obj) => obj?.ToString() ?? "null";
 
             private static string Join(IEnumerable collection)
             {
