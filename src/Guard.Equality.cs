@@ -1,7 +1,10 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
     using JetBrains.Annotations;
@@ -24,7 +27,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "gd")]
         public static ref readonly ArgumentInfo<T> Default<T>(
-            in this ArgumentInfo<T> argument, Func<T, string> message = null)
+            in this ArgumentInfo<T> argument, Func<T, string>? message = null)
             where T : struct
         {
             if (!EqualityComparer<T>.Default.Equals(argument.Value, default))
@@ -55,12 +58,12 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "gd")]
         public static ref readonly ArgumentInfo<T?> Default<T>(
-            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
+            in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (!EqualityComparer<T>.Default.Equals(value, default))
                 {
                     var m = message?.Invoke(value) ?? Messages.Default(argument);
@@ -87,6 +90,7 @@
         [AssertionMethod]
         [DebuggerStepThrough]
         [Obsolete("Use the NotDefault overload that accepts the message as a string.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static ref readonly ArgumentInfo<T> NotDefault<T>(
             in this ArgumentInfo<T> argument, Func<T, string> message)
             where T : struct
@@ -116,7 +120,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "gnd")]
         public static ref readonly ArgumentInfo<T> NotDefault<T>(
-            in this ArgumentInfo<T> argument, string message = null)
+            in this ArgumentInfo<T> argument, string? message = null)
             where T : struct
         {
             if (EqualityComparer<T>.Default.Equals(argument.Value, default))
@@ -144,12 +148,12 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "gnd")]
         public static ref readonly ArgumentInfo<T?> NotDefault<T>(
-            in this ArgumentInfo<T?> argument, string message = null)
+            in this ArgumentInfo<T?> argument, string? message = null)
             where T : struct
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (EqualityComparer<T>.Default.Equals(value, default))
                 {
                     var m = message ?? Messages.NotDefault(argument);
@@ -177,8 +181,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "geq")]
         public static ref readonly ArgumentInfo<T> Equal<T>(
-            in this ArgumentInfo<T> argument, in T other, Func<T, T, string> message = null)
-            => ref argument.Equal(other, null, message);
+            in this ArgumentInfo<T> argument, in T other, Func<T, T, string>? message = null)
+            => ref argument.Equal(other, null!, message);
 
         /// <summary>Requires the argument to have the specified value.</summary>
         /// <typeparam name="T">The type of the equatable argument.</typeparam>
@@ -201,7 +205,7 @@
             in this ArgumentInfo<T> argument,
             in T other,
             IEqualityComparer<T> comparer,
-            Func<T, T, string> message = null)
+            Func<T, T, string>? message = null)
         {
             if (argument.HasValue() && !(comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
@@ -231,8 +235,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "gneq")]
         public static ref readonly ArgumentInfo<T> NotEqual<T>(
-            in this ArgumentInfo<T> argument, in T other, Func<T, string> message = null)
-            => ref argument.NotEqual(other, null, message);
+            in this ArgumentInfo<T> argument, in T other, Func<T, string>? message = null)
+            => ref argument.NotEqual(other, null!, message);
 
         /// <summary>
         ///     Requires the argument to have a value that is different than the specified value.
@@ -257,7 +261,7 @@
             in this ArgumentInfo<T> argument,
             in T other,
             IEqualityComparer<T> comparer,
-            Func<T, string> message = null)
+            Func<T, string>? message = null)
         {
             if (argument.HasValue() && (comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
@@ -284,7 +288,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "gs")]
         public static ref readonly ArgumentInfo<T> Same<T>(
-            in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
+            in this ArgumentInfo<T> argument, object other, Func<T, object, string>? message = null)
             where T : class
         {
             if (argument.HasValue() && !ReferenceEquals(argument.Value, other))
@@ -314,7 +318,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Equality", "gns")]
         public static ref readonly ArgumentInfo<T> NotSame<T>(
-            in this ArgumentInfo<T> argument, object other, Func<T, object, string> message = null)
+            in this ArgumentInfo<T> argument, object other, Func<T, object, string>? message = null)
             where T : class
         {
             if (argument.HasValue() && ReferenceEquals(argument.Value, other))

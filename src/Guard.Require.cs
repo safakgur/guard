@@ -1,7 +1,10 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq.Expressions;
     using JetBrains.Annotations;
 
@@ -23,7 +26,7 @@
             [ContractAnnotation("condition:false => halt")]
             [DebuggerStepThrough]
             [GuardFunction("Predicate", "greq")]
-            public ArgumentInfo<T> Require(bool condition, Func<T, string> message = null)
+            public ArgumentInfo<T> Require(bool condition, Func<T, string>? message = null)
                 => this.Require<ArgumentException>(condition, message);
 
             /// <summary>
@@ -48,7 +51,7 @@
             [DebuggerStepThrough]
             [GuardFunction("Predicate", "greqe")]
             public ArgumentInfo<T> Require<TException>(
-                bool condition, Func<T, string> message = null)
+                bool condition, Func<T, string>? message = null)
                 where TException : Exception
             {
                 if (this.HasValue() && !condition)
@@ -73,7 +76,7 @@
             [AssertionMethod]
             [DebuggerStepThrough]
             [GuardFunction("Predicate", "greq")]
-            public ArgumentInfo<T> Require(Func<T, bool> predicate, Func<T, string> message = null)
+            public ArgumentInfo<T> Require(Func<T, bool> predicate, Func<T, string>? message = null)
                 => this.Require<ArgumentException>(predicate, message);
 
             /// <summary>
@@ -97,7 +100,7 @@
             [DebuggerStepThrough]
             [GuardFunction("Predicate", "greqe")]
             public ArgumentInfo<T> Require<TException>(
-                Func<T, bool> predicate, Func<T, string> message = null)
+                Func<T, bool> predicate, Func<T, string>? message = null)
                 where TException : Exception
             {
                 if (this.HasValue() && predicate?.Invoke(this.Value) == false)
@@ -130,22 +133,22 @@
                 var type = typeof(T);
                 if (type == typeof(ArgumentException))
                     return (paramName, message) =>
-                        new ArgumentException(message, paramName) as T;
+                        (new ArgumentException(message, paramName) as T)!;
 
                 if (type.IsSubclassOf(typeof(ArgumentException)))
                 {
-                    if (TryGetFactoryWithTwoStringArguments(out var two))
+                    if (TryGetFactoryWithTwoStringArguments(type, out var two))
                         return two;
 
-                    if (TryGetFactoryWithOneStringArgument(out var one))
+                    if (TryGetFactoryWithOneStringArgument(type, out var one))
                         return (paramName, message) => one(paramName);
                 }
-                else if (TryGetFactoryWithOneStringArgument(out var one))
+                else if (TryGetFactoryWithOneStringArgument(type, out var one))
                 {
                     return (paramName, message) => one(message);
                 }
 
-                if (TryGetFactoryWithNoArguments(out var none))
+                if (TryGetFactoryWithNoArguments(type, out var none))
                     return (paramName, message) => none();
                 else
                     return (paramName, message) =>
@@ -153,56 +156,59 @@
                         var x = new ArgumentException(message, paramName);
                         throw new ArgumentException($"An instance of {type} cannot be initialized.", x);
                     };
+            }
 
-                bool TryGetFactoryWithTwoStringArguments(out Func<string, string, T> factory)
+            private static bool TryGetFactoryWithTwoStringArguments(
+                Type type, [NotNullWhen(true)] out Func<string, string, T>? factory)
+            {
+                var ctor = type.GetConstructor(new[] { typeof(string), typeof(string) });
+                if (ctor != null)
                 {
-                    var ctor = type.GetConstructor(new[] { typeof(string), typeof(string) });
-                    if (ctor != null)
+                    var args = new[]
                     {
-                        var args = new[]
-                        {
                             Expression.Parameter(typeof(string), "arg1"),
                             Expression.Parameter(typeof(string), "arg2")
                         };
 
-                        factory = Expression.Lambda<Func<string, string, T>>(
-                            Expression.New(ctor, args), args).Compile();
+                    factory = Expression.Lambda<Func<string, string, T>>(
+                        Expression.New(ctor, args), args).Compile();
 
-                        return true;
-                    }
-
-                    factory = null;
-                    return false;
+                    return true;
                 }
 
-                bool TryGetFactoryWithOneStringArgument(out Func<string, T> factory)
+                factory = null;
+                return false;
+            }
+
+            private static bool TryGetFactoryWithOneStringArgument(
+                Type type, [NotNullWhen(true)] out Func<string, T>? factory)
+            {
+                var ctor = type.GetConstructor(new[] { typeof(string) });
+                if (ctor != null)
                 {
-                    var ctor = type.GetConstructor(new[] { typeof(string) });
-                    if (ctor != null)
-                    {
-                        var arg = Expression.Parameter(typeof(string), "message");
-                        factory = Expression.Lambda<Func<string, T>>(
-                            Expression.New(ctor, arg), arg).Compile();
+                    var arg = Expression.Parameter(typeof(string), "message");
+                    factory = Expression.Lambda<Func<string, T>>(
+                        Expression.New(ctor, arg), arg).Compile();
 
-                        return true;
-                    }
-
-                    factory = null;
-                    return false;
+                    return true;
                 }
 
-                bool TryGetFactoryWithNoArguments(out Func<T> factory)
+                factory = null;
+                return false;
+            }
+
+            private static bool TryGetFactoryWithNoArguments(
+                Type type, [NotNullWhen(true)] out Func<T>? factory)
+            {
+                var ctor = type.GetConstructor(Array<Type>.Empty);
+                if (ctor != null)
                 {
-                    var ctor = type.GetConstructor(Array<Type>.Empty);
-                    if (ctor != null)
-                    {
-                        factory = Expression.Lambda<Func<T>>(Expression.New(ctor)).Compile();
-                        return true;
-                    }
-
-                    factory = null;
-                    return false;
+                    factory = Expression.Lambda<Func<T>>(Expression.New(ctor)).Compile();
+                    return true;
                 }
+
+                factory = null;
+                return false;
             }
         }
     }

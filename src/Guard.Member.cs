@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Collections.Generic;
@@ -36,7 +38,7 @@
             in this ArgumentInfo<T> argument,
             Expression<Func<T, TMember>> member,
             Action<ArgumentInfo<TMember>> validation,
-            Func<T, TMember, Exception, string> message = null)
+            Func<T, TMember, Exception, string>? message = null)
             => ref argument.Member(member, validation, false, message);
 
         /// <summary>Requires a member of the argument to satisfy specified preconditions.</summary>
@@ -72,7 +74,7 @@
             Expression<Func<T, TMember>> member,
             Action<ArgumentInfo<TMember>> validation,
             bool validatesRange,
-            Func<T, TMember, Exception, string> message = null)
+            Func<T, TMember, Exception, string>? message = null)
         {
             if (argument.HasValue() && member != null && validation != null)
             {
@@ -141,7 +143,7 @@
             in this ArgumentInfo<T?> argument,
             Expression<Func<T, TMember>> member,
             Action<ArgumentInfo<TMember>> validation,
-            Func<T, TMember, Exception, string> message = null)
+            Func<T, TMember, Exception, string>? message = null)
             where T : struct
             => ref argument.Member(member, validation, false, message);
 
@@ -178,7 +180,7 @@
             Expression<Func<T, TMember>> member,
             Action<ArgumentInfo<TMember>> validation,
             bool validatesRange,
-            Func<T, TMember, Exception, string> message = null)
+            Func<T, TMember, Exception, string>? message = null)
             where T : struct
         {
             if (argument.HasValue() && member != null && validation != null)
@@ -198,7 +200,7 @@
                 TMember memberValue;
                 try
                 {
-                    memberValue = info.GetValue(argument.Value.Value);
+                    memberValue = info.GetValue(argument.GetValueOrDefault());
                 }
                 catch (Exception ex)
                 {
@@ -214,7 +216,7 @@
                 }
                 catch (Exception ex)
                 {
-                    var m = message?.Invoke(argument.Value.Value, memberValue, ex) ?? ex.Message;
+                    var m = message?.Invoke(argument.GetValueOrDefault(), memberValue, ex) ?? ex.Message;
                     throw Fail(!validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
                         : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m));
@@ -247,7 +249,7 @@
             /// </exception>
             public static ArgumentMemberInfo<T, TMember> GetMemberInfo<T, TMember>(Expression<Func<T, TMember>> lexp)
             {
-                Node node = null;
+                Node? node = null;
 
                 var exp = lexp.Body;
                 while (exp is MemberExpression e)
@@ -273,7 +275,7 @@
                             sourceLock.EnterWriteLock();
                             try
                             {
-                                node = new Node(node, e.Member);
+                                node = new Node();
                                 source[e.Member] = node;
                             }
                             finally
@@ -296,6 +298,7 @@
                     throw new ArgumentException(m, nameof(lexp));
                 }
 
+#pragma warning disable IDE0019 // Use pattern matching
                 node.Lock.EnterUpgradeableReadLock();
                 try
                 {
@@ -305,7 +308,7 @@
                         node.Lock.EnterWriteLock();
                         try
                         {
-                            info = new ArgumentMemberInfo<T, TMember>(lexp.Body as MemberExpression, lexp.Compile());
+                            info = new ArgumentMemberInfo<T, TMember>((lexp.Body as MemberExpression)!, lexp.Compile());
                             node.Info = info;
                         }
                         finally
@@ -320,17 +323,14 @@
                 {
                     node.Lock.ExitUpgradeableReadLock();
                 }
+#pragma warning restore IDE0019 // Use pattern matching
             }
 
             /// <summary>Represents a node in a tree of members.</summary>
             private sealed class Node
             {
                 /// <summary>Initializes a new instance of the <see cref="Node" /> class.</summary>
-                /// <param name="child">
-                ///     The member of which the current member is the owner of.
-                /// </param>
-                /// <param name="member">The member that this node represents.</param>
-                public Node(Node child, MemberInfo member)
+                public Node()
                 {
                     this.Owners = new Dictionary<MemberInfo, Node>(1);
                     this.Lock = new ReaderWriterLockSlim();
@@ -343,7 +343,7 @@
                 public ReaderWriterLockSlim Lock { get; }
 
                 /// <summary>Gets or sets the argument member that the current node represents.</summary>
-                public ArgumentMemberInfo Info { get; set; }
+                public ArgumentMemberInfo? Info { get; set; }
             }
         }
 
