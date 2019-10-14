@@ -141,51 +141,49 @@
             bool doNotTestScoping = false)
             where TException : ArgumentException
         {
-            using (var scope = new Scope(doNotTestScoping))
+            using var scope = new Scope(doNotTestScoping);
+            var isBase = typeof(TException) == typeof(ArgumentException);
+            if (!isBase && argument.Modified)
             {
-                var isBase = typeof(TException) == typeof(ArgumentException);
-                if (!isBase && argument.Modified)
-                {
-                    var result = ThrowsArgumentException<TArgument, ArgumentException>(
-                        argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+                var result = ThrowsArgumentException<TArgument, ArgumentException>(
+                    argument, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
 
-                    return new[] { result[0] as TException, result[1] as TException };
-                }
-
-                var exWithoutMessage = Assert.Throws<TException>(
-                    argument.Name,
-                    () => testWithoutMessage(argument));
-
-                scope.CheckException(exWithoutMessage);
-
-                if (exWithoutMessage is ArgumentOutOfRangeException rangeExWithoutMessage)
-                    Assert.Equal(argument.Secure, rangeExWithoutMessage.ActualValue == null);
-
-                if (testGeneratedMessage != null)
-                    Assert.True(testGeneratedMessage(exWithoutMessage.Message));
-
-                var message = RandomMessage;
-                var exWithMessage = Assert.Throws<TException>(
-                    argument.Name,
-                    () => testWithMessage(argument, message));
-
-                scope.CheckException(exWithMessage);
-
-                if (exWithMessage is ArgumentOutOfRangeException rangeExWithMessage)
-                    Assert.Equal(argument.Secure, rangeExWithMessage.ActualValue == null);
-
-                if (!allowMessageMismatch)
-                    Assert.StartsWith(message, exWithMessage.Message);
-
-                if (!isBase)
-                {
-                    var modified = argument.Modify(argument.Value);
-                    ThrowsArgumentException(
-                        modified, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
-                }
-
-                return new[] { exWithoutMessage, exWithMessage };
+                return new[] { result[0] as TException, result[1] as TException };
             }
+
+            var exWithoutMessage = Assert.Throws<TException>(
+                argument.Name,
+                () => testWithoutMessage(argument));
+
+            scope.CheckException(exWithoutMessage);
+
+            if (exWithoutMessage is ArgumentOutOfRangeException rangeExWithoutMessage)
+                Assert.Equal(argument.Secure, rangeExWithoutMessage.ActualValue == null);
+
+            if (testGeneratedMessage != null)
+                Assert.True(testGeneratedMessage(exWithoutMessage.Message));
+
+            var message = RandomMessage;
+            var exWithMessage = Assert.Throws<TException>(
+                argument.Name,
+                () => testWithMessage(argument, message));
+
+            scope.CheckException(exWithMessage);
+
+            if (exWithMessage is ArgumentOutOfRangeException rangeExWithMessage)
+                Assert.Equal(argument.Secure, rangeExWithMessage.ActualValue == null);
+
+            if (!allowMessageMismatch)
+                Assert.StartsWith(message, exWithMessage.Message);
+
+            if (!isBase)
+            {
+                var modified = argument.Modify(argument.Value);
+                ThrowsArgumentException(
+                    modified, testWithoutMessage, testGeneratedMessage, testWithMessage, allowMessageMismatch);
+            }
+
+            return new[] { exWithoutMessage, exWithMessage };
         }
 
         protected static void ThrowsException<T, TException>(

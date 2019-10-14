@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Linq;
@@ -58,7 +60,7 @@
         ///     The type from which the <paramref name="type" /> directly inherits, if there is one;
         ///     otherwise, <c>null</c>.
         /// </returns>
-        private static Type GetBaseType(this Type type)
+        private static Type? GetBaseType(this Type type)
         {
 #if NETSTANDARD1_0
             return type.GetTypeInfo().BaseType;
@@ -74,7 +76,7 @@
         ///     The getter of the property with the specified name, if it can be found in
         ///     <paramref name="type" />; otherwise, <c>null</c>.
         /// </returns>
-        private static MethodInfo GetPropertyGetter(this Type type, string name)
+        private static MethodInfo? GetPropertyGetter(this Type type, string name)
         {
 #if NETSTANDARD1_0
             return type.GetTypeInfo().GetDeclaredProperty(name)?.GetMethod;
@@ -84,7 +86,7 @@
         }
 
 #if NETSTANDARD1_0
-        private static Type GetNestedType(this Type type, string name)
+        private static Type? GetNestedType(this Type type, string name)
             => type.GetTypeInfo().DeclaredNestedTypes.FirstOrDefault(t => t.Name == name)?.AsType();
 
         private static Type[] GetGenericArguments(this Type type)
@@ -130,6 +132,23 @@ namespace System.Runtime.InteropServices
     [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
     public sealed class InAttribute : Attribute
     {
+    }
+}
+#endif
+
+#if NETSTANDARD1_0 || NETSTANDARD2_0
+namespace System.Diagnostics.CodeAnalysis
+{
+    /// <summary>Required for reference nullability annotations.</summary>
+    [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
+    public sealed class NotNullWhenAttribute : Attribute
+    {
+        /// <summary>Initializes a new instance of the <see cref="NotNullWhenAttribute" /> class.</summary>
+        /// <param name="returnValue">If the method returns this value, the associated parameter will not be null.</param>
+        public NotNullWhenAttribute(bool returnValue) => this.ReturnValue = returnValue;
+
+        /// <summary>Gets the return value condition.</summary>
+        public bool ReturnValue { get; }
     }
 }
 #endif

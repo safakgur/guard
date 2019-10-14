@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Diagnostics;
@@ -72,7 +74,7 @@
         public static ArgumentInfo<TTarget> Wrap<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument,
             Func<TSource, TTarget> convert,
-            Func<TSource, string> message = null)
+            Func<TSource, string>? message = null)
         {
             Argument(convert, nameof(convert)).NotNull();
             try
@@ -98,13 +100,13 @@
         [DebuggerStepThrough]
         [GuardFunction("Normalization", "gclone")]
         public static ArgumentInfo<T> Clone<T>(in this ArgumentInfo<T> argument)
-            where T : class, ICloneable
+            where T : class, ICloneable?
         {
             if (!argument.HasValue())
                 return argument;
 
-            return new ArgumentInfo<T>(
-                argument.Value.Clone() as T, argument.Name, argument.Modified, argument.Secure);
+            var clone = argument.Value!.Clone() as T;
+            return new ArgumentInfo<T>(clone!, argument.Name, argument.Modified, argument.Secure);
         }
 
 #endif

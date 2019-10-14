@@ -951,31 +951,18 @@
         /// <returns>A string equality comparer.</returns>
         private static IEqualityComparer<string> StringEqualityComparer(StringComparison comparison)
         {
-            switch (comparison)
+            return comparison switch
             {
-                case StringComparison.CurrentCulture:
-                    return StringComparer.CurrentCulture;
-
-                case StringComparison.CurrentCultureIgnoreCase:
-                    return StringComparer.CurrentCultureIgnoreCase;
-
+                StringComparison.CurrentCulture => StringComparer.CurrentCulture,
+                StringComparison.CurrentCultureIgnoreCase => StringComparer.CurrentCultureIgnoreCase,
 #if !NETSTANDARD1_0
-                case StringComparison.InvariantCulture:
-                    return StringComparer.InvariantCulture;
-
-                case StringComparison.InvariantCultureIgnoreCase:
-                    return StringComparer.InvariantCultureIgnoreCase;
+                StringComparison.InvariantCulture => StringComparer.InvariantCulture,
+                StringComparison.InvariantCultureIgnoreCase => StringComparer.InvariantCultureIgnoreCase,
 #endif
-
-                case StringComparison.Ordinal:
-                    return StringComparer.Ordinal;
-
-                case StringComparison.OrdinalIgnoreCase:
-                    return StringComparer.OrdinalIgnoreCase;
-
-                default:
-                    return EqualityComparer<string>.Default;
-            }
+                StringComparison.Ordinal => StringComparer.Ordinal,
+                StringComparison.OrdinalIgnoreCase => StringComparer.OrdinalIgnoreCase,
+                _ => EqualityComparer<string>.Default,
+            };
         }
     }
 }

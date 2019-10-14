@@ -44,12 +44,10 @@
                     g.SelectMany(p => VisualStudioSnippet.CreateSnippets(p.Key, p.Value)));
 
                 var document = VisualStudioSnippet.CreateDocument(snippets);
-                using (var file = File.Create(Path.Combine(directory, name)))
-                using (var writer = new StreamWriter(file, Encoding))
-                {
-                    await document.SaveAsync(writer, SaveOptions.None, ct).ConfigureAwait(false);
-                    Console.WriteLine($"Created \"{file.Name}\"");
-                }
+                using var file = File.Create(Path.Combine(directory, name));
+                using var writer = new StreamWriter(file, Encoding);
+                await document.SaveAsync(writer, SaveOptions.None, ct).ConfigureAwait(false);
+                Console.WriteLine($"Created \"{file.Name}\"");
             }
         }
 
