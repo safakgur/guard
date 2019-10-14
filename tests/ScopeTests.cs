@@ -133,7 +133,7 @@
                 await Task.WhenAll(disposers).ConfigureAwait(false);
             };
 
-            void Test(ref Exception intercepted)
+            static void Test(ref Exception intercepted)
             {
                 try
                 {
@@ -145,7 +145,7 @@
                 }
             }
 
-            Task Delay()
+            static Task Delay()
                 => Task.Delay(RandomUtils.Current.Next(10, 20));
         }
     }
