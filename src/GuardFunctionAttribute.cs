@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +23,7 @@
         ///     <paramref name="shortcut" /> does not start with "g", <paramref name="shortcut" />
         ///     does starts with "gx" or <paramref name="shortcut" /> is shorter than two characters.
         /// </exception>
-        public GuardFunctionAttribute(string group, string shortcut = null, int order = 0)
+        public GuardFunctionAttribute(string group, string? shortcut = null, int order = 0)
         {
             this.Group = Guard.Argument(group, nameof(group))
                 .NotNull()

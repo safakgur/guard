@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Collections.Generic;
@@ -29,7 +31,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Type")]
         public static ArgumentInfo<T> Type<T>(
-            in this ArgumentInfo<object> argument, Func<object, string> message = null)
+            in this ArgumentInfo<object> argument, Func<object, string>? message = null)
         {
             if (!TypeInfo<T>.CanBeInitializedFrom(argument.Value))
             {
@@ -61,7 +63,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Type")]
         public static ref readonly ArgumentInfo<object> NotType<T>(
-            in this ArgumentInfo<object> argument, Func<T, string> message = null)
+            in this ArgumentInfo<object> argument, Func<T, string>? message = null)
         {
             if (argument.HasValue() && TypeInfo<T>.CanBeInitializedFrom(argument.Value))
             {
@@ -89,7 +91,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Type")]
         public static ref readonly ArgumentInfo<object> Type(
-            in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
+            in this ArgumentInfo<object> argument, Type type, Func<object, Type, string>? message = null)
         {
             if (argument.HasValue() && !TypeInfo.CanBeConvertedTo(argument.Value, type))
             {
@@ -119,7 +121,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Type")]
         public static ref readonly ArgumentInfo<object> NotType(
-            in this ArgumentInfo<object> argument, Type type, Func<object, Type, string> message = null)
+            in this ArgumentInfo<object> argument, Type type, Func<object, Type, string>? message = null)
         {
             if (argument.HasValue() && TypeInfo.CanBeConvertedTo(argument.Value, type))
             {
@@ -151,7 +153,7 @@
             [AssertionMethod]
             [DebuggerStepThrough]
             [GuardFunction("Type", "gcomp")]
-            public ArgumentInfo<T> Compatible<TTarget>(Func<T, string> message = null)
+            public ArgumentInfo<T> Compatible<TTarget>(Func<T, string>? message = null)
             {
                 if (!this.HasValue() || this.Value is TTarget value)
                     return this;
@@ -178,7 +180,7 @@
             [AssertionMethod]
             [DebuggerStepThrough]
             [GuardFunction("Type", "gncomp")]
-            public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string> message = null)
+            public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string>? message = null)
             {
                 if (this.HasValue() && this.Value is TTarget value)
                 {
@@ -210,7 +212,7 @@
             [AssertionMethod]
             [DebuggerStepThrough]
             [GuardFunction("Type", "gcast")]
-            public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string> message = null)
+            public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string>? message = null)
             {
                 if (this.Value is TTarget value)
                     return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
@@ -239,7 +241,9 @@
                 var isValueType = IsValueType(targetType);
                 var isNullable = !isValueType || targetType.IsGenericType(typeof(Nullable<>));
 
-                var type = targetType;
+#pragma warning disable IDE0007 // Use implicit type
+                Type? type = targetType;
+#pragma warning restore IDE0007 // Use implicit type
                 var resultChain = new HashSet<Type>();
                 do
                 {
@@ -280,7 +284,7 @@
             /// <remarks>Calls <see cref="TypeInfo{T}.CanBeInitializedFrom" />.</remarks>
             public static bool CanBeConvertedTo(object obj, Type targetType)
             {
-                Func<object, bool> func;
+                Func<object, bool>? func;
 
                 Locker.EnterUpgradeableReadLock();
                 try
