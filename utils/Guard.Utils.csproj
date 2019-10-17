@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>8</LangVersion>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <StartupObject>Dawn.Utils.Program</StartupObject>
     <AssemblyName>Dawn.Guard.Utils</AssemblyName>
