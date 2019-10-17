@@ -235,6 +235,7 @@ namespace Dawn
         ///     value of <typeparamref name="T" />.
         /// </returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [NonGuard]
         public static T GetValueOrDefault<T>(in this ArgumentInfo<T?> argument)
             where T : struct
             => argument.Value.GetValueOrDefault();
