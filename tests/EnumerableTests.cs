@@ -21,13 +21,15 @@
 
             HasContains = 8,
 
-            HasNullElement = 16
+            HasNullElement = 16,
+
+            HasDuplicateElements = 32
         }
 
         [Theory(DisplayName = "Enumerable: Empty/NotEmpty")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
         [InlineData(CollectionOptions.Empty, CollectionOptions.NotEmpty)]
-        [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, CollectionOptions.NotEmpty | CollectionOptions.HasCount)]
+        [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, CollectionOptions.HasCount)]
         public void Empty(CollectionOptions emptyOptions, CollectionOptions nonEmptyOptions)
         {
             var empty = GetEnumerable<int>(emptyOptions);
@@ -71,7 +73,7 @@
         [Theory(DisplayName = "Enumerable: Count/NotCount")]
         [InlineData(null, -1, 0)]
         [InlineData("A", 1, 2)]
-        public void Length(string value, int count, int nonCount)
+        public void Count(string value, int count, int nonCount)
         {
             var valueArg = Guard.Argument(value.AsEnumerable(), nameof(value))
                 .Count(count)
@@ -109,9 +111,9 @@
         [InlineData(CollectionOptions.Empty, 0, 0, 1)]
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, 0, 0, 1)]
         [InlineData(CollectionOptions.NotEmpty, 3, 3, 4)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasCount, 3, 3, 4)]
+        [InlineData(CollectionOptions.HasCount, 3, 3, 4)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, 5)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasCount, 3, 2, 5)]
+        [InlineData(CollectionOptions.HasCount, 3, 2, 5)]
         public void MinCount(CollectionOptions options, int count, int countOrLess, int moreThanCount)
         {
             var enumerable = GetEnumerable<int>(options, count);
@@ -140,9 +142,9 @@
         [InlineData(CollectionOptions.Empty, 0, 0, -1)]
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, 0, 0, -1)]
         [InlineData(CollectionOptions.NotEmpty, 3, 3, 2)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasCount, 3, 3, 2)]
+        [InlineData(CollectionOptions.HasCount, 3, 3, 2)]
         [InlineData(CollectionOptions.NotEmpty, 3, 4, 1)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasCount, 3, 4, 1)]
+        [InlineData(CollectionOptions.HasCount, 3, 4, 1)]
         public void MaxCount(CollectionOptions options, int count, int countOrMore, int lessThanCount)
         {
             var enumerable = GetEnumerable<int>(options, count);
@@ -171,9 +173,9 @@
         [InlineData(CollectionOptions.Empty, 0, -1, 1)]
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, 0, -1, 1)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, 4)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasCount, 3, 2, 4)]
+        [InlineData(CollectionOptions.HasCount, 3, 2, 4)]
         [InlineData(CollectionOptions.NotEmpty, 3, 1, 5)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasCount, 3, 1, 5)]
+        [InlineData(CollectionOptions.HasCount, 3, 1, 5)]
         public void CountInRange(CollectionOptions options, int count, int lessThanCount, int moreThanCount)
         {
             var enumerable = GetEnumerable<int>(options, count);
@@ -229,12 +231,12 @@
         [InlineData(CollectionOptions.Empty | CollectionOptions.HasContains, 0, null, 1, true)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, false)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, true)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, false)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, true)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, 3, null, -1, false)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, 3, null, -1, true)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, false)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, true)]
+        [InlineData(CollectionOptions.HasContains, 3, 1, -1, false)]
+        [InlineData(CollectionOptions.HasContains, 3, 1, -1, true)]
+        [InlineData(CollectionOptions.HasNullElement, 3, null, -1, false)]
+        [InlineData(CollectionOptions.HasNullElement, 3, null, -1, true)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, false)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, true)]
         public void Contains(
             CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
         {
@@ -372,12 +374,12 @@
 
         [Theory(DisplayName = "Enumerable of class: ContainsNull/DoesNotContainNull")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.Empty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.Empty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.NotEmpty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.NotEmpty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.NotEmpty | CollectionOptions.HasContains)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.NotEmpty | CollectionOptions.HasContains)]
+        [InlineData(CollectionOptions.HasNullElement, CollectionOptions.Empty)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.Empty)]
+        [InlineData(CollectionOptions.HasNullElement, CollectionOptions.NotEmpty)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.NotEmpty)]
+        [InlineData(CollectionOptions.HasNullElement, CollectionOptions.HasContains)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.HasContains)]
         public void ContainsNullReference(
             CollectionOptions optionsWithNull, CollectionOptions optionsWithoutNull)
         {
@@ -424,12 +426,12 @@
 
         [Theory(DisplayName = "Enumerable of struct: ContainsNull/DoesNotContainNull")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.Empty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.Empty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.NotEmpty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.NotEmpty)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement, CollectionOptions.NotEmpty | CollectionOptions.HasContains)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.NotEmpty | CollectionOptions.HasContains)]
+        [InlineData(CollectionOptions.HasNullElement, CollectionOptions.Empty)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.Empty)]
+        [InlineData(CollectionOptions.HasNullElement, CollectionOptions.NotEmpty)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.NotEmpty)]
+        [InlineData(CollectionOptions.HasNullElement, CollectionOptions.HasContains)]
+        [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.HasContains)]
         public void ContainsNullValue(
             CollectionOptions optionsWithNull, CollectionOptions optionsWithoutNull)
         {
@@ -474,6 +476,140 @@
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
         }
 
+        [Theory(DisplayName = "Enumerable: DoesNotContainDuplicate")]
+        [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
+        [InlineData(CollectionOptions.HasDuplicateElements, CollectionOptions.Empty)]
+        [InlineData(CollectionOptions.HasDuplicateElements | CollectionOptions.HasCount, CollectionOptions.Empty)]
+        [InlineData(CollectionOptions.HasDuplicateElements, CollectionOptions.NotEmpty)]
+        [InlineData(CollectionOptions.HasDuplicateElements | CollectionOptions.HasCount, CollectionOptions.NotEmpty)]
+        [InlineData(CollectionOptions.HasDuplicateElements, CollectionOptions.HasCount)]
+        [InlineData(CollectionOptions.HasDuplicateElements | CollectionOptions.HasCount, CollectionOptions.HasCount)]
+        public void DoesNotContainDuplicate(
+            CollectionOptions optionsWithDuplicate, CollectionOptions optionsWithoutDuplicate)
+        {
+            var comparer = StringComparer.OrdinalIgnoreCase;
+
+            var enumerableWithDuplicate = GetEnumerable<string>(optionsWithDuplicate);
+            var enumerableWithDuplicateArg = Guard.Argument(() => enumerableWithDuplicate);
+
+            var enumerableWithoutDuplicate = GetEnumerable<string>(optionsWithoutDuplicate);
+            var enumerableWithoutDuplicateArg = Guard.Argument(() => enumerableWithoutDuplicate)
+                .DoesNotContainDuplicate()
+                .DoesNotContainDuplicate(comparer);
+
+            if (enumerableWithDuplicate is null)
+            {
+                enumerableWithDuplicateArg
+                    .DoesNotContainDuplicate()
+                    .DoesNotContainDuplicate(comparer);
+
+                return;
+            }
+
+            var duplicateItem = enumerableWithDuplicate.GroupBy(s => s).First(g => g.Count() > 1).First();
+
+            // Without Count
+            var nonGenericEnumerableWithDuplicate = new ArrayList(enumerableWithDuplicate.ToList()) as IEnumerable;
+            var nonGenericEnumerableWithDuplicateArg = Guard.Argument(() => nonGenericEnumerableWithDuplicate);
+
+            ThrowsArgumentException(
+                enumerableWithDuplicateArg,
+                arg => arg.DoesNotContainDuplicate(),
+                (arg, message) => arg.DoesNotContainDuplicate((e, item) =>
+                {
+                    Assert.Same(enumerableWithDuplicate, e);
+                    Assert.Same(duplicateItem, item);
+                    return message;
+                }));
+
+            ThrowsArgumentException(
+                nonGenericEnumerableWithDuplicateArg,
+                arg => arg.DoesNotContainDuplicate(),
+                (arg, message) => arg.DoesNotContainDuplicate((e, item) =>
+                {
+                    Assert.Same(nonGenericEnumerableWithDuplicate, e);
+                    Assert.Same(duplicateItem, item);
+                    return message;
+                }));
+
+            for (var i = 0; i < 2; i++)
+            {
+                var c = i == 0 ? null : comparer;
+                ThrowsArgumentException(
+                    enumerableWithDuplicateArg,
+                    arg => arg.DoesNotContainDuplicate(c),
+                    (arg, message) => arg.DoesNotContainDuplicate(c, (e, item) =>
+                    {
+                        Assert.Same(enumerableWithDuplicate, e);
+                        Assert.Same(duplicateItem, item);
+                        return message;
+                    }));
+
+                ThrowsArgumentException(
+                    nonGenericEnumerableWithDuplicateArg,
+                    arg => arg.DoesNotContainDuplicate(c),
+                    (arg, message) => arg.DoesNotContainDuplicate(c, (e, item) =>
+                    {
+                        Assert.Same(nonGenericEnumerableWithDuplicate, e);
+                        Assert.Same(duplicateItem, item);
+                        return message;
+                    }));
+            }
+
+            // With Count
+            if (enumerableWithDuplicate is ITestEnumerableWithCount<string> collectionWithDuplicate)
+            {
+                var collectionWithDuplicateArg = Guard.Argument(() => collectionWithDuplicate);
+
+                var nonGenericCollectionWithDuplicate = new ArrayList(collectionWithDuplicate.ToList());
+                var nonGenericCollectionWithDuplicateArg = Guard.Argument(() => nonGenericCollectionWithDuplicate);
+
+                ThrowsArgumentException(
+                    collectionWithDuplicateArg,
+                    arg => arg.DoesNotContainDuplicate(),
+                    (arg, message) => arg.DoesNotContainDuplicate((e, item) =>
+                    {
+                        Assert.Same(collectionWithDuplicate, e);
+                        Assert.Same(duplicateItem, item);
+                        return message;
+                    }));
+
+                ThrowsArgumentException(
+                    nonGenericCollectionWithDuplicateArg,
+                    arg => arg.DoesNotContainDuplicate(),
+                    (arg, message) => arg.DoesNotContainDuplicate((e, item) =>
+                    {
+                        Assert.Same(nonGenericCollectionWithDuplicate, e);
+                        Assert.Same(duplicateItem, item);
+                        return message;
+                    }));
+
+                for (var i = 0; i < 2; i++)
+                {
+                    var c = i == 0 ? null : comparer;
+                    ThrowsArgumentException(
+                        collectionWithDuplicateArg,
+                        arg => arg.DoesNotContainDuplicate(c),
+                        (arg, message) => arg.DoesNotContainDuplicate(c, (e, item) =>
+                        {
+                            Assert.Same(collectionWithDuplicate, e);
+                            Assert.Same(duplicateItem, item);
+                            return message;
+                        }));
+
+                        ThrowsArgumentException(
+                            nonGenericCollectionWithDuplicateArg,
+                            arg => arg.DoesNotContainDuplicate(c),
+                            (arg, message) => arg.DoesNotContainDuplicate(c, (e, item) =>
+                            {
+                                Assert.Same(nonGenericCollectionWithDuplicate, e);
+                                Assert.Same(duplicateItem, item);
+                                return message;
+                            }));
+                }
+            }
+        }
+
         [Theory(DisplayName = "Enumerable: In/NotIn collection")]
         [InlineData(CollectionOptions.Null, 3, 2, -1, false)]
         [InlineData(CollectionOptions.Null, 3, null, null, false)]
@@ -484,12 +620,12 @@
         [InlineData(CollectionOptions.NotEmpty, 3, null, -1, true)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, null, false)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, null, true)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, false)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, -1, true)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, null, -1, false)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, null, -1, true)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, null, false)]
-        [InlineData(CollectionOptions.NotEmpty | CollectionOptions.HasContains, 3, 1, null, true)]
+        [InlineData(CollectionOptions.HasContains, 3, 1, -1, false)]
+        [InlineData(CollectionOptions.HasContains, 3, 1, -1, true)]
+        [InlineData(CollectionOptions.HasContains, 3, null, -1, false)]
+        [InlineData(CollectionOptions.HasContains, 3, null, -1, true)]
+        [InlineData(CollectionOptions.HasContains, 3, 1, null, false)]
+        [InlineData(CollectionOptions.HasContains, 3, 1, null, true)]
         public void InCollection(
             CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
         {
@@ -711,8 +847,15 @@
             }
             else
             {
+                var addCount = 0;
+                if (options.HasFlag(CollectionOptions.HasNullElement))
+                    addCount++;
+
+                if (options.HasFlag(CollectionOptions.HasDuplicateElements))
+                    addCount++;
+
+                var range = Enumerable.Range(1, maxCount - addCount);
                 var type = typeof(T);
-                var range = Enumerable.Range(1, maxCount);
                 if (type == typeof(int))
                 {
                     items = range as IEnumerable<T>;
@@ -741,10 +884,10 @@
 
             var list = items.ToList();
             if (options.HasFlag(CollectionOptions.HasNullElement))
-            {
-                list.RemoveAt(list.Count - 1);
                 list.Insert(RandomUtils.Current.Next(list.Count), default);
-            }
+
+            if (options.HasFlag(CollectionOptions.HasDuplicateElements))
+                list.Insert(RandomUtils.Current.Next(list.Count), list[RandomUtils.Current.Next(list.Count)]);
 
             var hasCount = options.HasFlag(CollectionOptions.HasCount);
             var hasContains = options.HasFlag(CollectionOptions.HasContains);
