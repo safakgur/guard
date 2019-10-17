@@ -2,7 +2,7 @@ jobs:
 - template: .azure-pipelines-build.yml
   parameters:
     name: Windows
-    image: vs2017-win2016
+    image: windows-2019
     artifacts: true
 
 - template: .azure-pipelines-build.yml

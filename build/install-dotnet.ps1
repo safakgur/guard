@@ -8,8 +8,8 @@ function Install-Sdk {
             "&([scriptblock]::Create((Invoke-WebRequest -useb 'https://dot.net/v1/dotnet-install.ps1')))"
 
         $Shell = "powershell"
-        if (Get-Command "pwsh" -ErrorAction SilentlyContinue) 
-        { 
+        if (Get-Command "pwsh" -ErrorAction SilentlyContinue)
+        {
            $Shell = "pwsh"
         }
 
@@ -21,4 +21,4 @@ function Install-Sdk {
     }
 }
 
-Install-Sdk -Version "2.1.400"
+Install-Sdk -Version "3.0.100"
