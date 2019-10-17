@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>8</LangVersion>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Dawn.Guard.Tests</AssemblyName>
     <RootNamespace>Dawn.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
