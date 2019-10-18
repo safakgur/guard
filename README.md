@@ -16,7 +16,6 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 * [Design Decisions](#design-decisions)
 * [Extensibility](#extensibility)
 * [Code Snippets](#code-snippets)
-* [What's Next](#whats-next)
 
 ## Introduction
 
