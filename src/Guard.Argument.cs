@@ -1,6 +1,9 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
@@ -35,7 +38,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Initialization", "ga", order: 1)]
         public static ArgumentInfo<T> Argument<T>(
-            T value, [InvokerParameterName] string name = null, bool secure = false)
+            T value, [InvokerParameterName] string? name = null, bool secure = false)
             => new ArgumentInfo<T>(value, name, secure: secure);
 
         /// <summary>
@@ -55,7 +58,7 @@
         [GuardFunction("Initialization", order: 2)]
         public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e, bool secure = false)
         {
-            if (e == null)
+            if (e is null)
                 throw new ArgumentNullException(nameof(e));
 
             return e.Body is MemberExpression m
@@ -70,7 +73,7 @@
         public static Exception Fail(Exception exception)
         {
 #if !NETSTANDARD1_0
-            StackTrace stackTrace = null;
+            StackTrace? stackTrace = null;
             for (var scope = Scope.Current; scope != null; scope = scope.Parent)
             {
                 scope.ExceptionInterceptor?.Invoke(
@@ -95,7 +98,7 @@
             private static readonly string DefaultName = $"The {typeof(T)} argument";
 
             /// <summary>The argument name.</summary>
-            private readonly string name;
+            private readonly string? name;
 
             /// <summary>
             ///     Initializes a new instance of the <see cref="ArgumentInfo{T} " /> struct.
@@ -113,7 +116,7 @@
             [DebuggerStepThrough]
             public ArgumentInfo(
                 T value,
-                [InvokerParameterName] string name,
+                [InvokerParameterName] string? name,
                 bool modified = false,
                 bool secure = false)
             {
@@ -149,7 +152,7 @@
                 get
                 {
                     var name = this.name;
-                    var value = this.HasValue() ? this.Value.ToString() : "null";
+                    var value = this.Value?.ToString() ?? "null";
                     var result = name is null ? value : $"{name}: {value}";
                     return this.Secure ? $"[SECURE] {result}" : result;
                 }
@@ -174,12 +177,13 @@
             ///     <c>true</c>, if <see cref="Value" /> is <c>null</c>; otherwise, <c>false</c>.
             /// </returns>
             [Obsolete("Use the HasValue method to check against null.")]
-            public bool IsNull() => this.Value == null;
+            [EditorBrowsable(EditorBrowsableState.Never)]
+            public bool IsNull() => this.Value is null;
 
             /// <summary>Returns the string representation of the argument value.</summary>
             /// <returns>String representation of the argument value.</returns>
             public override string ToString()
-                => this.HasValue() ? this.Value.ToString() : string.Empty;
+                => this.Value?.ToString() ?? string.Empty;
         }
     }
 }

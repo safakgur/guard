@@ -1,6 +1,9 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
     using JetBrains.Annotations;
 
@@ -29,7 +32,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnan")]
         public static ref readonly ArgumentInfo<double> NaN(
-            in this ArgumentInfo<double> argument, Func<double, string> message = null)
+            in this ArgumentInfo<double> argument, Func<double, string>? message = null)
         {
             if (!double.IsNaN(argument.Value))
             {
@@ -70,11 +73,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnan")]
         public static ref readonly ArgumentInfo<double?> NaN(
-            in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
+            in this ArgumentInfo<double?> argument, Func<double?, string>? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (!double.IsNaN(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.NaN(argument);
@@ -108,7 +111,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnnan")]
         public static ref readonly ArgumentInfo<double> NotNaN(
-            in this ArgumentInfo<double> argument, string message = null)
+            in this ArgumentInfo<double> argument, string? message = null)
         {
             if (double.IsNaN(argument.Value))
             {
@@ -142,11 +145,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnnan")]
         public static ref readonly ArgumentInfo<double?> NotNaN(
-            in this ArgumentInfo<double?> argument, string message = null)
+            in this ArgumentInfo<double?> argument, string? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (double.IsNaN(value))
                 {
                     var m = message ?? Messages.NotNaN(argument);
@@ -182,7 +185,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "ginf")]
         public static ref readonly ArgumentInfo<double> Infinity(
-            in this ArgumentInfo<double> argument, Func<double, string> message = null)
+            in this ArgumentInfo<double> argument, Func<double, string>? message = null)
         {
             if (!double.IsInfinity(argument.Value))
             {
@@ -226,11 +229,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "ginf")]
         public static ref readonly ArgumentInfo<double?> Infinity(
-            in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
+            in this ArgumentInfo<double?> argument, Func<double?, string>? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (!double.IsInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.Infinity(argument);
@@ -264,6 +267,7 @@
         [AssertionMethod]
         [DebuggerStepThrough]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double, string>`.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static ref readonly ArgumentInfo<double> NotInfinity(
             in this ArgumentInfo<double> argument, string message)
         {
@@ -301,7 +305,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gninf")]
         public static ref readonly ArgumentInfo<double> NotInfinity(
-            in this ArgumentInfo<double> argument, Func<double, string> message = null)
+            in this ArgumentInfo<double> argument, Func<double, string>? message = null)
         {
             if (double.IsInfinity(argument.Value))
             {
@@ -335,6 +339,7 @@
         [AssertionMethod]
         [DebuggerStepThrough]
         [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double?, string>`.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
             in this ArgumentInfo<double?> argument, string message)
         {
@@ -378,11 +383,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gninf")]
         public static ref readonly ArgumentInfo<double?> NotInfinity(
-            in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
+            in this ArgumentInfo<double?> argument, Func<double?, string>? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (double.IsInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.NotInfinity(argument);
@@ -417,7 +422,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gposinf")]
         public static ref readonly ArgumentInfo<double> PositiveInfinity(
-            in this ArgumentInfo<double> argument, Func<double, string> message = null)
+            in this ArgumentInfo<double> argument, Func<double, string>? message = null)
         {
             if (!double.IsPositiveInfinity(argument.Value))
             {
@@ -458,11 +463,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gposinf")]
         public static ref readonly ArgumentInfo<double?> PositiveInfinity(
-            in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
+            in this ArgumentInfo<double?> argument, Func<double?, string>? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (!double.IsPositiveInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.PositiveInfinity(argument);
@@ -496,7 +501,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnposinf")]
         public static ref readonly ArgumentInfo<double> NotPositiveInfinity(
-            in this ArgumentInfo<double> argument, string message = null)
+            in this ArgumentInfo<double> argument, string? message = null)
         {
             if (double.IsPositiveInfinity(argument.Value))
             {
@@ -530,11 +535,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnposinf")]
         public static ref readonly ArgumentInfo<double?> NotPositiveInfinity(
-            in this ArgumentInfo<double?> argument, string message = null)
+            in this ArgumentInfo<double?> argument, string? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (double.IsPositiveInfinity(value))
                 {
                     var m = message ?? Messages.NotPositiveInfinity(argument);
@@ -569,7 +574,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gneginf")]
         public static ref readonly ArgumentInfo<double> NegativeInfinity(
-            in this ArgumentInfo<double> argument, Func<double, string> message = null)
+            in this ArgumentInfo<double> argument, Func<double, string>? message = null)
         {
             if (!double.IsNegativeInfinity(argument.Value))
             {
@@ -610,11 +615,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gneginf")]
         public static ref readonly ArgumentInfo<double?> NegativeInfinity(
-            in this ArgumentInfo<double?> argument, Func<double?, string> message = null)
+            in this ArgumentInfo<double?> argument, Func<double?, string>? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (!double.IsNegativeInfinity(value))
                 {
                     var m = message?.Invoke(value) ?? Messages.NegativeInfinity(argument);
@@ -648,7 +653,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnneginf")]
         public static ref readonly ArgumentInfo<double> NotNegativeInfinity(
-            in this ArgumentInfo<double> argument, string message = null)
+            in this ArgumentInfo<double> argument, string? message = null)
         {
             if (double.IsNegativeInfinity(argument.Value))
             {
@@ -682,11 +687,11 @@
         [DebuggerStepThrough]
         [GuardFunction("Double", "gnneginf")]
         public static ref readonly ArgumentInfo<double?> NotNegativeInfinity(
-            in this ArgumentInfo<double?> argument, string message = null)
+            in this ArgumentInfo<double?> argument, string? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 if (double.IsNegativeInfinity(value))
                 {
                     var m = message ?? Messages.NotNegativeInfinity(argument);
@@ -722,7 +727,7 @@
             in this ArgumentInfo<double> argument,
             double other,
             double delta,
-            Func<double, double, string> message = null)
+            Func<double, double, string>? message = null)
         {
             var diff = Math.Abs(argument.Value - other);
             if (diff > delta)
@@ -759,11 +764,11 @@
             in this ArgumentInfo<double?> argument,
             double other,
             double delta,
-            Func<double, double, string> message = null)
+            Func<double, double, string>? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 var diff = Math.Abs(value - other);
                 if (diff > delta)
                 {
@@ -800,7 +805,7 @@
             in this ArgumentInfo<double> argument,
             double other,
             double delta,
-            Func<double, double, string> message = null)
+            Func<double, double, string>? message = null)
         {
             var diff = Math.Abs(argument.Value - other);
             if (diff <= delta)
@@ -837,11 +842,11 @@
             in this ArgumentInfo<double?> argument,
             double other,
             double delta,
-            Func<double, double, string> message = null)
+            Func<double, double, string>? message = null)
         {
             if (argument.HasValue())
             {
-                var value = argument.Value.Value;
+                var value = argument.GetValueOrDefault();
                 var diff = Math.Abs(value - other);
                 if (diff <= delta)
                 {

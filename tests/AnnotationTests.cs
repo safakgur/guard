@@ -55,23 +55,13 @@ namespace Dawn.Tests
                 where m.DeclaringType.Assembly == assembly
                    && !m.IsVirtual
                    && !m.IsSpecialName
+                   && m.GetCustomAttribute<NonGuardAttribute>() is null
                    && m.GetCustomAttribute<ObsoleteAttribute>() is null
                 select m;
 
-            var markedMethods = GetMarkedMethods().Select(p => p.Key).ToList();
+            var markedMethods = GetMarkedMethods().Select(p => p.Key).ToHashSet();
             foreach (var e in exportedMethods)
-            {
-                var ep = e.GetParameters().Select(p => p.ParameterType);
-                var equals =
-                    from m in markedMethods
-                    where m.DeclaringType == e.DeclaringType
-                       && m.Name == e.Name
-                    let mp = m.GetParameters().Select(p => p.ParameterType)
-                    where mp.SequenceEqual(ep)
-                    select m;
-
-                Assert.NotEmpty(equals);
-            }
+                Assert.Contains(e, markedMethods);
         }
 
         [Fact(DisplayName = "Annotations: Shortcuts are unique")]

@@ -103,7 +103,9 @@
             {
             }
 
+#pragma warning disable IDE0060 // Remove unused parameter
             private TestCloneable(bool isClone) => this.IsClone = true;
+#pragma warning restore IDE0060 // Remove unused parameter
 
             public bool IsClone { get; }
 

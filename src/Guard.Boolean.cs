@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Diagnostics;
@@ -18,7 +20,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Boolean", "gtrue")]
         public static ref readonly ArgumentInfo<bool> True(
-            in this ArgumentInfo<bool> argument, string message = null)
+            in this ArgumentInfo<bool> argument, string? message = null)
         {
             if (!argument.Value)
             {
@@ -40,9 +42,9 @@
         [DebuggerStepThrough]
         [GuardFunction("Boolean", "gtrue")]
         public static ref readonly ArgumentInfo<bool?> True(
-            in this ArgumentInfo<bool?> argument, string message = null)
+            in this ArgumentInfo<bool?> argument, string? message = null)
         {
-            if (argument.HasValue() && !argument.Value.Value)
+            if (argument.Value == false)
             {
                 var m = message ?? Messages.True(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -62,7 +64,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Boolean", "gfalse")]
         public static ref readonly ArgumentInfo<bool> False(
-            in this ArgumentInfo<bool> argument, string message = null)
+            in this ArgumentInfo<bool> argument, string? message = null)
         {
             if (argument.Value)
             {
@@ -84,9 +86,9 @@
         [DebuggerStepThrough]
         [GuardFunction("Boolean", "gfalse")]
         public static ref readonly ArgumentInfo<bool?> False(
-            in this ArgumentInfo<bool?> argument, string message = null)
+            in this ArgumentInfo<bool?> argument, string? message = null)
         {
-            if (argument.HasValue() && argument.Value.Value)
+            if (argument.GetValueOrDefault())
             {
                 var m = message ?? Messages.False(argument);
                 throw Fail(new ArgumentException(m, argument.Name));

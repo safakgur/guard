@@ -1,7 +1,11 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
+    using System.Runtime.CompilerServices;
     using JetBrains.Annotations;
 
     /// <content>Nullability preconditions.</content>
@@ -19,13 +23,13 @@
         [AssertionMethod]
         [DebuggerStepThrough]
         [GuardFunction("Null", "gn")]
-        public static ref readonly ArgumentInfo<T> Null<T>(
-            in this ArgumentInfo<T> argument, Func<T, string> message = null)
+        public static ref readonly ArgumentInfo<T?> Null<T>(
+            in this ArgumentInfo<T?> argument, Func<T, string>? message = null)
             where T : class
         {
             if (argument.HasValue())
             {
-                var m = message?.Invoke(argument.Value) ?? Messages.Null(argument);
+                var m = message?.Invoke(argument.Value!) ?? Messages.Null(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -51,13 +55,13 @@
         [DebuggerStepThrough]
         [GuardFunction("Null", "gn")]
         public static ref readonly ArgumentInfo<T?> Null<T>(
-            in this ArgumentInfo<T?> argument, Func<T?, string> message = null)
+            in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct
         {
             if (argument.HasValue())
             {
                 Debug.Assert(argument.Value.HasValue, "argument.HasValue");
-                var m = message?.Invoke(argument.Value.Value) ?? Messages.Null(argument);
+                var m = message?.Invoke(argument.GetValueOrDefault()) ?? Messages.Null(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -84,7 +88,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Null", "gnn")]
         public static ref readonly ArgumentInfo<T> NotNull<T>(
-            in this ArgumentInfo<T> argument, string message = null)
+            in this ArgumentInfo<T> argument, string? message = null)
             where T : class
         {
             if (!argument.HasValue())
@@ -118,7 +122,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Null", "gnn")]
         public static ArgumentInfo<T> NotNull<T>(
-            in this ArgumentInfo<T?> argument, string message = null)
+            in this ArgumentInfo<T?> argument, string? message = null)
             where T : struct
         {
             if (!argument.HasValue())
@@ -130,7 +134,7 @@
             }
 
             return new ArgumentInfo<T>(
-                argument.Value.Value, argument.Name, argument.Modified, argument.Secure);
+                argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Secure);
         }
 
         /// <summary>
@@ -148,6 +152,7 @@
         [AssertionMethod]
         [DebuggerStepThrough]
         [Obsolete("Use the HasValue method to check against null.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool NotNull<T>(
             in this ArgumentInfo<T?> argument, out ArgumentInfo<T> result)
             where T : struct
@@ -155,7 +160,7 @@
             if (argument.HasValue())
             {
                 result = new ArgumentInfo<T>(
-                    argument.Value.Value, argument.Name, argument.Modified, argument.Secure);
+                    argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Secure);
 
                 return true;
             }
@@ -180,7 +185,7 @@
         [DebuggerStepThrough]
         [GuardFunction("Null")]
         public static void NotAllNull<T1, T2>(
-            in ArgumentInfo<T1> argument1, in ArgumentInfo<T2> argument2, string message = null)
+            in ArgumentInfo<T1> argument1, in ArgumentInfo<T2> argument2, string? message = null)
         {
             if (!argument1.HasValue() && !argument2.HasValue())
             {
@@ -210,7 +215,7 @@
             in ArgumentInfo<T1> argument1,
             in ArgumentInfo<T2> argument2,
             in ArgumentInfo<T3> argument3,
-            string message = null)
+            string? message = null)
         {
             if (!argument1.HasValue() && !argument2.HasValue() && !argument3.HasValue())
             {
@@ -218,5 +223,21 @@
                 throw Fail(new ArgumentNullException($"{argument1.Name}, {argument2.Name}, {argument3.Name}", m));
             }
         }
+
+        /// <summary>
+        ///     Retrieves the value of a nullable argument, or the default value of <typeparamref name="T" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the argument.</typeparam>
+        /// <param name="argument">The argument.</param>
+        /// <returns>
+        ///     The inner value of the nullable argument's value, if
+        ///     <see cref="ArgumentInfo{T}.HasValue" /> returns <c>true</c>; otherwise, the default
+        ///     value of <typeparamref name="T" />.
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [NonGuard]
+        public static T GetValueOrDefault<T>(in this ArgumentInfo<T?> argument)
+            where T : struct
+            => argument.Value.GetValueOrDefault();
     }
 }

@@ -133,9 +133,12 @@
         [Fact(DisplayName = "Equality: Same/NotSame")]
         public void Same()
         {
+            var one1 = "1";
+            var one2 = ((char)('0' + 1)).ToString();
+
             Test(null, null, null, false);
-            Test("1", "1", 1.ToString(), false);
-            Test("1", "1", 1.ToString(), true);
+            Test(one1, one1, one2, false);
+            Test(one1, one1, one2, true);
 
             void Test(string value, string same, string nonSame, bool secure)
             {
