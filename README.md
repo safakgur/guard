@@ -16,7 +16,6 @@ Guard is a fluent argument validation library that is intuitive, fast and extens
 * [Design Decisions](#design-decisions)
 * [Extensibility](#extensibility)
 * [Code Snippets](#code-snippets)
-* [What's Next](#whats-next)
 
 ## Introduction
 
@@ -85,7 +84,7 @@ have `<LangVersion>7.2</LangVersion>` or later added in your .csproj file.
 
 **.NET Standard 1.0** and above are supported. [Microsoft Docs][2] lists the following platform
 versions as .NET Standard 1.0 compliant but keep in mind that currently, the unit tests are only
-targeting .NET Core 1.0 and 2.0.
+targeting .NET Core 3.0.
 
 | Platform                   | Version  |
 | -------------------------- | -------- |

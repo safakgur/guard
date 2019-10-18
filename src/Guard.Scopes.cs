@@ -1,4 +1,6 @@
-﻿#if !NETSTANDARD1_0
+﻿#nullable enable
+
+#if !NETSTANDARD1_0
 
 namespace Dawn
 {
@@ -33,7 +35,7 @@ namespace Dawn
             /// <summary>
             ///     The scope data that is local to the calling asynchronous control flow.
             /// </summary>
-            private static readonly AsyncLocal<Scope> Local = new AsyncLocal<Scope>();
+            private static readonly AsyncLocal<Scope?> Local = new AsyncLocal<Scope?>();
 
             /// <summary>
             ///     Contains zero if the instance is not disposed; and one if it is disposed.
@@ -48,7 +50,7 @@ namespace Dawn
             /// <param name="propagates">
             ///     A value indicating whether the scope should bubble up to parent scopes.
             /// </param>
-            public Scope(Action<Exception, StackTrace> exceptionInterceptor, bool propagates)
+            public Scope(Action<Exception, StackTrace>? exceptionInterceptor, bool propagates)
             {
                 this.Parent = Current;
                 Current = this;
@@ -58,10 +60,10 @@ namespace Dawn
             }
 
             /// <summary>Gets the previous scope to restore when the current one is disposed.</summary>
-            public Scope Parent { get; }
+            public Scope? Parent { get; }
 
             /// <summary>Gets the current guarding scope.</summary>
-            public static Scope Current
+            public static Scope? Current
             {
                 get => Local.Value;
                 private set => Local.Value = value;
@@ -71,7 +73,7 @@ namespace Dawn
             ///     Gets a delegate to intercept the exceptions caused by failed validations along
             ///     with their full stack trace.
             /// </summary>
-            public Action<Exception, StackTrace> ExceptionInterceptor { get; }
+            public Action<Exception, StackTrace>? ExceptionInterceptor { get; }
 
             /// <summary>
             ///     Gets a value indicating whether the scope should bubble up to parent scopes.

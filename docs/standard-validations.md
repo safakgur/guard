@@ -64,6 +64,8 @@ For `ArgumentInfo<T> where T : IEnumerable`
 * `DoesNotContain<TItem>(TItem, IEqualityComparer<TItem>)`
 * `ContainsNull()`
 * `DoesNotContainNull()`
+* `DoesNotContainDuplicate()`
+* `DoesNotContainDuplicate(IEqualityComparer<TItem>)`
 
 For `ArgumentInfo<T>`
 * `In<TCollection>(TCollection)`

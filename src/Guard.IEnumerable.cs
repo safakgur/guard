@@ -1,4 +1,6 @@
-﻿namespace Dawn
+﻿#nullable enable
+
+namespace Dawn
 {
     using System;
     using System.Collections;
@@ -29,8 +31,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gem")]
         public static ref readonly ArgumentInfo<TCollection> Empty<TCollection>(
-            in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, 1) != 0)
             {
@@ -56,8 +58,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gnem")]
         public static ref readonly ArgumentInfo<TCollection> NotEmpty<TCollection>(
-            in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, 1) == 0)
             {
@@ -89,8 +91,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gc")]
         public static ref readonly ArgumentInfo<TCollection> Count<TCollection>(
-            in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, count + 1) != count)
             {
@@ -123,8 +125,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gnc")]
         public static ref readonly ArgumentInfo<TCollection> NotCount<TCollection>(
-            in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, count + 1) == count)
             {
@@ -156,8 +158,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gminc")]
         public static ref readonly ArgumentInfo<TCollection> MinCount<TCollection>(
-            in this ArgumentInfo<TCollection> argument, int minCount, Func<TCollection, int, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, int minCount, Func<TCollection, int, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, minCount) < minCount)
             {
@@ -189,8 +191,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gmaxc")]
         public static ref readonly ArgumentInfo<TCollection> MaxCount<TCollection>(
-            in this ArgumentInfo<TCollection> argument, int maxCount, Func<TCollection, int, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, int maxCount, Func<TCollection, int, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, maxCount + 1) > maxCount)
             {
@@ -226,8 +228,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gcr")]
         public static ref readonly ArgumentInfo<TCollection> CountInRange<TCollection>(
-            in this ArgumentInfo<TCollection> argument, int minCount, int maxCount, Func<TCollection, int, int, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, int minCount, int maxCount, Func<TCollection, int, int, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue())
             {
@@ -264,9 +266,9 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gcon")]
         public static ref readonly ArgumentInfo<TCollection> Contains<TCollection, TItem>(
-            in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
-            where TCollection : IEnumerable
-            => ref argument.Contains(item, null, message);
+            in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string>? message = null)
+            where TCollection : IEnumerable?
+            => ref argument.Contains(item, null!, message);
 
         /// <summary>
         ///     Requires the argument to have a collection value that contains the specified item.
@@ -292,8 +294,8 @@
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
             IEqualityComparer<TItem> comparer,
-            Func<TCollection, TItem, string> message = null)
-            where TCollection : IEnumerable
+            Func<TCollection, TItem, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && !Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
@@ -322,9 +324,9 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gncon")]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContain<TCollection, TItem>(
-            in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string> message = null)
-            where TCollection : IEnumerable
-            => ref argument.DoesNotContain(item, null, message);
+            in this ArgumentInfo<TCollection> argument, in TItem item, Func<TCollection, TItem, string>? message = null)
+            where TCollection : IEnumerable?
+            => ref argument.DoesNotContain(item, null!, message);
 
         /// <summary>
         ///     Requires the argument to have a collection value that does not contain the specified item.
@@ -350,8 +352,8 @@
             in this ArgumentInfo<TCollection> argument,
             in TItem item,
             IEqualityComparer<TItem> comparer,
-            Func<TCollection, TItem, string> message = null)
-            where TCollection : IEnumerable
+            Func<TCollection, TItem, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
@@ -379,8 +381,8 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gconn")]
         public static ref readonly ArgumentInfo<TCollection> ContainsNull<TCollection>(
-            in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && !Collection<TCollection>.ContainsNull(argument.Value))
             {
@@ -406,13 +408,88 @@
         [DebuggerStepThrough]
         [GuardFunction("Collection", "gnconn")]
         public static ref readonly ArgumentInfo<TCollection> DoesNotContainNull<TCollection>(
-            in this ArgumentInfo<TCollection> argument, Func<TCollection, string> message = null)
-            where TCollection : IEnumerable
+            in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() && Collection<TCollection>.ContainsNull(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionDoesNotContain(argument, "null");
                 throw Fail(new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a collection value that does not contain duplicate elements.
+        /// </summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <param name="argument">The collection argument.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> contains duplicate elements.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Collection", "gncond")]
+        public static ref readonly ArgumentInfo<TCollection> DoesNotContainDuplicate<TCollection>(
+            in this ArgumentInfo<TCollection> argument, Func<TCollection, object, string>? message = null)
+            where TCollection : IEnumerable?
+        {
+            if (argument.HasValue())
+            {
+                var (containsDuplicate, duplicateValue) = Collection<TCollection>.ContainsDuplicate(argument.Value, null);
+                if (containsDuplicate)
+                {
+                    var m = message?.Invoke(argument.Value, duplicateValue)
+                        ?? Messages.CollectionDoesNotContain(argument, "duplicate items");
+
+                    throw Fail(new ArgumentException(m, argument.Name));
+                }
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a collection value that does not contain duplicate elements.
+        /// </summary>
+        /// <typeparam name="TCollection">The type of the collection.</typeparam>
+        /// <typeparam name="TItem">The type of the collection items.</typeparam>
+        /// <param name="argument">The collection argument.</param>
+        /// <param name="comparer">The equality comparer to use.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> contains duplicate elements by the comparison made by
+        ///     <paramref name="comparer" />.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Collection", "gncond")]
+        public static ref readonly ArgumentInfo<TCollection> DoesNotContainDuplicate<TCollection, TItem>(
+            in this ArgumentInfo<TCollection> argument,
+            IEqualityComparer<TItem> comparer,
+            Func<TCollection, object, string>? message = null)
+            where TCollection : IEnumerable?
+        {
+            if (argument.HasValue())
+            {
+                var (containsDuplicate, duplicateValue) = Collection<TCollection>.ContainsDuplicate(argument.Value, comparer);
+                if (containsDuplicate)
+                {
+                    var m = message?.Invoke(argument.Value, duplicateValue)
+                        ?? Messages.CollectionDoesNotContain(argument, "duplicate items");
+
+                    throw Fail(new ArgumentException(m, argument.Name));
+                }
             }
 
             return ref argument;
@@ -440,9 +517,9 @@
         public static ref readonly ArgumentInfo<TItem> In<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
-            Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable
-            => ref argument.In(collection, null, message);
+            Func<TItem, TCollection, string>? message = null)
+            where TCollection : IEnumerable?
+            => ref argument.In(collection, null!, message);
 
         /// <summary>Requires the specified collection to contain the argument value.</summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
@@ -468,8 +545,8 @@
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
             IEqualityComparer<TItem> comparer,
-            Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable
+            Func<TItem, TCollection, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() &&
                 collection != null &&
@@ -534,9 +611,9 @@
         public static ref readonly ArgumentInfo<TItem> NotIn<TCollection, TItem>(
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
-            Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable
-            => ref argument.NotIn(collection, null, message);
+            Func<TItem, TCollection, string>? message = null)
+            where TCollection : IEnumerable?
+            => ref argument.NotIn(collection, null!, message);
 
         /// <summary>Requires the specified collection not to contain the argument value.</summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
@@ -562,8 +639,8 @@
             in this ArgumentInfo<TItem> argument,
             TCollection collection,
             IEqualityComparer<TItem> comparer,
-            Func<TItem, TCollection, string> message = null)
-            where TCollection : IEnumerable
+            Func<TItem, TCollection, string>? message = null)
+            where TCollection : IEnumerable?
         {
             if (argument.HasValue() &&
                 collection != null &&
@@ -643,7 +720,7 @@
         /// <summary>Provides cached collection utilities for the type <typeparamref name="TCollection" />.</summary>
         /// <typeparam name="TCollection">The type of the collection.</typeparam>
         private static class Collection<TCollection>
-            where TCollection : IEnumerable
+            where TCollection : IEnumerable?
         {
             /// <summary>
             ///     A function that returns the number of elements in the specified collection. It
@@ -661,37 +738,32 @@
             /// </summary>
             public static readonly Func<TCollection, bool> ContainsNull = InitContainsNull();
 
+            /// <summary>
+            ///     A function that returns a value that indicates whether the specified collection
+            ///     contains duplicate elements. It checks for reference equality if the collection
+            ///     does not implement <see cref="IEnumerable{T}" />.
+            /// </summary>
+            public static readonly Func<TCollection, object?, (bool, object)> ContainsDuplicate = InitContainsDuplicate();
+
             /// <summary>Initializes <see cref="Count" />.</summary>
             /// <returns>
             ///     A function that returns the number of elements in the specified collection.
             /// </returns>
             private static Func<TCollection, int, int> InitCount()
             {
-                var type = typeof(TCollection);
-                var integer = typeof(int);
-
-                var getter = type.GetPropertyGetter("Count");
-                if (getter?.IsStatic == false && getter.ReturnType == integer)
-                    return CompileGetter();
-
-                getter = type.GetPropertyGetter("Length");
-                if (getter?.IsStatic == false && getter.ReturnType == integer)
-                    return CompileGetter();
-
-                return EnumerableCount;
-
-                Func<TCollection, int, int> CompileGetter()
+                var countGetter = GetCountGetter();
+                if (countGetter != null)
                 {
-                    var t = Expression.Parameter(type, "collection");
-                    var c = Expression.Call(t, getter);
-                    var l = Expression.Lambda<Func<TCollection, int>>(c, t);
-                    var count = l.Compile();
+                    var collectionParam = Expression.Parameter(typeof(TCollection), "collection");
+                    var countCall = Expression.Call(collectionParam, countGetter);
+                    var countLambda = Expression.Lambda<Func<TCollection, int>>(countCall, collectionParam);
+                    var count = countLambda.Compile();
                     return (collection, max) => count(collection);
                 }
 
-                int EnumerableCount(TCollection collection, int max)
+                return (collection, max) =>
                 {
-                    if (type != collection.GetType())
+                    if (typeof(TCollection) != collection!.GetType())
                         return ProxyCount(collection, max);
 
                     if (max == 0)
@@ -710,16 +782,16 @@
                     }
 
                     return i;
-                }
+                };
 
-                int ProxyCount(TCollection collection, int max)
+                static int ProxyCount(TCollection collection, int max)
                 {
-                    Func<object, int, int> func;
+                    Func<object, int, int>? func;
 
                     Collection.CachedCountFunctionsLocker.EnterUpgradeableReadLock();
                     try
                     {
-                        if (!Collection.CachedCountFunctions.TryGetValue(collection.GetType(), out func))
+                        if (!Collection.CachedCountFunctions.TryGetValue(collection!.GetType(), out func))
                         {
                             var f = Expression.Field(null, typeof(Collection<>)
                                 .MakeGenericType(collection.GetType())
@@ -749,6 +821,41 @@
 
                     return func(collection, max);
                 }
+            }
+
+            /// <summary>
+            ///     Returns the getter of Count or Length property of <typeparamref name="TCollection" />.
+            /// </summary>
+            /// <returns>
+            ///     The getter of Count or Length property of <typeparamref name="TCollection" />,
+            ///     if exists; otherwise, <c>null</c>.
+            /// </returns>
+            private static MethodInfo? GetCountGetter()
+            {
+                var collectionType = typeof(TCollection);
+                var implementedType = typeof(ICollection);
+
+                if (implementedType.IsAssignableFrom(collectionType))
+                    return implementedType.GetPropertyGetter("Count");
+
+                var itemType = GetItemType();
+                if (itemType != null)
+                {
+                    implementedType = typeof(IReadOnlyCollection<>).MakeGenericType(itemType);
+                    if (implementedType.IsAssignableFrom(collectionType))
+                        return implementedType.GetPropertyGetter("Count");
+                }
+
+                var returnType = typeof(int);
+                var getter = collectionType.GetPropertyGetter("Count");
+                if (getter?.IsStatic == false && getter.ReturnType == returnType)
+                    return getter;
+
+                getter = collectionType.GetPropertyGetter("Length");
+                if (getter?.IsStatic == false && getter.ReturnType == returnType)
+                    return getter;
+
+                return null;
             }
 
             /// <summary>Initializes <see cref="ContainsNull" />.</summary>
@@ -794,11 +901,11 @@
                     if (nullableContains != null)
                     {
                         var t = Expression.Parameter(collectionType, "collection");
-                        var v = IsValueType(nullableContainsParamType)
-                            ? Activator.CreateInstance(nullableContainsParamType)
+                        var v = IsValueType(nullableContainsParamType!)
+                            ? Activator.CreateInstance(nullableContainsParamType!)
                             : null;
 
-                        var i = Expression.Constant(v, nullableContainsParamType);
+                        var i = Expression.Constant(v, nullableContainsParamType!);
                         var c = Expression.Call(t, nullableContains, i);
                         var l = Expression.Lambda<Func<TCollection, bool>>(c, t);
                         return l.Compile();
@@ -812,7 +919,7 @@
 
                 bool EnumeratingContainsNull(TCollection collection)
                 {
-                    if (collectionType != collection.GetType())
+                    if (collectionType != collection!.GetType())
                         return ProxyContainsNull(collection);
 
                     foreach (var item in collection)
@@ -822,14 +929,14 @@
                     return false;
                 }
 
-                bool ProxyContainsNull(TCollection collection)
+                static bool ProxyContainsNull(TCollection collection)
                 {
                     Func<object, bool> func;
 
                     Collection.CachedContainsNullFunctionsLocker.EnterUpgradeableReadLock();
                     try
                     {
-                        if (!Collection.CachedContainsNullFunctions.TryGetValue(collection.GetType(), out var del))
+                        if (!Collection.CachedContainsNullFunctions.TryGetValue(collection!.GetType(), out var del))
                         {
                             var f = Expression.Field(null, typeof(Collection<>)
                                 .MakeGenericType(collection.GetType())
@@ -862,6 +969,120 @@
                 }
             }
 
+            /// <summary>Initializes <see cref="ContainsDuplicate" />.</summary>
+            /// <returns>
+            ///     A function that returns a value that indicates whether the specified collection
+            ///     contains duplicate elements.
+            /// </returns>
+            private static Func<TCollection, object?, (bool, object)> InitContainsDuplicate()
+            {
+                var itemType = GetItemType();
+                if (itemType is null)
+                    return (collection, _) =>
+                    {
+                        var set = new HashSet<object>();
+                        foreach (var item in collection!)
+                            if (!set.Add(item))
+                                return (true, item);
+
+                        return default;
+                    };
+
+                var collectionType = typeof(TCollection);
+                var collectionParam = Expression.Parameter(collectionType, "collection");
+                var comparerType = typeof(IEqualityComparer<>).MakeGenericType(itemType);
+                var comparerParam = Expression.Parameter(typeof(object), "comparer");
+
+                var setType = typeof(HashSet<>).MakeGenericType(itemType);
+                var setAddMethod = setType.GetMethod("Add", new[] { itemType });
+                var setVar = Expression.Variable(setType, "set");
+
+                var enumerableType = typeof(IEnumerable<>).MakeGenericType(itemType);
+                var enumeratorType = typeof(IEnumerator<>).MakeGenericType(itemType);
+                var enumeratorVar = Expression.Variable(enumeratorType, "enumerator");
+                var getEnumeratorMethod = enumerableType.GetMethod("GetEnumerator", Array<Type>.Empty);
+                var getEnumeratorCall = Expression.Call(collectionParam, getEnumeratorMethod);
+                var moveNextMethod = typeof(IEnumerator).GetMethod("MoveNext", Array<Type>.Empty);
+                var moveNextCall = Expression.Call(enumeratorVar, moveNextMethod);
+
+                var itemVar = Expression.Variable(itemType, "item");
+                var returnType = typeof(ValueTuple<,>).MakeGenericType(typeof(bool), typeof(object));
+                var returnDefault = Expression.Default(returnType);
+                var returnLabelTarget = Expression.Label(returnType, "ReturnResult");
+                var returnLabel = Expression.Label(returnLabelTarget, returnDefault);
+                var block = Expression.Block(
+                    new[] { comparerParam, setVar, enumeratorVar, itemVar },
+                    Expression.IfThenElse(
+                        Expression.ReferenceEqual(comparerParam, Expression.Constant(null)),
+                        Expression.Assign(setVar, GetSetNew(null)),
+                        Expression.Assign(setVar, GetSetNew(comparerParam))),
+                    Expression.Assign(enumeratorVar, getEnumeratorCall),
+                    Expression.Loop(
+                        Expression.IfThenElse(
+                            Expression.Equal(moveNextCall, Expression.Constant(true)),
+                            Expression.Block(
+                                Expression.Assign(itemVar, Expression.Property(enumeratorVar, "Current")),
+                                Expression.IfThen(
+                                    Expression.Not(Expression.Call(setVar, setAddMethod, itemVar)),
+                                    Expression.Return(returnLabelTarget, Expression.New(
+                                        returnType.GetConstructor(returnType.GetGenericArguments()),
+                                        Expression.Constant(true),
+                                        Expression.Convert(itemVar, typeof(object))))
+                                )),
+                            Expression.Return(returnLabelTarget, returnDefault)
+                        )),
+                    returnLabel
+                );
+
+                return Expression.Lambda<Func<TCollection, object?, (bool, object)>>(
+                    block, collectionParam, comparerParam).Compile();
+
+                NewExpression GetSetNew(ParameterExpression? comparerParam)
+                {
+                    if (comparerParam != null)
+                    {
+                        var setCtor = setType.GetConstructor(new[] { comparerType });
+                        return Expression.New(setCtor, Expression.Convert(comparerParam, comparerType));
+                    }
+
+                    var countGetter = GetCountGetter();
+                    if (countGetter != null)
+                    {
+                        var setCtor = setType.GetConstructor(new[] { typeof(int) });
+                        var countCall = Expression.Call(collectionParam, countGetter);
+                        return Expression.New(setCtor, countCall);
+                    }
+
+                    return Expression.New(setType);
+                }
+            }
+
+            /// <summary>Returns the item type of a generic <typeparamref name="TCollection" />.</summary>
+            /// <returns>
+            ///     The item type of <typeparamref name="TCollection" />, if it implements
+            ///     <see cref="IEnumerable{T}" />; otherwise, <c>null</c>.
+            /// </returns>
+            private static Type? GetItemType()
+            {
+                return GetItemType(typeof(TCollection));
+
+                static Type? GetItemType(Type collectionType)
+                {
+                    var openType = typeof(IEnumerable<>);
+                    foreach (var interfaceType in collectionType.GetInterfaces())
+                        if (interfaceType.IsGenericType(openType))
+                            return interfaceType.GetGenericArguments()[0];
+
+                    if (collectionType.IsGenericType(openType))
+                        return collectionType.GetGenericArguments()[0];
+
+                    var baseType = collectionType.GetBaseType();
+                    return baseType != null
+                        ? GetItemType(baseType)
+                        : null;
+                }
+            }
+
             /// <summary>
             ///     Provides cached collection utilities for collections that contain instances of <typeparamref name="TItem" />.
             /// </summary>
@@ -882,7 +1103,11 @@
                 private static Func<TCollection, TItem, IEqualityComparer<TItem>, bool> InitContains()
                 {
                     var collectionType = typeof(TCollection);
-                    var itemType = typeof(TItem);
+
+#pragma warning disable IDE0007 // Use implicit type
+                    Type? itemType = typeof(TItem);
+#pragma warning restore IDE0007 // Use implicit type
+
                     do
                     {
                         var method = collectionType.GetMethod("Contains", new[] { itemType });
@@ -911,7 +1136,7 @@
 
                     bool EnumeratingContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
                     {
-                        if (collectionType != collection.GetType())
+                        if (collectionType != collection!.GetType())
                             return ProxyContains(collection, item, comparer);
 
                         if (comparer is null)
@@ -933,7 +1158,7 @@
                         return false;
                     }
 
-                    bool ProxyContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
+                    static bool ProxyContains(TCollection collection, TItem item, IEqualityComparer<TItem> comparer)
                     {
                         Func<object, TItem, IEqualityComparer<TItem>, bool> func;
 
@@ -944,7 +1169,7 @@
                             if (!Collection.CachedContainsFunctions.TryGetValue(key, out var del))
                             {
                                 var f = Expression.Field(null, typeof(Collection<>)
-                                    .GetNestedType("Typed`1")
+                                    .GetNestedType("Typed`1")!
                                     .MakeGenericType(collection.GetType(), typeof(TItem))
                                     .GetField(nameof(Contains)));
 
@@ -966,7 +1191,7 @@
                                 }
                             }
 
-                            func = del as Func<object, TItem, IEqualityComparer<TItem>, bool>;
+                            func = (del as Func<object, TItem, IEqualityComparer<TItem>, bool>)!;
                         }
                         finally
                         {

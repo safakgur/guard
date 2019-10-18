@@ -434,6 +434,46 @@
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">
     <Header>
+      <Title>Guard.DoesNotContainDuplicate()</Title>
+      <Shortcut>gncond</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).DoesNotContainDuplicate()$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().DoesNotContainDuplicate()</Title>
+      <Shortcut>gxncond</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().DoesNotContainDuplicate()$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
       <Title>Guard.DoesNotContainNull()</Title>
       <Shortcut>gnconn</Shortcut>
     </Header>
