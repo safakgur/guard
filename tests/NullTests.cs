@@ -44,7 +44,9 @@
             var one = 1 as int?;
             for (var i = 0; i < 2; i++)
             {
-                var nullableOneArg = Guard.Argument(() => one, i == 1);
+                var nullableOneArg = i == 1
+                    ? Guard.SecureArgument(() => one)
+                    : Guard.Argument(() => one);
                 Assert.IsType<Guard.ArgumentInfo<int?>>(nullableOneArg);
                 Assert.True(nullableOneArg.HasValue());
 

@@ -11,7 +11,9 @@
             for (var i = 0; i < 2; i++)
             {
                 var stringValue = 1.ToString();
-                var stringArg = Guard.Argument(() => stringValue, i == 1);
+                var stringArg = i == 1
+                    ? Guard.SecureArgument(() => stringValue)
+                    : Guard.Argument(() => stringValue);
                 Assert.False(stringArg.Modified);
 
                 var integerValue = int.Parse(stringValue);
@@ -28,7 +30,9 @@
             for (var i = 0; i < 2; i++)
             {
                 var stringValue = 1.ToString();
-                var stringArg = Guard.Argument(() => stringValue, i == 1);
+                var stringArg = i == 1
+                    ? Guard.SecureArgument(() => stringValue)
+                    : Guard.Argument(() => stringValue);
 
                 var integerArg = stringArg.Modify(s => int.Parse(s));
                 Assert.Equal(stringArg.Name, integerArg.Name);
@@ -48,7 +52,9 @@
             var stringValue = 1.ToString();
             for (var i = 0; i < 2; i++)
             {
-                var stringArg = Guard.Argument(() => stringValue, i == 1);
+                var stringArg = i == 1
+                    ? Guard.SecureArgument(() => stringValue)
+                    : Guard.Argument(() => stringValue);
                 var integerArg = stringArg.Wrap(s => int.Parse(s));
 
                 Assert.Equal(stringArg.Name, integerArg.Name);
@@ -76,7 +82,9 @@
 
             for (var i = 0; i < 2; i++)
             {
-                var cloneableArg = Guard.Argument(() => cloneable, i == 1);
+                var cloneableArg = i == 1
+                    ? Guard.SecureArgument(() => cloneable)
+                    : Guard.Argument(() => cloneable);
                 Assert.False(cloneableArg.Modified);
 
                 var cloneArg = cloneableArg.Clone();

@@ -215,7 +215,9 @@
         public void EqualWithComparison(
             string value, string equal, string unequal, StringComparison comparison, bool secure)
         {
-            var valueArg = Guard.Argument(() => value, secure)
+            var valueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
                 .Equal(equal, comparison)
                 .NotEqual(unequal, comparison);
 
@@ -257,7 +259,9 @@
         public void StartsWithWithoutComparison(
             string value, string head, string nonHead, bool secure)
         {
-            var valueArg = Guard.Argument(() => value, secure)
+            var valueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
                 .StartsWith(head)
                 .DoesNotStartWith(nonHead);
 
@@ -302,7 +306,9 @@
         public void StartsWithWithComparison(
             string value, string head, string nonHead, StringComparison comparison, bool secure)
         {
-            var valueArg = Guard.Argument(() => value, secure)
+            var valueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
                 .StartsWith(head, comparison)
                 .DoesNotStartWith(nonHead, comparison);
 
@@ -345,7 +351,9 @@
         public void EndsWithWithoutComparison(
             string value, string tail, string nonTail, bool secure)
         {
-            var valueArg = Guard.Argument(() => value, secure)
+            var valueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
                 .EndsWith(tail)
                 .DoesNotEndWith(nonTail);
 
@@ -387,7 +395,9 @@
         public void EndsWithWithComparison(
             string value, string tail, string nonTail, StringComparison comparison, bool secure)
         {
-            var valueArg = Guard.Argument(() => value, secure)
+            var valueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
                 .EndsWith(tail, comparison)
                 .DoesNotEndWith(nonTail, comparison);
 
@@ -439,13 +449,17 @@
             var validRegexWithTimeout = validPattern is null ? null : new Regex(validPattern, RegexOptions.None, MatchTimeout);
             var timeoutRegex = timeoutPattern is null ? null : new Regex(timeoutPattern, RegexOptions.None, MatchTimeout);
 
-            var withMatchArg = Guard.Argument(() => withMatch, secure)
+            var withMatchArg = (secure
+                    ? Guard.SecureArgument(() => withMatch)
+                    : Guard.Argument(() => withMatch))
                 .Matches(validPattern)
                 .Matches(validPattern, MatchTimeout)
                 .Matches(validRegexWithoutTimeout)
                 .Matches(validRegexWithTimeout);
 
-            var withoutMatchArg = Guard.Argument(() => withoutMatch, secure)
+            var withoutMatchArg = (secure
+                    ? Guard.SecureArgument(() => withoutMatch)
+                    : Guard.Argument(() => withoutMatch))
                 .DoesNotMatch(validPattern)
                 .DoesNotMatch(validPattern, MatchTimeout)
                 .DoesNotMatch(validRegexWithoutTimeout)
@@ -558,7 +572,9 @@
 
             // Matches - invalid pattern w/o timeout
             ThrowsArgumentException(
-                Guard.Argument(withMatch, "pattern", secure),
+                secure
+                    ? Guard.SecureArgument(withMatch, "pattern")
+                    : Guard.Argument(withMatch, "pattern"),
                 arg => arg.Matches(invalidPattern),
                 (arg, message) => arg.Matches(invalidPattern, (s, t) =>
                 {
@@ -571,7 +587,9 @@
 
             // Matches - invalid pattern w/ timeout
             ThrowsArgumentException(
-                Guard.Argument(withMatch, "pattern", secure),
+                secure
+                    ? Guard.SecureArgument(withMatch, "pattern")
+                    : Guard.Argument(withMatch, "pattern"),
                 arg => arg.Matches(invalidPattern),
                 (arg, message) => arg.Matches(invalidPattern, MatchTimeout, (s, t) =>
                 {
@@ -632,7 +650,9 @@
 
             // Does not match - invalid pattern w/o timeout
             ThrowsArgumentException(
-                Guard.Argument(withoutMatch, "pattern", secure),
+                secure
+                    ? Guard.SecureArgument(withoutMatch, "pattern")
+                    : Guard.Argument(withoutMatch, "pattern"),
                 arg => arg.DoesNotMatch(invalidPattern),
                 (arg, message) => arg.DoesNotMatch(invalidPattern, (s, t) =>
                 {
@@ -645,7 +665,9 @@
 
             // Does not match - invalid pattern w/ timeout
             ThrowsArgumentException(
-                Guard.Argument(withoutMatch, "pattern", secure),
+                secure
+                    ? Guard.SecureArgument(withoutMatch, "pattern")
+                    : Guard.Argument(withoutMatch, "pattern"),
                 arg => arg.DoesNotMatch(invalidPattern),
                 (arg, message) => arg.DoesNotMatch(invalidPattern, MatchTimeout, (s, t) =>
                 {

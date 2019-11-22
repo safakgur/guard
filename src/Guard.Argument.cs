@@ -30,39 +30,31 @@ namespace Dawn
         ///         violating the preconditions can be easily identified.
         ///     </para>
         /// </param>
-        /// <param name="secure">
-        ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
-        ///     messages of failed validations.
-        /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
         [DebuggerStepThrough]
         [GuardFunction("Initialization", "ga", order: 1)]
         public static ArgumentInfo<T> Argument<T>(
-            T value, [InvokerParameterName] string? name = null, bool secure = false)
-            => new ArgumentInfo<T>(value, name, secure: secure);
+            T value, [InvokerParameterName] string? name = null)
+            => new ArgumentInfo<T>(value, name);
 
         /// <summary>
         ///     Returns an object that can be used to assert preconditions for the specified method argument.
         /// </summary>
         /// <typeparam name="T">The type of the method argument.</typeparam>
         /// <param name="e">An expression that specifies a method argument.</param>
-        /// <param name="secure">
-        ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
-        ///     messages of failed validations.
-        /// </param>
         /// <returns>An object used for asserting preconditions.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="e" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="e" /> is not a <see cref="MemberExpression" />.</exception>
         [ContractAnnotation("e:null => halt")]
         [DebuggerStepThrough]
         [GuardFunction("Initialization", order: 2)]
-        public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e, bool secure = false)
+        public static ArgumentInfo<T> Argument<T>(Expression<Func<T>> e)
         {
             if (e is null)
                 throw new ArgumentNullException(nameof(e));
 
             return e.Body is MemberExpression m
-                ? Argument(e.Compile()(), m.Member.Name, secure)
+                ? Argument(e.Compile()(), m.Member.Name)
                 : throw new ArgumentException("A member expression is expected.", nameof(e));
         }
 

@@ -102,7 +102,9 @@ namespace Dawn
                 }
 
                 // Validate the member.
-                var memberArgument = Argument(memberValue, info.Name, argument.Secure);
+                var memberArgument = argument.Secure
+                    ? SecureArgument(memberValue, info.Name)
+                    : Argument(memberValue, info.Name);
                 try
                 {
                     validation(memberArgument);
@@ -209,7 +211,9 @@ namespace Dawn
                 }
 
                 // Validate the member.
-                var memberArgument = Argument(memberValue, info.Name, argument.Secure);
+                var memberArgument = argument.Secure
+                    ? SecureArgument(memberValue, info.Name)
+                    : Argument(memberValue, info.Name);
                 try
                 {
                     validation(memberArgument);

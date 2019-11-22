@@ -299,7 +299,9 @@
 
             for (var i = 0; i < 2; i++)
             {
-                var streamArg = Guard.Argument(() => stream, i == 1);
+                var streamArg = i == 1
+                    ? Guard.SecureArgument(() => stream)
+                    : Guard.Argument(() => stream);
 
                 var objectCastedArg = streamArg.Cast<object>();
                 Assert.Same(streamArg.Name, objectCastedArg.Name);

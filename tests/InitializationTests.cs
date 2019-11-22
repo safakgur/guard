@@ -35,9 +35,11 @@
         {
             for (var i = 0; i < 3; i++)
             {
-                var arg = i == 0 ? Guard.Argument(() => value)
-                    : i == 1 ? Guard.Argument(() => value, false)
-                             : Guard.Argument(() => value, true);
+                var arg = i == 0
+                    ? Guard.Argument(() => value)
+                    : i == 1
+                        ? Guard.Argument(() => value)
+                        : Guard.SecureArgument(() => value);
 
                 Assert.Equal(value, arg.Value);
                 Assert.Equal(nameof(value), arg.Name);
@@ -61,9 +63,11 @@
         {
             for (var i = 0; i < 3; i++)
             {
-                var arg = i == 0 ? Guard.Argument(value, nameof(value))
-                    : i == 1 ? Guard.Argument(value, nameof(value), false)
-                             : Guard.Argument(value, nameof(value), true);
+                var arg = i == 0
+                    ? Guard.Argument(value, nameof(value))
+                    : i == 1
+                        ? Guard.Argument(value, nameof(value))
+                        : Guard.SecureArgument(value, nameof(value));
 
                 Assert.Equal(value, arg.Value);
                 Assert.Equal(nameof(value), arg.Name);
@@ -98,9 +102,11 @@
         {
             for (var i = 0; i < 3; i++)
             {
-                var arg = i == 0 ? Guard.Argument(value)
-                    : i == 1 ? Guard.Argument(value, secure: false)
-                             : Guard.Argument(value, secure: true);
+                var arg = i == 0
+                    ? Guard.Argument(value)
+                    : i == 1
+                        ? Guard.Argument(value)
+                        : Guard.SecureArgument(value);
 
                 Assert.Equal(value, arg.Value);
                 Assert.Contains(typeof(T).ToString(), arg.Name);
@@ -151,7 +157,9 @@
             {
                 var hasName = i <= 1;
                 var isSecure = i >= 1;
-                var valueArg = Guard.Argument(value, hasName ? nameof(value) : null, isSecure);
+                var valueArg = isSecure
+                    ? Guard.SecureArgument(value, hasName ? nameof(value) : null)
+                    : Guard.Argument(value, hasName ? nameof(value) : null);
 
                 var display = valueArg.DebuggerDisplay;
                 if (hasName)

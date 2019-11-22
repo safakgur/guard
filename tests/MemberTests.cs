@@ -43,7 +43,9 @@
                 ? default(DateTime?)
                 : DateTime.Parse(dateTimeString, CultureInfo.InvariantCulture);
 
-            var nullableTimeArg = Guard.Argument(() => nullableDateTime, secure)
+            var nullableTimeArg = (secure
+                    ? Guard.SecureArgument(() => nullableDateTime)
+                    : Guard.Argument(() => nullableDateTime))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour), true);
 
@@ -88,7 +90,9 @@
                     return message;
                 }));
 
-            var dateTimeArg = Guard.Argument(() => dateTime, secure)
+            var dateTimeArg = (secure
+                    ? Guard.SecureArgument(() => dateTime)
+                    : Guard.Argument(() => dateTime))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour), true);
 

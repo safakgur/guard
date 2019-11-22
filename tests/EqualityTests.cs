@@ -56,7 +56,10 @@
         [InlineData("AB", "AB", "BC", true)]
         public void EqualWithoutComparer(string value, string equal, string unequal, bool secure)
         {
-            var valueArg = Guard.Argument(() => value, secure).Equal(equal).NotEqual(unequal);
+            var valueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
+                .Equal(equal).NotEqual(unequal);
             if (value == null)
             {
                 valueArg.Equal(unequal);
@@ -94,7 +97,9 @@
         public void EqualWithComparer(
             string value, string equal, string unequal, StringComparison comparison, bool secure)
         {
-            var valueArg = Guard.Argument(() => value, secure);
+            var valueArg = secure
+                ? Guard.SecureArgument(() => value)
+                : Guard.Argument(() => value);
             var comparer = comparison == StringComparison.Ordinal
                 ? StringComparer.Ordinal
                 : StringComparer.OrdinalIgnoreCase;
@@ -145,7 +150,9 @@
                 same = same?.ToString();
                 nonSame = nonSame?.ToString();
 
-                var valueArg = Guard.Argument(() => value, secure);
+                var valueArg = secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value);
                 valueArg
                     .Equal(same)
                     .Equal(nonSame)

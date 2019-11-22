@@ -49,7 +49,9 @@
         [InlineData(Colors.Red | Colors.Blue, Colors.Blue, Colors.Green, true)]
         public void HasFlag(Colors? value, Colors setFlags, Colors unsetFlags, bool secure)
         {
-            var nullableValueArg = Guard.Argument(() => value, secure)
+            var nullableValueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
                 .HasFlag(setFlags)
                 .DoesNotHaveFlag(unsetFlags);
 
@@ -84,7 +86,9 @@
                     return message;
                 }));
 
-            var valueArg = Guard.Argument(value.Value, nameof(value), secure)
+            var valueArg = (secure
+                    ? Guard.SecureArgument(value.Value, nameof(value))
+                    : Guard.Argument(value.Value, nameof(value)))
                 .HasFlag(setFlags)
                 .DoesNotHaveFlag(unsetFlags);
 

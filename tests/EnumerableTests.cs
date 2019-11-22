@@ -241,7 +241,9 @@
             CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
         {
             var enumerable = GetEnumerable<int?>(options, count);
-            var enumerableArg = Guard.Argument(() => enumerable, secure);
+            var enumerableArg = secure
+                ? Guard.SecureArgument(() => enumerable)
+                : Guard.Argument(() => enumerable);
 
             var index = enumerable?.Items.TakeWhile(i => i != contained).Count() ?? RandomNumber;
             var comparer = EqualityComparer<int?>.Default;
@@ -629,8 +631,12 @@
         public void InCollection(
             CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
         {
-            var containedArg = Guard.Argument(() => contained, secure);
-            var nonContainedArg = Guard.Argument(() => nonContained, secure);
+            var containedArg = secure
+                ? Guard.SecureArgument(() => contained)
+                : Guard.Argument(() => contained);
+            var nonContainedArg = secure
+                ? Guard.SecureArgument(() => nonContained)
+                : Guard.Argument(() => nonContained);
 
             var enumerable = GetEnumerable<int?>(options, count);
             var index = enumerable?.Items.TakeWhile(i => i != contained).Count() ?? RandomNumber;
@@ -793,7 +799,9 @@
         {
             var containing = containingString?.Split(',');
             var nonContaining = nonContainingString?.Split(',');
-            var valueArg = Guard.Argument(() => value, secure)
+            var valueArg = (secure
+                    ? Guard.SecureArgument(() => value)
+                    : Guard.Argument(() => value))
                 .In(containing)
                 .NotIn(nonContaining);
 

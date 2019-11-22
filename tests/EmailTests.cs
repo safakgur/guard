@@ -18,7 +18,10 @@
         public void HasHost(string emailString, string host, string nonHost, bool secure)
         {
             var email = emailString is null ? null : new MailAddress(emailString);
-            var emailArgument = Guard.Argument(() => email, secure).HasHost(host).DoesNotHaveHost(nonHost);
+            var emailArgument = (secure
+                    ? Guard.SecureArgument(() => email)
+                    : Guard.Argument(() => email))
+                .HasHost(host).DoesNotHaveHost(nonHost);
 
             if (email is null)
             {
@@ -69,7 +72,9 @@
             string emailString, string hostsString, string nonHostsString, bool hasContains, bool secure)
         {
             var email = emailString is null ? null : new MailAddress(emailString);
-            var emailArg = Guard.Argument(() => email, secure);
+            var emailArg = secure
+                ? Guard.SecureArgument(() => email)
+                : Guard.Argument(() => email);
             var hosts = GetHosts(hostsString, hasContains, out var hostsCount);
             var hostIndex = email is null ? RandomNumber : hosts.Items.TakeWhile(h => h != email.Host).Count();
             var nonHosts = GetHosts(nonHostsString, hasContains, out var nonHostsCount);
