@@ -1,10 +1,10 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public abstract class BaseTests
     {
         private const string Alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -268,47 +268,47 @@
             private static readonly Random Seeder = new Random();
 
             [ThreadStatic]
-            private static Random current;
+            private static Random s_current;
 
             public static Random Current
             {
                 get
                 {
-                    if (current == null)
+                    if (s_current == null)
                     {
                         int seed;
                         lock (Seeder)
                             seed = Seeder.Next();
 
-                        current = new Random(seed);
+                        s_current = new Random(seed);
                     }
 
-                    return current;
+                    return s_current;
                 }
             }
         }
 
         private sealed class Scope : IDisposable
         {
-            private readonly IDisposable scope;
+            private readonly IDisposable _scope;
 
 #pragma warning disable IDE0044
-            private Exception lastException;
+            private Exception _lastException;
 #pragma warning restore IDE0044
 
             public Scope(bool doNotTestScoping = false)
             {
                 if (RandomBoolean && !doNotTestScoping)
-                    this.scope = Guard.BeginScope((ex, stackTrace) => this.lastException = ex);
+                    _scope = Guard.BeginScope((ex, stackTrace) => _lastException = ex);
             }
 
             public void CheckException(Exception exception)
             {
-                if (this.scope != null && exception != null)
-                    Assert.Same(this.lastException, exception);
+                if (_scope != null && exception != null)
+                    Assert.Same(_lastException, exception);
             }
 
-            public void Dispose() => this.scope?.Dispose();
+            public void Dispose() => _scope?.Dispose();
         }
     }
 }

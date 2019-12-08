@@ -1,14 +1,14 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using JetBrains.Annotations;
-
     /// <content>Provides preconditions for <see cref="IEquatable{T}" /> arguments.</content>
     public static partial class Guard
     {

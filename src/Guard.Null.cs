@@ -1,13 +1,13 @@
 ﻿#nullable enable
 
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using JetBrains.Annotations;
-
     /// <content>Nullability preconditions.</content>
     public static partial class Guard
     {

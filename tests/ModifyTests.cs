@@ -1,8 +1,8 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using Xunit;
+﻿using System;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class ModifyTests : BaseTests
     {
         [Fact(DisplayName = "Modify: Modify using value")]
@@ -38,7 +38,7 @@
 
                 var exception = new Exception(RandomMessage);
                 Assert.Same(exception, Assert.Throws<Exception>(()
-                    => stringArg.Modify<string, int>(s => { throw exception; })));
+                    => stringArg.Modify<string, int>(s => throw exception)));
             }
         }
 
@@ -59,8 +59,8 @@
                 var exception = new Exception(RandomMessage);
                 Assert.DoesNotContain(exception, ThrowsArgumentException(
                     stringArg,
-                    arg => arg.Wrap<string, int>(s => { throw exception; }),
-                    (arg, message) => arg.Wrap<string, int>(s => { throw exception; }, s =>
+                    arg => arg.Wrap<string, int>(s => throw exception),
+                    (arg, message) => arg.Wrap<string, int>(s => throw exception, s =>
                     {
                         Assert.Same(stringArg.Value, s);
                         return message;
@@ -103,9 +103,7 @@
             {
             }
 
-#pragma warning disable IDE0060 // Remove unused parameter
-            private TestCloneable(bool isClone) => this.IsClone = true;
-#pragma warning restore IDE0060 // Remove unused parameter
+            private TestCloneable(bool isClone) => IsClone = isClone;
 
             public bool IsClone { get; }
 

@@ -1,12 +1,12 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
 namespace Dawn
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
     /// <summary>Marks a target as a function of <see cref="Guard" />.</summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     internal sealed class GuardFunctionAttribute : Attribute
@@ -25,16 +25,16 @@ namespace Dawn
         /// </exception>
         public GuardFunctionAttribute(string group, string? shortcut = null, int order = 0)
         {
-            this.Group = Guard.Argument(group, nameof(group))
+            Group = Guard.Argument(group, nameof(group))
                 .NotNull()
                 .NotWhiteSpace();
 
-            this.Shortcut = Guard.Argument(shortcut, nameof(shortcut))
+            Shortcut = Guard.Argument(shortcut, nameof(shortcut))
                 .StartsWith("g", StringComparison.Ordinal)
                 .DoesNotStartWith("gx", StringComparison.Ordinal)
                 .MinLength(2);
 
-            this.Order = order;
+            Order = order;
         }
 
         /// <summary>The group that the function belongs to.</summary>

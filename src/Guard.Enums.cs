@@ -1,13 +1,13 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq.Expressions;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq.Expressions;
-    using JetBrains.Annotations;
-
     /// <content>Provides preconditions for <see cref="System.Enum" /> arguments.</content>
     public static partial class Guard
     {

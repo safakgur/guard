@@ -1,12 +1,12 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using Xunit;
+﻿using System;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class RequireTests : BaseTests
     {
         [ThreadStatic]
-        private static object currentValue;
+        private static object s_currentValue;
 
         [Theory(DisplayName = "Require: Default exception")]
         [InlineData(null)]
@@ -14,7 +14,7 @@
         [InlineData("A")]
         public void RequireDefaultException<T>(T value)
         {
-            currentValue = value;
+            s_currentValue = value;
             var valueArg = Guard.Argument(() => value).Require(true).Require(Success);
             if (value == null)
             {
@@ -47,7 +47,7 @@
         [InlineData("A")]
         public void RequireArgumentExceptionWithMessage<T>(T value)
         {
-            currentValue = value;
+            s_currentValue = value;
             var valueArg = Guard.Argument(() => value)
                 .Require<TestArgException>(true)
                 .Require<TestArgException>(Success);
@@ -86,7 +86,7 @@
         [InlineData("A")]
         public void RequireArgumentExceptionWithoutMessage<T>(T value)
         {
-            currentValue = value;
+            s_currentValue = value;
             var valueArg = Guard.Argument(() => value)
                 .Require<TestArgExceptionNoMessage>(true)
                 .Require<TestArgExceptionNoMessage>(Success);
@@ -125,7 +125,7 @@
         [InlineData("A")]
         public void RequireCommonExceptionWithMessage<T>(T value)
         {
-            currentValue = value;
+            s_currentValue = value;
             var valueArg = Guard.Argument(() => value)
                 .Require<TestException>(true)
                 .Require<TestException>(Success);
@@ -164,7 +164,7 @@
         [InlineData("A")]
         public void RequireCommonExceptionWithoutMessage<T>(T value)
         {
-            currentValue = value;
+            s_currentValue = value;
             var valueArg = Guard.Argument(() => value)
                 .Require<TestExceptionNoMessage>(true)
                 .Require<TestExceptionNoMessage>(Success);
@@ -203,7 +203,7 @@
         [InlineData("A")]
         public void RequireExceptionWithoutConstructor<T>(T value)
         {
-            currentValue = value;
+            s_currentValue = value;
             var valueArg = Guard.Argument(() => value)
                 .Require<TestExceptionNoCtor>(true)
                 .Require<TestExceptionNoCtor>(Success);
@@ -288,13 +288,13 @@
 
         private static bool Success<T>(T v)
         {
-            Assert.Equal((T)currentValue, v);
+            Assert.Equal((T)s_currentValue, v);
             return true;
         }
 
         private static bool Fail<T>(T v)
         {
-            Assert.Equal((T)currentValue, v);
+            Assert.Equal((T)s_currentValue, v);
             return false;
         }
 

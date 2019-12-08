@@ -1,12 +1,12 @@
-﻿namespace Dawn
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using System.Text.RegularExpressions;
-    using JetBrains.Annotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 
+namespace Dawn
+{
     /// <content>Provides preconditions for <see cref="string" /> arguments.</content>
     public static partial class Guard
     {

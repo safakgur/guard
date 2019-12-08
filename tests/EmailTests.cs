@@ -1,12 +1,12 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Mail;
-    using Xunit;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class EmailTests : BaseTests
     {
         [Theory(DisplayName = "Email: HasHost/DoesNotHaveHost")]

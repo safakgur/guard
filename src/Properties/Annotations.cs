@@ -1,7 +1,7 @@
-﻿namespace JetBrains.Annotations
-{
-    using System;
+﻿using System;
 
+namespace JetBrains.Annotations
+{
     /// <summary>
     ///     Indicates that the marked method is an assertion method, i.e. it halts the control flow
     ///     unless a condition is satisfied.
@@ -18,7 +18,7 @@
         ///     Initializes a new instance of the <see cref="ContractAnnotationAttribute" /> class.
         /// </summary>
         /// <param name="contract">The contract string.</param>
-        public ContractAnnotationAttribute([NotNull] string contract) => this.Contract = contract;
+        public ContractAnnotationAttribute([NotNull] string contract) => Contract = contract;
 
         /// <summary>Gets the contract string.</summary>
         [NotNull]

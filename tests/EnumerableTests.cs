@@ -1,11 +1,11 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Xunit;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class EnumerableTests : BaseTests
     {
         [Flags]
@@ -906,7 +906,7 @@
 
         public class TestEnumerable<T> : ITestEnumerable<T>
         {
-            public TestEnumerable(IEnumerable<T> items) => this.Items = items;
+            public TestEnumerable(IEnumerable<T> items) => Items = items;
 
             public IEnumerable<T> Items { get; }
 
@@ -916,36 +916,36 @@
 
             public IEnumerator<T> GetEnumerator()
             {
-                this.Enumerated = true;
-                foreach (var item in this.Items)
+                Enumerated = true;
+                foreach (var item in Items)
                 {
-                    this.EnumerationCount++;
+                    EnumerationCount++;
                     yield return item;
                 }
             }
 
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             public virtual void Reset()
             {
-                this.Enumerated = false;
-                this.EnumerationCount = 0;
+                Enumerated = false;
+                EnumerationCount = 0;
             }
         }
 
         public class TestEnumerableWithCount<T> : TestEnumerable<T>, ITestEnumerableWithCount<T>
         {
-            private readonly int count;
+            private readonly int _count;
 
             public TestEnumerableWithCount(IEnumerable<T> items)
-                : base(items) => this.count = items.Count();
+                : base(items) => _count = items.Count();
 
             public int Count
             {
                 get
                 {
-                    this.CountCalled = true;
-                    return this.count;
+                    CountCalled = true;
+                    return _count;
                 }
             }
 
@@ -954,7 +954,7 @@
             public override void Reset()
             {
                 base.Reset();
-                this.CountCalled = false;
+                CountCalled = false;
             }
         }
 
@@ -969,14 +969,14 @@
 
             public bool Contains(T item)
             {
-                this.ContainsCalled = true;
-                return this.Items.Contains(item);
+                ContainsCalled = true;
+                return Items.Contains(item);
             }
 
             public override void Reset()
             {
                 base.Reset();
-                this.ContainsCalled = false;
+                ContainsCalled = false;
             }
         }
 
@@ -992,14 +992,14 @@
 
             public bool Contains(T item)
             {
-                this.ContainsCalled = true;
-                return this.Items.Contains(item);
+                ContainsCalled = true;
+                return Items.Contains(item);
             }
 
             public override void Reset()
             {
                 base.Reset();
-                this.ContainsCalled = false;
+                ContainsCalled = false;
             }
         }
     }

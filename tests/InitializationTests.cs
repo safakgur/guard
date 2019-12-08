@@ -1,8 +1,8 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using Xunit;
+﻿using System;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class InitializationTests : BaseTests
     {
         [Fact(DisplayName = "Argument: Uninitialized")]

@@ -1,7 +1,7 @@
-﻿namespace Dawn.Tests
-{
-    using Xunit;
+﻿using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class ComparableTests : BaseTests
     {
         [Theory(DisplayName = "Comparable: Min")]

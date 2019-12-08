@@ -1,8 +1,8 @@
-﻿namespace Dawn.Tests
-{
-    using System.IO;
-    using Xunit;
+﻿using System.IO;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class TypeTests : BaseTests
     {
         [Theory(DisplayName = "Type: Type/NotType (generic class)")]
