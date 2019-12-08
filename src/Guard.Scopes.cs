@@ -2,12 +2,12 @@
 
 #if !NETSTANDARD1_0
 
+using System;
+using System.Diagnostics;
+using System.Threading;
+
 namespace Dawn
 {
-    using System;
-    using System.Diagnostics;
-    using System.Threading;
-
     /// <content>Provides scoping support.</content>
     public static partial class Guard
     {
@@ -40,7 +40,7 @@ namespace Dawn
             /// <summary>
             ///     Contains zero if the instance is not disposed; and one if it is disposed.
             /// </summary>
-            private int disposed;
+            private int _disposed;
 
             /// <summary>Initializes a new instance of the <see cref="Scope" /> class.</summary>
             /// <param name="exceptionInterceptor">
@@ -52,11 +52,11 @@ namespace Dawn
             /// </param>
             public Scope(Action<Exception, StackTrace>? exceptionInterceptor, bool propagates)
             {
-                this.Parent = Current;
+                Parent = Current;
                 Current = this;
 
-                this.ExceptionInterceptor = exceptionInterceptor;
-                this.Propagates = propagates;
+                ExceptionInterceptor = exceptionInterceptor;
+                Propagates = propagates;
             }
 
             /// <summary>Gets the previous scope to restore when the current one is disposed.</summary>
@@ -83,8 +83,8 @@ namespace Dawn
             /// <summary>Ends the guarding scope.</summary>
             public void Dispose()
             {
-                if (Interlocked.CompareExchange(ref this.disposed, 1, 0) == 0)
-                    Current = this.Parent;
+                if (Interlocked.CompareExchange(ref _disposed, 1, 0) == 0)
+                    Current = Parent;
             }
         }
 

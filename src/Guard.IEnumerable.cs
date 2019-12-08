@@ -1,18 +1,18 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
-    using System.Threading;
-    using JetBrains.Annotations;
-
     /// <content>Provides preconditions for <see cref="IEnumerable" /> arguments.</content>
     public static partial class Guard
     {
@@ -865,14 +865,14 @@ namespace Dawn
             /// </returns>
             private static Func<TCollection, bool> InitContainsNull()
             {
-                const string Name = "Contains";
+                const string name = "Contains";
                 var collectionType = typeof(TCollection);
 
                 IEnumerable<MethodInfo> search;
 #if NETSTANDARD1_0
-                search = collectionType.GetTypeInfo().GetDeclaredMethods(Name).Where(m => m.IsPublic && !m.IsStatic);
+                search = collectionType.GetTypeInfo().GetDeclaredMethods(name).Where(m => m.IsPublic && !m.IsStatic);
 #else
-                search = collectionType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(m => m.Name == Name);
+                search = collectionType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(m => m.Name == name);
 #endif
 
                 var methods = search.Where(m => m.ReturnType == typeof(bool)).ToList();
@@ -1104,10 +1104,7 @@ namespace Dawn
                 {
                     var collectionType = typeof(TCollection);
 
-#pragma warning disable IDE0007 // Use implicit type
                     Type? itemType = typeof(TItem);
-#pragma warning restore IDE0007 // Use implicit type
-
                     do
                     {
                         var method = collectionType.GetMethod("Contains", new[] { itemType });

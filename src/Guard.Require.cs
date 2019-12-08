@@ -1,13 +1,13 @@
 ﻿#nullable enable
 
+using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq.Expressions;
-    using JetBrains.Annotations;
-
     /// <content>Provides generic preconditions.</content>
     public static partial class Guard
     {
@@ -54,10 +54,10 @@ namespace Dawn
                 bool condition, Func<T, string>? message = null)
                 where TException : Exception
             {
-                if (this.HasValue() && !condition)
+                if (HasValue() && !condition)
                 {
-                    var m = message?.Invoke(this.Value) ?? Messages.Require(this);
-                    throw Fail(Exception<TException>.Factory(this.Name, m));
+                    var m = message?.Invoke(Value) ?? Messages.Require(this);
+                    throw Fail(Exception<TException>.Factory(Name, m));
                 }
 
                 return this;
@@ -103,10 +103,10 @@ namespace Dawn
                 Func<T, bool> predicate, Func<T, string>? message = null)
                 where TException : Exception
             {
-                if (this.HasValue() && predicate?.Invoke(this.Value) == false)
+                if (HasValue() && predicate?.Invoke(Value) == false)
                 {
-                    var m = message?.Invoke(this.Value) ?? Messages.Require(this);
-                    throw Fail(Exception<TException>.Factory(this.Name, m));
+                    var m = message?.Invoke(Value) ?? Messages.Require(this);
+                    throw Fail(Exception<TException>.Factory(Name, m));
                 }
 
                 return this;

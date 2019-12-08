@@ -1,10 +1,10 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
-    using Xunit;
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class StringTests : BaseTests
     {
         private static readonly TimeSpan MatchTimeout = TimeSpan.FromMilliseconds(10);

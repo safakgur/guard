@@ -1,12 +1,12 @@
 ﻿#nullable enable
 
+using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using JetBrains.Annotations;
-
     /// <content>Provides state preconditions.</content>
     public static partial class Guard
     {
