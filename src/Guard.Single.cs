@@ -38,7 +38,7 @@ namespace Dawn
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NaN(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -82,7 +82,7 @@ namespace Dawn
                 {
                     var m = message?.Invoke(value) ?? Messages.NaN(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -117,7 +117,7 @@ namespace Dawn
             {
                 var m = message ?? Messages.NotNaN(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -154,7 +154,7 @@ namespace Dawn
                 {
                     var m = message ?? Messages.NotNaN(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -191,7 +191,7 @@ namespace Dawn
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.Infinity(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -238,7 +238,7 @@ namespace Dawn
                 {
                     var m = message?.Invoke(value) ?? Messages.Infinity(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -274,7 +274,7 @@ namespace Dawn
             {
                 var m = message ?? Messages.NotInfinity(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -309,7 +309,7 @@ namespace Dawn
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotInfinity(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -344,7 +344,7 @@ namespace Dawn
             {
                 var m = message ?? Messages.NotInfinity(a);
                 throw Fail(!a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, argument.Secure ? null : a.Value as object, m)
+                    ? new ArgumentOutOfRangeException(a.Name, argument.Sensitive ? null : a.Value as object, m)
                     : new ArgumentException(m, a.Name));
             }
 
@@ -388,7 +388,7 @@ namespace Dawn
                 {
                     var m = message?.Invoke(value) ?? Messages.NotInfinity(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -424,7 +424,7 @@ namespace Dawn
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.PositiveInfinity(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -468,7 +468,7 @@ namespace Dawn
                 {
                     var m = message?.Invoke(value) ?? Messages.PositiveInfinity(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -503,7 +503,7 @@ namespace Dawn
             {
                 var m = message ?? Messages.NotPositiveInfinity(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -540,7 +540,7 @@ namespace Dawn
                 {
                     var m = message ?? Messages.NotPositiveInfinity(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -576,7 +576,7 @@ namespace Dawn
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NegativeInfinity(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -620,7 +620,7 @@ namespace Dawn
                 {
                     var m = message?.Invoke(value) ?? Messages.NegativeInfinity(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -655,7 +655,7 @@ namespace Dawn
             {
                 var m = message ?? Messages.NotNegativeInfinity(argument);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -692,7 +692,7 @@ namespace Dawn
                 {
                     var m = message ?? Messages.NotNegativeInfinity(argument);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -730,7 +730,7 @@ namespace Dawn
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other, delta);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -770,7 +770,7 @@ namespace Dawn
                 {
                     var m = message?.Invoke(value, other) ?? Messages.Equal(argument, other, delta);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }
@@ -808,7 +808,7 @@ namespace Dawn
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.NotEqual(argument, other, delta);
                 throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
             }
 
@@ -848,7 +848,7 @@ namespace Dawn
                 {
                     var m = message?.Invoke(value, other) ?? Messages.NotEqual(argument, other, delta);
                     throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : value as object, m)
                         : new ArgumentException(m, argument.Name));
                 }
             }

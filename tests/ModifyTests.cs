@@ -12,7 +12,7 @@
             {
                 var stringValue = 1.ToString();
                 var stringArg = i == 1
-                    ? Guard.SecureArgument(() => stringValue)
+                    ? Guard.SensitiveArgument(() => stringValue)
                     : Guard.Argument(() => stringValue);
                 Assert.False(stringArg.Modified);
 
@@ -20,7 +20,7 @@
                 var integerArg = stringArg.Modify(integerValue);
                 Assert.Equal(stringArg.Name, integerArg.Name);
                 Assert.Equal(integerValue, integerArg.Value);
-                Assert.Equal(stringArg.Secure, integerArg.Secure);
+                Assert.Equal(stringArg.Sensitive, integerArg.Sensitive);
             }
         }
 
@@ -31,14 +31,14 @@
             {
                 var stringValue = 1.ToString();
                 var stringArg = i == 1
-                    ? Guard.SecureArgument(() => stringValue)
+                    ? Guard.SensitiveArgument(() => stringValue)
                     : Guard.Argument(() => stringValue);
 
                 var integerArg = stringArg.Modify(s => int.Parse(s));
                 Assert.Equal(stringArg.Name, integerArg.Name);
                 Assert.Equal(1, integerArg.Value);
                 Assert.True(integerArg.Modified);
-                Assert.Equal(stringArg.Secure, integerArg.Secure);
+                Assert.Equal(stringArg.Sensitive, integerArg.Sensitive);
 
                 var exception = new Exception(RandomMessage);
                 Assert.Same(exception, Assert.Throws<Exception>(()
@@ -53,14 +53,14 @@
             for (var i = 0; i < 2; i++)
             {
                 var stringArg = i == 1
-                    ? Guard.SecureArgument(() => stringValue)
+                    ? Guard.SensitiveArgument(() => stringValue)
                     : Guard.Argument(() => stringValue);
                 var integerArg = stringArg.Wrap(s => int.Parse(s));
 
                 Assert.Equal(stringArg.Name, integerArg.Name);
                 Assert.Equal(1, integerArg.Value);
                 Assert.True(integerArg.Modified);
-                Assert.Equal(stringArg.Secure, integerArg.Secure);
+                Assert.Equal(stringArg.Sensitive, integerArg.Sensitive);
 
                 var exception = new Exception(RandomMessage);
                 Assert.DoesNotContain(exception, ThrowsArgumentException(
@@ -83,7 +83,7 @@
             for (var i = 0; i < 2; i++)
             {
                 var cloneableArg = i == 1
-                    ? Guard.SecureArgument(() => cloneable)
+                    ? Guard.SensitiveArgument(() => cloneable)
                     : Guard.Argument(() => cloneable);
                 Assert.False(cloneableArg.Modified);
 
@@ -91,17 +91,17 @@
                 Assert.Equal(cloneableArg.Name, cloneArg.Name);
                 Assert.True(cloneArg.Value.IsClone);
                 Assert.Equal(cloneableArg.Modified, cloneArg.Modified);
-                Assert.Equal(cloneableArg.Secure, cloneArg.Secure);
+                Assert.Equal(cloneableArg.Sensitive, cloneArg.Sensitive);
 
                 var modifiedCloneableArg = cloneableArg.Modify(c => new TestCloneable());
                 Assert.True(modifiedCloneableArg.Modified);
-                Assert.Equal(cloneableArg.Secure, modifiedCloneableArg.Secure);
+                Assert.Equal(cloneableArg.Sensitive, modifiedCloneableArg.Sensitive);
 
                 var modifiedCloneArg = modifiedCloneableArg.Clone();
                 Assert.Equal(modifiedCloneableArg.Name, modifiedCloneArg.Name);
                 Assert.True(modifiedCloneArg.Value.IsClone);
                 Assert.Equal(modifiedCloneableArg.Modified, modifiedCloneArg.Modified);
-                Assert.Equal(modifiedCloneableArg.Secure, modifiedCloneArg.Secure);
+                Assert.Equal(modifiedCloneableArg.Sensitive, modifiedCloneArg.Sensitive);
             }
         }
 

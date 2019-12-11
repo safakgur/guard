@@ -15,11 +15,11 @@
         [InlineData("a@b.c", "b.c", "c.b", true)]
         [InlineData("a@b.c", "B.C", "C.B", false)] // Ordinal case-insensitive.
         [InlineData("a@b.c", "B.C", "C.B", true)]
-        public void HasHost(string emailString, string host, string nonHost, bool secure)
+        public void HasHost(string emailString, string host, string nonHost, bool sensitive)
         {
             var email = emailString is null ? null : new MailAddress(emailString);
-            var emailArgument = (secure
-                    ? Guard.SecureArgument(() => email)
+            var emailArgument = (sensitive
+                    ? Guard.SensitiveArgument(() => email)
                     : Guard.Argument(() => email))
                 .HasHost(host).DoesNotHaveHost(nonHost);
 
@@ -32,7 +32,7 @@
             ThrowsArgumentException(
                 emailArgument,
                 arg => arg.HasHost(nonHost),
-                m => secure != m.Contains(nonHost),
+                m => sensitive != m.Contains(nonHost),
                 (arg, message) => arg.HasHost(nonHost, (e, h) =>
                 {
                     Assert.Same(email, e);
@@ -43,7 +43,7 @@
             ThrowsArgumentException(
                 emailArgument,
                 arg => arg.DoesNotHaveHost(host),
-                m => secure != m.Contains(host),
+                m => sensitive != m.Contains(host),
                 (arg, message) => arg.DoesNotHaveHost(host, (e, h) =>
                 {
                     Assert.Same(email, e);
@@ -69,11 +69,11 @@
         [InlineData("a@b.c", "a.b;b.c", "", true, false)]
         [InlineData("a@b.c", "a.b;b.c", "", true, true)]
         public void HostIn(
-            string emailString, string hostsString, string nonHostsString, bool hasContains, bool secure)
+            string emailString, string hostsString, string nonHostsString, bool hasContains, bool sensitive)
         {
             var email = emailString is null ? null : new MailAddress(emailString);
-            var emailArg = secure
-                ? Guard.SecureArgument(() => email)
+            var emailArg = sensitive
+                ? Guard.SensitiveArgument(() => email)
                 : Guard.Argument(() => email);
             var hosts = GetHosts(hostsString, hasContains, out var hostsCount);
             var hostIndex = email is null ? RandomNumber : hosts.Items.TakeWhile(h => h != email.Host).Count();
@@ -100,7 +100,7 @@
                 }));
 
             var enumerationCount = GetEnumerationCount(null, nonHostsCount);
-            var forceEnumerated = !secure ? true : default(bool?);
+            var forceEnumerated = !sensitive ? true : default(bool?);
             CheckAndReset(nonHosts, containsCalled: true, enumerationCount: enumerationCount, forceEnumerated: forceEnumerated);
 
             CheckAndReset(hosts, containsCalled: true, enumerationCount: hostIndex + 1);
@@ -121,8 +121,8 @@
             int GetEnumerationCount(int? index, int count)
             {
                 var result = index.HasValue
-                    ? (index.Value + 1) * 2 + (secure ? 0 : count)
-                    : count * (secure ? 2 : 3);
+                    ? (index.Value + 1) * 2 + (sensitive ? 0 : count)
+                    : count * (sensitive ? 2 : 3);
 
                 if (result == 0)
                     result++;
@@ -131,7 +131,7 @@
             }
 
             bool TestGeneratedMessage(string message, ITestEnumerable<string> enumerable)
-                => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
+                => sensitive || enumerable.Items.All(i => message.Contains(i.ToString()));
         }
 
         [Theory(DisplayName = "Email: HasDisplayName/DoesNotHaveDisplayName")]

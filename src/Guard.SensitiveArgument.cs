@@ -31,9 +31,9 @@ namespace Dawn
         /// <returns>An object used for asserting preconditions.</returns>
         [DebuggerStepThrough]
         [GuardFunction("Initialization", "gsa", order: 1)]
-        public static ArgumentInfo<T> SecureArgument<T>(
+        public static ArgumentInfo<T> SensitiveArgument<T>(
             T value, [InvokerParameterName] string? name = null)
-            => new ArgumentInfo<T>(value, name, secure: true);
+            => new ArgumentInfo<T>(value, name, sensitive: true);
 
         /// <summary>
         ///     Returns an object that can be used to assert preconditions for the specified method argument.
@@ -47,13 +47,13 @@ namespace Dawn
         [ContractAnnotation("e:null => halt")]
         [DebuggerStepThrough]
         [GuardFunction("Initialization", order: 2)]
-        public static ArgumentInfo<T> SecureArgument<T>(Expression<Func<T>> e)
+        public static ArgumentInfo<T> SensitiveArgument<T>(Expression<Func<T>> e)
         {
             if (e is null)
                 throw new ArgumentNullException(nameof(e));
 
             return e.Body is MemberExpression m
-                ? SecureArgument(e.Compile()(), m.Member.Name)
+                ? SensitiveArgument(e.Compile()(), m.Member.Name)
                 : throw new ArgumentException("A member expression is expected.", nameof(e));
         }
     }

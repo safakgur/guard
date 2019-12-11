@@ -37,14 +37,14 @@
         [InlineData(null, 17, 18, false)]
         [InlineData("08/19/2018 17:42:48", 17, 18, false)]
         [InlineData("08/19/2018 17:42:48", 17, 18, true)]
-        public void ValidMemberCall(string dateTimeString, int hour, int nonHour, bool secure)
+        public void ValidMemberCall(string dateTimeString, int hour, int nonHour, bool sensitive)
         {
             var nullableDateTime = dateTimeString is null
                 ? default(DateTime?)
                 : DateTime.Parse(dateTimeString, CultureInfo.InvariantCulture);
 
-            var nullableTimeArg = (secure
-                    ? Guard.SecureArgument(() => nullableDateTime)
+            var nullableTimeArg = (sensitive
+                    ? Guard.SensitiveArgument(() => nullableDateTime)
                     : Guard.Argument(() => nullableDateTime))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour), true);
@@ -90,8 +90,8 @@
                     return message;
                 }));
 
-            var dateTimeArg = (secure
-                    ? Guard.SecureArgument(() => dateTime)
+            var dateTimeArg = (sensitive
+                    ? Guard.SensitiveArgument(() => dateTime)
                     : Guard.Argument(() => dateTime))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour))
                 .Member(dt => dt.TimeOfDay.Hours, h => h.Equal(hour), true);
@@ -126,7 +126,7 @@
                 }));
 
             bool TestGeneratedMessage(string message)
-                => secure != message.Contains(nonHour.ToString());
+                => sensitive != message.Contains(nonHour.ToString());
         }
 
         private sealed class TestObjectWithInaccessibleMember

@@ -238,11 +238,11 @@
         [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, false)]
         [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, 3, null, -1, true)]
         public void Contains(
-            CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
+            CollectionOptions options, int count, int? contained, int? nonContained, bool sensitive)
         {
             var enumerable = GetEnumerable<int?>(options, count);
-            var enumerableArg = secure
-                ? Guard.SecureArgument(() => enumerable)
+            var enumerableArg = sensitive
+                ? Guard.SensitiveArgument(() => enumerable)
                 : Guard.Argument(() => enumerable);
 
             var index = enumerable?.Items.TakeWhile(i => i != contained).Count() ?? RandomNumber;
@@ -294,7 +294,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.Contains(nonContained.Value),
-                    m => secure != m.Contains(nonContained.ToString()),
+                    m => sensitive != m.Contains(nonContained.ToString()),
                     (arg, message) => arg.Contains(nonContained.Value, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -307,7 +307,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.Contains(nonContained.Value, null),
-                    m => secure != m.Contains(nonContained.ToString()),
+                    m => sensitive != m.Contains(nonContained.ToString()),
                     (arg, message) => arg.Contains(nonContained.Value, null, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -320,7 +320,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.Contains(nonContained.Value, comparer),
-                    m => secure != m.Contains(nonContained.ToString()),
+                    m => sensitive != m.Contains(nonContained.ToString()),
                     (arg, message) => arg.Contains(nonContained.Value, comparer, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -336,7 +336,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.DoesNotContain(contained.Value),
-                    m => secure != m.Contains(contained.ToString()),
+                    m => sensitive != m.Contains(contained.ToString()),
                     (arg, message) => arg.DoesNotContain(contained.Value, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -349,7 +349,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.DoesNotContain(contained.Value, null),
-                    m => secure != m.Contains(contained.ToString()),
+                    m => sensitive != m.Contains(contained.ToString()),
                     (arg, message) => arg.DoesNotContain(contained.Value, null, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -362,7 +362,7 @@
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.DoesNotContain(contained.Value, comparer),
-                    m => secure != m.Contains(contained.ToString()),
+                    m => sensitive != m.Contains(contained.ToString()),
                     (arg, message) => arg.DoesNotContain(contained.Value, comparer, (e, i) =>
                     {
                         Assert.Same(enumerable, e);
@@ -629,20 +629,20 @@
         [InlineData(CollectionOptions.HasContains, 3, 1, null, false)]
         [InlineData(CollectionOptions.HasContains, 3, 1, null, true)]
         public void InCollection(
-            CollectionOptions options, int count, int? contained, int? nonContained, bool secure)
+            CollectionOptions options, int count, int? contained, int? nonContained, bool sensitive)
         {
-            var containedArg = secure
-                ? Guard.SecureArgument(() => contained)
+            var containedArg = sensitive
+                ? Guard.SensitiveArgument(() => contained)
                 : Guard.Argument(() => contained);
-            var nonContainedArg = secure
-                ? Guard.SecureArgument(() => nonContained)
+            var nonContainedArg = sensitive
+                ? Guard.SensitiveArgument(() => nonContained)
                 : Guard.Argument(() => nonContained);
 
             var enumerable = GetEnumerable<int?>(options, count);
             var index = enumerable?.Items.TakeWhile(i => i != contained).Count() ?? RandomNumber;
             var comparer = EqualityComparer<int?>.Default;
 
-            var forceEnumerated = !secure ? true : default(bool?);
+            var forceEnumerated = !sensitive ? true : default(bool?);
             if (!contained.HasValue || enumerable is null)
             {
                 containedArg
@@ -774,8 +774,8 @@
             int GetEnumerationCount(bool found)
             {
                 var result = found
-                    ? (index + 1) * 2 + (secure ? 0 : count)
-                    : count * (secure ? 2 : 3);
+                    ? (index + 1) * 2 + (sensitive ? 0 : count)
+                    : count * (sensitive ? 2 : 3);
 
                 if (result == 0)
                     result++;
@@ -784,7 +784,7 @@
             }
 
             bool TestGeneratedMessage(string message)
-                => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
+                => sensitive || enumerable.Items.All(i => message.Contains(i.ToString()));
         }
 
         [Theory(DisplayName = "Enumerable: In/NotIn array")]
@@ -795,12 +795,12 @@
         [InlineData("AB", null, null, true)]
         [InlineData("AB", "AB,BC", "BC,DE", false)]
         [InlineData("AB", "AB,BC", "BC,DE", true)]
-        public void InArray(string value, string containingString, string nonContainingString, bool secure)
+        public void InArray(string value, string containingString, string nonContainingString, bool sensitive)
         {
             var containing = containingString?.Split(',');
             var nonContaining = nonContainingString?.Split(',');
-            var valueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .In(containing)
                 .NotIn(nonContaining);
@@ -839,7 +839,7 @@
             void Throws(Action<Guard.ArgumentInfo<string>> test, string[] tested)
             {
                 var exception = Assert.Throws<ArgumentException>(valueArg.Name, () => test(valueArg));
-                Assert.NotEqual(secure, tested.All(i => exception.Message.Contains(i)));
+                Assert.NotEqual(sensitive, tested.All(i => exception.Message.Contains(i)));
             }
         }
 

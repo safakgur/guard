@@ -102,8 +102,8 @@ namespace Dawn
                 }
 
                 // Validate the member.
-                var memberArgument = argument.Secure
-                    ? SecureArgument(memberValue, info.Name)
+                var memberArgument = argument.Sensitive
+                    ? SensitiveArgument(memberValue, info.Name)
                     : Argument(memberValue, info.Name);
                 try
                 {
@@ -114,7 +114,7 @@ namespace Dawn
                     var m = message?.Invoke(argument.Value, memberValue, ex) ?? ex.Message;
                     throw Fail(!validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m));
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m));
                 }
             }
 
@@ -211,8 +211,8 @@ namespace Dawn
                 }
 
                 // Validate the member.
-                var memberArgument = argument.Secure
-                    ? SecureArgument(memberValue, info.Name)
+                var memberArgument = argument.Sensitive
+                    ? SensitiveArgument(memberValue, info.Name)
                     : Argument(memberValue, info.Name);
                 try
                 {
@@ -223,7 +223,7 @@ namespace Dawn
                     var m = message?.Invoke(argument.GetValueOrDefault(), memberValue, ex) ?? ex.Message;
                     throw Fail(!validatesRange || argument.Modified
                         ? new ArgumentException(m, argument.Name, ex)
-                        : new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m));
+                        : new ArgumentOutOfRangeException(argument.Name, argument.Sensitive ? null : argument.Value as object, m));
                 }
             }
 

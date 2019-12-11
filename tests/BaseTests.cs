@@ -52,12 +52,12 @@
             Action<Guard.ArgumentInfo<T?>> nullableBody,
             Action<Guard.ArgumentInfo<T>> nonNullableBody,
             bool testModified = true,
-            bool testSecure = true)
+            bool testSensitive = true)
             where T : struct
         {
-            Test(value, name, nullableBody, testModified, testSecure);
+            Test(value, name, nullableBody, testModified, testSensitive);
             if (value.HasValue)
-                Test(value.Value, name, nonNullableBody, testModified, testSecure);
+                Test(value.Value, name, nonNullableBody, testModified, testSensitive);
         }
 
         protected static void Test<T>(
@@ -65,16 +65,16 @@
             string name,
             Action<Guard.ArgumentInfo<T>> body,
             bool testModified = true,
-            bool testSecure = true)
+            bool testSensitive = true)
         {
             body(new Guard.ArgumentInfo<T>(value, name, false, false));
             if (testModified)
                 body(new Guard.ArgumentInfo<T>(value, name, true, false));
 
-            if (testSecure)
+            if (testSensitive)
                 body(new Guard.ArgumentInfo<T>(value, name, false, true));
 
-            if (testModified && testSecure)
+            if (testModified && testSensitive)
                 body(new Guard.ArgumentInfo<T>(value, name, true, true));
         }
 
@@ -158,7 +158,7 @@
             scope.CheckException(exWithoutMessage);
 
             if (exWithoutMessage is ArgumentOutOfRangeException rangeExWithoutMessage)
-                Assert.Equal(argument.Secure, rangeExWithoutMessage.ActualValue == null);
+                Assert.Equal(argument.Sensitive, rangeExWithoutMessage.ActualValue == null);
 
             if (testGeneratedMessage != null)
                 Assert.True(testGeneratedMessage(exWithoutMessage.Message));
@@ -171,7 +171,7 @@
             scope.CheckException(exWithMessage);
 
             if (exWithMessage is ArgumentOutOfRangeException rangeExWithMessage)
-                Assert.Equal(argument.Secure, rangeExWithMessage.ActualValue == null);
+                Assert.Equal(argument.Sensitive, rangeExWithMessage.ActualValue == null);
 
             if (!allowMessageMismatch)
                 Assert.StartsWith(message, exWithMessage.Message);

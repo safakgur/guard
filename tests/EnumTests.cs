@@ -47,10 +47,10 @@
         [InlineData(Colors.Red | Colors.Green, Colors.Red | Colors.Green, Colors.Blue, true)]
         [InlineData(Colors.Red | Colors.Blue, Colors.Blue, Colors.Green, false)]
         [InlineData(Colors.Red | Colors.Blue, Colors.Blue, Colors.Green, true)]
-        public void HasFlag(Colors? value, Colors setFlags, Colors unsetFlags, bool secure)
+        public void HasFlag(Colors? value, Colors setFlags, Colors unsetFlags, bool sensitive)
         {
-            var nullableValueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var nullableValueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .HasFlag(setFlags)
                 .DoesNotHaveFlag(unsetFlags);
@@ -67,7 +67,7 @@
             ThrowsArgumentException(
                 nullableValueArg,
                 arg => arg.HasFlag(unsetFlags),
-                m => secure != m.Contains(unsetFlags.ToString()),
+                m => sensitive != m.Contains(unsetFlags.ToString()),
                 (arg, message) => arg.HasFlag(unsetFlags, (v, f) =>
                 {
                     Assert.Equal(value, v);
@@ -78,7 +78,7 @@
             ThrowsArgumentException(
                 nullableValueArg,
                 arg => arg.DoesNotHaveFlag(setFlags),
-                m => secure != m.Contains(setFlags.ToString()),
+                m => sensitive != m.Contains(setFlags.ToString()),
                 (arg, message) => arg.DoesNotHaveFlag(setFlags, (v, f) =>
                 {
                     Assert.Equal(value, v);
@@ -86,8 +86,8 @@
                     return message;
                 }));
 
-            var valueArg = (secure
-                    ? Guard.SecureArgument(value.Value, nameof(value))
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(value.Value, nameof(value))
                     : Guard.Argument(value.Value, nameof(value)))
                 .HasFlag(setFlags)
                 .DoesNotHaveFlag(unsetFlags);
@@ -95,7 +95,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.HasFlag(unsetFlags),
-                m => secure != m.Contains(unsetFlags.ToString()),
+                m => sensitive != m.Contains(unsetFlags.ToString()),
                 (arg, message) => arg.HasFlag(unsetFlags, (v, f) =>
                 {
                     Assert.Equal(value, v);
@@ -106,7 +106,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.DoesNotHaveFlag(setFlags),
-                m => secure != m.Contains(setFlags.ToString()),
+                m => sensitive != m.Contains(setFlags.ToString()),
                 (arg, message) => arg.DoesNotHaveFlag(setFlags, (v, f) =>
                 {
                     Assert.Equal(value, v);

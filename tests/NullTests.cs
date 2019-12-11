@@ -45,7 +45,7 @@
             for (var i = 0; i < 2; i++)
             {
                 var nullableOneArg = i == 1
-                    ? Guard.SecureArgument(() => one)
+                    ? Guard.SensitiveArgument(() => one)
                     : Guard.Argument(() => one);
                 Assert.IsType<Guard.ArgumentInfo<int?>>(nullableOneArg);
                 Assert.True(nullableOneArg.HasValue());
@@ -63,7 +63,7 @@
                 Assert.IsType<Guard.ArgumentInfo<int>>(oneArg);
                 Assert.True(oneArg.HasValue());
                 Assert.Equal(nullableOneArg.Value, oneArg.Value);
-                Assert.Equal(nullableOneArg.Secure, oneArg.Secure);
+                Assert.Equal(nullableOneArg.Sensitive, oneArg.Sensitive);
             }
         }
 

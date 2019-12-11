@@ -18,7 +18,7 @@
                 var typedArg = arg.Type<string>();
                 Assert.IsType<Guard.ArgumentInfo<string>>(typedArg);
                 Assert.Equal(arg.Modified, typedArg.Modified);
-                Assert.Equal(arg.Secure, typedArg.Secure);
+                Assert.Equal(arg.Sensitive, typedArg.Sensitive);
             }
 
             var valueArg = Guard.Argument(value as object, nameof(value))
@@ -110,7 +110,7 @@
                 var typedArg = arg.Type<int?>();
                 Assert.IsType<Guard.ArgumentInfo<int?>>(typedArg);
                 Assert.Equal(arg.Modified, typedArg.Modified);
-                Assert.Equal(arg.Secure, typedArg.Secure);
+                Assert.Equal(arg.Sensitive, typedArg.Sensitive);
             }
 
             var valueArg = Guard.Argument(value as object, nameof(value));
@@ -300,18 +300,18 @@
             for (var i = 0; i < 2; i++)
             {
                 var streamArg = i == 1
-                    ? Guard.SecureArgument(() => stream)
+                    ? Guard.SensitiveArgument(() => stream)
                     : Guard.Argument(() => stream);
 
                 var objectCastedArg = streamArg.Cast<object>();
                 Assert.Same(streamArg.Name, objectCastedArg.Name);
                 Assert.Equal(streamArg.Modified, objectCastedArg.Modified);
-                Assert.Equal(streamArg.Secure, objectCastedArg.Secure);
+                Assert.Equal(streamArg.Sensitive, objectCastedArg.Sensitive);
                 Assert.Same(stream, objectCastedArg.Value);
 
                 var msCastedArg = streamArg.Cast<MemoryStream>();
                 Assert.Equal(streamArg.Modified, msCastedArg.Modified);
-                Assert.Equal(streamArg.Secure, msCastedArg.Secure);
+                Assert.Equal(streamArg.Sensitive, msCastedArg.Sensitive);
                 Assert.Same(stream, msCastedArg.Value);
 
                 ThrowsArgumentException(

@@ -101,7 +101,7 @@ namespace Dawn
             ///     Whether the original method argument is modified before the initialization of
             ///     this instance.
             /// </param>
-            /// <param name="secure">
+            /// <param name="sensitive">
             ///     Pass <c>true</c> for the validation parameters to be excluded from the exception
             ///     messages of failed validations.
             /// </param>
@@ -110,12 +110,12 @@ namespace Dawn
                 T value,
                 [InvokerParameterName] string? name,
                 bool modified = false,
-                bool secure = false)
+                bool sensitive = false)
             {
                 this.Value = value;
                 this.name = name;
                 this.Modified = modified;
-                this.Secure = secure;
+                this.Sensitive = sensitive;
             }
 
             /// <summary>Gets the argument value.</summary>
@@ -135,7 +135,7 @@ namespace Dawn
             ///     argument. If <c>true</c>, exception messages provide less information about the
             ///     validation parameters.
             /// </summary>
-            public bool Secure { get; }
+            public bool Sensitive { get; }
 
             /// <summary>Gets how the layout is displayed in the debugger variable windows.</summary>
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -146,7 +146,7 @@ namespace Dawn
                     var name = this.name;
                     var value = this.Value?.ToString() ?? "null";
                     var result = name is null ? value : $"{name}: {value}";
-                    return this.Secure ? $"[SECURE] {result}" : result;
+                    return this.Sensitive ? $"[SENSITIVE] {result}" : result;
                 }
             }
 

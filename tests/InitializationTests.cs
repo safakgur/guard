@@ -12,19 +12,19 @@
             Assert.Equal(default, int32Arg.Value);
             Assert.Contains(typeof(int).ToString(), int32Arg.Name);
             Assert.False(int32Arg.Modified);
-            Assert.False(int32Arg.Secure);
+            Assert.False(int32Arg.Sensitive);
 
             var nullableInt32Arg = default(Guard.ArgumentInfo<int?>);
             Assert.Equal(default, nullableInt32Arg.Value);
             Assert.Contains(typeof(int?).ToString(), nullableInt32Arg.Name);
             Assert.False(nullableInt32Arg.Modified);
-            Assert.False(nullableInt32Arg.Secure);
+            Assert.False(nullableInt32Arg.Sensitive);
 
             var stringArg = default(Guard.ArgumentInfo<string>);
             Assert.Equal(default, stringArg.Value);
             Assert.Contains(typeof(string).ToString(), stringArg.Name);
             Assert.False(stringArg.Modified);
-            Assert.False(stringArg.Secure);
+            Assert.False(stringArg.Sensitive);
         }
 
         [Theory(DisplayName = "Argument: Member expression")]
@@ -39,12 +39,12 @@
                     ? Guard.Argument(() => value)
                     : i == 1
                         ? Guard.Argument(() => value)
-                        : Guard.SecureArgument(() => value);
+                        : Guard.SensitiveArgument(() => value);
 
                 Assert.Equal(value, arg.Value);
                 Assert.Equal(nameof(value), arg.Name);
                 Assert.False(arg.Modified);
-                Assert.Equal(i == 2, arg.Secure);
+                Assert.Equal(i == 2, arg.Sensitive);
             }
         }
 
@@ -67,12 +67,12 @@
                     ? Guard.Argument(value, nameof(value))
                     : i == 1
                         ? Guard.Argument(value, nameof(value))
-                        : Guard.SecureArgument(value, nameof(value));
+                        : Guard.SensitiveArgument(value, nameof(value));
 
                 Assert.Equal(value, arg.Value);
                 Assert.Equal(nameof(value), arg.Name);
                 Assert.False(arg.Modified);
-                Assert.Equal(i == 2, arg.Secure);
+                Assert.Equal(i == 2, arg.Sensitive);
             }
 
             for (var i = 0; i < 9; i++)
@@ -80,17 +80,17 @@
                 var arg = i == 0 ? new Guard.ArgumentInfo<T>(value, nameof(value))
                     : i == 1 ? new Guard.ArgumentInfo<T>(value, nameof(value), false)
                     : i == 2 ? new Guard.ArgumentInfo<T>(value, nameof(value), true)
-                    : i == 3 ? new Guard.ArgumentInfo<T>(value, nameof(value), secure: false)
+                    : i == 3 ? new Guard.ArgumentInfo<T>(value, nameof(value), sensitive: false)
                     : i == 4 ? new Guard.ArgumentInfo<T>(value, nameof(value), false, false)
                     : i == 5 ? new Guard.ArgumentInfo<T>(value, nameof(value), true, false)
-                    : i == 6 ? new Guard.ArgumentInfo<T>(value, nameof(value), secure: true)
+                    : i == 6 ? new Guard.ArgumentInfo<T>(value, nameof(value), sensitive: true)
                     : i == 7 ? new Guard.ArgumentInfo<T>(value, nameof(value), false, true)
                              : new Guard.ArgumentInfo<T>(value, nameof(value), true, true);
 
                 Assert.Equal(value, arg.Value);
                 Assert.Equal(nameof(value), arg.Name);
                 Assert.Equal(i == 2 || i == 5 || i == 8, arg.Modified);
-                Assert.Equal(i == 6 || i == 7 || i == 8, arg.Secure);
+                Assert.Equal(i == 6 || i == 7 || i == 8, arg.Sensitive);
             }
         }
 
@@ -106,12 +106,12 @@
                     ? Guard.Argument(value)
                     : i == 1
                         ? Guard.Argument(value)
-                        : Guard.SecureArgument(value);
+                        : Guard.SensitiveArgument(value);
 
                 Assert.Equal(value, arg.Value);
                 Assert.Contains(typeof(T).ToString(), arg.Name);
                 Assert.False(arg.Modified);
-                Assert.Equal(i == 2, arg.Secure);
+                Assert.Equal(i == 2, arg.Sensitive);
             }
 
             for (var i = 0; i < 9; i++)
@@ -119,17 +119,17 @@
                 var arg = i == 0 ? new Guard.ArgumentInfo<T>(value, null)
                     : i == 1 ? new Guard.ArgumentInfo<T>(value, null, false)
                     : i == 2 ? new Guard.ArgumentInfo<T>(value, null, true)
-                    : i == 3 ? new Guard.ArgumentInfo<T>(value, null, secure: false)
+                    : i == 3 ? new Guard.ArgumentInfo<T>(value, null, sensitive: false)
                     : i == 4 ? new Guard.ArgumentInfo<T>(value, null, false, false)
                     : i == 5 ? new Guard.ArgumentInfo<T>(value, null, true, false)
-                    : i == 6 ? new Guard.ArgumentInfo<T>(value, null, secure: true)
+                    : i == 6 ? new Guard.ArgumentInfo<T>(value, null, sensitive: true)
                     : i == 7 ? new Guard.ArgumentInfo<T>(value, null, false, true)
                              : new Guard.ArgumentInfo<T>(value, null, true, true);
 
                 Assert.Equal(value, arg.Value);
                 Assert.Contains(typeof(T).ToString(), arg.Name);
                 Assert.Equal(i == 2 || i == 5 || i == 8, arg.Modified);
-                Assert.Equal(i == 6 || i == 7 || i == 8, arg.Secure);
+                Assert.Equal(i == 6 || i == 7 || i == 8, arg.Sensitive);
             }
         }
 
@@ -156,9 +156,9 @@
             for (var i = 0; i < 3; i++)
             {
                 var hasName = i <= 1;
-                var isSecure = i >= 1;
-                var valueArg = isSecure
-                    ? Guard.SecureArgument(value, hasName ? nameof(value) : null)
+                var isSensitive = i >= 1;
+                var valueArg = isSensitive
+                    ? Guard.SensitiveArgument(value, hasName ? nameof(value) : null)
                     : Guard.Argument(value, hasName ? nameof(value) : null);
 
                 var display = valueArg.DebuggerDisplay;
@@ -167,10 +167,10 @@
                 else
                     Assert.DoesNotContain(nameof(value), display);
 
-                if (isSecure)
-                    Assert.Contains("SECURE", display, IgnoreCase);
+                if (isSensitive)
+                    Assert.Contains("SENSITIVE", display, IgnoreCase);
                 else
-                    Assert.DoesNotContain("SECURE", display, IgnoreCase);
+                    Assert.DoesNotContain("SENSITIVE", display, IgnoreCase);
 
                 if (valueArg.HasValue())
                     Assert.Contains(value.ToString(), display);

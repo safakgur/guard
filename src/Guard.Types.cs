@@ -40,7 +40,7 @@ namespace Dawn
             }
 
             return new ArgumentInfo<T>(
-                (T)argument.Value, argument.Name, argument.Modified, argument.Secure);
+                (T)argument.Value, argument.Name, argument.Modified, argument.Sensitive);
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace Dawn
             public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string>? message = null)
             {
                 if (this.Value is TTarget value)
-                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
+                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Sensitive);
 
                 var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
                 throw Fail(new ArgumentException(m, this.Name));

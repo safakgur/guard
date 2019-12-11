@@ -231,7 +231,7 @@
                 ThrowsArgumentOutOfRangeException(
                     nullableValueArg,
                     arg => arg.Equal(nonEqual, delta),
-                    m => nullableValueArg.Secure != m.Contains(nonEqual.ToString()),
+                    m => nullableValueArg.Sensitive != m.Contains(nonEqual.ToString()),
                     (arg, message) => arg.Equal(nonEqual, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);
@@ -242,7 +242,7 @@
                 ThrowsArgumentOutOfRangeException(
                     nullableValueArg,
                     arg => arg.NotEqual(equal, delta),
-                    m => nullableValueArg.Secure != m.Contains(equal.ToString()),
+                    m => nullableValueArg.Sensitive != m.Contains(equal.ToString()),
                     (arg, message) => arg.NotEqual(equal, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);
@@ -257,7 +257,7 @@
                 ThrowsArgumentOutOfRangeException(
                     valueArg,
                     arg => arg.Equal(nonEqual, delta),
-                    m => valueArg.Secure != m.Contains(nonEqual.ToString()),
+                    m => valueArg.Sensitive != m.Contains(nonEqual.ToString()),
                     (arg, message) => arg.Equal(nonEqual, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);
@@ -268,7 +268,7 @@
                 ThrowsArgumentOutOfRangeException(
                     valueArg,
                     arg => arg.NotEqual(equal, delta),
-                    m => valueArg.Secure != m.Contains(equal.ToString()),
+                    m => valueArg.Sensitive != m.Contains(equal.ToString()),
                     (arg, message) => arg.NotEqual(equal, delta, (v, o) =>
                     {
                         Assert.Equal(value, v);

@@ -54,10 +54,10 @@
         [InlineData(null, null, null, false)]
         [InlineData("AB", "AB", "BC", false)]
         [InlineData("AB", "AB", "BC", true)]
-        public void EqualWithoutComparer(string value, string equal, string unequal, bool secure)
+        public void EqualWithoutComparer(string value, string equal, string unequal, bool sensitive)
         {
-            var valueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .Equal(equal).NotEqual(unequal);
             if (value == null)
@@ -69,7 +69,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.Equal(unequal),
-                m => secure != m.Contains(unequal),
+                m => sensitive != m.Contains(unequal),
                 (arg, message) => arg.Equal(unequal, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -80,7 +80,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.NotEqual(equal),
-                m => secure != m.Contains(equal),
+                m => sensitive != m.Contains(equal),
                 (arg, message) => arg.NotEqual(equal, v =>
                 {
                     Assert.Same(value, v);
@@ -95,10 +95,10 @@
         [InlineData("AB", "ab", "BC", StringComparison.OrdinalIgnoreCase, false)]
         [InlineData("AB", "ab", "BC", StringComparison.OrdinalIgnoreCase, true)]
         public void EqualWithComparer(
-            string value, string equal, string unequal, StringComparison comparison, bool secure)
+            string value, string equal, string unequal, StringComparison comparison, bool sensitive)
         {
-            var valueArg = secure
-                ? Guard.SecureArgument(() => value)
+            var valueArg = sensitive
+                ? Guard.SensitiveArgument(() => value)
                 : Guard.Argument(() => value);
             var comparer = comparison == StringComparison.Ordinal
                 ? StringComparer.Ordinal
@@ -116,7 +116,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.Equal(unequal, comparer),
-                m => secure != m.Contains(unequal),
+                m => sensitive != m.Contains(unequal),
                 (arg, message) => arg.Equal(unequal, comparer, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -127,7 +127,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.NotEqual(equal, comparer),
-                m => secure != m.Contains(equal),
+                m => sensitive != m.Contains(equal),
                 (arg, message) => arg.NotEqual(equal, comparer, v =>
                 {
                     Assert.Same(value, v);
@@ -145,13 +145,13 @@
             Test(one1, one1, one2, false);
             Test(one1, one1, one2, true);
 
-            void Test(string value, string same, string nonSame, bool secure)
+            void Test(string value, string same, string nonSame, bool sensitive)
             {
                 same = same?.ToString();
                 nonSame = nonSame?.ToString();
 
-                var valueArg = secure
-                    ? Guard.SecureArgument(() => value)
+                var valueArg = sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value);
                 valueArg
                     .Equal(same)
@@ -171,7 +171,7 @@
                 ThrowsArgumentException(
                     valueArg,
                     arg => arg.Same(nonSame),
-                    m => secure != m.Contains(nonSame),
+                    m => sensitive != m.Contains(nonSame),
                     (arg, message) => arg.Same(nonSame, (v, other) =>
                     {
                         Assert.Same(value, v);
@@ -182,7 +182,7 @@
                 ThrowsArgumentException(
                     valueArg,
                     arg => arg.NotSame(same),
-                    m => secure != m.Contains(same),
+                    m => sensitive != m.Contains(same),
                     (arg, message) => arg.NotSame(same, (v, other) =>
                     {
                         Assert.Same(value, v);

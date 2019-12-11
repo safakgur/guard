@@ -48,22 +48,22 @@ namespace Dawn
                 => $"{argument.Name} cannot be {default(T)!}.";
 
             public static string Equal<T>(in ArgumentInfo<T> argument, in T other)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must be {ToString(other)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must be {ToString(other)}.";
 
             public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be {ToString(other)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot be {ToString(other)}.";
 
             public static string Equal<T>(in ArgumentInfo<T> argument, in T other, T delta)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must be within {delta} accuracy of {other}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must be within {delta} accuracy of {other}.";
 
             public static string NotEqual<T>(in ArgumentInfo<T> argument, in T other, T delta)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be within {delta} accuracy of {other}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot be within {delta} accuracy of {other}.";
 
             public static string Same<T>(in ArgumentInfo<T> argument, object other)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must have the same reference as {ToString(other)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must have the same reference as {ToString(other)}.";
 
             public static string NotSame<T>(in ArgumentInfo<T> argument, object other)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have the same reference as {ToString(other)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot have the same reference as {ToString(other)}.";
 
             public static string Require<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} is invalid.";
@@ -159,28 +159,28 @@ namespace Dawn
                 => $"{argument.Name} must contain {minLength} to {maxLength} characters.";
 
             public static string StringStartsWith(in ArgumentInfo<string> argument, string value)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must start with '{value}'.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must start with '{value}'.";
 
             public static string StringDoesNotStartWith(in ArgumentInfo<string> argument, string value)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot start with '{value}'.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot start with '{value}'.";
 
             public static string StringEndsWith(in ArgumentInfo<string> argument, string value)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must end with '{value}'.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must end with '{value}'.";
 
             public static string StringDoesNotEndWith(in ArgumentInfo<string> argument, string value)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot end with '{value}'.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot end with '{value}'.";
 
             public static string StringMatches(in ArgumentInfo<string> argument, string pattern)
-                => argument.Secure ? Require(argument) : $"No match in {argument.Name} could be found by the regular expression '{pattern}'.";
+                => argument.Sensitive ? Require(argument) : $"No match in {argument.Name} could be found by the regular expression '{pattern}'.";
 
             public static string StringMatchesTimeout(in ArgumentInfo<string> argument, string pattern, TimeSpan matchTimeout)
-                => argument.Secure ? Require(argument) : $"No match in {argument.Name} could be found by the regular expression '{pattern}' in {matchTimeout}";
+                => argument.Sensitive ? Require(argument) : $"No match in {argument.Name} could be found by the regular expression '{pattern}' in {matchTimeout}";
 
             public static string StringDoesNotMatch(in ArgumentInfo<string> argument, string pattern)
-                => argument.Secure ? Require(argument) : $"A match in {argument.Name} is found by the regular expression '{pattern}'.";
+                => argument.Sensitive ? Require(argument) : $"A match in {argument.Name} is found by the regular expression '{pattern}'.";
 
             public static string StringDoesNotMatchTimeout(in ArgumentInfo<string> argument, string pattern, TimeSpan matchTimeout)
-                => argument.Secure ? Require(argument) : $"{argument.Name} could not entirely be searched by the regular expression '{pattern}' due to time-out {matchTimeout}";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} could not entirely be searched by the regular expression '{pattern}' due to time-out {matchTimeout}";
 
             public static string True<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be true.";
@@ -201,10 +201,10 @@ namespace Dawn
                 => $"{argument.Name} must have at least one of its bits set.";
 
             public static string EnumHasFlag<T>(in ArgumentInfo<T> argument, T flag)
-                => argument.Secure ? Require(argument) : $"{argument.Name} does not has the {flag} flag.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} does not has the {flag} flag.";
 
             public static string EnumDoesNotHaveFlag<T>(in ArgumentInfo<T> argument, T flag)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have the {flag} flag.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot have the {flag} flag.";
 
             public static string CollectionEmpty<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be empty.";
@@ -228,16 +228,16 @@ namespace Dawn
                 => $"{argument.Name} must contain {minCount} to {maxCount} items.";
 
             public static string CollectionContains<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must contain {ToString(item)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must contain {ToString(item)}.";
 
             public static string CollectionDoesNotContain<TCollection, TItem>(ArgumentInfo<TCollection> argument, TItem item)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot contain {ToString(item)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot contain {ToString(item)}.";
 
             public static string InCollection<T>(ArgumentInfo<T> argument, IEnumerable collection)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must be one of the following: {Join(collection)}";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must be one of the following: {Join(collection)}";
 
             public static string NotInCollection<T>(ArgumentInfo<T> argument, IEnumerable collection)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot be one of the following: {Join(collection)}";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot be one of the following: {Join(collection)}";
 
             public static string UriAbsolute(in ArgumentInfo<Uri> argument)
                 => $"{argument.Name} must be an absolute URI.";
@@ -260,16 +260,16 @@ namespace Dawn
 #if !NETSTANDARD1_0
 
             public static string EmailHasHost(in ArgumentInfo<MailAddress> argument, string host)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must have the host '{host}'.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must have the host '{host}'.";
 
             public static string EmailDoesNotHaveHost(in ArgumentInfo<MailAddress> argument, string host)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have the host '{host}'.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot have the host '{host}'.";
 
             public static string EmailHostIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
-                => argument.Secure ? Require(argument) : $"{argument.Name} must have one of the following hosts: {Join(hosts)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} must have one of the following hosts: {Join(hosts)}.";
 
             public static string EmailHostNotIn(in ArgumentInfo<MailAddress> argument, IEnumerable<string> hosts)
-                => argument.Secure ? Require(argument) : $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}.";
+                => argument.Sensitive ? Require(argument) : $"{argument.Name} cannot have one of the following hosts: {Join(hosts)}.";
 
             public static string EmailHasDisplayName(in ArgumentInfo<MailAddress> argument)
                 => $"{argument.Name} must have a display name specified.";

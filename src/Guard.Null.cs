@@ -134,7 +134,7 @@ namespace Dawn
             }
 
             return new ArgumentInfo<T>(
-                argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Secure);
+                argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Sensitive);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Dawn
             if (argument.HasValue())
             {
                 result = new ArgumentInfo<T>(
-                    argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Secure);
+                    argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Sensitive);
 
                 return true;
             }

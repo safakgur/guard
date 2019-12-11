@@ -213,10 +213,10 @@
         [InlineData("AB", "ab", "BC", StringComparison.OrdinalIgnoreCase, false)]
         [InlineData("AB", "ab", "BC", StringComparison.OrdinalIgnoreCase, true)]
         public void EqualWithComparison(
-            string value, string equal, string unequal, StringComparison comparison, bool secure)
+            string value, string equal, string unequal, StringComparison comparison, bool sensitive)
         {
-            var valueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .Equal(equal, comparison)
                 .NotEqual(unequal, comparison);
@@ -233,7 +233,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.Equal(unequal, comparison),
-                m => secure != m.Contains(unequal),
+                m => sensitive != m.Contains(unequal),
                 (arg, message) => arg.Equal(unequal, comparison, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -244,7 +244,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.NotEqual(equal, comparison),
-                m => secure != m.Contains(equal),
+                m => sensitive != m.Contains(equal),
                 (arg, message) => arg.NotEqual(equal, comparison, v =>
                 {
                     Assert.Same(value, v);
@@ -257,10 +257,10 @@
         [InlineData("ABC", "AB", "B", false)]
         [InlineData("ABC", "AB", "B", true)]
         public void StartsWithWithoutComparison(
-            string value, string head, string nonHead, bool secure)
+            string value, string head, string nonHead, bool sensitive)
         {
-            var valueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .StartsWith(head)
                 .DoesNotStartWith(nonHead);
@@ -277,7 +277,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.StartsWith(nonHead),
-                m => secure != m.Contains(nonHead),
+                m => sensitive != m.Contains(nonHead),
                 (arg, message) => arg.StartsWith(nonHead, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -288,7 +288,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.DoesNotStartWith(head),
-                m => secure != m.Contains(head),
+                m => sensitive != m.Contains(head),
                 (arg, message) => arg.DoesNotStartWith(head, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -304,10 +304,10 @@
         [InlineData("ABC", "ab", "b", StringComparison.OrdinalIgnoreCase, false)]
         [InlineData("ABC", "ab", "b", StringComparison.OrdinalIgnoreCase, true)]
         public void StartsWithWithComparison(
-            string value, string head, string nonHead, StringComparison comparison, bool secure)
+            string value, string head, string nonHead, StringComparison comparison, bool sensitive)
         {
-            var valueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .StartsWith(head, comparison)
                 .DoesNotStartWith(nonHead, comparison);
@@ -324,7 +324,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.StartsWith(nonHead, comparison),
-                m => secure != m.Contains(nonHead),
+                m => sensitive != m.Contains(nonHead),
                 (arg, message) => arg.StartsWith(nonHead, comparison, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -335,7 +335,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.DoesNotStartWith(head, comparison),
-                m => secure != m.Contains(head),
+                m => sensitive != m.Contains(head),
                 (arg, message) => arg.DoesNotStartWith(head, comparison, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -349,10 +349,10 @@
         [InlineData("ABC", "BC", "B", false)]
         [InlineData("ABC", "BC", "B", true)]
         public void EndsWithWithoutComparison(
-            string value, string tail, string nonTail, bool secure)
+            string value, string tail, string nonTail, bool sensitive)
         {
-            var valueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .EndsWith(tail)
                 .DoesNotEndWith(nonTail);
@@ -366,7 +366,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.EndsWith(nonTail),
-                m => secure != m.Contains(nonTail),
+                m => sensitive != m.Contains(nonTail),
                 (arg, message) => arg.EndsWith(nonTail, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -377,7 +377,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.DoesNotEndWith(tail),
-                m => secure != m.Contains(tail),
+                m => sensitive != m.Contains(tail),
                 (arg, message) => arg.DoesNotEndWith(tail, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -393,10 +393,10 @@
         [InlineData("ABC", "bc", "b", StringComparison.OrdinalIgnoreCase, false)]
         [InlineData("ABC", "bc", "b", StringComparison.OrdinalIgnoreCase, true)]
         public void EndsWithWithComparison(
-            string value, string tail, string nonTail, StringComparison comparison, bool secure)
+            string value, string tail, string nonTail, StringComparison comparison, bool sensitive)
         {
-            var valueArg = (secure
-                    ? Guard.SecureArgument(() => value)
+            var valueArg = (sensitive
+                    ? Guard.SensitiveArgument(() => value)
                     : Guard.Argument(() => value))
                 .EndsWith(tail, comparison)
                 .DoesNotEndWith(nonTail, comparison);
@@ -413,7 +413,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.EndsWith(nonTail, comparison),
-                m => secure != m.Contains(nonTail),
+                m => sensitive != m.Contains(nonTail),
                 (arg, message) => arg.EndsWith(nonTail, comparison, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -424,7 +424,7 @@
             ThrowsArgumentException(
                 valueArg,
                 arg => arg.DoesNotEndWith(tail, comparison),
-                m => secure != m.Contains(tail),
+                m => sensitive != m.Contains(tail),
                 (arg, message) => arg.DoesNotEndWith(tail, comparison, (v, other) =>
                 {
                     Assert.Same(value, v);
@@ -443,22 +443,22 @@
             string validPattern,
             string invalidPattern,
             string timeoutPattern,
-            bool secure)
+            bool sensitive)
         {
             var validRegexWithoutTimeout = validPattern is null ? null : new Regex(validPattern);
             var validRegexWithTimeout = validPattern is null ? null : new Regex(validPattern, RegexOptions.None, MatchTimeout);
             var timeoutRegex = timeoutPattern is null ? null : new Regex(timeoutPattern, RegexOptions.None, MatchTimeout);
 
-            var withMatchArg = (secure
-                    ? Guard.SecureArgument(() => withMatch)
+            var withMatchArg = (sensitive
+                    ? Guard.SensitiveArgument(() => withMatch)
                     : Guard.Argument(() => withMatch))
                 .Matches(validPattern)
                 .Matches(validPattern, MatchTimeout)
                 .Matches(validRegexWithoutTimeout)
                 .Matches(validRegexWithTimeout);
 
-            var withoutMatchArg = (secure
-                    ? Guard.SecureArgument(() => withoutMatch)
+            var withoutMatchArg = (sensitive
+                    ? Guard.SensitiveArgument(() => withoutMatch)
                     : Guard.Argument(() => withoutMatch))
                 .DoesNotMatch(validPattern)
                 .DoesNotMatch(validPattern, MatchTimeout)
@@ -510,7 +510,7 @@
                     ThrowsArgumentException(
                         withMatchArg,
                         arg => arg.Matches(timeoutPattern, MatchTimeout),
-                        m => secure != m.Contains(timeoutPattern),
+                        m => sensitive != m.Contains(timeoutPattern),
                         (arg, message) => arg.Matches(timeoutPattern, MatchTimeout, (s, t) =>
                         {
                             Assert.Same(withMatch, s);
@@ -526,7 +526,7 @@
                     ThrowsArgumentException(
                         withMatchArg,
                         arg => arg.Matches(timeoutRegex),
-                        m => secure != m.Contains(timeoutPattern),
+                        m => sensitive != m.Contains(timeoutPattern),
                         (arg, message) => arg.Matches(timeoutRegex, (s, t) =>
                         {
                             Assert.Same(withMatch, s);
@@ -542,7 +542,7 @@
                     ThrowsArgumentException(
                         withMatchArg,
                         arg => arg.DoesNotMatch(timeoutPattern, MatchTimeout),
-                        m => secure != m.Contains(timeoutPattern),
+                        m => sensitive != m.Contains(timeoutPattern),
                         (arg, message) => arg.DoesNotMatch(timeoutPattern, MatchTimeout, (s, t) =>
                         {
                             Assert.Same(withMatch, s);
@@ -558,7 +558,7 @@
                     ThrowsArgumentException(
                         withMatchArg,
                         arg => arg.DoesNotMatch(timeoutRegex),
-                        m => secure != m.Contains(timeoutPattern),
+                        m => sensitive != m.Contains(timeoutPattern),
                         (arg, message) => arg.DoesNotMatch(timeoutRegex, (s, t) =>
                         {
                             Assert.Same(withMatch, s);
@@ -572,8 +572,8 @@
 
             // Matches - invalid pattern w/o timeout
             ThrowsArgumentException(
-                secure
-                    ? Guard.SecureArgument(withMatch, "pattern")
+                sensitive
+                    ? Guard.SensitiveArgument(withMatch, "pattern")
                     : Guard.Argument(withMatch, "pattern"),
                 arg => arg.Matches(invalidPattern),
                 (arg, message) => arg.Matches(invalidPattern, (s, t) =>
@@ -587,8 +587,8 @@
 
             // Matches - invalid pattern w/ timeout
             ThrowsArgumentException(
-                secure
-                    ? Guard.SecureArgument(withMatch, "pattern")
+                sensitive
+                    ? Guard.SensitiveArgument(withMatch, "pattern")
                     : Guard.Argument(withMatch, "pattern"),
                 arg => arg.Matches(invalidPattern),
                 (arg, message) => arg.Matches(invalidPattern, MatchTimeout, (s, t) =>
@@ -604,7 +604,7 @@
             ThrowsArgumentException(
                 withoutMatchArg,
                 arg => arg.Matches(validPattern),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.Matches(validPattern, (s, t) =>
                 {
                     Assert.Same(withoutMatch, s);
@@ -616,7 +616,7 @@
             ThrowsArgumentException(
                 withoutMatchArg,
                 arg => arg.Matches(validPattern, MatchTimeout),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.Matches(validPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withoutMatch, s);
@@ -628,7 +628,7 @@
             ThrowsArgumentException(
                 withoutMatchArg,
                 arg => arg.Matches(validRegexWithoutTimeout),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.Matches(validRegexWithoutTimeout, (s, t) =>
                 {
                     Assert.Same(withoutMatch, s);
@@ -640,7 +640,7 @@
             ThrowsArgumentException(
                 withoutMatchArg,
                 arg => arg.Matches(validRegexWithTimeout),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.Matches(validRegexWithTimeout, (s, t) =>
                 {
                     Assert.Same(withoutMatch, s);
@@ -650,8 +650,8 @@
 
             // Does not match - invalid pattern w/o timeout
             ThrowsArgumentException(
-                secure
-                    ? Guard.SecureArgument(withoutMatch, "pattern")
+                sensitive
+                    ? Guard.SensitiveArgument(withoutMatch, "pattern")
                     : Guard.Argument(withoutMatch, "pattern"),
                 arg => arg.DoesNotMatch(invalidPattern),
                 (arg, message) => arg.DoesNotMatch(invalidPattern, (s, t) =>
@@ -665,8 +665,8 @@
 
             // Does not match - invalid pattern w/ timeout
             ThrowsArgumentException(
-                secure
-                    ? Guard.SecureArgument(withoutMatch, "pattern")
+                sensitive
+                    ? Guard.SensitiveArgument(withoutMatch, "pattern")
                     : Guard.Argument(withoutMatch, "pattern"),
                 arg => arg.DoesNotMatch(invalidPattern),
                 (arg, message) => arg.DoesNotMatch(invalidPattern, MatchTimeout, (s, t) =>
@@ -682,7 +682,7 @@
             ThrowsArgumentException(
                 withMatchArg,
                 arg => arg.DoesNotMatch(validPattern),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.DoesNotMatch(validPattern, (s, t) =>
                 {
                     Assert.Same(withMatch, s);
@@ -694,7 +694,7 @@
             ThrowsArgumentException(
                 withMatchArg,
                 arg => arg.DoesNotMatch(validPattern, MatchTimeout),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.DoesNotMatch(validPattern, MatchTimeout, (s, t) =>
                 {
                     Assert.Same(withMatch, s);
@@ -706,7 +706,7 @@
             ThrowsArgumentException(
                 withMatchArg,
                 arg => arg.DoesNotMatch(validRegexWithoutTimeout),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.DoesNotMatch(validRegexWithoutTimeout, (s, t) =>
                 {
                     Assert.Same(withMatch, s);
@@ -718,7 +718,7 @@
             ThrowsArgumentException(
                 withMatchArg,
                 arg => arg.DoesNotMatch(validRegexWithTimeout),
-                m => secure != m.Contains(validPattern),
+                m => sensitive != m.Contains(validPattern),
                 (arg, message) => arg.DoesNotMatch(validRegexWithTimeout, (s, t) =>
                 {
                     Assert.Same(withMatch, s);

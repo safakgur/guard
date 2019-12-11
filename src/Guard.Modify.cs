@@ -19,7 +19,7 @@ namespace Dawn
         [GuardFunction("Normalization", "gmod")]
         public static ArgumentInfo<TTarget> Modify<TSource, TTarget>(
             in this ArgumentInfo<TSource> argument, TTarget value)
-            => new ArgumentInfo<TTarget>(value, argument.Name, true, argument.Secure);
+            => new ArgumentInfo<TTarget>(value, argument.Name, true, argument.Sensitive);
 
         /// <summary>
         ///     Returns a new argument with the same name and a value that is created using the
@@ -42,7 +42,7 @@ namespace Dawn
         {
             Argument(convert, nameof(convert)).NotNull();
             return new ArgumentInfo<TTarget>(
-                convert(argument.Value), argument.Name, true, argument.Secure);
+                convert(argument.Value), argument.Name, true, argument.Sensitive);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Dawn
             try
             {
                 return new ArgumentInfo<TTarget>(
-                    convert(argument.Value), argument.Name, true, argument.Secure);
+                    convert(argument.Value), argument.Name, true, argument.Sensitive);
             }
             catch (Exception x)
             {
@@ -106,7 +106,7 @@ namespace Dawn
                 return argument;
 
             var clone = argument.Value!.Clone() as T;
-            return new ArgumentInfo<T>(clone!, argument.Name, argument.Modified, argument.Secure);
+            return new ArgumentInfo<T>(clone!, argument.Name, argument.Modified, argument.Sensitive);
         }
 
 #endif
