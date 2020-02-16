@@ -150,7 +150,7 @@ namespace System.Runtime.InteropServices
 {
     /// <summary>Required to use "in" parameters on .NET Standard 1.0.</summary>
     [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
-    public sealed class InAttribute : Attribute
+    internal sealed class InAttribute : Attribute
     {
     }
 }
@@ -161,7 +161,7 @@ namespace System.Diagnostics.CodeAnalysis
 {
     /// <summary>Required for reference nullability annotations.</summary>
     [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
-    public sealed class NotNullWhenAttribute : Attribute
+    internal sealed class NotNullWhenAttribute : Attribute
     {
         /// <summary>Initializes a new instance of the <see cref="NotNullWhenAttribute" /> class.</summary>
         /// <param name="returnValue">If the method returns this value, the associated parameter will not be null.</param>
