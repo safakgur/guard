@@ -91,6 +91,85 @@ namespace Dawn
         }
 
         /// <summary>
+        ///     Requires the argument to have a value that is greater than a specified value.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="other">The value that the argument must be greater than.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is less than or equal to
+        ///     <paramref name="other" /> and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is less than or equal to
+        ///     <paramref name="other" /> and the argument is modified after its initialization.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Comparison", "ggt")]
+        public static ref readonly ArgumentInfo<T> GreaterThan<T>(
+            in this ArgumentInfo<T> argument, in T other, Func<T, T, string>? message = null)
+            where T : IComparable<T>?
+        {
+            if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, other) <= 0)
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.GreaterThan(argument, other);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                     : new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the nullable argument to have a value that is <c>null</c> or greater than
+        ///     the specified value.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="other">The value that the argument must be greater than.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is less than or equal to
+        ///     <paramref name="other" /> and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is less than or equal to
+        ///     <paramref name="other" /> and the argument is modified after its initialization.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Comparison", "ggt")]
+        public static ref readonly ArgumentInfo<T?> GreaterThan<T>(
+            in this ArgumentInfo<T?> argument, in T other, Func<T, T, string>? message = null)
+            where T : struct, IComparable<T>
+        {
+            if (argument.HasValue())
+            {
+                var value = argument.GetValueOrDefault();
+                if (argument.HasValue() && Comparer<T>.Default.Compare(value, other) <= 0)
+                {
+                    var m = message?.Invoke(value, other) ?? Messages.GreaterThan(argument, other);
+                    throw Fail(!argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                         : new ArgumentException(m, argument.Name));
+                }
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
         ///     Requires the argument to have a value that is equal to or lower than a specified value.
         /// </summary>
         /// <typeparam name="T">The type of the comparable argument.</typeparam>
@@ -160,6 +239,85 @@ namespace Dawn
                 if (argument.HasValue() && Comparer<T>.Default.Compare(value, maxValue) > 0)
                 {
                     var m = message?.Invoke(value, maxValue) ?? Messages.Max(argument, maxValue);
+                    throw Fail(!argument.Modified
+                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                         : new ArgumentException(m, argument.Name));
+                }
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the argument to have a value that is less than a specified value.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="other">The value that the argument must be less than.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is greater than or equal to
+        ///     <paramref name="other" /> and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is greater than or equal to
+        ///     <paramref name="other" /> and the argument is modified after its initialization.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Comparison", "glt")]
+        public static ref readonly ArgumentInfo<T> LessThan<T>(
+            in this ArgumentInfo<T> argument, in T other, Func<T, T, string>? message = null)
+            where T : IComparable<T>?
+        {
+            if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, other) >= 0)
+            {
+                var m = message?.Invoke(argument.Value, other) ?? Messages.LessThan(argument, other);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
+                     : new ArgumentException(m, argument.Name));
+            }
+
+            return ref argument;
+        }
+
+        /// <summary>
+        ///     Requires the nullable argument to have a value that is <c>null</c> or less than
+        ///     the specified value.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparable argument.</typeparam>
+        /// <param name="argument">The comparable argument.</param>
+        /// <param name="other">The value that the argument must be less than.</param>
+        /// <param name="message">
+        ///     The factory to initialize the message of the exception that will be thrown if the
+        ///     precondition is not satisfied.
+        /// </param>
+        /// <returns><paramref name="argument" />.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     <paramref name="argument" /> value is greater than or equal to
+        ///     <paramref name="other" /> and the argument is not modified since it is initialized.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///     <paramref name="argument" /> value is greater than or equal to
+        ///     <paramref name="other" /> and the argument is modified after its initialization.
+        /// </exception>
+        [AssertionMethod]
+        [DebuggerStepThrough]
+        [GuardFunction("Comparison", "glt")]
+        public static ref readonly ArgumentInfo<T?> LessThan<T>(
+            in this ArgumentInfo<T?> argument, in T other, Func<T, T, string>? message = null)
+            where T : struct, IComparable<T>
+        {
+            if (argument.HasValue())
+            {
+                var value = argument.GetValueOrDefault();
+                if (argument.HasValue() && Comparer<T>.Default.Compare(value, other) >= 0)
+                {
+                    var m = message?.Invoke(value, other) ?? Messages.GreaterThan(argument, other);
                     throw Fail(!argument.Modified
                          ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
                          : new ArgumentException(m, argument.Name));

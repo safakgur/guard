@@ -114,7 +114,7 @@ namespace Dawn.Tests
         [InlineData(CollectionOptions.HasCount, 3, 3, 4)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, 5)]
         [InlineData(CollectionOptions.HasCount, 3, 2, 5)]
-        public void MinCount(CollectionOptions options, int count, int countOrLess, int moreThanCount)
+        public void MinCount(CollectionOptions options, int count, int countOrLess, int greaterThanCount)
         {
             var enumerable = GetEnumerable<int>(options, count);
             var enumerableArg = Guard.Argument(() => enumerable).MinCount(countOrLess);
@@ -122,17 +122,17 @@ namespace Dawn.Tests
 
             if (enumerable is null)
             {
-                enumerableArg.MinCount(moreThanCount);
+                enumerableArg.MinCount(greaterThanCount);
                 return;
             }
 
             ThrowsArgumentException(
                 enumerableArg,
-                arg => arg.MinCount(moreThanCount),
-                (arg, message) => arg.MinCount(moreThanCount, (e, m) =>
+                arg => arg.MinCount(greaterThanCount),
+                (arg, message) => arg.MinCount(greaterThanCount, (e, m) =>
                 {
                     Assert.Same(enumerable, e);
-                    Assert.Equal(moreThanCount, m);
+                    Assert.Equal(greaterThanCount, m);
                     return message;
                 }));
         }
@@ -176,7 +176,7 @@ namespace Dawn.Tests
         [InlineData(CollectionOptions.HasCount, 3, 2, 4)]
         [InlineData(CollectionOptions.NotEmpty, 3, 1, 5)]
         [InlineData(CollectionOptions.HasCount, 3, 1, 5)]
-        public void CountInRange(CollectionOptions options, int count, int lessThanCount, int moreThanCount)
+        public void CountInRange(CollectionOptions options, int count, int lessThanCount, int greaterThanCount)
         {
             var enumerable = GetEnumerable<int>(options, count);
             var enumerableArg = Guard.Argument(() => enumerable);
@@ -187,17 +187,17 @@ namespace Dawn.Tests
             enumerableArg.CountInRange(count, count);
             CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: count + 1 != 0);
 
-            enumerableArg.CountInRange(count, moreThanCount);
-            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: moreThanCount + 1 != 0);
+            enumerableArg.CountInRange(count, greaterThanCount);
+            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: greaterThanCount + 1 != 0);
 
-            enumerableArg.CountInRange(lessThanCount, moreThanCount);
-            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: moreThanCount + 1 != 0);
+            enumerableArg.CountInRange(lessThanCount, greaterThanCount);
+            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: greaterThanCount + 1 != 0);
 
             if (enumerable is null)
             {
                 for (var i = 0; i < 2; i++)
                 {
-                    var limit = i == 0 ? lessThanCount : moreThanCount;
+                    var limit = i == 0 ? lessThanCount : greaterThanCount;
                     enumerableArg.CountInRange(limit, limit);
                 }
 
@@ -206,7 +206,7 @@ namespace Dawn.Tests
 
             for (var i = 0; i < 2; i++)
             {
-                var limit = i == 0 ? lessThanCount : moreThanCount;
+                var limit = i == 0 ? lessThanCount : greaterThanCount;
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.CountInRange(limit, limit),

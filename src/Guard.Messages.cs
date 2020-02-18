@@ -83,8 +83,14 @@ namespace Dawn
             public static string Min<T>(in ArgumentInfo<T> argument, in T minValue)
                 => $"{argument.Name} cannot be less than {minValue}.";
 
+            public static string GreaterThan<T>(in ArgumentInfo<T> argument, in T other)
+                => $"{argument.Name} must be greater than {other}.";
+
             public static string Max<T>(in ArgumentInfo<T> argument, in T maxValue)
                 => $"{argument.Name} cannot be greater than {maxValue}.";
+
+            public static string LessThan<T>(in ArgumentInfo<T> argument, in T other)
+                => $"{argument.Name} must be less than {other}.";
 
             public static string Zero<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be zero.";
