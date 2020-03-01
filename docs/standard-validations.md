@@ -50,6 +50,12 @@ For `ArgumentInfo<T|T?> where T : struct, IComparable<T>`
 * `Negative()`
 * `NotNegative()`
 
+### Boolean Guards
+
+For `ArgumentInfo<bool|bool?>`
+* `True()`
+* `False()`
+
 ### Collection Guards
 
 For `ArgumentInfo<T> where T : IEnumerable`
@@ -104,6 +110,12 @@ For `ArgumentInfo<string>`
 * `DoesNotMatch(string, TimeSpan)`
 * `DoesNotMatch(Regex)`
 
+### Time Guards
+
+For `ArgumentInfo<DateTime|DateTime?>`
+
+* `KindSpecified()`
+
 ### Floating-Point Number Guards
 
 For `ArgumentInfo<float|float?|double|double?>`
@@ -117,12 +129,6 @@ For `ArgumentInfo<float|float?|double|double?>`
 * `NotNegativeInfinity()`
 * `Equal(T, T)` - Approx. equality.
 * `NotEqual(T, T)` - Approx. unequality.
-
-### Boolean Guards
-
-For `ArgumentInfo<bool|bool?>`
-* `True()`
-* `False()`
 
 ### URI Guards
 
