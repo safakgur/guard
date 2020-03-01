@@ -115,6 +115,7 @@ For `ArgumentInfo<string>`
 For `ArgumentInfo<DateTime|DateTime?>`
 
 * `KindSpecified()`
+* `KindUnspecified()`
 
 ### Floating-Point Number Guards
 
