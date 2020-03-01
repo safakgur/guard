@@ -778,7 +778,7 @@ namespace Dawn.Tests
             }
 
             bool TestGeneratedMessage(string message)
-                => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
+                => secure || enumerable.Items.Take(5).All(i => message.Contains(i.ToString()));
         }
 
         [Theory(DisplayName = "Enumerable: In/NotIn array")]
