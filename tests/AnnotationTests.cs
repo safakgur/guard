@@ -8,6 +8,30 @@ namespace Dawn.Tests
 {
     public sealed class AnnotationTests : BaseTests
     {
+        private static readonly IReadOnlyList<KeyValuePair<MethodInfo, GuardFunctionAttribute>> s_markedMethods =
+            GuardFunctionAttribute.GetMethods(Assembly.GetAssembly(typeof(Guard))).ToList();
+
+        public static IEnumerable<object[]> ExportedMethodData
+        {
+            get
+            {
+                var assembly = Assembly.GetAssembly(typeof(Guard));
+                var flags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
+                return
+                    from t in assembly.ExportedTypes
+                    where !t.FullName.StartsWith("Coverlet")
+                       && t.GetCustomAttribute<ObsoleteAttribute>() is null
+                    select t.GetMethods(flags) into methods
+                    from m in methods
+                    where m.DeclaringType.Assembly == assembly
+                       && !m.IsVirtual
+                       && !m.IsSpecialName
+                       && m.GetCustomAttribute<NonGuardAttribute>() is null
+                       && m.GetCustomAttribute<ObsoleteAttribute>() is null
+                    select new object[] { m };
+            }
+        }
+
         [Fact(DisplayName = "Annotations: [GuardFunc] initialization")]
         public void GuardFunctionInit()
         {
@@ -41,41 +65,23 @@ namespace Dawn.Tests
             Assert.Equal(1, attr.Order);
         }
 
-        [Fact(DisplayName = "Annotations: Exported methods are marked")]
-        public void ExportedMethodsAreMarked()
+        [Theory(DisplayName = "Annotations: Exported methods are marked")]
+        [MemberData(nameof(ExportedMethodData))]
+        public void ExportedMethodsAreMarked(MethodInfo method)
         {
-            var assembly = Assembly.GetAssembly(typeof(Guard));
-            var flags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
-            var exportedMethods =
-                from t in assembly.ExportedTypes
-                where !t.FullName.StartsWith("Coverlet")
-                   && t.GetCustomAttribute<ObsoleteAttribute>() is null
-                select t.GetMethods(flags) into methods
-                from m in methods
-                where m.DeclaringType.Assembly == assembly
-                   && !m.IsVirtual
-                   && !m.IsSpecialName
-                   && m.GetCustomAttribute<NonGuardAttribute>() is null
-                   && m.GetCustomAttribute<ObsoleteAttribute>() is null
-                select m;
-
-            var markedMethods = GetMarkedMethods().Select(p => p.Key).ToHashSet();
-            foreach (var e in exportedMethods)
-                Assert.Contains(e, markedMethods);
+            var markedMethods = s_markedMethods.Select(p => p.Key);
+            Assert.Contains(method, markedMethods);
         }
 
         [Fact(DisplayName = "Annotations: Shortcuts are unique")]
         public void ShortcutsAreUnique()
         {
-            var groups = GetMarkedMethods()
+            var groups = s_markedMethods
                 .Where(p => p.Value.Shortcut != null)
                 .GroupBy(p => p.Value.Shortcut);
 
             foreach (var group in groups)
                 Assert.False(group.GroupBy(t => t.Key.Name).Skip(1).Any());
         }
-
-        private static IEnumerable<KeyValuePair<MethodInfo, GuardFunctionAttribute>> GetMarkedMethods()
-            => GuardFunctionAttribute.GetMethods(Assembly.GetAssembly(typeof(Guard)));
     }
 }

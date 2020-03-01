@@ -34,7 +34,7 @@ namespace Dawn.Tests
         {
             var @null = null as int?;
             var nullArg = Guard.Argument(() => @null).Null();
-            Assert.False(nullArg.HasValue());
+            Assert.False(nullArg.HasValue);
 
             ThrowsArgumentNullException(
                 nullArg,
@@ -46,7 +46,7 @@ namespace Dawn.Tests
             {
                 var nullableOneArg = Guard.Argument(() => one, i == 1);
                 Assert.IsType<Guard.ArgumentInfo<int?>>(nullableOneArg);
-                Assert.True(nullableOneArg.HasValue());
+                Assert.True(nullableOneArg.HasValue);
 
                 ThrowsArgumentException(
                     nullableOneArg,
@@ -59,7 +59,7 @@ namespace Dawn.Tests
 
                 var oneArg = nullableOneArg.NotNull();
                 Assert.IsType<Guard.ArgumentInfo<int>>(oneArg);
-                Assert.True(oneArg.HasValue());
+                Assert.True(oneArg.HasValue);
                 Assert.Equal(nullableOneArg.Value, oneArg.Value);
                 Assert.Equal(nullableOneArg.Secure, oneArg.Secure);
             }

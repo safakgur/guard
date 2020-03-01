@@ -65,9 +65,9 @@ namespace Dawn
         public static ref readonly ArgumentInfo<object> NotType<T>(
             in this ArgumentInfo<object> argument, Func<T, string>? message = null)
         {
-            if (argument.HasValue() && TypeInfo<T>.CanBeInitializedFrom(argument.Value))
+            if (argument!.TryGetValue(out var value) && TypeInfo<T>.CanBeInitializedFrom(value))
             {
-                var m = message?.Invoke((T)argument.Value) ?? Messages.NotType(argument, typeof(T));
+                var m = message?.Invoke((T)value) ?? Messages.NotType(argument, typeof(T));
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -93,9 +93,9 @@ namespace Dawn
         public static ref readonly ArgumentInfo<object> Type(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string>? message = null)
         {
-            if (argument.HasValue() && !TypeInfo.CanBeConvertedTo(argument.Value, type))
+            if (argument!.TryGetValue(out var value) && !TypeInfo.CanBeConvertedTo(value, type))
             {
-                var m = message?.Invoke(argument.Value, type) ?? Messages.Type(argument, type);
+                var m = message?.Invoke(value, type) ?? Messages.Type(argument, type);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -123,9 +123,9 @@ namespace Dawn
         public static ref readonly ArgumentInfo<object> NotType(
             in this ArgumentInfo<object> argument, Type type, Func<object, Type, string>? message = null)
         {
-            if (argument.HasValue() && TypeInfo.CanBeConvertedTo(argument.Value, type))
+            if (argument!.TryGetValue(out var value) && TypeInfo.CanBeConvertedTo(value, type))
             {
-                var m = message?.Invoke(argument.Value, type) ?? Messages.NotType(argument, type);
+                var m = message?.Invoke(value, type) ?? Messages.NotType(argument, type);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -155,7 +155,7 @@ namespace Dawn
             [GuardFunction("Type", "gcomp")]
             public ArgumentInfo<T> Compatible<TTarget>(Func<T, string>? message = null)
             {
-                if (!HasValue() || Value is TTarget value)
+                if (!HasValue || Value is TTarget value)
                     return this;
 
                 var m = message?.Invoke(Value) ?? Messages.Compatible<T, TTarget>(this);
@@ -182,7 +182,7 @@ namespace Dawn
             [GuardFunction("Type", "gncomp")]
             public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string>? message = null)
             {
-                if (HasValue() && Value is TTarget value)
+                if (HasValue && Value is TTarget value)
                 {
                     var m = message?.Invoke(value) ?? Messages.NotCompatible<T, TTarget>(this);
                     throw Fail(new ArgumentException(m, Name));

@@ -264,6 +264,7 @@ namespace Dawn
                 => $"{argument.Name} must be an absolute URI with the HTTPS scheme.";
 
 #if !NETSTANDARD1_0
+
             public static string EmailHasHost(in ArgumentInfo<MailAddress> argument, string host)
                 => argument.Secure ? Require(argument) : $"{argument.Name} must have the host '{host}'.";
 
@@ -281,6 +282,7 @@ namespace Dawn
 
             public static string EmailDoesNotHaveDisplayName(in ArgumentInfo<MailAddress> argument)
                 => $"{argument.Name} cannot have a display name specified.";
+
 #endif
 
             public static string KindSpecified<T>(in ArgumentInfo<T> argument)

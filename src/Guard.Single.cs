@@ -74,16 +74,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> NaN(
             in this ArgumentInfo<float?> argument, Func<float?, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && !float.IsNaN(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (!float.IsNaN(value))
-                {
-                    var m = message?.Invoke(value) ?? Messages.NaN(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.NaN(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -146,16 +142,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> NotNaN(
             in this ArgumentInfo<float?> argument, string? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && float.IsNaN(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (float.IsNaN(value))
-                {
-                    var m = message ?? Messages.NotNaN(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message ?? Messages.NotNaN(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -230,16 +222,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> Infinity(
             in this ArgumentInfo<float?> argument, Func<float?, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && !float.IsInfinity(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (!float.IsInfinity(value))
-                {
-                    var m = message?.Invoke(value) ?? Messages.Infinity(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.Infinity(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -310,16 +298,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> NotInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && float.IsInfinity(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (float.IsInfinity(value))
-                {
-                    var m = message?.Invoke(value) ?? Messages.NotInfinity(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.NotInfinity(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -390,16 +374,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> PositiveInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && !float.IsPositiveInfinity(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (!float.IsPositiveInfinity(value))
-                {
-                    var m = message?.Invoke(value) ?? Messages.PositiveInfinity(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.PositiveInfinity(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -462,16 +442,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> NotPositiveInfinity(
             in this ArgumentInfo<float?> argument, string? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && float.IsPositiveInfinity(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (float.IsPositiveInfinity(value))
-                {
-                    var m = message ?? Messages.NotPositiveInfinity(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message ?? Messages.NotPositiveInfinity(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -542,16 +518,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> NegativeInfinity(
             in this ArgumentInfo<float?> argument, Func<float?, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && !float.IsNegativeInfinity(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (!float.IsNegativeInfinity(value))
-                {
-                    var m = message?.Invoke(value) ?? Messages.NegativeInfinity(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.NegativeInfinity(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -614,16 +586,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<float?> NotNegativeInfinity(
             in this ArgumentInfo<float?> argument, string? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && float.IsNegativeInfinity(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (float.IsNegativeInfinity(value))
-                {
-                    var m = message ?? Messages.NotNegativeInfinity(argument);
-                    throw Fail(!argument.Modified
-                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                        : new ArgumentException(m, argument.Name));
-                }
+                var m = message ?? Messages.NotNegativeInfinity(argument);
+                throw Fail(!argument.Modified
+                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                    : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -691,9 +659,8 @@ namespace Dawn
             float delta,
             Func<float, float, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value))
             {
-                var value = argument.GetValueOrDefault();
                 var diff = Math.Abs(value - other);
                 if (diff > delta)
                 {
@@ -769,9 +736,8 @@ namespace Dawn
             float delta,
             Func<float, float, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value))
             {
-                var value = argument.GetValueOrDefault();
                 var diff = Math.Abs(value - other);
                 if (diff <= delta)
                 {

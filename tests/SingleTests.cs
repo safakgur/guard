@@ -222,7 +222,7 @@ namespace Dawn.Tests
             void NullableTest(Guard.ArgumentInfo<float?> nullableValueArg)
             {
                 nullableValueArg.Equal(equal, delta).NotEqual(nonEqual, delta);
-                if (!nullableValueArg.HasValue())
+                if (!nullableValueArg.HasValue)
                 {
                     nullableValueArg.Equal(nonEqual, delta).NotEqual(equal, delta);
                     return;

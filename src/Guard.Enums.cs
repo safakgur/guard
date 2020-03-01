@@ -60,14 +60,10 @@ namespace Dawn
             this in ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct, System.Enum
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && !EnumInfo<T>.Values.Contains(value))
             {
-                var value = argument.GetValueOrDefault();
-                if (!EnumInfo<T>.Values.Contains(value))
-                {
-                    var m = message?.Invoke(value) ?? Messages.EnumDefined(argument);
-                    throw Fail(new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.EnumDefined(argument);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -125,14 +121,10 @@ namespace Dawn
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string>? message = null)
             where T : struct, System.Enum
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && !EnumInfo<T>.HasFlag(value, flag))
             {
-                var value = argument.GetValueOrDefault();
-                if (!EnumInfo<T>.HasFlag(value, flag))
-                {
-                    var m = message?.Invoke(value, flag) ?? Messages.EnumHasFlag(argument, flag);
-                    throw Fail(new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value, flag) ?? Messages.EnumHasFlag(argument, flag);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -190,14 +182,10 @@ namespace Dawn
             this in ArgumentInfo<T?> argument, T flag, Func<T, T, string>? message = null)
             where T : struct, System.Enum
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && EnumInfo<T>.HasFlag(value, flag))
             {
-                var value = argument.GetValueOrDefault();
-                if (EnumInfo<T>.HasFlag(value, flag))
-                {
-                    var m = message?.Invoke(value, flag) ?? Messages.EnumDoesNotHaveFlag(argument, flag);
-                    throw Fail(new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value, flag) ?? Messages.EnumDoesNotHaveFlag(argument, flag);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;

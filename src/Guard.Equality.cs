@@ -60,14 +60,10 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && !EqualityComparer<T>.Default.Equals(value, default))
             {
-                var value = argument.GetValueOrDefault();
-                if (!EqualityComparer<T>.Default.Equals(value, default))
-                {
-                    var m = message?.Invoke(value) ?? Messages.Default(argument);
-                    throw Fail(new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.Default(argument);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -120,14 +116,10 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, string? message = null)
             where T : struct
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && EqualityComparer<T>.Default.Equals(value, default))
             {
-                var value = argument.GetValueOrDefault();
-                if (EqualityComparer<T>.Default.Equals(value, default))
-                {
-                    var m = message ?? Messages.NotDefault(argument);
-                    throw Fail(new ArgumentException(m, argument.Name));
-                }
+                var m = message ?? Messages.NotDefault(argument);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -176,7 +168,7 @@ namespace Dawn
             IEqualityComparer<T> comparer,
             Func<T, T, string>? message = null)
         {
-            if (argument.HasValue() && !(comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
+            if (argument.HasValue && !(comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -232,7 +224,7 @@ namespace Dawn
             IEqualityComparer<T> comparer,
             Func<T, string>? message = null)
         {
-            if (argument.HasValue() && (comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
+            if (argument.HasValue && (comparer ?? EqualityComparer<T>.Default).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument, other);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -260,9 +252,9 @@ namespace Dawn
             in this ArgumentInfo<T> argument, object other, Func<T, object, string>? message = null)
             where T : class
         {
-            if (argument.HasValue() && !ReferenceEquals(argument.Value, other))
+            if (argument!.TryGetValue(out var value) && !ReferenceEquals(value, other))
             {
-                var m = message?.Invoke(argument.Value, other) ?? Messages.Same(argument, other);
+                var m = message?.Invoke(value, other) ?? Messages.Same(argument, other);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -290,9 +282,9 @@ namespace Dawn
             in this ArgumentInfo<T> argument, object other, Func<T, object, string>? message = null)
             where T : class
         {
-            if (argument.HasValue() && ReferenceEquals(argument.Value, other))
+            if (argument!.TryGetValue(out var value) && ReferenceEquals(value, other))
             {
-                var m = message?.Invoke(argument.Value, other) ?? Messages.NotSame(argument, other);
+                var m = message?.Invoke(value, other) ?? Messages.NotSame(argument, other);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 

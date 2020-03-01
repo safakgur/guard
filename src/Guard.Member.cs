@@ -76,7 +76,7 @@ namespace Dawn
             bool validatesRange,
             Func<T, TMember, Exception, string>? message = null)
         {
-            if (argument.HasValue() && member != null && validation != null)
+            if (argument.HasValue && member != null && validation != null)
             {
                 // Get member info.
                 ArgumentMemberInfo<T, TMember> info;
@@ -183,7 +183,7 @@ namespace Dawn
             Func<T, TMember, Exception, string>? message = null)
             where T : struct
         {
-            if (argument.HasValue() && member != null && validation != null)
+            if (argument.HasValue && member != null && validation != null)
             {
                 // Get member info.
                 ArgumentMemberInfo<T, TMember> info;

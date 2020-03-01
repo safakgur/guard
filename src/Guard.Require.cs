@@ -54,7 +54,7 @@ namespace Dawn
                 bool condition, Func<T, string>? message = null)
                 where TException : Exception
             {
-                if (HasValue() && !condition)
+                if (HasValue && !condition)
                 {
                     var m = message?.Invoke(Value) ?? Messages.Require(this);
                     throw Fail(Exception<TException>.Factory(Name, m));
@@ -103,7 +103,7 @@ namespace Dawn
                 Func<T, bool> predicate, Func<T, string>? message = null)
                 where TException : Exception
             {
-                if (HasValue() && predicate?.Invoke(Value) == false)
+                if (HasValue && predicate?.Invoke(Value) == false)
                 {
                     var m = message?.Invoke(Value) ?? Messages.Require(this);
                     throw Fail(Exception<TException>.Factory(Name, m));

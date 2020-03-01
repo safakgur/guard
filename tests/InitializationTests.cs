@@ -134,7 +134,7 @@ namespace Dawn.Tests
         public void ConvertToString<T>(T value)
         {
             var valueArg = Guard.Argument(() => value);
-            if (valueArg.HasValue())
+            if (valueArg.HasValue)
                 Assert.Equal(value.ToString(), valueArg.ToString());
             else
                 Assert.Same(string.Empty, valueArg.ToString());
@@ -146,7 +146,7 @@ namespace Dawn.Tests
         [InlineData("S")]
         public void DebuggerDisplay<T>(T value)
         {
-            const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
+            const StringComparison ignoreCase = StringComparison.OrdinalIgnoreCase;
             for (var i = 0; i < 3; i++)
             {
                 var hasName = i <= 1;
@@ -160,14 +160,14 @@ namespace Dawn.Tests
                     Assert.DoesNotContain(nameof(value), display);
 
                 if (isSecure)
-                    Assert.Contains("SECURE", display, IgnoreCase);
+                    Assert.Contains("SECURE", display, ignoreCase);
                 else
-                    Assert.DoesNotContain("SECURE", display, IgnoreCase);
+                    Assert.DoesNotContain("SECURE", display, ignoreCase);
 
-                if (valueArg.HasValue())
+                if (valueArg.HasValue)
                     Assert.Contains(value.ToString(), display);
                 else
-                    Assert.Contains("NULL", display, IgnoreCase);
+                    Assert.Contains("NULL", display, ignoreCase);
             }
         }
     }
