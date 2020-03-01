@@ -1,18 +1,18 @@
 ﻿#nullable enable
 
-namespace Dawn
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 #if !NETSTANDARD1_0
 
-    using System.Net.Mail;
+using System.Net.Mail;
 
 #endif
 
+namespace Dawn
+{
     /// <content>Provides error messages for the common preconditions.</content>
     public static partial class Guard
     {
@@ -83,8 +83,14 @@ namespace Dawn
             public static string Min<T>(in ArgumentInfo<T> argument, in T minValue)
                 => $"{argument.Name} cannot be less than {minValue}.";
 
+            public static string GreaterThan<T>(in ArgumentInfo<T> argument, in T other)
+                => $"{argument.Name} must be greater than {other}.";
+
             public static string Max<T>(in ArgumentInfo<T> argument, in T maxValue)
                 => $"{argument.Name} cannot be greater than {maxValue}.";
+
+            public static string LessThan<T>(in ArgumentInfo<T> argument, in T other)
+                => $"{argument.Name} must be less than {other}.";
 
             public static string Zero<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be zero.";
@@ -283,16 +289,16 @@ namespace Dawn
 
             private static string Join(IEnumerable collection)
             {
-                const int Max = 5;
+                const int max = 5;
 
                 var objects = collection is IEnumerable<string> e
                     ? e.Select(i => $"\"{i}\"") as IEnumerable<object>
                     : collection.Cast<object>();
 
-                var list = objects.Take(Max + 1).ToList();
-                var ellipsis = list.Count > Max;
+                var list = objects.Take(max + 1).ToList();
+                var ellipsis = list.Count > max;
                 if (ellipsis)
-                    list.RemoveAt(Max);
+                    list.RemoveAt(max);
 
                 var result = string.Join(", ", list);
                 if (ellipsis)

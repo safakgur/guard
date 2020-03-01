@@ -1,12 +1,12 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading.Tasks;
-    using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class ScopeTests : BaseTests
     {
         [Fact(DisplayName = "Scopes: BeginScope")]

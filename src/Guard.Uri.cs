@@ -1,10 +1,10 @@
-﻿namespace Dawn
-{
-    using System;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using JetBrains.Annotations;
+﻿using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
+namespace Dawn
+{
     /// <content>Provides preconditions for <see cref="Uri" /> arguments.</content>
     public static partial class Guard
     {

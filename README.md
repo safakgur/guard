@@ -41,6 +41,8 @@ public Person(string name, int age)
 And this is how we write the same constructor with Guard:
 
 ```c#
+using Dawn; // Bring Guard into scope.
+
 public Person(string name, int age)
 {
     Name = Guard.Argument(name, nameof(name)).NotNull().NotEmpty();

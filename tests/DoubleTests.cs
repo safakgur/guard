@@ -1,7 +1,7 @@
-﻿namespace Dawn.Tests
-{
-    using Xunit;
+﻿using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class DoubleTests : BaseTests
     {
         [Theory(DisplayName = "Double: NaN/NotNaN")]

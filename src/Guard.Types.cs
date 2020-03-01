@@ -1,14 +1,14 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Threading;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using JetBrains.Annotations;
-
     /// <content>Provides type preconditions.</content>
     public static partial class Guard
     {
@@ -155,11 +155,11 @@ namespace Dawn
             [GuardFunction("Type", "gcomp")]
             public ArgumentInfo<T> Compatible<TTarget>(Func<T, string>? message = null)
             {
-                if (!this.HasValue() || this.Value is TTarget value)
+                if (!HasValue() || Value is TTarget value)
                     return this;
 
-                var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
-                throw Fail(new ArgumentException(m, this.Name));
+                var m = message?.Invoke(Value) ?? Messages.Compatible<T, TTarget>(this);
+                throw Fail(new ArgumentException(m, Name));
             }
 
             /// <summary>
@@ -182,10 +182,10 @@ namespace Dawn
             [GuardFunction("Type", "gncomp")]
             public ArgumentInfo<T> NotCompatible<TTarget>(Func<TTarget, string>? message = null)
             {
-                if (this.HasValue() && this.Value is TTarget value)
+                if (HasValue() && Value is TTarget value)
                 {
                     var m = message?.Invoke(value) ?? Messages.NotCompatible<T, TTarget>(this);
-                    throw Fail(new ArgumentException(m, this.Name));
+                    throw Fail(new ArgumentException(m, Name));
                 }
 
                 return this;
@@ -214,11 +214,11 @@ namespace Dawn
             [GuardFunction("Type", "gcast")]
             public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string>? message = null)
             {
-                if (this.Value is TTarget value)
+                if (Value is TTarget value)
                     return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
 
-                var m = message?.Invoke(this.Value) ?? Messages.Compatible<T, TTarget>(this);
-                throw Fail(new ArgumentException(m, this.Name));
+                var m = message?.Invoke(Value) ?? Messages.Compatible<T, TTarget>(this);
+                throw Fail(new ArgumentException(m, Name));
             }
         }
 
@@ -241,9 +241,7 @@ namespace Dawn
                 var isValueType = IsValueType(targetType);
                 var isNullable = !isValueType || targetType.IsGenericType(typeof(Nullable<>));
 
-#pragma warning disable IDE0007 // Use implicit type
                 Type? type = targetType;
-#pragma warning restore IDE0007 // Use implicit type
                 var resultChain = new HashSet<Type>();
                 do
                 {

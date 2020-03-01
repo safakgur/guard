@@ -1,9 +1,9 @@
-﻿namespace Dawn.Utils
-{
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
+namespace Dawn.Utils
+{
     public static class Program
     {
         public static async Task Main(string[] args)

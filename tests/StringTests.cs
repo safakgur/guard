@@ -1,10 +1,10 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
-    using Xunit;
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class StringTests : BaseTests
     {
         private static readonly TimeSpan MatchTimeout = TimeSpan.FromMilliseconds(10);
@@ -118,23 +118,23 @@
         [InlineData("", 0, 1)]
         [InlineData("ABC", 3, 4)]
         [InlineData("DEF", 2, 5)]
-        public void MinLength(string value, int lengthOrLess, int moreThanLength)
+        public void MinLength(string value, int lengthOrLess, int greaterThanLength)
         {
             var valueArg = Guard.Argument(() => value).MinLength(lengthOrLess);
 
             if (value is null)
             {
-                valueArg.MinLength(moreThanLength);
+                valueArg.MinLength(greaterThanLength);
                 return;
             }
 
             ThrowsArgumentException(
                 valueArg,
-                arg => arg.MinLength(moreThanLength),
-                (arg, message) => arg.MinLength(moreThanLength, (v, m) =>
+                arg => arg.MinLength(greaterThanLength),
+                (arg, message) => arg.MinLength(greaterThanLength, (v, m) =>
                 {
                     Assert.Same(value, v);
-                    Assert.Equal(moreThanLength, m);
+                    Assert.Equal(greaterThanLength, m);
                     return message;
                 }));
         }
@@ -170,20 +170,20 @@
         [InlineData("", -1, 1)]
         [InlineData("ABC", 2, 4)]
         [InlineData("DEF", 1, 5)]
-        public void LengthInRange(string value, int lessThanLength, int moreThanLength)
+        public void LengthInRange(string value, int lessThanLength, int greaterThanLength)
         {
             var length = value?.Length ?? RandomNumber;
             var valueArg = Guard.Argument(() => value)
                 .LengthInRange(lessThanLength, length)
                 .LengthInRange(length, length)
-                .LengthInRange(length, moreThanLength)
-                .LengthInRange(lessThanLength, moreThanLength);
+                .LengthInRange(length, greaterThanLength)
+                .LengthInRange(lessThanLength, greaterThanLength);
 
             if (value is null)
             {
                 for (var i = 0; i < 2; i++)
                 {
-                    var limit = i == 0 ? lessThanLength : moreThanLength;
+                    var limit = i == 0 ? lessThanLength : greaterThanLength;
                     valueArg.LengthInRange(limit, limit);
                 }
 
@@ -192,7 +192,7 @@
 
             for (var i = 0; i < 2; i++)
             {
-                var limit = i == 0 ? lessThanLength : moreThanLength;
+                var limit = i == 0 ? lessThanLength : greaterThanLength;
                 ThrowsArgumentException(
                     valueArg,
                     arg => arg.LengthInRange(limit, limit),

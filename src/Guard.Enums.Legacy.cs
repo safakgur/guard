@@ -1,10 +1,10 @@
-﻿namespace Dawn
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using JetBrains.Annotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using JetBrains.Annotations;
 
+namespace Dawn
+{
     /// <content>Provides preconditions for <see cref="System.Enum" /> arguments.</content>
     public static partial class Guard
     {
@@ -70,7 +70,7 @@
             /// </summary>
             /// <param name="argument">The original argument.</param>
             internal EnumArgumentInfo(ArgumentInfo<T> argument)
-                => this.Argument = argument;
+                => Argument = argument;
 
             /// <summary>Gets the original argument.</summary>
             public ArgumentInfo<T> Argument { get; }
@@ -96,10 +96,10 @@
             [DebuggerStepThrough]
             public EnumArgumentInfo<T> Defined(Func<T, string> message = null)
             {
-                if (!EnumInfo<T>.Values.Contains(this.Argument.Value))
+                if (!EnumInfo<T>.Values.Contains(Argument.Value))
                 {
-                    var m = message?.Invoke(this.Argument.Value) ?? Messages.EnumDefined(this.Argument);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value) ?? Messages.EnumDefined(Argument);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
                 return this;
@@ -118,10 +118,10 @@
             [DebuggerStepThrough]
             public EnumArgumentInfo<T> None(Func<T, string> message = null)
             {
-                if (!EqualityComparer<T>.Default.Equals(this.Argument.Value, default))
+                if (!EqualityComparer<T>.Default.Equals(Argument.Value, default))
                 {
-                    var m = message?.Invoke(this.Argument.Value) ?? Messages.EnumNone(this.Argument);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value) ?? Messages.EnumNone(Argument);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
                 return this;
@@ -140,10 +140,10 @@
             [DebuggerStepThrough]
             public EnumArgumentInfo<T> NotNone(Func<T, string> message = null)
             {
-                if (EqualityComparer<T>.Default.Equals(this.Argument.Value, default))
+                if (EqualityComparer<T>.Default.Equals(Argument.Value, default))
                 {
-                    var m = message?.Invoke(this.Argument.Value) ?? Messages.EnumNotNone(this.Argument);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value) ?? Messages.EnumNotNone(Argument);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
                 return this;
@@ -163,10 +163,10 @@
             [DebuggerStepThrough]
             public EnumArgumentInfo<T> Equal(T other, Func<T, T, string> message = null)
             {
-                if (!EqualityComparer<T>.Default.Equals(this.Argument.Value, other))
+                if (!EqualityComparer<T>.Default.Equals(Argument.Value, other))
                 {
-                    var m = message?.Invoke(this.Argument.Value, other) ?? Messages.Equal(this.Argument, other);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value, other) ?? Messages.Equal(Argument, other);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
                 return this;
@@ -188,10 +188,10 @@
             [DebuggerStepThrough]
             public EnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
-                if (EqualityComparer<T>.Default.Equals(this.Argument.Value, other))
+                if (EqualityComparer<T>.Default.Equals(Argument.Value, other))
                 {
-                    var m = message?.Invoke(this.Argument.Value) ?? Messages.NotEqual(this.Argument, other);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value) ?? Messages.NotEqual(Argument, other);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
                 return this;
@@ -212,10 +212,10 @@
             [DebuggerStepThrough]
             public EnumArgumentInfo<T> HasFlag(T flag, Func<T, T, string> message = null)
             {
-                if (!EnumInfo<T>.HasFlag(this.Argument.Value, flag))
+                if (!EnumInfo<T>.HasFlag(Argument.Value, flag))
                 {
-                    var m = message?.Invoke(this.Argument.Value, flag) ?? Messages.EnumHasFlag(this.Argument, flag);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value, flag) ?? Messages.EnumHasFlag(Argument, flag);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
                 return this;
@@ -235,10 +235,10 @@
             [DebuggerStepThrough]
             public EnumArgumentInfo<T> DoesNotHaveFlag(T flag, Func<T, T, string> message = null)
             {
-                if (EnumInfo<T>.HasFlag(this.Argument.Value, flag))
+                if (EnumInfo<T>.HasFlag(Argument.Value, flag))
                 {
-                    var m = message?.Invoke(this.Argument.Value, flag) ?? Messages.EnumDoesNotHaveFlag(this.Argument, flag);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value, flag) ?? Messages.EnumDoesNotHaveFlag(Argument, flag);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
                 return this;
@@ -256,7 +256,7 @@
             /// </summary>
             /// <param name="argument">The original argument.</param>
             internal NullableEnumArgumentInfo(ArgumentInfo<T?> argument)
-                => this.Argument = argument;
+                => Argument = argument;
 
             /// <summary>Gets the original argument.</summary>
             public ArgumentInfo<T?> Argument { get; }
@@ -264,7 +264,7 @@
             /// <summary>Gets the value of a nullable enum argument.</summary>
             /// <param name="argument">The argument whose value to return.</param>
             /// <returns>The value of <see cref="Argument" />.</returns>
-            public static implicit operator T? (NullableEnumArgumentInfo<T> argument)
+            public static implicit operator T?(NullableEnumArgumentInfo<T> argument)
                 => argument.Argument.Value;
 
             /// <summary>Requires the nullable enum argument to be <c>null</c>.</summary>
@@ -278,13 +278,13 @@
             /// </exception>
             public ArgumentInfo<T?> Null(Func<T, string> message = null)
             {
-                if (this.Argument.HasValue())
+                if (Argument.HasValue())
                 {
-                    var m = message?.Invoke(this.Argument.Value.Value) ?? Messages.Null(this.Argument);
-                    throw new ArgumentException(m, this.Argument.Name);
+                    var m = message?.Invoke(Argument.Value.Value) ?? Messages.Null(Argument);
+                    throw new ArgumentException(m, Argument.Name);
                 }
 
-                return this.Argument;
+                return Argument;
             }
 
             /// <summary>Requires the nullable enum argument to be not <c>null</c>.</summary>
@@ -302,7 +302,7 @@
             /// </exception>
             public EnumArgumentInfo<T> NotNull(string message = null)
 #pragma warning disable CS0618 // Type or member is obsolete
-                => this.Argument.NotNull(message).Enum();
+                => Argument.NotNull(message).Enum();
 
 #pragma warning restore CS0618 // Type or member is obsolete
 
@@ -323,7 +323,7 @@
             [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> Defined(Func<T, string> message = null)
             {
-                if (this.NotNull(out var a))
+                if (NotNull(out var a))
                     a.Defined(message);
 
                 return this;
@@ -344,7 +344,7 @@
             [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> None(Func<T, string> message = null)
             {
-                if (this.NotNull(out var a))
+                if (NotNull(out var a))
                     a.None(message);
 
                 return this;
@@ -363,7 +363,7 @@
             [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> NotNone(Func<T, string> message = null)
             {
-                if (this.NotNull(out var a))
+                if (NotNull(out var a))
                     a.NotNone(message);
 
                 return this;
@@ -385,7 +385,7 @@
             [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> Equal(T other, Func<T, T, string> message = null)
             {
-                if (this.NotNull(out var a))
+                if (NotNull(out var a))
                     a.Equal(other, message);
 
                 return this;
@@ -408,7 +408,7 @@
             [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> NotEqual(T other, Func<T, string> message = null)
             {
-                if (this.NotNull(out var a))
+                if (NotNull(out var a))
                     a.NotEqual(other, message);
 
                 return this;
@@ -432,7 +432,7 @@
             [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> HasFlag(T flag, Func<T, T, string> message = null)
             {
-                if (this.NotNull(out var a))
+                if (NotNull(out var a))
                     a.HasFlag(flag, message);
 
                 return this;
@@ -456,7 +456,7 @@
             [DebuggerStepThrough]
             public NullableEnumArgumentInfo<T> DoesNotHaveFlag(T flag, Func<T, T, string> message = null)
             {
-                if (this.NotNull(out var a))
+                if (NotNull(out var a))
                     a.DoesNotHaveFlag(flag, message);
 
                 return this;
@@ -475,14 +475,14 @@
             /// </returns>
             private bool NotNull(out EnumArgumentInfo<T> result)
             {
-                if (this.Argument.Value.HasValue)
+                if (Argument.Value.HasValue)
                 {
                     result = new EnumArgumentInfo<T>(
                         new ArgumentInfo<T>(
-                            this.Argument.Value.Value,
-                            this.Argument.Name,
-                            this.Argument.Modified,
-                            this.Argument.Secure));
+                            Argument.Value.Value,
+                            Argument.Name,
+                            Argument.Modified,
+                            Argument.Secure));
 
                     return true;
                 }
