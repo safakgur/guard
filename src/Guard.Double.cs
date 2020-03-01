@@ -1,7 +1,6 @@
 ﻿#nullable enable
 
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using JetBrains.Annotations;
 
@@ -252,42 +251,6 @@ namespace Dawn
         /// </summary>
         /// <param name="argument">The argument.</param>
         /// <param name="message">
-        ///     The message of the exception that will be thrown if the precondition is not satisfied.
-        /// </param>
-        /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is not modified since it
-        ///     is initialized.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
-        /// </exception>
-        [AssertionMethod]
-        [DebuggerStepThrough]
-        [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double, string>`.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ref readonly ArgumentInfo<double> NotInfinity(
-            in this ArgumentInfo<double> argument, string message)
-        {
-            if (double.IsInfinity(argument.Value))
-            {
-                var m = message ?? Messages.NotInfinity(argument);
-                throw Fail(!argument.Modified
-                    ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
-                    : new ArgumentException(m, argument.Name));
-            }
-
-            return ref argument;
-        }
-
-        /// <summary>
-        ///     Requires the double-precision floating-point argument to have a value that is neither
-        ///     positive infinity ( <see cref="double.PositiveInfinity" />) nor negative infinity ( <see cref="double.NegativeInfinity" />).
-        /// </summary>
-        /// <param name="argument">The argument.</param>
-        /// <param name="message">
         ///     The factory to initialize the message of the exception that will be thrown if the
         ///     precondition is not satisfied.
         /// </param>
@@ -313,42 +276,6 @@ namespace Dawn
                 throw Fail(!argument.Modified
                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : argument.Value as object, m)
                     : new ArgumentException(m, argument.Name));
-            }
-
-            return ref argument;
-        }
-
-        /// <summary>
-        ///     Requires the double-precision floating-point argument to have a value that is neither
-        ///     positive infinity ( <see cref="double.PositiveInfinity" />) nor negative infinity ( <see cref="double.NegativeInfinity" />).
-        /// </summary>
-        /// <param name="argument">The argument.</param>
-        /// <param name="message">
-        ///     The message of the exception that will be thrown if the precondition is not satisfied.
-        /// </param>
-        /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is not modified since it
-        ///     is initialized.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> value is either <see cref="double.PositiveInfinity" />
-        ///     or <see cref="double.NegativeInfinity" />, and the argument is modified after its initialization.
-        /// </exception>
-        [AssertionMethod]
-        [DebuggerStepThrough]
-        [Obsolete("Use the NotInfinity overload that accepts the message as a `Func<double?, string>`.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ref readonly ArgumentInfo<double?> NotInfinity(
-            in this ArgumentInfo<double?> argument, string message)
-        {
-            if (argument.NotNull(out var a) && double.IsInfinity(a.Value))
-            {
-                var m = message ?? Messages.NotInfinity(a);
-                throw Fail(!a.Modified
-                    ? new ArgumentOutOfRangeException(a.Name, argument.Secure ? null : a.Value as object, m)
-                    : new ArgumentException(m, a.Name));
             }
 
             return ref argument;
