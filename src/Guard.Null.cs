@@ -1,7 +1,6 @@
 ﻿#nullable enable
 
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
@@ -135,38 +134,6 @@ namespace Dawn
 
             return new ArgumentInfo<T>(
                 argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Secure);
-        }
-
-        /// <summary>
-        ///     Initializes a new <see cref="ArgumentInfo{T}" /> if the argument value is not
-        ///     <c>null</c>. A return value indicates whether the new argument is created.
-        /// </summary>
-        /// <param name="argument">The argument.</param>
-        /// <param name="result">
-        ///     The new argument, if <paramref name="argument" /> is not <c>null</c>; otherwise, the
-        ///     uninitialized argument.
-        /// </param>
-        /// <returns>
-        ///     <c>true</c>, if the <paramref name="argument" /> is not <c>null</c>; otherwise, <c>false</c>.
-        /// </returns>
-        [AssertionMethod]
-        [DebuggerStepThrough]
-        [Obsolete("Use the HasValue method to check against null.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool NotNull<T>(
-            in this ArgumentInfo<T?> argument, out ArgumentInfo<T> result)
-            where T : struct
-        {
-            if (argument.HasValue())
-            {
-                result = new ArgumentInfo<T>(
-                    argument.GetValueOrDefault(), argument.Name, argument.Modified, argument.Secure);
-
-                return true;
-            }
-
-            result = default;
-            return false;
         }
 
         /// <summary>Requires at least one of the specified arguments not to be <c>null</c>.</summary>

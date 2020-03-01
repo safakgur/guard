@@ -1,7 +1,6 @@
 ﻿#nullable enable
 
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -171,14 +170,6 @@ namespace Dawn
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [GuardFunction("Initialization")]
             public bool HasValue() => Value != null;
-
-            /// <summary>Determines whether the argument value is <c>null</c>.</summary>
-            /// <returns>
-            ///     <c>true</c>, if <see cref="Value" /> is <c>null</c>; otherwise, <c>false</c>.
-            /// </returns>
-            [Obsolete("Use the HasValue method to check against null.")]
-            [EditorBrowsable(EditorBrowsableState.Never)]
-            public bool IsNull() => Value is null;
 
             /// <summary>Returns the string representation of the argument value.</summary>
             /// <returns>String representation of the argument value.</returns>

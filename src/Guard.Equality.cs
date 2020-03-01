@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
@@ -69,36 +68,6 @@ namespace Dawn
                     var m = message?.Invoke(value) ?? Messages.Default(argument);
                     throw Fail(new ArgumentException(m, argument.Name));
                 }
-            }
-
-            return ref argument;
-        }
-
-        /// <summary>
-        ///     Requires the argument to have a value that is not the default value of type <typeparamref name="T" />.
-        /// </summary>
-        /// <typeparam name="T">The type of the equatable argument.</typeparam>
-        /// <param name="argument">The equatable argument.</param>
-        /// <param name="message">
-        ///     The factory to initialize the message of the exception that will be thrown if the
-        ///     precondition is not satisfied.
-        /// </param>
-        /// <returns><paramref name="argument" />.</returns>
-        /// <exception cref="ArgumentException">
-        ///     <paramref name="argument" /> have the default value of type <typeparamref name="T" />.
-        /// </exception>
-        [AssertionMethod]
-        [DebuggerStepThrough]
-        [Obsolete("Use the NotDefault overload that accepts the message as a string.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ref readonly ArgumentInfo<T> NotDefault<T>(
-            in this ArgumentInfo<T> argument, Func<T, string> message)
-            where T : struct
-        {
-            if (EqualityComparer<T>.Default.Equals(argument.Value, default))
-            {
-                var m = message?.Invoke(argument.Value) ?? Messages.NotDefault(argument);
-                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
