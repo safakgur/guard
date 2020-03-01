@@ -1434,6 +1434,86 @@
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">
     <Header>
+      <Title>Guard.KindSpecified()</Title>
+      <Shortcut>gtks</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).KindSpecified()$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().KindSpecified()</Title>
+      <Shortcut>gxtks</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().KindSpecified()$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.KindUnspecified()</Title>
+      <Shortcut>gtku</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).KindUnspecified()$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().KindUnspecified()</Title>
+      <Shortcut>gxtku</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().KindUnspecified()$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
       <Title>Guard.Equal(other, delta)</Title>
       <Shortcut>geqd</Shortcut>
     </Header>
