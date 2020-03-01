@@ -1,13 +1,13 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
 namespace Dawn
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
-
     /// <content>Provides utilities to support legacy frameworks.</content>
     public static partial class Guard
     {
@@ -150,7 +150,7 @@ namespace System.Runtime.InteropServices
 {
     /// <summary>Required to use "in" parameters on .NET Standard 1.0.</summary>
     [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
-    public sealed class InAttribute : Attribute
+    internal sealed class InAttribute : Attribute
     {
     }
 }
@@ -161,11 +161,11 @@ namespace System.Diagnostics.CodeAnalysis
 {
     /// <summary>Required for reference nullability annotations.</summary>
     [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
-    public sealed class NotNullWhenAttribute : Attribute
+    internal sealed class NotNullWhenAttribute : Attribute
     {
         /// <summary>Initializes a new instance of the <see cref="NotNullWhenAttribute" /> class.</summary>
         /// <param name="returnValue">If the method returns this value, the associated parameter will not be null.</param>
-        public NotNullWhenAttribute(bool returnValue) => this.ReturnValue = returnValue;
+        public NotNullWhenAttribute(bool returnValue) => ReturnValue = returnValue;
 
         /// <summary>Gets the return value condition.</summary>
         public bool ReturnValue { get; }

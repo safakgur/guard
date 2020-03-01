@@ -1,16 +1,16 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
-    using System.Threading;
-    using JetBrains.Annotations;
-
     /// <content>Provides routed member preconditions.</content>
     public static partial class Guard
     {
@@ -298,23 +298,21 @@ namespace Dawn
                     throw new ArgumentException(m, nameof(lexp));
                 }
 
-#pragma warning disable IDE0019 // Use pattern matching
                 node.Lock.EnterUpgradeableReadLock();
                 try
                 {
-                    var info = node.Info as ArgumentMemberInfo<T, TMember>;
-                    if (info is null)
+                    if (node.Info is ArgumentMemberInfo<T, TMember> info)
+                        return info;
+
+                    node.Lock.EnterWriteLock();
+                    try
                     {
-                        node.Lock.EnterWriteLock();
-                        try
-                        {
-                            info = new ArgumentMemberInfo<T, TMember>((lexp.Body as MemberExpression)!, lexp.Compile());
-                            node.Info = info;
-                        }
-                        finally
-                        {
-                            node.Lock.ExitWriteLock();
-                        }
+                        info = new ArgumentMemberInfo<T, TMember>((lexp.Body as MemberExpression)!, lexp.Compile());
+                        node.Info = info;
+                    }
+                    finally
+                    {
+                        node.Lock.ExitWriteLock();
                     }
 
                     return info;
@@ -323,7 +321,6 @@ namespace Dawn
                 {
                     node.Lock.ExitUpgradeableReadLock();
                 }
-#pragma warning restore IDE0019 // Use pattern matching
             }
 
             /// <summary>Represents a node in a tree of members.</summary>
@@ -332,8 +329,8 @@ namespace Dawn
                 /// <summary>Initializes a new instance of the <see cref="Node" /> class.</summary>
                 public Node()
                 {
-                    this.Owners = new Dictionary<MemberInfo, Node>(1);
-                    this.Lock = new ReaderWriterLockSlim();
+                    Owners = new Dictionary<MemberInfo, Node>(1);
+                    Lock = new ReaderWriterLockSlim();
                 }
 
                 /// <summary>Gets the owners of the member that the current node represents.</summary>
@@ -363,8 +360,8 @@ namespace Dawn
             {
                 var memberName = mexp.ToString();
 
-                this.Name = memberName.Substring(memberName.IndexOf('.') + 1);
-                this.GetValue = getValue;
+                Name = memberName.Substring(memberName.IndexOf('.') + 1);
+                GetValue = getValue;
             }
 
             /// <summary>Gets the member name.</summary>

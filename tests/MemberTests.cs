@@ -1,9 +1,9 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Globalization;
-    using Xunit;
+﻿using System;
+using System.Globalization;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class MemberTests : BaseTests
     {
         [Fact(DisplayName = "Member w/o valid expression")]
@@ -132,7 +132,7 @@
             public TestObjectWithInaccessibleMember(Exception accessException)
                 => this.accessException = accessException;
 
-            public object InaccessibleMember => throw this.accessException;
+            public object InaccessibleMember => throw accessException;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Xunit;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class EnumerableTests : BaseTests
     {
         [Flags]
@@ -114,7 +114,7 @@
         [InlineData(CollectionOptions.HasCount, 3, 3, 4)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, 5)]
         [InlineData(CollectionOptions.HasCount, 3, 2, 5)]
-        public void MinCount(CollectionOptions options, int count, int countOrLess, int moreThanCount)
+        public void MinCount(CollectionOptions options, int count, int countOrLess, int greaterThanCount)
         {
             var enumerable = GetEnumerable<int>(options, count);
             var enumerableArg = Guard.Argument(() => enumerable).MinCount(countOrLess);
@@ -122,17 +122,17 @@
 
             if (enumerable is null)
             {
-                enumerableArg.MinCount(moreThanCount);
+                enumerableArg.MinCount(greaterThanCount);
                 return;
             }
 
             ThrowsArgumentException(
                 enumerableArg,
-                arg => arg.MinCount(moreThanCount),
-                (arg, message) => arg.MinCount(moreThanCount, (e, m) =>
+                arg => arg.MinCount(greaterThanCount),
+                (arg, message) => arg.MinCount(greaterThanCount, (e, m) =>
                 {
                     Assert.Same(enumerable, e);
-                    Assert.Equal(moreThanCount, m);
+                    Assert.Equal(greaterThanCount, m);
                     return message;
                 }));
         }
@@ -176,7 +176,7 @@
         [InlineData(CollectionOptions.HasCount, 3, 2, 4)]
         [InlineData(CollectionOptions.NotEmpty, 3, 1, 5)]
         [InlineData(CollectionOptions.HasCount, 3, 1, 5)]
-        public void CountInRange(CollectionOptions options, int count, int lessThanCount, int moreThanCount)
+        public void CountInRange(CollectionOptions options, int count, int lessThanCount, int greaterThanCount)
         {
             var enumerable = GetEnumerable<int>(options, count);
             var enumerableArg = Guard.Argument(() => enumerable);
@@ -187,17 +187,17 @@
             enumerableArg.CountInRange(count, count);
             CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: count + 1 != 0);
 
-            enumerableArg.CountInRange(count, moreThanCount);
-            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: moreThanCount + 1 != 0);
+            enumerableArg.CountInRange(count, greaterThanCount);
+            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: greaterThanCount + 1 != 0);
 
-            enumerableArg.CountInRange(lessThanCount, moreThanCount);
-            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: moreThanCount + 1 != 0);
+            enumerableArg.CountInRange(lessThanCount, greaterThanCount);
+            CheckAndReset(enumerable, countCalled: true, enumerationCount: count, enumerated: greaterThanCount + 1 != 0);
 
             if (enumerable is null)
             {
                 for (var i = 0; i < 2; i++)
                 {
-                    var limit = i == 0 ? lessThanCount : moreThanCount;
+                    var limit = i == 0 ? lessThanCount : greaterThanCount;
                     enumerableArg.CountInRange(limit, limit);
                 }
 
@@ -206,7 +206,7 @@
 
             for (var i = 0; i < 2; i++)
             {
-                var limit = i == 0 ? lessThanCount : moreThanCount;
+                var limit = i == 0 ? lessThanCount : greaterThanCount;
                 ThrowsArgumentException(
                     enumerableArg,
                     arg => arg.CountInRange(limit, limit),
@@ -614,8 +614,8 @@
         [InlineData(CollectionOptions.Null, 3, 2, -1, false)]
         [InlineData(CollectionOptions.Null, 3, null, null, false)]
         [InlineData(CollectionOptions.Null, 3, null, null, true)]
-        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, false)]
-        [InlineData(CollectionOptions.NotEmpty, 3, 2, -1, true)]
+        [InlineData(CollectionOptions.NotEmpty, 6, 2, -1, false)]
+        [InlineData(CollectionOptions.NotEmpty, 6, 2, -1, true)]
         [InlineData(CollectionOptions.NotEmpty, 3, null, -1, false)]
         [InlineData(CollectionOptions.NotEmpty, 3, null, -1, true)]
         [InlineData(CollectionOptions.NotEmpty, 3, 2, null, false)]
@@ -778,7 +778,7 @@
             }
 
             bool TestGeneratedMessage(string message)
-                => secure || enumerable.Items.All(i => message.Contains(i.ToString()));
+                => secure || enumerable.Items.Take(5).All(i => message.Contains(i.ToString()));
         }
 
         [Theory(DisplayName = "Enumerable: In/NotIn array")]
@@ -906,7 +906,7 @@
 
         public class TestEnumerable<T> : ITestEnumerable<T>
         {
-            public TestEnumerable(IEnumerable<T> items) => this.Items = items;
+            public TestEnumerable(IEnumerable<T> items) => Items = items;
 
             public IEnumerable<T> Items { get; }
 
@@ -916,36 +916,36 @@
 
             public IEnumerator<T> GetEnumerator()
             {
-                this.Enumerated = true;
-                foreach (var item in this.Items)
+                Enumerated = true;
+                foreach (var item in Items)
                 {
-                    this.EnumerationCount++;
+                    EnumerationCount++;
                     yield return item;
                 }
             }
 
-            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
             public virtual void Reset()
             {
-                this.Enumerated = false;
-                this.EnumerationCount = 0;
+                Enumerated = false;
+                EnumerationCount = 0;
             }
         }
 
         public class TestEnumerableWithCount<T> : TestEnumerable<T>, ITestEnumerableWithCount<T>
         {
-            private readonly int count;
+            private readonly int _count;
 
             public TestEnumerableWithCount(IEnumerable<T> items)
-                : base(items) => this.count = items.Count();
+                : base(items) => _count = items.Count();
 
             public int Count
             {
                 get
                 {
-                    this.CountCalled = true;
-                    return this.count;
+                    CountCalled = true;
+                    return _count;
                 }
             }
 
@@ -954,7 +954,7 @@
             public override void Reset()
             {
                 base.Reset();
-                this.CountCalled = false;
+                CountCalled = false;
             }
         }
 
@@ -969,14 +969,14 @@
 
             public bool Contains(T item)
             {
-                this.ContainsCalled = true;
-                return this.Items.Contains(item);
+                ContainsCalled = true;
+                return Items.Contains(item);
             }
 
             public override void Reset()
             {
                 base.Reset();
-                this.ContainsCalled = false;
+                ContainsCalled = false;
             }
         }
 
@@ -992,14 +992,14 @@
 
             public bool Contains(T item)
             {
-                this.ContainsCalled = true;
-                return this.Items.Contains(item);
+                ContainsCalled = true;
+                return Items.Contains(item);
             }
 
             public override void Reset()
             {
                 base.Reset();
-                this.ContainsCalled = false;
+                ContainsCalled = false;
             }
         }
     }

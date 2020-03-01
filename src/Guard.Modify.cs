@@ -1,11 +1,11 @@
 ﻿#nullable enable
 
+using System;
+using System.Diagnostics;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.Diagnostics;
-    using JetBrains.Annotations;
-
     /// <content>Provides safe modification functions to normalize arguments.</content>
     public static partial class Guard
     {

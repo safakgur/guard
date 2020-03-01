@@ -946,6 +946,54 @@
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">
     <Header>
+      <Title>Guard.GreaterThan(other)</Title>
+      <Shortcut>ggt</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>other</ID>
+          <Default>other</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).GreaterThan($other$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().GreaterThan(other)</Title>
+      <Shortcut>gxgt</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>other</ID>
+          <Default>other</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().GreaterThan($other$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
       <Title>Guard.InRange(minValue, maxValue)</Title>
       <Shortcut>gr</Shortcut>
     </Header>
@@ -998,6 +1046,54 @@
         </Literal>
       </Declarations>
       <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().InRange($minValue$, $maxValue$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.LessThan(other)</Title>
+      <Shortcut>glt</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>other</ID>
+          <Default>other</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).LessThan($other$)$end$;]]></Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard.NotNull().LessThan(other)</Title>
+      <Shortcut>gxlt</Shortcut>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>Dawn</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>arg</ID>
+          <Default>arg</Default>
+        </Literal>
+        <Literal>
+          <ID>other</ID>
+          <Default>other</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[Guard.Argument($arg$, nameof($arg$)).NotNull().LessThan($other$)$end$;]]></Code>
     </Snippet>
   </CodeSnippet>
   <CodeSnippet Format="1.0.0">

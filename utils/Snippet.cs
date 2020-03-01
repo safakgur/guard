@@ -1,26 +1,26 @@
-﻿namespace Dawn.Utils
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
-    using System.Text;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Xml.Linq;
-    using Dawn;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using Dawn;
 
+namespace Dawn.Utils
+{
     internal abstract class Snippet
     {
         private static readonly Encoding Encoding = new UTF8Encoding(false);
 
         public Snippet(MethodInfo method, GuardFunctionAttribute attribute, string shortcut)
         {
-            this.Method = method;
-            this.Attribute = attribute;
-            this.Shortcut = shortcut;
+            Method = method;
+            Attribute = attribute;
+            Shortcut = shortcut;
         }
 
         public MethodInfo Method { get; }
@@ -57,12 +57,12 @@
 
             private static readonly XNamespace Namespace = "http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet";
 
-            private readonly XElement element;
+            private readonly XElement _element;
 
             private VisualStudioSnippet(
                 MethodInfo method, GuardFunctionAttribute attribute, string shortcut, XElement element)
                 : base(method, attribute, shortcut)
-                => this.element = element;
+                => _element = element;
 
             public static IEnumerable<VisualStudioSnippet> CreateSnippets(MethodInfo method, GuardFunctionAttribute attribute)
             {
@@ -199,7 +199,7 @@
             {
                 var elements = snippets
                     .GroupBy(s => s.Shortcut)
-                    .Select(g => new XElement(g.First().element));
+                    .Select(g => new XElement(g.First()._element));
 
                 return new XDocument(Declaration, new XElement(Namespace + "CodeSnippets", elements));
             }

@@ -1,8 +1,8 @@
-﻿namespace Dawn.Tests
-{
-    using System;
-    using Xunit;
+﻿using System;
+using Xunit;
 
+namespace Dawn.Tests
+{
     public sealed class NullTests : BaseTests
     {
         [Fact(DisplayName = "Nullable class: Null/NotNull")]

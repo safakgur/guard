@@ -1,12 +1,12 @@
 ﻿#nullable enable
 
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using JetBrains.Annotations;
-
     /// <content>Provides preconditions for <see cref="float" /> arguments.</content>
     public static partial class Guard
     {

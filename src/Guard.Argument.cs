@@ -1,15 +1,15 @@
 ﻿#nullable enable
 
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+
 namespace Dawn
 {
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Linq.Expressions;
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
-    using JetBrains.Annotations;
-
     /// <summary>Validates argument preconditions.</summary>
     /// <content>Contains the argument initialization methods.</content>
     public static partial class Guard
@@ -98,7 +98,7 @@ namespace Dawn
             private static readonly string DefaultName = $"The {typeof(T)} argument";
 
             /// <summary>The argument name.</summary>
-            private readonly string? name;
+            private readonly string? _name;
 
             /// <summary>
             ///     Initializes a new instance of the <see cref="ArgumentInfo{T} " /> struct.
@@ -120,17 +120,17 @@ namespace Dawn
                 bool modified = false,
                 bool secure = false)
             {
-                this.Value = value;
-                this.name = name;
-                this.Modified = modified;
-                this.Secure = secure;
+                Value = value;
+                _name = name;
+                Modified = modified;
+                Secure = secure;
             }
 
             /// <summary>Gets the argument value.</summary>
             public T Value { get; }
 
             /// <summary>Gets the argument name.</summary>
-            public string Name => this.name ?? DefaultName;
+            public string Name => _name ?? DefaultName;
 
             /// <summary>
             ///     Gets a value indicating whether the original method argument is modified before
@@ -151,10 +151,10 @@ namespace Dawn
             {
                 get
                 {
-                    var name = this.name;
-                    var value = this.Value?.ToString() ?? "null";
+                    var name = _name;
+                    var value = Value?.ToString() ?? "null";
                     var result = name is null ? value : $"{name}: {value}";
-                    return this.Secure ? $"[SECURE] {result}" : result;
+                    return Secure ? $"[SECURE] {result}" : result;
                 }
             }
 
@@ -170,7 +170,7 @@ namespace Dawn
             [DebuggerStepThrough]
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             [GuardFunction("Initialization")]
-            public bool HasValue() => this.Value != null;
+            public bool HasValue() => Value != null;
 
             /// <summary>Determines whether the argument value is <c>null</c>.</summary>
             /// <returns>
@@ -178,12 +178,12 @@ namespace Dawn
             /// </returns>
             [Obsolete("Use the HasValue method to check against null.")]
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public bool IsNull() => this.Value is null;
+            public bool IsNull() => Value is null;
 
             /// <summary>Returns the string representation of the argument value.</summary>
             /// <returns>String representation of the argument value.</returns>
             public override string ToString()
-                => this.Value?.ToString() ?? string.Empty;
+                => Value?.ToString() ?? string.Empty;
         }
     }
 }
