@@ -170,6 +170,7 @@ dotnet_naming_symbols.private_static_field_symbols.required_modifiers = static
 
 dotnet_naming_symbols.static_readonly_field_symbols.applicable_kinds = field
 dotnet_naming_symbols.static_readonly_field_symbols.required_modifiers = static, readonly
+dotnet_naming_symbols.static_readonly_field_symbols.applicable_accessibilities = public, protected, protected_internal
 
 dotnet_naming_symbols.local_symbols.applicable_kinds = parameter, local
 
