@@ -57,14 +57,10 @@ namespace Dawn
         public static ref readonly ArgumentInfo<DateTime?> KindSpecified(
             in this ArgumentInfo<DateTime?> argument, Func<DateTime, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && value.Kind == DateTimeKind.Unspecified)
             {
-                var value = argument.GetValueOrDefault();
-                if (value.Kind == DateTimeKind.Unspecified)
-                {
-                    var m = message?.Invoke(value) ?? Messages.KindSpecified(argument);
-                    throw Fail(new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.KindSpecified(argument);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -118,14 +114,10 @@ namespace Dawn
         public static ref readonly ArgumentInfo<DateTime?> KindUnspecified(
             in this ArgumentInfo<DateTime?> argument, Func<DateTime, string>? message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && value.Kind != DateTimeKind.Unspecified)
             {
-                var value = argument.GetValueOrDefault();
-                if (value.Kind != DateTimeKind.Unspecified)
-                {
-                    var m = message?.Invoke(value) ?? Messages.KindUnspecified(argument);
-                    throw Fail(new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.KindUnspecified(argument);
+                throw Fail(new ArgumentException(m, argument.Name));
             }
 
             return ref argument;

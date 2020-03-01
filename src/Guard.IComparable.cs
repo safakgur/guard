@@ -36,7 +36,7 @@ namespace Dawn
             in this ArgumentInfo<T> argument, in T minValue, Func<T, T, string>? message = null)
             where T : IComparable<T>?
         {
-            if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, minValue) < 0)
+            if (argument.HasValue && Comparer<T>.Default.Compare(argument.Value, minValue) < 0)
             {
                 var m = message?.Invoke(argument.Value, minValue) ?? Messages.Min(argument, minValue);
                 throw Fail(!argument.Modified
@@ -74,16 +74,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, in T minValue, Func<T, T, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, minValue) < 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (argument.HasValue() && Comparer<T>.Default.Compare(value, minValue) < 0)
-                {
-                    var m = message?.Invoke(value, minValue) ?? Messages.Min(argument, minValue);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value, minValue) ?? Messages.Min(argument, minValue);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -115,7 +111,7 @@ namespace Dawn
             in this ArgumentInfo<T> argument, in T other, Func<T, T, string>? message = null)
             where T : IComparable<T>?
         {
-            if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, other) <= 0)
+            if (argument.HasValue && Comparer<T>.Default.Compare(argument.Value, other) <= 0)
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.GreaterThan(argument, other);
                 throw Fail(!argument.Modified
@@ -153,16 +149,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, in T other, Func<T, T, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, other) <= 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (argument.HasValue() && Comparer<T>.Default.Compare(value, other) <= 0)
-                {
-                    var m = message?.Invoke(value, other) ?? Messages.GreaterThan(argument, other);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value, other) ?? Messages.GreaterThan(argument, other);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -194,7 +186,7 @@ namespace Dawn
             in this ArgumentInfo<T> argument, in T maxValue, Func<T, T, string>? message = null)
             where T : IComparable<T>?
         {
-            if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, maxValue) > 0)
+            if (argument.HasValue && Comparer<T>.Default.Compare(argument.Value, maxValue) > 0)
             {
                 var m = message?.Invoke(argument.Value, maxValue) ?? Messages.Max(argument, maxValue);
                 throw Fail(!argument.Modified
@@ -232,16 +224,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, in T maxValue, Func<T, T, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, maxValue) > 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (argument.HasValue() && Comparer<T>.Default.Compare(value, maxValue) > 0)
-                {
-                    var m = message?.Invoke(value, maxValue) ?? Messages.Max(argument, maxValue);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value, maxValue) ?? Messages.Max(argument, maxValue);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -273,7 +261,7 @@ namespace Dawn
             in this ArgumentInfo<T> argument, in T other, Func<T, T, string>? message = null)
             where T : IComparable<T>?
         {
-            if (argument.HasValue() && Comparer<T>.Default.Compare(argument.Value, other) >= 0)
+            if (argument.HasValue && Comparer<T>.Default.Compare(argument.Value, other) >= 0)
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.LessThan(argument, other);
                 throw Fail(!argument.Modified
@@ -311,16 +299,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, in T other, Func<T, T, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, other) >= 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (argument.HasValue() && Comparer<T>.Default.Compare(value, other) >= 0)
-                {
-                    var m = message?.Invoke(value, other) ?? Messages.GreaterThan(argument, other);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value, other) ?? Messages.GreaterThan(argument, other);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -354,7 +338,7 @@ namespace Dawn
             in this ArgumentInfo<T> argument, in T minValue, in T maxValue, Func<T, T, T, string>? message = null)
             where T : IComparable<T>?
         {
-            if (argument.HasValue())
+            if (argument.HasValue)
             {
                 var comparer = Comparer<T>.Default;
                 if (comparer.Compare(argument.Value, minValue) < 0 ||
@@ -400,20 +384,15 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, in T minValue, in T maxValue, Func<T, T, T, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value))
             {
-                var value = argument.GetValueOrDefault();
-                if (argument.HasValue())
+                var comparer = Comparer<T>.Default;
+                if (comparer.Compare(value, minValue) < 0 || comparer.Compare(value, maxValue) > 0)
                 {
-                    var comparer = Comparer<T>.Default;
-                    if (comparer.Compare(value, minValue) < 0 ||
-                        comparer.Compare(value, maxValue) > 0)
-                    {
-                        var m = message?.Invoke(value, minValue, maxValue) ?? Messages.InRange(argument, minValue, maxValue);
-                        throw Fail(!argument.Modified
-                            ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                            : new ArgumentException(m, argument.Name));
-                    }
+                    var m = message?.Invoke(value, minValue, maxValue) ?? Messages.InRange(argument, minValue, maxValue);
+                    throw Fail(!argument.Modified
+                        ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                        : new ArgumentException(m, argument.Name));
                 }
             }
 
@@ -483,16 +462,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, default) != 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (Comparer<T>.Default.Compare(value, default) != 0)
-                {
-                    var m = message?.Invoke(value) ?? Messages.Zero(argument);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.Zero(argument);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -559,16 +534,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, string? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, default) == 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (Comparer<T>.Default.Compare(value, default) == 0)
-                {
-                    var m = message ?? Messages.NotZero(argument);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message ?? Messages.NotZero(argument);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -639,16 +610,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, default) <= 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (Comparer<T>.Default.Compare(value, default) <= 0)
-                {
-                    var m = message?.Invoke(value) ?? Messages.Positive(argument);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.Positive(argument);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -719,16 +686,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, default) > 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (Comparer<T>.Default.Compare(value, default) > 0)
-                {
-                    var m = message?.Invoke(value) ?? Messages.NotPositive(argument);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.NotPositive(argument);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -799,16 +762,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, default) >= 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (Comparer<T>.Default.Compare(value, default) >= 0)
-                {
-                    var m = message?.Invoke(value) ?? Messages.Negative(argument);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.Negative(argument);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;
@@ -879,16 +838,12 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct, IComparable<T>
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value) && Comparer<T>.Default.Compare(value, default) < 0)
             {
-                var value = argument.GetValueOrDefault();
-                if (Comparer<T>.Default.Compare(value, default) < 0)
-                {
-                    var m = message?.Invoke(value) ?? Messages.NotNegative(argument);
-                    throw Fail(!argument.Modified
-                         ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
-                         : new ArgumentException(m, argument.Name));
-                }
+                var m = message?.Invoke(value) ?? Messages.NotNegative(argument);
+                throw Fail(!argument.Modified
+                     ? new ArgumentOutOfRangeException(argument.Name, argument.Secure ? null : value as object, m)
+                     : new ArgumentException(m, argument.Name));
             }
 
             return ref argument;

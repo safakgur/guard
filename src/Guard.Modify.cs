@@ -102,7 +102,7 @@ namespace Dawn
         public static ArgumentInfo<T> Clone<T>(in this ArgumentInfo<T> argument)
             where T : class, ICloneable?
         {
-            if (!argument.HasValue())
+            if (!argument.HasValue)
                 return argument;
 
             var clone = argument.Value!.Clone() as T;

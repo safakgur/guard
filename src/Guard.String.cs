@@ -166,7 +166,7 @@ namespace Dawn
         public static ref readonly ArgumentInfo<string> Length(
             in this ArgumentInfo<string> argument, int length, Func<string, int, string> message = null)
         {
-            if (argument.HasValue() && argument.Value.Length != length)
+            if (argument.HasValue && argument.Value.Length != length)
             {
                 var m = message?.Invoke(argument.Value, length) ?? Messages.StringLength(argument, length);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -198,7 +198,7 @@ namespace Dawn
         public static ref readonly ArgumentInfo<string> NotLength(
             in this ArgumentInfo<string> argument, int length, Func<string, int, string> message = null)
         {
-            if (argument.HasValue() && argument.Value.Length == length)
+            if (argument.HasValue && argument.Value.Length == length)
             {
                 var m = message?.Invoke(argument.Value, length) ?? Messages.StringNotLength(argument, length);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -305,7 +305,7 @@ namespace Dawn
             int maxLength,
             Func<string, int, int, string> message = null)
         {
-            if (argument.HasValue())
+            if (argument.HasValue)
                 if (argument.Value.Length < minLength || argument.Value.Length > maxLength)
                 {
                     var m = message?.Invoke(argument.Value, minLength, maxLength)
@@ -342,7 +342,7 @@ namespace Dawn
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && !StringEqualityComparer(comparison).Equals(argument.Value, other))
+            if (argument.HasValue && !StringEqualityComparer(comparison).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value, other) ?? Messages.Equal(argument, other);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -376,7 +376,7 @@ namespace Dawn
             StringComparison comparison,
             Func<string, string> message = null)
         {
-            if (argument.HasValue() && StringEqualityComparer(comparison).Equals(argument.Value, other))
+            if (argument.HasValue && StringEqualityComparer(comparison).Equals(argument.Value, other))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.NotEqual(argument, other);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -434,7 +434,7 @@ namespace Dawn
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && value != null && !argument.Value.StartsWith(value, comparison))
+            if (argument.HasValue && value != null && !argument.Value.StartsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringStartsWith(argument, value);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -492,7 +492,7 @@ namespace Dawn
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && value != null && argument.Value.StartsWith(value, comparison))
+            if (argument.HasValue && value != null && argument.Value.StartsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotStartWith(argument, value);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -550,7 +550,7 @@ namespace Dawn
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && value != null && !argument.Value.EndsWith(value, comparison))
+            if (argument.HasValue && value != null && !argument.Value.EndsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringEndsWith(argument, value);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -608,7 +608,7 @@ namespace Dawn
             StringComparison comparison,
             Func<string, string, string> message = null)
         {
-            if (argument.HasValue() && value != null && argument.Value.EndsWith(value, comparison))
+            if (argument.HasValue && value != null && argument.Value.EndsWith(value, comparison))
             {
                 var m = message?.Invoke(argument.Value, value) ?? Messages.StringDoesNotEndWith(argument, value);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -640,7 +640,7 @@ namespace Dawn
             [RegexPattern] string pattern,
             Func<string, bool, string> message = null)
         {
-            if (argument.HasValue() && pattern != null)
+            if (argument.HasValue && pattern != null)
             {
                 bool matches;
                 try
@@ -696,7 +696,7 @@ namespace Dawn
             TimeSpan matchTimeout,
             Func<string, bool, string> message = null)
         {
-            if (argument.HasValue() && pattern != null)
+            if (argument.HasValue && pattern != null)
             {
                 bool matches;
                 try
@@ -751,7 +751,7 @@ namespace Dawn
             Regex regex,
             Func<string, bool, string> message = null)
         {
-            if (argument.HasValue() && regex != null)
+            if (argument.HasValue && regex != null)
             {
                 bool matches;
                 try
@@ -802,7 +802,7 @@ namespace Dawn
             [RegexPattern] string pattern,
             Func<string, bool, string> message = null)
         {
-            if (argument.HasValue() && pattern != null)
+            if (argument.HasValue && pattern != null)
             {
                 bool matches;
                 try
@@ -859,7 +859,7 @@ namespace Dawn
             TimeSpan matchTimeout,
             Func<string, bool, string> message = null)
         {
-            if (argument.HasValue() && pattern != null)
+            if (argument.HasValue && pattern != null)
             {
                 bool matches;
                 try
@@ -915,7 +915,7 @@ namespace Dawn
             Regex regex,
             Func<string, bool, string> message = null)
         {
-            if (argument.HasValue() && regex != null)
+            if (argument.HasValue && regex != null)
             {
                 bool matches;
                 try

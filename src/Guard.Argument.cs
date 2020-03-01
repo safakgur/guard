@@ -3,7 +3,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 
@@ -125,6 +124,9 @@ namespace Dawn
                 Secure = secure;
             }
 
+            /// <summary>Determines whether the argument value is not <c>null</c>.</summary>
+            public bool HasValue => Value != null;
+
             /// <summary>Gets the argument value.</summary>
             public T Value { get; }
 
@@ -161,15 +163,6 @@ namespace Dawn
             /// <param name="argument">The argument whose value to return.</param>
             /// <returns><see cref="Value" />.</returns>
             public static implicit operator T(ArgumentInfo<T> argument) => argument.Value;
-
-            /// <summary>Determines whether the argument value is not <c>null</c>.</summary>
-            /// <returns>
-            ///     <c>true</c>, if <see cref="Value" /> is not <c>null</c>; otherwise, <c>false</c>.
-            /// </returns>
-            [DebuggerStepThrough]
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            [GuardFunction("Initialization")]
-            public bool HasValue() => Value != null;
 
             /// <summary>Returns the string representation of the argument value.</summary>
             /// <returns>String representation of the argument value.</returns>

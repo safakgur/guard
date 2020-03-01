@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
@@ -26,7 +27,7 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T, string>? message = null)
             where T : class
         {
-            if (argument.HasValue())
+            if (argument.HasValue)
             {
                 var m = message?.Invoke(argument.Value!) ?? Messages.Null(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -57,7 +58,7 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, Func<T?, string>? message = null)
             where T : struct
         {
-            if (argument.HasValue())
+            if (argument.HasValue)
             {
                 Debug.Assert(argument.Value.HasValue, "argument.HasValue");
                 var m = message?.Invoke(argument.GetValueOrDefault()) ?? Messages.Null(argument);
@@ -90,7 +91,7 @@ namespace Dawn
             in this ArgumentInfo<T> argument, string? message = null)
             where T : class
         {
-            if (!argument.HasValue())
+            if (!argument.HasValue)
             {
                 var m = message ?? Messages.NotNull(argument);
                 throw Fail(!argument.Modified
@@ -124,7 +125,7 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, string? message = null)
             where T : struct
         {
-            if (!argument.HasValue())
+            if (!argument.HasValue)
             {
                 var m = message ?? Messages.NotNull(argument);
                 throw Fail(!argument.Modified
@@ -154,7 +155,7 @@ namespace Dawn
         public static void NotAllNull<T1, T2>(
             in ArgumentInfo<T1> argument1, in ArgumentInfo<T2> argument2, string? message = null)
         {
-            if (!argument1.HasValue() && !argument2.HasValue())
+            if (!argument1.HasValue && !argument2.HasValue)
             {
                 var m = message ?? Messages.NotAllNull(argument1.Name, argument2.Name);
                 throw Fail(new ArgumentNullException($"{argument1.Name}, {argument2.Name}", m));
@@ -184,7 +185,7 @@ namespace Dawn
             in ArgumentInfo<T3> argument3,
             string? message = null)
         {
-            if (!argument1.HasValue() && !argument2.HasValue() && !argument3.HasValue())
+            if (!argument1.HasValue && !argument2.HasValue && !argument3.HasValue)
             {
                 var m = message ?? Messages.NotAllNull(argument1.Name, argument2.Name, argument3.Name);
                 throw Fail(new ArgumentNullException($"{argument1.Name}, {argument2.Name}, {argument3.Name}", m));
@@ -206,5 +207,63 @@ namespace Dawn
         public static T GetValueOrDefault<T>(in this ArgumentInfo<T?> argument)
             where T : struct
             => argument.Value.GetValueOrDefault();
+
+        /// <summary>
+        ///     Gets the underlying value of a nullable argument. A return value indicates whether
+        ///     the retrieval succeeded, i.e. the argument value was not <c>null</c>.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="value">
+        ///     When this method returns, contains the underlying value of <paramref name="argument" />
+        ///     if it is not <c>null</c>; otherwise, the default value of <typeparamref name="T" />.
+        /// </param>
+        /// <returns>
+        ///     <c>true</c>, if the <paramref name="argument" /> value is not <c>null</c>;
+        ///     otherwise, <c>false</c>.
+        /// </returns>
+        [AssertionMethod]
+        [NonGuard]
+        public static bool TryGetValue<T>(
+            in this ArgumentInfo<T?> argument, [NotNullWhen(true)] out T? value)
+            where T : class
+        {
+            if (argument.HasValue)
+            {
+                value = argument.Value;
+                return true;
+            }
+
+            value = null;
+            return false;
+        }
+
+        /// <summary>
+        ///     Gets the underlying value of a nullable argument. A return value indicates whether
+        ///     the retrieval succeeded, i.e. the argument value was not <c>null</c>.
+        /// </summary>
+        /// <param name="argument">The argument.</param>
+        /// <param name="value">
+        ///     When this method returns, contains the underlying value of <paramref name="argument" />
+        ///     if it is not <c>null</c>; otherwise, the default value of <typeparamref name="T" />.
+        /// </param>
+        /// <returns>
+        ///     <c>true</c>, if the <paramref name="argument" /> value is not <c>null</c>;
+        ///     otherwise, <c>false</c>.
+        /// </returns>
+        [AssertionMethod]
+        [NonGuard]
+        public static bool TryGetValue<T>(in this ArgumentInfo<T?> argument, out T value)
+            where T : struct
+        {
+            if (argument.HasValue)
+            {
+                value = argument.GetValueOrDefault();
+                return true;
+            }
+
+            value = default;
+            return false;
+        }
+
     }
 }

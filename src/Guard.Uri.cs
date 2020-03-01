@@ -30,9 +30,9 @@ namespace Dawn
         public static ref readonly ArgumentInfo<Uri> Absolute(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
-            if (argument.HasValue() && !argument.Value.IsAbsoluteUri)
+            if (argument.TryGetValue(out var value) && !value.IsAbsoluteUri)
             {
-                var m = message?.Invoke(argument.Value) ?? Messages.UriAbsolute(argument);
+                var m = message?.Invoke(value) ?? Messages.UriAbsolute(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -55,9 +55,9 @@ namespace Dawn
         public static ref readonly ArgumentInfo<Uri> Relative(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
-            if (argument.HasValue() && argument.Value.IsAbsoluteUri)
+            if (argument.TryGetValue(out var value) && value.IsAbsoluteUri)
             {
-                var m = message?.Invoke(argument.Value) ?? Messages.UriRelative(argument);
+                var m = message?.Invoke(value) ?? Messages.UriRelative(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -84,12 +84,12 @@ namespace Dawn
         public static ref readonly ArgumentInfo<Uri> Scheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
-            if (argument.HasValue())
+            if (argument.TryGetValue(out var value))
             {
-                if (!argument.Value.IsAbsoluteUri ||
-                    !argument.Value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase))
+                if (!value.IsAbsoluteUri ||
+                    !value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase))
                 {
-                    var m = message?.Invoke(argument.Value, scheme) ?? Messages.UriScheme(argument, scheme);
+                    var m = message?.Invoke(value, scheme) ?? Messages.UriScheme(argument, scheme);
                     throw Fail(new ArgumentException(m, argument.Name));
                 }
             }
@@ -114,11 +114,11 @@ namespace Dawn
         public static ref readonly ArgumentInfo<Uri> NotScheme(
             in this ArgumentInfo<Uri> argument, string scheme, Func<Uri, string, string> message = null)
         {
-            if (argument.HasValue() &&
-                argument.Value.IsAbsoluteUri &&
-                argument.Value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase))
+            if (argument.TryGetValue(out var value) &&
+                value.IsAbsoluteUri &&
+                value.Scheme.Equals(scheme, StringComparison.OrdinalIgnoreCase))
             {
-                var m = message?.Invoke(argument.Value, scheme) ?? Messages.UriNotScheme(argument, scheme);
+                var m = message?.Invoke(value, scheme) ?? Messages.UriNotScheme(argument, scheme);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -169,19 +169,19 @@ namespace Dawn
         public static ref readonly ArgumentInfo<Uri> Http(
             in this ArgumentInfo<Uri> argument, bool allowHttps, Func<Uri, string> message = null)
         {
-            if (!argument.HasValue())
+            if (!argument.TryGetValue(out var value))
                 return ref argument;
 
-            if (argument.Value.IsAbsoluteUri)
+            if (value.IsAbsoluteUri)
             {
-                if (argument.Value.Scheme == HttpUriScheme)
+                if (value.Scheme == HttpUriScheme)
                     return ref argument;
 
-                if (allowHttps && argument.Value.Scheme == HttpsUriScheme)
+                if (allowHttps && value.Scheme == HttpsUriScheme)
                     return ref argument;
             }
 
-            var m = message?.Invoke(argument.Value) ?? Messages.UriHttp(argument);
+            var m = message?.Invoke(value) ?? Messages.UriHttp(argument);
             throw Fail(new ArgumentException(m, argument.Name));
         }
 
@@ -201,10 +201,10 @@ namespace Dawn
         public static ref readonly ArgumentInfo<Uri> Https(
             in this ArgumentInfo<Uri> argument, Func<Uri, string> message = null)
         {
-            if (argument.HasValue())
-                if (!argument.Value.IsAbsoluteUri || argument.Value.Scheme != HttpsUriScheme)
+            if (argument.TryGetValue(out var value))
+                if (!value.IsAbsoluteUri || value.Scheme != HttpsUriScheme)
                 {
-                    var m = message?.Invoke(argument.Value) ?? Messages.UriHttps(argument);
+                    var m = message?.Invoke(value) ?? Messages.UriHttps(argument);
                     throw Fail(new ArgumentException(m, argument.Name));
                 }
 

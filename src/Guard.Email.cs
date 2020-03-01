@@ -30,10 +30,10 @@ namespace Dawn
             string host,
             Func<MailAddress, string, string> message = null)
         {
-            if (argument.HasValue() &&
-                !argument.Value.Host.Equals(host, StringComparison.OrdinalIgnoreCase))
+            if (argument.TryGetValue(out var value) &&
+                !value.Host.Equals(host, StringComparison.OrdinalIgnoreCase))
             {
-                var m = message?.Invoke(argument.Value, host) ?? Messages.EmailHasHost(argument, host);
+                var m = message?.Invoke(value, host) ?? Messages.EmailHasHost(argument, host);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -59,10 +59,10 @@ namespace Dawn
             string host,
             Func<MailAddress, string, string> message = null)
         {
-            if (argument.HasValue() &&
-                argument.Value.Host.Equals(host, StringComparison.OrdinalIgnoreCase))
+            if (argument.TryGetValue(out var value) &&
+                value.Host.Equals(host, StringComparison.OrdinalIgnoreCase))
             {
-                var m = message?.Invoke(argument.Value, host) ?? Messages.EmailDoesNotHaveHost(argument, host);
+                var m = message?.Invoke(value, host) ?? Messages.EmailDoesNotHaveHost(argument, host);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -90,10 +90,10 @@ namespace Dawn
             Func<MailAddress, IEnumerable<string>, string> message = null)
             where TCollection : IEnumerable<string>
         {
-            if (argument.HasValue() &&
-                !Collection<TCollection>.Typed<string>.Contains(hosts, argument.Value.Host, null))
+            if (argument.TryGetValue(out var value) &&
+                !Collection<TCollection>.Typed<string>.Contains(hosts, value.Host, null))
             {
-                var m = message?.Invoke(argument.Value, hosts) ?? Messages.EmailHostIn(argument, hosts);
+                var m = message?.Invoke(value, hosts) ?? Messages.EmailHostIn(argument, hosts);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -121,10 +121,10 @@ namespace Dawn
             Func<MailAddress, IEnumerable<string>, string> message = null)
             where TCollection : IEnumerable<string>
         {
-            if (argument.HasValue() &&
-                Collection<TCollection>.Typed<string>.Contains(hosts, argument.Value.Host, null))
+            if (argument.TryGetValue(out var value) &&
+                Collection<TCollection>.Typed<string>.Contains(hosts, value.Host, null))
             {
-                var m = message?.Invoke(argument.Value, hosts) ?? Messages.EmailHostNotIn(argument, hosts);
+                var m = message?.Invoke(value, hosts) ?? Messages.EmailHostNotIn(argument, hosts);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -147,9 +147,9 @@ namespace Dawn
         public static ref readonly ArgumentInfo<MailAddress> HasDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {
-            if (argument.HasValue() && argument.Value.DisplayName.Length == 0)
+            if (argument.TryGetValue(out var value) && value.DisplayName.Length == 0)
             {
-                var m = message?.Invoke(argument.Value) ?? Messages.EmailHasDisplayName(argument);
+                var m = message?.Invoke(value) ?? Messages.EmailHasDisplayName(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 
@@ -172,9 +172,9 @@ namespace Dawn
         public static ref readonly ArgumentInfo<MailAddress> DoesNotHaveDisplayName(
             in this ArgumentInfo<MailAddress> argument, Func<MailAddress, string> message = null)
         {
-            if (argument.HasValue() && argument.Value.DisplayName.Length > 0)
+            if (argument.TryGetValue(out var value) && value.DisplayName.Length > 0)
             {
-                var m = message?.Invoke(argument.Value) ?? Messages.EmailDoesNotHaveDisplayName(argument);
+                var m = message?.Invoke(value) ?? Messages.EmailDoesNotHaveDisplayName(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
             }
 

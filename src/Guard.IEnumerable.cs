@@ -34,7 +34,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, 1) != 0)
+            if (argument.HasValue && Collection<TCollection>.Count(argument.Value, 1) != 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionEmpty(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -61,7 +61,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, 1) == 0)
+            if (argument.HasValue && Collection<TCollection>.Count(argument.Value, 1) == 0)
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionNotEmpty(argument);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -94,7 +94,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, count + 1) != count)
+            if (argument.HasValue && Collection<TCollection>.Count(argument.Value, count + 1) != count)
             {
                 var m = message?.Invoke(argument.Value, count) ?? Messages.CollectionCount(argument, count);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -128,7 +128,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, int count, Func<TCollection, int, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, count + 1) == count)
+            if (argument.HasValue && Collection<TCollection>.Count(argument.Value, count + 1) == count)
             {
                 var m = message?.Invoke(argument.Value, count) ?? Messages.CollectionNotCount(argument, count);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -161,7 +161,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, int minCount, Func<TCollection, int, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, minCount) < minCount)
+            if (argument.HasValue && Collection<TCollection>.Count(argument.Value, minCount) < minCount)
             {
                 var m = message?.Invoke(argument.Value, minCount) ?? Messages.CollectionMinCount(argument, minCount);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -194,7 +194,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, int maxCount, Func<TCollection, int, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.Count(argument.Value, maxCount + 1) > maxCount)
+            if (argument.HasValue && Collection<TCollection>.Count(argument.Value, maxCount + 1) > maxCount)
             {
                 var m = message?.Invoke(argument.Value, maxCount) ?? Messages.CollectionMaxCount(argument, maxCount);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -231,7 +231,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, int minCount, int maxCount, Func<TCollection, int, int, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue())
+            if (argument.HasValue)
             {
                 var count = Collection<TCollection>.Count(argument.Value, maxCount + 1);
                 if (count < minCount || count > maxCount)
@@ -297,7 +297,7 @@ namespace Dawn
             Func<TCollection, TItem, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && !Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
+            if (argument.HasValue && !Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionContains(argument, item);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -355,7 +355,7 @@ namespace Dawn
             Func<TCollection, TItem, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
+            if (argument.HasValue && Collection<TCollection>.Typed<TItem>.Contains(argument.Value, item, comparer))
             {
                 var m = message?.Invoke(argument.Value, item) ?? Messages.CollectionDoesNotContain(argument, item);
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -384,7 +384,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && !Collection<TCollection>.ContainsNull(argument.Value))
+            if (argument.HasValue && !Collection<TCollection>.ContainsNull(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionContains(argument, "null");
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -411,7 +411,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, Func<TCollection, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() && Collection<TCollection>.ContainsNull(argument.Value))
+            if (argument.HasValue && Collection<TCollection>.ContainsNull(argument.Value))
             {
                 var m = message?.Invoke(argument.Value) ?? Messages.CollectionDoesNotContain(argument, "null");
                 throw Fail(new ArgumentException(m, argument.Name));
@@ -440,7 +440,7 @@ namespace Dawn
             in this ArgumentInfo<TCollection> argument, Func<TCollection, object, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue())
+            if (argument.HasValue)
             {
                 var (containsDuplicate, duplicateValue) = Collection<TCollection>.ContainsDuplicate(argument.Value, null);
                 if (containsDuplicate)
@@ -480,7 +480,7 @@ namespace Dawn
             Func<TCollection, object, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue())
+            if (argument.HasValue)
             {
                 var (containsDuplicate, duplicateValue) = Collection<TCollection>.ContainsDuplicate(argument.Value, comparer);
                 if (containsDuplicate)
@@ -548,7 +548,7 @@ namespace Dawn
             Func<TItem, TCollection, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() &&
+            if (argument.HasValue &&
                 collection != null &&
                 !Collection<TCollection>.Typed<TItem>.Contains(collection, argument.Value, comparer))
             {
@@ -575,7 +575,7 @@ namespace Dawn
         public static ref readonly ArgumentInfo<TItem> In<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {
-            if (argument.HasValue() && items != null)
+            if (argument.HasValue && items != null)
             {
                 var comparer = EqualityComparer<TItem>.Default;
                 for (var i = 0; i < items.Length; i++)
@@ -642,7 +642,7 @@ namespace Dawn
             Func<TItem, TCollection, string>? message = null)
             where TCollection : IEnumerable?
         {
-            if (argument.HasValue() &&
+            if (argument.HasValue &&
                 collection != null &&
                 Collection<TCollection>.Typed<TItem>.Contains(collection, argument.Value, comparer))
             {
@@ -669,7 +669,7 @@ namespace Dawn
         public static ref readonly ArgumentInfo<TItem> NotIn<TItem>(
             in this ArgumentInfo<TItem> argument, params TItem[] items)
         {
-            if (argument.HasValue() && items != null)
+            if (argument.HasValue && items != null)
             {
                 var comparer = EqualityComparer<TItem>.Default;
                 for (var i = 0; i < items.Length; i++)
