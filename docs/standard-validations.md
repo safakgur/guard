@@ -38,6 +38,8 @@ For `ArgumentInfo<T|T?> where T : struct`
 For `ArgumentInfo<T> where T : IComparable<T>`
 * `Min(T)`
 * `Max(T)`
+* `GreaterThan(T)`
+* `LessThan(T)`
 * `InRange(T, T)`
 
 For `ArgumentInfo<T|T?> where T : struct, IComparable<T>`
