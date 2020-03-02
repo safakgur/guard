@@ -34,7 +34,14 @@ namespace Dawn.Tests
             void Reset();
         }
 
-        protected interface ITestEnumerableWithCount<T> : ITestEnumerable<T>, IReadOnlyCollection<T>
+        protected interface ITestEnumerableWithCount<T> : ITestEnumerable<T>
+        {
+            int Count { get; }
+
+            bool CountCalled { get; }
+        }
+
+        protected interface ITestEnumerableWithImplementedCount<T> : ITestEnumerable<T>, IReadOnlyCollection<T>
         {
             bool CountCalled { get; }
         }
@@ -265,7 +272,7 @@ namespace Dawn.Tests
 
         protected static class RandomUtils
         {
-            private static readonly Random Seeder = new Random();
+            private static readonly Random s_seeder = new Random();
 
             [ThreadStatic]
             private static Random s_current;
@@ -277,8 +284,8 @@ namespace Dawn.Tests
                     if (s_current == null)
                     {
                         int seed;
-                        lock (Seeder)
-                            seed = Seeder.Next();
+                        lock (s_seeder)
+                            seed = s_seeder.Next();
 
                         s_current = new Random(seed);
                     }

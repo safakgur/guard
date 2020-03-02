@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace Dawn.Tests
@@ -82,6 +83,14 @@ namespace Dawn.Tests
 
             foreach (var group in groups)
                 Assert.False(group.GroupBy(t => t.Key.Name).Skip(1).Any());
+        }
+
+        [Fact(DisplayName = "Annotations: JetBrains")]
+        public void JetBrains()
+        {
+            var contract = Guid.NewGuid().ToString();
+            var attr = new ContractAnnotationAttribute(contract);
+            Assert.Same(contract, attr.Contract);
         }
     }
 }
