@@ -19,17 +19,20 @@ namespace Dawn.Tests
 
             HasCount = 4,
 
-            HasContains = 8,
+            ImplementsCount = 8,
 
-            HasNullElement = 16,
+            HasContains = 16,
 
-            HasDuplicateElements = 32
+            HasNullElement = 32,
+
+            HasDuplicateElements = 64
         }
 
         [Theory(DisplayName = "Enumerable: Empty/NotEmpty")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
         [InlineData(CollectionOptions.Empty, CollectionOptions.NotEmpty)]
-        [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, CollectionOptions.HasCount)]
+        [InlineData(CollectionOptions.Empty | CollectionOptions.HasCount, CollectionOptions.ImplementsCount)]
+        [InlineData(CollectionOptions.Empty | CollectionOptions.ImplementsCount, CollectionOptions.HasCount)]
         public void Empty(CollectionOptions emptyOptions, CollectionOptions nonEmptyOptions)
         {
             var empty = GetEnumerable<int>(emptyOptions);
@@ -424,7 +427,7 @@ namespace Dawn.Tests
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
         }
 
-        [Theory(DisplayName = "Enumerable of struct: ContainsNull/DoesNotContainNull")]
+        [Theory(DisplayName = "Enumerable of nulable struct: ContainsNull/DoesNotContainNull")]
         [InlineData(CollectionOptions.Null, CollectionOptions.Null)]
         [InlineData(CollectionOptions.HasNullElement, CollectionOptions.Empty)]
         [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.Empty)]
@@ -432,7 +435,7 @@ namespace Dawn.Tests
         [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.NotEmpty)]
         [InlineData(CollectionOptions.HasNullElement, CollectionOptions.HasContains)]
         [InlineData(CollectionOptions.HasNullElement | CollectionOptions.HasContains, CollectionOptions.HasContains)]
-        public void ContainsNullValue(
+        public void ContainsNullNullableValue(
             CollectionOptions optionsWithNull, CollectionOptions optionsWithoutNull)
         {
             var withNullCount = 10;
@@ -474,6 +477,23 @@ namespace Dawn.Tests
                 }));
 
             CheckAndReset(enumerableWithNull, containsCalled: true, enumerationCount: (nullIndex + 1) * 2);
+        }
+
+        [Theory(DisplayName = "Enumerable of non-nullable struct: ContainsNull/DoesNotContainNull")]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ContainsNullValue(int itemCount)
+        {
+            var col = Enumerable.Range(1, itemCount);
+            var colArg = Guard.Argument(() => col).DoesNotContainNull();
+            ThrowsArgumentException(
+                colArg,
+                arg => arg.ContainsNull(),
+                (arg, message) => arg.ContainsNull(c =>
+                {
+                    Assert.Same(col, c);
+                    return message;
+                }));
         }
 
         [Theory(DisplayName = "Enumerable: DoesNotContainDuplicate")]
@@ -597,15 +617,15 @@ namespace Dawn.Tests
                             return message;
                         }));
 
-                        ThrowsArgumentException(
-                            nonGenericCollectionWithDuplicateArg,
-                            arg => arg.DoesNotContainDuplicate(c),
-                            (arg, message) => arg.DoesNotContainDuplicate(c, (e, item) =>
-                            {
-                                Assert.Same(nonGenericCollectionWithDuplicate, e);
-                                Assert.Same(duplicateItem, item);
-                                return message;
-                            }));
+                    ThrowsArgumentException(
+                        nonGenericCollectionWithDuplicateArg,
+                        arg => arg.DoesNotContainDuplicate(c),
+                        (arg, message) => arg.DoesNotContainDuplicate(c, (e, item) =>
+                        {
+                            Assert.Same(nonGenericCollectionWithDuplicate, e);
+                            Assert.Same(duplicateItem, item);
+                            return message;
+                        }));
                 }
             }
         }
@@ -890,13 +910,20 @@ namespace Dawn.Tests
                 list.Insert(RandomUtils.Current.Next(list.Count), list[RandomUtils.Current.Next(list.Count)]);
 
             var hasCount = options.HasFlag(CollectionOptions.HasCount);
+            var implementsCount = options.HasFlag(CollectionOptions.ImplementsCount);
             var hasContains = options.HasFlag(CollectionOptions.HasContains);
 
             if (hasCount && hasContains)
                 return new TestEnumerableWithCountAndContains<T>(list);
 
+            if (implementsCount && hasContains)
+                return new TestEnumerableWithImplementedCountAndContains<T>(list);
+
             if (hasCount)
                 return new TestEnumerableWithCount<T>(list);
+
+            if (implementsCount)
+                return new TestEnumerableWithImplementedCount<T>(list);
 
             if (hasContains)
                 return new TestEnumerableWithContains<T>(list);
@@ -958,6 +985,12 @@ namespace Dawn.Tests
             }
         }
 
+        public class TestEnumerableWithImplementedCount<T>
+            : TestEnumerableWithCount<T>, ITestEnumerableWithImplementedCount<T>
+        {
+            public TestEnumerableWithImplementedCount(IEnumerable<T> items) : base(items) { }
+        }
+
         public class TestEnumerableWithContains<T> : TestEnumerable<T>, ITestEnumerableWithContains<T>
         {
             public TestEnumerableWithContains(IEnumerable<T> items)
@@ -981,7 +1014,7 @@ namespace Dawn.Tests
         }
 
         public class TestEnumerableWithCountAndContains<T>
-            : TestEnumerableWithCount<T>, ITestEnumerableWithCount<T>, ITestEnumerableWithContains<T>
+            : TestEnumerableWithCount<T>, ITestEnumerableWithContains<T>
         {
             public TestEnumerableWithCountAndContains(IEnumerable<T> items)
                 : base(items)
@@ -1001,6 +1034,12 @@ namespace Dawn.Tests
                 base.Reset();
                 ContainsCalled = false;
             }
+        }
+
+        public class TestEnumerableWithImplementedCountAndContains<T>
+            : TestEnumerableWithCountAndContains<T>, ITestEnumerableWithImplementedCount<T>
+        {
+            public TestEnumerableWithImplementedCountAndContains(IEnumerable<T> items) : base(items) { }
         }
     }
 }

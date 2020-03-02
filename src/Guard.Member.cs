@@ -230,11 +230,11 @@ namespace Dawn
         private abstract class ArgumentMemberInfo
         {
             /// <summary>Cached root nodes of member trees.</summary>
-            private static readonly IDictionary<MemberInfo, Node> Nodes
+            private static readonly IDictionary<MemberInfo, Node> s_nodes
                 = new Dictionary<MemberInfo, Node>();
 
-            /// <summary>The lock that synchronizes access to <see cref="Nodes" />.</summary>
-            private static readonly ReaderWriterLockSlim NodesLock
+            /// <summary>The lock that synchronizes access to <see cref="s_nodes" />.</summary>
+            private static readonly ReaderWriterLockSlim s_nodesLock
                 = new ReaderWriterLockSlim();
 
             /// <summary>Returns the cached argument member for the specified lambda expression.</summary>
@@ -258,8 +258,8 @@ namespace Dawn
                     ReaderWriterLockSlim sourceLock;
                     if (node is null)
                     {
-                        source = Nodes;
-                        sourceLock = NodesLock;
+                        source = s_nodes;
+                        sourceLock = s_nodesLock;
                     }
                     else
                     {

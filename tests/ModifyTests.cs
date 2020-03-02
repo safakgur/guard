@@ -71,6 +71,9 @@ namespace Dawn.Tests
         [Fact(DisplayName = "Modify: Clone")]
         public void GuardSupportsCloning()
         {
+            var nullClonable = null as TestCloneable;
+            Assert.False(Guard.Argument(() => nullClonable).Clone().HasValue);
+
             var cloneable = new TestCloneable();
             Assert.False(cloneable.IsClone);
 

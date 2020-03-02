@@ -194,17 +194,8 @@ namespace Dawn
             public static string False<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} must be false.";
 
-            public static string Enum<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} is not an enum value.";
-
             public static string EnumDefined<T>(in ArgumentInfo<T> argument)
                 => $"{argument.Name} is not a defined {typeof(T)} member.";
-
-            public static string EnumNone<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} cannot have any of its bits set.";
-
-            public static string EnumNotNone<T>(in ArgumentInfo<T> argument)
-                => $"{argument.Name} must have at least one of its bits set.";
 
             public static string EnumHasFlag<T>(in ArgumentInfo<T> argument, T flag)
                 => argument.Secure ? Require(argument) : $"{argument.Name} does not has the {flag} flag.";

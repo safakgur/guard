@@ -833,17 +833,16 @@ namespace Dawn
             private static MethodInfo? GetCountGetter()
             {
                 var collectionType = typeof(TCollection);
-                var implementedType = typeof(ICollection);
-
-                if (implementedType.IsAssignableFrom(collectionType))
-                    return implementedType.GetPropertyGetter("Count");
+                var interfaceType = typeof(ICollection);
+                if (interfaceType.IsAssignableFrom(collectionType))
+                    return interfaceType.GetPropertyGetter("Count");
 
                 var itemType = GetItemType();
                 if (itemType != null)
                 {
-                    implementedType = typeof(IReadOnlyCollection<>).MakeGenericType(itemType);
-                    if (implementedType.IsAssignableFrom(collectionType))
-                        return implementedType.GetPropertyGetter("Count");
+                    interfaceType = typeof(IReadOnlyCollection<>).MakeGenericType(itemType);
+                    if (interfaceType.IsAssignableFrom(collectionType))
+                        return interfaceType.GetPropertyGetter("Count");
                 }
 
                 var returnType = typeof(int);
