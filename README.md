@@ -31,7 +31,7 @@ public Person(string name, int age)
         throw new ArgumentException("Name cannot be empty.", nameof(name));
 
     if (age < 0)
-        throw new ArgumentOutOfRangeException(nameof(age), age, "Age cannot be negative.");
+        throw new ArgumentOutOfRangeException(nameof(age), age, "Age cannot be less than zero.");
 
     Name = name;
     Age = age;
@@ -46,7 +46,7 @@ using Dawn; // Bring Guard into scope.
 public Person(string name, int age)
 {
     Name = Guard.Argument(name, nameof(name)).NotNull().NotEmpty();
-    Age = Guard.Argument(age, nameof(age)).NotNegative();
+    Age = Guard.Argument(age, nameof(age)).Min(0);
 }
 ```
 

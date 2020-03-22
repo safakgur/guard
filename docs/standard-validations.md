@@ -42,14 +42,6 @@ For `ArgumentInfo<T> where T : IComparable<T>`
 * `LessThan(T)`
 * `InRange(T, T)`
 
-For `ArgumentInfo<T|T?> where T : struct, IComparable<T>`
-* `Zero()`
-* `NotZero()`
-* `Positive()`
-* `NotPositive()`
-* `Negative()`
-* `NotNegative()`
-
 ### Boolean Guards
 
 For `ArgumentInfo<bool|bool?>`

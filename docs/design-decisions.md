@@ -97,7 +97,7 @@ Guard.Argument(() => arg).NotEmpty());
 
 Each validation in Guard has a specific exception type it throws when its precondition is not
 satisfied. `NotNull` throws an `ArgumentNullException`. The validations on `IComparable<T>`
-arguments like `MinValue` and `NotZero` throw `ArgumentOutOfRangeException`s. Most others
+arguments like `MinValue` and `InRange` throw `ArgumentOutOfRangeException`s. Most others
 throw `ArgumentException`s. (See [Modifying Arguments](#modifying-arguments) for exceptional cases.)
 
 Throwing custom exceptions from standard validations seems counter-intuitive and right now, the only
