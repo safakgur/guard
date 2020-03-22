@@ -35,7 +35,7 @@ namespace Dawn
             /// <summary>
             ///     The scope data that is local to the calling asynchronous control flow.
             /// </summary>
-            private static readonly AsyncLocal<Scope?> Local = new AsyncLocal<Scope?>();
+            private static readonly AsyncLocal<Scope?> s_local = new AsyncLocal<Scope?>();
 
             /// <summary>
             ///     Contains zero if the instance is not disposed; and one if it is disposed.
@@ -65,8 +65,8 @@ namespace Dawn
             /// <summary>Gets the current guarding scope.</summary>
             public static Scope? Current
             {
-                get => Local.Value;
-                private set => Local.Value = value;
+                get => s_local.Value;
+                private set => s_local.Value = value;
             }
 
             /// <summary>
