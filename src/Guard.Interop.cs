@@ -44,21 +44,6 @@ namespace Dawn
 #endif
         }
 
-        /// <summary>Determines whether the specified type is an enum.</summary>
-        /// <param name="type">The type to check.</param>
-        /// <returns>
-        ///     <c>true</c>, if <paramref name="type" /> represents an enumeration; otherwise, <c>false</c>.
-        /// </returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool IsEnum(this Type type)
-        {
-#if NETSTANDARD1_0
-            return type.GetTypeInfo().IsEnum;
-#else
-            return type.IsEnum;
-#endif
-        }
-
         /// <summary>Returns the type from which the specified type directly inherits.</summary>
         /// <param name="type">The type whose base type to return.</param>
         /// <returns>
