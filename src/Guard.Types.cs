@@ -215,7 +215,7 @@ namespace Dawn
             public ArgumentInfo<TTarget> Cast<TTarget>(Func<T, string>? message = null)
             {
                 if (Value is TTarget value)
-                    return new ArgumentInfo<TTarget>(value, this.Name, this.Modified, this.Secure);
+                    return new ArgumentInfo<TTarget>(value, Name, Modified, Secure);
 
                 var m = message?.Invoke(Value) ?? Messages.Compatible<T, TTarget>(this);
                 throw Fail(new ArgumentException(m, Name));

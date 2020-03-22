@@ -27,7 +27,7 @@ namespace Dawn
             [DebuggerStepThrough]
             [GuardFunction("Predicate", "greq")]
             public ArgumentInfo<T> Require(bool condition, Func<T, string>? message = null)
-                => this.Require<ArgumentException>(condition, message);
+                => Require<ArgumentException>(condition, message);
 
             /// <summary>
             ///     Requires the argument to satisfy a condition and throws the specified type of
@@ -77,7 +77,7 @@ namespace Dawn
             [DebuggerStepThrough]
             [GuardFunction("Predicate", "greq")]
             public ArgumentInfo<T> Require(Func<T, bool> predicate, Func<T, string>? message = null)
-                => this.Require<ArgumentException>(predicate, message);
+                => Require<ArgumentException>(predicate, message);
 
             /// <summary>
             ///     Requires the argument to satisfy a condition and throws the specified type of
