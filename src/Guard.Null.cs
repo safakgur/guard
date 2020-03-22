@@ -227,11 +227,13 @@ namespace Dawn
             in this ArgumentInfo<T?> argument, [NotNullWhen(true)] out T? value)
             where T : class
         {
+#pragma warning disable CS8762 // Parameter may not have a null value when exiting in some condition.
             if (argument.HasValue)
             {
                 value = argument.Value;
                 return true;
             }
+#pragma warning restore CS8762 // Parameter may not have a null value when exiting in some condition.
 
             value = null;
             return false;
@@ -264,6 +266,5 @@ namespace Dawn
             value = default;
             return false;
         }
-
     }
 }
