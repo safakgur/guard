@@ -1047,11 +1047,16 @@ namespace Dawn
 
                     var countGetter = GetCountGetter();
                     if (countGetter != null)
-                    {
-                        var setCtor = setType.GetConstructor(new[] { typeof(int) });
-                        var countCall = Expression.Call(collectionParam, countGetter);
-                        return Expression.New(setCtor, countCall);
-                    }
+                        try
+                        {
+                            var setCtor = setType.GetConstructor(new[] { typeof(int) });
+                            var countCall = Expression.Call(collectionParam, countGetter);
+                            return Expression.New(setCtor, countCall);
+                        }
+                        catch (Exception)
+                        {
+                            // Swallow and use default
+                        }
 
                     return Expression.New(setType);
                 }

@@ -2,22 +2,22 @@ jobs:
 - template: .azure-pipelines-build.yml
   parameters:
     name: Windows
-    image: windows-2019
+    image: windows-latest
     artifacts: true
 
 - template: .azure-pipelines-build.yml
   parameters:
     name: macOS
-    image: macOS-10.13
+    image: macOS-latest
 
 - template: .azure-pipelines-build.yml
   parameters:
     name: Linux
-    image: Ubuntu-16.04
+    image: ubuntu-latest
 
 - job: Deploy
   pool:
-    vmImage: macOS-10.13
+    vmImage: ubuntu-latest
 
   dependsOn:
   - Windows
