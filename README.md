@@ -1,5 +1,75 @@
 # Guard
 
+## Warning
+
+This project is no longer actively maintained.
+
+I apologise to everyone who depended on Guard for my three-year-long silence.
+Guard was my passion project for the longest time, helping me get better at C#, automated builds,
+Visual Studio extensibility, documentation, and how to be part of a community regardless of how
+small we've been. It also kickstarted my journey of creating terrible gifs.
+
+But my life has changed - I moved to a different country, changed jobs, lost someone very dear to me,
+and started spending less and less time coding outside my work hours. I always believed I'd be back
+and release v2 with all my bright ideas, but I just didn't know when. I only noticed today that
+I've been avoiding my GitHub notifications out of guilt for over a year, and I figured it was time for closure.
+
+### Why I'm stopping this
+
+* I can no longer find the time to maintain an open-source project, as I want to spend most of my
+  free time with my family and on other hobbies.
+  
+* Guard has always been in an awkward position:
+
+  Library authors avoid adding unnecessary dependencies to their packages, and Guard didn't bring
+  enough value to be worth being a runtime dependency. I wanted to experiment with IL weaving and
+  source generators to make Guard a compile-time dependency that would replace call sites with
+  simple if-then-throw statements, but I never got the chance.
+
+  App developers didn't need Guard as their validation scenarios doesn't involve throwing argument
+  exceptions. For example, a web API would use something like DataAnnotation attributes or
+  [FluentValidation](https://fluentvalidation.net) to validate its requests. So as a library that
+  specifically targeted library authors, Guard has always been irrelevant to app developers.
+
+### What was I looking to do in v2:
+
+* New style with `using static` and `[CallerArgumentExpression]`:
+
+  ```csharp
+  // using static Dawn.Validation.Argument;
+
+  Require(firstName).NotNullOrWhiteSpace();
+  ```
+  
+* Lite validations with `[CallerArgumentExpression]`:
+
+  ```csharp
+  var ratio = 5.0;
+  Require(ratio).Range(ratio is >= 0.0 and <= 1.0);
+  // ArgumentOutOfRangeException
+  // * ParamName: "ratio"
+  // * ActualValue: 5
+  // * Message: "Failed precondition: 'ratio is >= 0.0 and <= 1.0'."
+  ```
+
+  Hadn't yet decided whether the light validations would replace the custom ones or live in addition to them.
+
+* Type guards, e.g., `Require<TImplementation>().NotAbstract();`
+
+* Fixing nullable reference type issues
+
+* Changing the argument value to a ref field, which meant:
+
+  * We could even work on mutable structs without copying
+
+  * We could experiment with in-place normalisations
+
+* Dropping .NET Standard support
+
+I hope this helps anyone who was waiting for the v2. Original intro below:
+
+---
+
 ![Logo](media/guard-64.png)
 
 Guard is a fluent argument validation library that is intuitive, fast and extensible.
